@@ -34,16 +34,16 @@
     .logout {
       background: white;
       color: #1565c0;
-      border: none;
       padding: 9px 14px;
       border-radius: 8px;
+      text-decoration: none;
       font-weight: bold;
     }
 
     .container {
-      padding: 20px;
       max-width: 1200px;
       margin: auto;
+      padding: 20px;
     }
 
     .welcome {
@@ -52,97 +52,119 @@
 
     .welcome h2 {
       color: #1565c0;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
-    .cards {
+    .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
       margin-bottom: 25px;
     }
 
-    .card {
+    .stat {
       background: white;
       padding: 20px;
       border-radius: 14px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .card .icon {
-      font-size: 30px;
-      margin-bottom: 10px;
-    }
-
-    .card h3 {
-      color: #555;
-      font-size: 15px;
+    .stat-icon {
+      font-size: 28px;
       margin-bottom: 8px;
     }
 
+    .stat h3 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 7px;
+    }
+
     .number {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: bold;
       color: #1565c0;
     }
 
-    .section {
-      background: white;
-      padding: 20px;
-      border-radius: 14px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    .section h2 {
+    .section-title {
       color: #1565c0;
       margin-bottom: 15px;
-      font-size: 20px;
     }
 
-    .menu-grid {
+    .menu {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
-    .menu-item {
-      padding: 18px;
-      background: #e3f2fd;
-      border-radius: 12px;
-      text-align: center;
-      font-weight: bold;
+    .menu-card {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: #222;
+      transition: 0.2s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 16px rgba(0,0,0,0.12);
+    }
+
+    .menu-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .menu-card h3 {
       color: #1565c0;
-      cursor: pointer;
+      margin-bottom: 6px;
     }
 
-    .menu-item:hover {
-      background: #bbdefb;
+    .menu-card p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     .activity {
-      padding: 12px 0;
-      border-bottom: 1px solid #eee;
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .activity:last-child {
-      border-bottom: none;
+    .activity h3 {
+      color: #1565c0;
+      margin-bottom: 15px;
     }
 
-    .footer {
+    .empty {
       text-align: center;
       color: #777;
       padding: 25px;
-      font-size: 13px;
     }
 
-    @media (max-width: 600px) {
-      .header h1 {
-        font-size: 16px;
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
       }
 
-      .container {
-        padding: 12px;
+      .menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .stats,
+      .menu {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 16px;
       }
     }
   </style>
@@ -152,109 +174,107 @@
 
   <header class="header">
     <h1>🏫 Shule Portal Tanzania</h1>
-    <button class="logout" onclick="logout()">Toka</button>
+    <a href="admin.html" class="logout">← Admin Login</a>
   </header>
 
   <main class="container">
 
     <div class="welcome">
-      <h2>Dashboard ya Admin Mkuu</h2>
+      <h2>Admin Dashboard</h2>
       <p>Karibu kwenye mfumo wa usimamizi wa Shule Portal Tanzania.</p>
     </div>
 
-    <div class="cards">
+    <div class="stats">
 
-      <div class="card">
-        <div class="icon">🏫</div>
+      <div class="stat">
+        <div class="stat-icon">🏫</div>
         <h3>Shule Zilizosajiliwa</h3>
         <div class="number">0</div>
       </div>
 
-      <div class="card">
-        <div class="icon">📝</div>
+      <div class="stat">
+        <div class="stat-icon">🎫</div>
         <h3>Fomu Zilizouzwa</h3>
         <div class="number">0</div>
       </div>
 
-      <div class="card">
-        <div class="icon">💰</div>
+      <div class="stat">
+        <div class="stat-icon">💰</div>
         <h3>Malipo</h3>
         <div class="number">TZS 0</div>
       </div>
 
-      <div class="card">
-        <div class="icon">📋</div>
+      <div class="stat">
+        <div class="stat-icon">📋</div>
         <h3>Maombi</h3>
         <div class="number">0</div>
       </div>
 
     </div>
 
-    <section class="section">
-      <h2>Usimamizi wa Mfumo</h2>
+    <h2 class="section-title">⚙️ Usimamizi wa Mfumo</h2>
 
-      <div class="menu-grid">
+    <div class="menu">
 
-        <div class="menu-item">
-          🏫<br><br>
-          Simamia Shule
-        </div>
+      <a href="schools.html" class="menu-card">
+        <div class="menu-icon">🏫</div>
+        <h3>Simamia Shule</h3>
+        <p>Ongeza, hariri na simamia shule zilizosajiliwa.</p>
+      </a>
 
-        <div class="menu-item">
-          👨‍💼<br><br>
-          School Admins
-        </div>
+      <a href="school-admins.html" class="menu-card">
+        <div class="menu-icon">👨‍💼</div>
+        <h3>School Admins</h3>
+        <p>Simamia akaunti za wasimamizi wa shule.</p>
+      </a>
 
-        <div class="menu-item">
-          📝<br><br>
-          Fomu za Shule
-        </div>
+      <a href="school-forms.html" class="menu-card">
+        <div class="menu-icon">🎫</div>
+        <h3>Fomu za Shule</h3>
+        <p>Simamia aina, bei na muda wa fomu za shule.</p>
+      </a>
 
-        <div class="menu-item">
-          📋<br><br>
-          Maombi
-        </div>
+      <a href="applications.html" class="menu-card">
+        <div class="menu-icon">📋</div>
+        <h3>Maombi</h3>
+        <p>Angalia na simamia maombi ya wanafunzi.</p>
+      </a>
 
-        <div class="menu-item">
-          💰<br><br>
-          Malipo
-        </div>
+      <a href="payments.html" class="menu-card">
+        <div class="menu-icon">💰</div>
+        <h3>Malipo</h3>
+        <p>Fuatilia malipo yote ya fomu za shule.</p>
+      </a>
 
-        <div class="menu-item">
-          📊<br><br>
-          Ripoti
-        </div>
+      <a href="reports.html" class="menu-card">
+        <div class="menu-icon">📊</div>
+        <h3>Ripoti</h3>
+        <p>Angalia ripoti za mauzo, malipo na maombi.</p>
+      </a>
 
-        <div class="menu-item">
-          ⚙️<br><br>
-          Settings
-        </div>
+      <a href="#" class="menu-card" onclick="settingsMessage(); return false;">
+        <div class="menu-icon">⚙️</div>
+        <h3>Settings</h3>
+        <p>Usimamizi wa mipangilio ya mfumo.</p>
+      </a>
 
-      </div>
-    </section>
+    </div>
 
-    <section class="section">
-      <h2>Shughuli za Mfumo</h2>
+    <section class="activity">
 
-      <div class="activity">
+      <h3>🕒 Shughuli za Hivi Karibuni</h3>
+
+      <div class="empty">
         Hakuna shughuli mpya kwa sasa.
-      </div>
-
-      <div class="activity">
-        Mfumo unasubiri kuunganishwa na database.
       </div>
 
     </section>
 
   </main>
 
-  <footer class="footer">
-    © 2026 Shule Portal Tanzania — Admin System
-  </footer>
-
   <script>
-    function logout() {
-      window.location.href = "admin.html";
+    function settingsMessage() {
+      alert("Settings itaunganishwa katika hatua inayofuata.");
     }
   </script>
 
