@@ -1,151 +1,309 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shule Portal Tanzania</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<title>Shule Portal Tanzania</title>
 
-    body {
-      background: #f4f7fb;
-      color: #222;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
 
-    header {
-      background: #0b5ed7;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+body{
+  background:#f5f8fc;
+  color:#172033;
+}
 
-    header h1 {
-      font-size: 26px;
-      margin-bottom: 5px;
-    }
+header{
+  background:#0757b8;
+  color:white;
+  padding:16px 20px;
+}
 
-    header p {
-      font-size: 14px;
-    }
+.nav{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-    .container {
-      max-width: 1100px;
-      margin: 25px auto;
-      padding: 15px;
-    }
+.logo{
+  font-size:21px;
+  font-weight:bold;
+}
 
-    .welcome {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+.nav button{
+  background:white;
+  color:#0757b8;
+  border:0;
+  padding:9px 15px;
+  border-radius:7px;
+  font-weight:bold;
+}
 
-    .welcome h2 {
-      color: #0b5ed7;
-      margin-bottom: 10px;
-    }
+.hero{
+  background:linear-gradient(135deg,#0757b8,#1689e8);
+  color:white;
+  padding:55px 20px;
+}
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-    }
+.hero-content{
+  max-width:1100px;
+  margin:auto;
+}
 
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+.hero h1{
+  font-size:36px;
+  margin-bottom:15px;
+}
 
-    .card h3 {
-      color: #0b5ed7;
-      margin-bottom: 10px;
-    }
+.hero p{
+  font-size:17px;
+  max-width:650px;
+  line-height:1.6;
+}
 
-    .card button {
-      background: #0b5ed7;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+.search-box{
+  max-width:900px;
+  margin:-25px auto 30px;
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,.12);
+  display:flex;
+  gap:10px;
+}
 
-    footer {
-      margin-top: 40px;
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 18px;
-      font-size: 13px;
-    }
-  </style>
+.search-box input{
+  flex:1;
+  padding:13px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  font-size:15px;
+}
+
+.search-box button{
+  background:#0757b8;
+  color:white;
+  border:0;
+  padding:13px 20px;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
+.section-title{
+  margin-bottom:20px;
+}
+
+.section-title h2{
+  color:#0757b8;
+  margin-bottom:5px;
+}
+
+.schools{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+}
+
+.school{
+  background:white;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.school h3{
+  margin-bottom:8px;
+  color:#0757b8;
+}
+
+.school p{
+  margin:6px 0;
+  color:#596579;
+  font-size:14px;
+}
+
+.price{
+  font-size:20px;
+  font-weight:bold;
+  color:#16834a;
+  margin:15px 0;
+}
+
+.apply{
+  width:100%;
+  background:#0757b8;
+  color:white;
+  border:0;
+  padding:12px;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  margin:40px 0;
+}
+
+.feature{
+  background:white;
+  padding:22px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.feature h3{
+  margin:10px 0;
+}
+
+footer{
+  background:#101827;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+  margin-top:30px;
+}
+
+footer p{
+  margin:6px;
+  font-size:13px;
+}
+
+@media(max-width:600px){
+  .hero h1{
+    font-size:28px;
+  }
+
+  .search-box{
+    margin:15px;
+    flex-direction:column;
+  }
+
+  .nav{
+    gap:10px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Shule Portal Tanzania</h1>
-    <p>Mfumo wa Usimamizi wa Shule</p>
-  </header>
+<header>
+  <div class="nav">
+    <div class="logo">🏫 Shule Portal Tanzania</div>
+    <button>School Admin</button>
+  </div>
+</header>
 
-  <main class="container">
+<section class="hero">
+  <div class="hero-content">
+    <h1>Pata Fomu za Shule Mtandaoni</h1>
+    <p>
+      Tafuta shule, angalia taarifa za shule, nunua fomu ya maombi
+      na tuma maombi yako mtandaoni kwa urahisi.
+    </p>
+  </div>
+</section>
 
-    <section class="welcome">
-      <h2>Karibu Shule Portal Tanzania</h2>
-      <p>
-        Mfumo wa kidijitali wa kusaidia shule kusimamia
-        wanafunzi, walimu, madarasa na taarifa za shule.
-      </p>
-    </section>
+<div class="search-box">
+  <input type="text" placeholder="Tafuta jina la shule, mkoa au wilaya...">
+  <button>Tafuta Shule</button>
+</div>
 
-    <section class="cards">
+<main class="container">
 
-      <div class="card">
-        <h3>Wanafunzi</h3>
-        <p>Usimamizi wa taarifa za wanafunzi.</p>
-        <br>
-        <button>Fungua</button>
-      </div>
+  <div class="section-title">
+    <h2>Shule Zinazopokea Maombi</h2>
+    <p>Chagua shule unayotaka na anza mchakato wa maombi.</p>
+  </div>
 
-      <div class="card">
-        <h3>Walimu</h3>
-        <p>Usimamizi wa taarifa za walimu.</p>
-        <br>
-        <button>Fungua</button>
-      </div>
+  <div class="schools">
 
-      <div class="card">
-        <h3>Madarasa</h3>
-        <p>Usimamizi wa madarasa na masomo.</p>
-        <br>
-        <button>Fungua</button>
-      </div>
+    <div class="school">
+      <h3>Shule ya Mfano Academy</h3>
+      <p>📍 Dar es Salaam</p>
+      <p>🎓 Primary & Secondary</p>
+      <p>📅 Maombi yanaendelea</p>
 
-      <div class="card">
-        <h3>Matokeo</h3>
-        <p>Usimamizi wa matokeo ya wanafunzi.</p>
-        <br>
-        <button>Fungua</button>
-      </div>
+      <div class="price">TZS 10,000</div>
 
-    </section>
+      <button class="apply">Nunua Fomu</button>
+    </div>
 
-  </main>
+    <div class="school">
+      <h3>Bright Future School</h3>
+      <p>📍 Arusha</p>
+      <p>🎓 Primary School</p>
+      <p>📅 Maombi yanaendelea</p>
 
-  <footer>
-    © 2026 Shule Portal Tanzania
-  </footer>
+      <div class="price">TZS 5,000</div>
+
+      <button class="apply">Nunua Fomu</button>
+    </div>
+
+    <div class="school">
+      <h3>St. Joseph School</h3>
+      <p>📍 Dodoma</p>
+      <p>🎓 Secondary School</p>
+      <p>📅 Maombi yanaendelea</p>
+
+      <div class="price">TZS 10,000</div>
+
+      <button class="apply">Nunua Fomu</button>
+    </div>
+
+  </div>
+
+  <div class="features">
+
+    <div class="feature">
+      <div>🔎</div>
+      <h3>Tafuta Shule</h3>
+      <p>Pata shule kwa mkoa, wilaya au jina.</p>
+    </div>
+
+    <div class="feature">
+      <div>💳</div>
+      <h3>Lipa Mtandaoni</h3>
+      <p>Lipia fomu kupitia njia za malipo zinazopatikana.</p>
+    </div>
+
+    <div class="feature">
+      <div>📋</div>
+      <h3>Jaza Fomu</h3>
+      <p>Jaza taarifa za mwanafunzi baada ya malipo.</p>
+    </div>
+
+    <div class="feature">
+      <div>📄</div>
+      <h3>Fuatilia Maombi</h3>
+      <p>Fuatilia hatua ya maombi yako mtandaoni.</p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <h3>Shule Portal Tanzania</h3>
+  <p>Jukwaa la kupata na kuomba fomu za shule mtandaoni.</p>
+  <p>© 2026 Shule Portal Tanzania. Haki zote zimehifadhiwa.</p>
+</footer>
 
 </body>
 </html>
