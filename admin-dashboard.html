@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 20px;
+    }
+
+    .logout {
+      background: white;
+      color: #1565c0;
+      border: none;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .welcome {
+      margin-bottom: 20px;
+    }
+
+    .welcome h2 {
+      color: #1565c0;
+      margin-bottom: 5px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .card .icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      color: #555;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .number {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1565c0;
+    }
+
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .section h2 {
+      color: #1565c0;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .menu-item {
+      padding: 18px;
+      background: #e3f2fd;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+      color: #1565c0;
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      background: #bbdefb;
+    }
+
+    .activity {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .activity:last-child {
+      border-bottom: none;
+    }
+
+    .footer {
+      text-align: center;
+      color: #777;
+      padding: 25px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 16px;
+      }
+
+      .container {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>🏫 Shule Portal Tanzania</h1>
+    <button class="logout" onclick="logout()">Toka</button>
+  </header>
+
+  <main class="container">
+
+    <div class="welcome">
+      <h2>Dashboard ya Admin Mkuu</h2>
+      <p>Karibu kwenye mfumo wa usimamizi wa Shule Portal Tanzania.</p>
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="icon">🏫</div>
+        <h3>Shule Zilizosajiliwa</h3>
+        <div class="number">0</div>
+      </div>
+
+      <div class="card">
+        <div class="icon">📝</div>
+        <h3>Fomu Zilizouzwa</h3>
+        <div class="number">0</div>
+      </div>
+
+      <div class="card">
+        <div class="icon">💰</div>
+        <h3>Malipo</h3>
+        <div class="number">TZS 0</div>
+      </div>
+
+      <div class="card">
+        <div class="icon">📋</div>
+        <h3>Maombi</h3>
+        <div class="number">0</div>
+      </div>
+
+    </div>
+
+    <section class="section">
+      <h2>Usimamizi wa Mfumo</h2>
+
+      <div class="menu-grid">
+
+        <div class="menu-item">
+          🏫<br><br>
+          Simamia Shule
+        </div>
+
+        <div class="menu-item">
+          👨‍💼<br><br>
+          School Admins
+        </div>
+
+        <div class="menu-item">
+          📝<br><br>
+          Fomu za Shule
+        </div>
+
+        <div class="menu-item">
+          📋<br><br>
+          Maombi
+        </div>
+
+        <div class="menu-item">
+          💰<br><br>
+          Malipo
+        </div>
+
+        <div class="menu-item">
+          📊<br><br>
+          Ripoti
+        </div>
+
+        <div class="menu-item">
+          ⚙️<br><br>
+          Settings
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Shughuli za Mfumo</h2>
+
+      <div class="activity">
+        Hakuna shughuli mpya kwa sasa.
+      </div>
+
+      <div class="activity">
+        Mfumo unasubiri kuunganishwa na database.
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    © 2026 Shule Portal Tanzania — Admin System
+  </footer>
+
+  <script>
+    function logout() {
+      window.location.href = "admin.html";
+    }
+  </script>
+
+</body>
+</html>
