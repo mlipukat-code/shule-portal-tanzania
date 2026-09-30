@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nunua Fomu - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .back {
+      background: white;
+      color: #1565c0;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 25px 20px;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .title h1 {
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .title p {
+      color: #666;
+    }
+
+    .box {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .box h2 {
+      color: #1565c0;
+      margin-bottom: 18px;
+      font-size: 19px;
+    }
+
+    .school-summary {
+      background: #e3f2fd;
+      padding: 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .school-summary h3 {
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .school-summary p {
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .form-option {
+      border: 2px solid #e3f2fd;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    .form-option.selected {
+      border-color: #1565c0;
+      background: #f8fbff;
+    }
+
+    .form-option label {
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .form-option input {
+      margin-top: 4px;
+    }
+
+    .form-name {
+      font-weight: bold;
+      color: #1565c0;
+      margin-bottom: 7px;
+    }
+
+    .form-description {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .price {
+      margin-top: 10px;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    .summary {
+      background: #f4f7fb;
+      padding: 18px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 0;
+    }
+
+    .total {
+      border-top: 1px solid #ddd;
+      margin-top: 8px;
+      padding-top: 14px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #1565c0;
+    }
+
+    .notice {
+      background: #fff8e1;
+      color: #795548;
+      padding: 13px;
+      border-radius: 9px;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+
+    .continue-btn {
+      width: 100%;
+      border: none;
+      background: #1565c0;
+      color: white;
+      padding: 14px;
+      border-radius: 9px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .continue-btn:hover {
+      background: #0d47a1;
+    }
+
+    @media (max-width: 500px) {
+      .logo {
+        font-size: 16px;
+      }
+
+      .header-inner {
+        gap: 10px;
+      }
+
+      .summary-row {
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">🏫 Shule Portal Tanzania</div>
+
+    <a href="school-details.html" class="back">
+      ← Rudi
+    </a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="title">
+    <h1>🛒 Nunua Fomu</h1>
+    <p>Chagua fomu unayotaka kuomba.</p>
+  </section>
+
+  <section class="box">
+
+    <div class="school-summary">
+
+      <h3>🏫 Shule ya Mfano Academy</h3>
+
+      <p>
+        📍 Dar es Salaam<br>
+        🎓 Primary & Secondary<br>
+        📅 Mwaka wa Maombi: 2026
+      </p>
+
+    </div>
+
+    <h2>📄 Chagua Fomu</h2>
+
+    <div class="form-option selected">
+
+      <label>
+
+        <input
+          type="radio"
+          name="applicationForm"
+          value="10000"
+          checked
+          onchange="updatePrice()"
+        >
+
+        <div>
+
+          <div class="form-name">
+            Fomu ya Maombi ya Kujiunga
+          </div>
+
+          <div class="form-description">
+            Fomu ya maombi ya mwanafunzi kwa mwaka
+            wa masomo 2026.
+          </div>
+
+          <div class="price">
+            TZS 10,000
+          </div>
+
+        </div>
+
+      </label>
+
+    </div>
+
+    <div class="summary">
+
+      <div class="summary-row">
+        <span>Fomu</span>
+        <strong>Maombi ya Kujiunga</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Shule</span>
+        <strong>Shule ya Mfano Academy</strong>
+      </div>
+
+      <div class="summary-row total">
+        <span>Jumla</span>
+        <span id="totalPrice">TZS 10,000</span>
+      </div>
+
+    </div>
+
+    <div class="notice">
+      ℹ️ Baada ya kuendelea, utaelekezwa kwenye hatua
+      ya malipo. Baada ya malipo kuthibitishwa,
+      utaweza kujaza fomu ya maombi.
+    </div>
+
+    <button
+      class="continue-btn"
+      onclick="continuePayment()"
+    >
+      Endelea na Malipo →
+    </button>
+
+  </section>
+
+</main>
+
+<script>
+
+function updatePrice() {
+
+  const selected =
+    document.querySelector(
+      'input[name="applicationForm"]:checked'
+    );
+
+  if (!selected) return;
+
+  const price =
+    Number(selected.value);
+
+  document.getElementById("totalPrice").textContent =
+    "TZS " + price.toLocaleString();
+
+}
+
+
+function continuePayment() {
+
+  const selected =
+    document.querySelector(
+      'input[name="applicationForm"]:checked'
+    );
+
+  if (!selected) {
+    alert("Tafadhali chagua fomu.");
+    return;
+  }
+
+  alert(
+    "Hatua inayofuata ni malipo ya TZS " +
+    Number(selected.value).toLocaleString() +
+    "."
+  );
+
+}
+
+</script>
+
+</body>
+</html>
