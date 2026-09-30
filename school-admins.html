@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Admins - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 20px;
+    }
+
+    .back {
+      background: white;
+      color: #1565c0;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .title {
+      margin-bottom: 20px;
+    }
+
+    .title h2 {
+      color: #1565c0;
+      margin-bottom: 6px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .box h3 {
+      color: #1565c0;
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 15px;
+    }
+
+    .save-btn {
+      margin-top: 18px;
+      background: #1565c0;
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 9px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .edit {
+      background: #1565c0;
+      color: white;
+      border: none;
+      padding: 7px 11px;
+      border-radius: 6px;
+      margin-right: 5px;
+    }
+
+    .delete {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 7px 11px;
+      border-radius: 6px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 25px;
+    }
+
+    .info {
+      background: #fff8e1;
+      color: #795548;
+      padding: 12px;
+      border-radius: 9px;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>🏫 Shule Portal Tanzania</h1>
+    <a href="admin-dashboard.html" class="back">← Dashboard</a>
+  </header>
+
+  <main class="container">
+
+    <div class="title">
+      <h2>School Admins</h2>
+      <p>Simamia akaunti za wasimamizi wa shule.</p>
+    </div>
+
+    <section class="box">
+
+      <h3>➕ Tengeneza School Admin</h3>
+
+      <div class="info">
+        Kila shule inaweza kuwa na School Admin wake kwa ajili ya kusimamia
+        maombi na taarifa za shule.
+      </div>
+
+      <form id="adminForm">
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Jina Kamili</label>
+            <input
+              type="text"
+              id="fullName"
+              placeholder="Mfano: John Joseph"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="admin@shule.co.tz"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Namba ya Simu</label>
+            <input
+              type="tel"
+              id="phone"
+              placeholder="07XXXXXXXX"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Shule</label>
+            <select id="school" required>
+              <option value="">Chagua shule</option>
+              <option>Shule ya Mfano Academy</option>
+              <option>Bright Future School</option>
+              <option>St. Joseph School</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Password ya Mwanzo</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Weka password"
+              required
+            >
+          </div>
+
+        </div>
+
+        <button type="submit" class="save-btn">
+          Tengeneza Akaunti
+        </button>
+
+      </form>
+
+    </section>
+
+    <section class="box">
+
+      <h3>👨‍💼 School Admins Waliosajiliwa</h3>
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Jina</th>
+              <th>Email</th>
+              <th>Simu</th>
+              <th>Shule</th>
+              <th>Hali</th>
+              <th>Hatua</th>
+            </tr>
+          </thead>
+
+          <tbody id="adminList">
+
+            <tr>
+              <td colspan="6" class="empty">
+                Hakuna School Admin aliyesajiliwa bado.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    document.getElementById("adminForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      alert(
+        "Akaunti ya School Admin imepokelewa. " +
+        "Database itawezesha kuhifadhi akaunti hii na login halisi."
+      );
+
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>
