@@ -1,818 +1,409 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fomu ya Maombi - Shule Portal Tanzania</title>
 
-  <title>Fomu ya Maombi - Shule Portal Tanzania</title>
+<style>
+*{
+  box-sizing:border-box;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f7fb;
+  color:#1f2937;
+}
 
-    body {
-      background: #f4f7fb;
-      color: #222;
-      line-height: 1.5;
-    }
+.header{
+  background:#0b5ed7;
+  color:white;
+  padding:18px 15px;
+  text-align:center;
+}
 
-    .header {
-      background: #1565c0;
-      color: white;
-      padding: 18px 20px;
-    }
+.header h1{
+  margin:0;
+  font-size:22px;
+}
 
-    .header-inner {
-      max-width: 900px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-    }
+.header p{
+  margin:6px 0 0;
+  font-size:14px;
+}
 
-    .logo {
-      font-size: 19px;
-      font-weight: bold;
-    }
+.container{
+  max-width:850px;
+  margin:25px auto;
+  padding:0 15px;
+}
 
-    .back {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      white-space: nowrap;
-    }
+.card{
+  background:white;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:18px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 25px 20px 40px;
-    }
+.card h2{
+  margin-top:0;
+  color:#0b5ed7;
+  font-size:19px;
+  border-bottom:1px solid #e5e7eb;
+  padding-bottom:10px;
+}
 
-    .title {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+label{
+  display:block;
+  font-weight:bold;
+  margin-top:14px;
+  margin-bottom:6px;
+  font-size:14px;
+}
 
-    .title h1 {
-      color: #1565c0;
-      margin-bottom: 8px;
-    }
+input,
+select,
+textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd5e1;
+  border-radius:7px;
+  font-size:15px;
+  background:white;
+}
 
-    .title p {
-      color: #666;
-    }
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
 
-    .school-info {
-      background: #e3f2fd;
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
 
-    .school-info h3 {
-      color: #1565c0;
-      margin-bottom: 6px;
-    }
+.file-note{
+  font-size:12px;
+  color:#64748b;
+  margin-top:5px;
+}
 
-    .section {
-      background: white;
-      padding: 22px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-    }
+.confirmation{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-top:15px;
+}
 
-    .section h2 {
-      color: #1565c0;
-      font-size: 19px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #e3f2fd;
-      padding-bottom: 10px;
-    }
+.confirmation input{
+  width:auto;
+  margin-top:3px;
+}
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 17px;
-    }
+.submit-btn{
+  width:100%;
+  border:none;
+  background:#198754;
+  color:white;
+  padding:14px;
+  border-radius:8px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:20px;
+}
 
-    .field {
-      display: flex;
-      flex-direction: column;
-    }
+.submit-btn:hover{
+  background:#157347;
+}
 
-    .field.full {
-      grid-column: 1 / -1;
-    }
+.school-info{
+  background:#eaf3ff;
+  border-left:5px solid #0b5ed7;
+  padding:14px;
+  border-radius:6px;
+  margin-bottom:18px;
+}
 
-    label {
-      font-weight: bold;
-      margin-bottom: 7px;
-      color: #333;
-    }
+.school-info strong{
+  display:block;
+  margin-bottom:5px;
+}
 
-    .required {
-      color: #d32f2f;
-    }
+.footer{
+  text-align:center;
+  padding:25px 15px;
+  color:#64748b;
+  font-size:13px;
+}
 
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      background: white;
-    }
+@media(max-width:600px){
+  .row{
+    grid-template-columns:1fr;
+    gap:0;
+  }
 
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
+  .card{
+    padding:16px;
+  }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #1565c0;
-    }
-
-    .upload-box {
-      border: 2px dashed #b7c9df;
-      background: #f8fbff;
-      padding: 18px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-
-    .upload-box p {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
-    .terms {
-      background: #fff8e1;
-      padding: 15px;
-      border-radius: 9px;
-      margin-bottom: 18px;
-      color: #795548;
-    }
-
-    .checkbox-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    .checkbox-row input {
-      width: auto;
-      margin-top: 4px;
-    }
-
-    .submit-btn {
-      width: 100%;
-      border: none;
-      background: #1565c0;
-      color: white;
-      padding: 15px;
-      border-radius: 9px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .submit-btn:hover {
-      background: #0d47a1;
-    }
-
-    .note {
-      text-align: center;
-      color: #777;
-      font-size: 13px;
-      margin-top: 12px;
-    }
-
-    .footer {
-      text-align: center;
-      color: #777;
-      padding: 25px;
-      font-size: 14px;
-    }
-
-    @media (max-width: 650px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .field.full {
-        grid-column: auto;
-      }
-
-      .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .back {
-        align-self: flex-start;
-      }
-
-      .container {
-        padding: 20px 14px 35px;
-      }
-
-      .section {
-        padding: 18px;
-      }
-    }
-  </style>
+  .header h1{
+    font-size:20px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<header class="header">
-  <div class="header-inner">
+<div class="header">
+  <h1>Shule Portal Tanzania</h1>
+  <p>Fomu ya Maombi ya Kujiunga na Shule</p>
+</div>
 
-    <div class="logo">
-      🏫 Shule Portal Tanzania
-    </div>
-
-    <a href="payment.html" class="back">
-      ← Rudi
-    </a>
-
-  </div>
-</header>
-
-
-<main class="container">
-
-  <section class="title">
-
-    <h1>📝 Fomu ya Maombi</h1>
-
-    <p>
-      Jaza taarifa za mwanafunzi kwa usahihi.
-    </p>
-
-  </section>
-
+<div class="container">
 
   <div class="school-info">
-
-    <h3>🏫 Shule ya Mfano Academy</h3>
-
-    <p>
-      📍 Dar es Salaam |
-      🎓 Primary & Secondary |
-      📅 Mwaka 2026
-    </p>
-
+    <strong>Shule: Shule ya Mfano Academy</strong>
+    Dar es Salaam — Primary & Secondary<br>
+    Mwaka wa Masomo: 2026<br>
+    Application No. ya Malipo: SPT-2026-0001
   </div>
 
+  <form id="applicationForm">
 
-  <!-- TAARIFA ZA MWANAFUNZI -->
+    <div class="card">
+      <h2>1. Taarifa za Mwanafunzi</h2>
 
-  <section class="section">
+      <div class="row">
+        <div>
+          <label>Jina la Kwanza *</label>
+          <input type="text" id="firstName" required>
+        </div>
 
-    <h2>👤 1. Taarifa za Mwanafunzi</h2>
-
-    <div class="form-grid">
-
-      <div class="field">
-        <label>
-          Jina la Kwanza <span class="required">*</span>
-        </label>
-
-        <input
-          type="text"
-          id="firstName"
-          placeholder="Jina la kwanza"
-          required
-        >
+        <div>
+          <label>Jina la Kati</label>
+          <input type="text" id="middleName">
+        </div>
       </div>
 
+      <label>Jina la Mwisho *</label>
+      <input type="text" id="lastName" required>
 
-      <div class="field">
-        <label>
-          Jina la Kati
-        </label>
+      <div class="row">
+        <div>
+          <label>Jinsia *</label>
+          <select id="gender" required>
+            <option value="">Chagua</option>
+            <option value="Me">Me</option>
+            <option value="Ke">Ke</option>
+          </select>
+        </div>
 
-        <input
-          type="text"
-          id="middleName"
-          placeholder="Jina la kati"
-        >
+        <div>
+          <label>Tarehe ya Kuzaliwa *</label>
+          <input type="date" id="dob" required>
+        </div>
       </div>
 
+      <label>Mahali pa Kuzaliwa *</label>
+      <input type="text" id="birthPlace" required>
 
-      <div class="field">
-        <label>
-          Jina la Mwisho <span class="required">*</span>
-        </label>
+      <label>Utaifa *</label>
+      <input type="text" id="nationality" value="Mtanzania" required>
 
-        <input
-          type="text"
-          id="lastName"
-          placeholder="Jina la mwisho"
-          required
-        >
-      </div>
-
-
-      <div class="field">
-        <label>
-          Jinsia <span class="required">*</span>
-        </label>
-
-        <select id="gender" required>
-
-          <option value="">
-            Chagua jinsia
-          </option>
-
-          <option value="Me">
-            Me
-          </option>
-
-          <option value="Ke">
-            Ke
-          </option>
-
-        </select>
-      </div>
-
-
-      <div class="field">
-        <label>
-          Tarehe ya Kuzaliwa <span class="required">*</span>
-        </label>
-
-        <input
-          type="date"
-          id="dateOfBirth"
-          required
-        >
-      </div>
-
-
-      <div class="field">
-        <label>
-          Mahali pa Kuzaliwa
-        </label>
-
-        <input
-          type="text"
-          id="birthPlace"
-          placeholder="Mji / Wilaya"
-        >
-      </div>
-
-
-      <div class="field">
-        <label>
-          Uraia
-        </label>
-
-        <input
-          type="text"
-          id="nationality"
-          value="Tanzania"
-        >
-      </div>
-
-
-      <div class="field">
-        <label>
-          Namba ya Cheti cha Kuzaliwa
-        </label>
-
-        <input
-          type="text"
-          id="birthCertificate"
-          placeholder="Namba ya cheti"
-        >
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- TAARIFA ZA MASOMO -->
-
-  <section class="section">
-
-    <h2>🎓 2. Taarifa za Masomo</h2>
-
-    <div class="form-grid">
-
-      <div class="field">
-
-        <label>
-          Darasa / Kidato Anachoomba
-          <span class="required">*</span>
-        </label>
-
-        <select id="classApplying" required>
-
-          <option value="">
-            Chagua darasa / kidato
-          </option>
-
-          <option>
-            Darasa la Kwanza
-          </option>
-
-          <option>
-            Darasa la Pili
-          </option>
-
-          <option>
-            Darasa la Tatu
-          </option>
-
-          <option>
-            Darasa la Nne
-          </option>
-
-          <option>
-            Darasa la Tano
-          </option>
-
-          <option>
-            Darasa la Sita
-          </option>
-
-          <option>
-            Darasa la Saba
-          </option>
-
-          <option>
-            Kidato cha Kwanza
-          </option>
-
-          <option>
-            Kidato cha Pili
-          </option>
-
-          <option>
-            Kidato cha Tatu
-          </option>
-
-          <option>
-            Kidato cha Nne
-          </option>
-
-          <option>
-            Kidato cha Tano
-          </option>
-
-          <option>
-            Kidato cha Sita
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Shule Aliyochaguliwa Hapo Awali
-        </label>
-
-        <input
-          type="text"
-          id="previousSchool"
-          placeholder="Jina la shule"
-        >
-
-      </div>
-
-
-      <div class="field full">
-
-        <label>
-          Anwani ya Shule Aliyosoma
-        </label>
-
-        <textarea
-          id="previousSchoolAddress"
-          placeholder="Andika anwani ya shule..."
-        ></textarea>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- TAARIFA ZA MZAZI -->
-
-  <section class="section">
-
-    <h2>👨‍👩‍👦 3. Taarifa za Mzazi / Mlezi</h2>
-
-    <div class="form-grid">
-
-      <div class="field">
-
-        <label>
-          Jina Kamili la Mzazi/Mlezi
-          <span class="required">*</span>
-        </label>
-
-        <input
-          type="text"
-          id="parentName"
-          placeholder="Jina kamili"
-          required
-        >
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Uhusiano na Mwanafunzi
-          <span class="required">*</span>
-        </label>
-
-        <select id="relationship" required>
-
-          <option value="">
-            Chagua
-          </option>
-
-          <option>
-            Baba
-          </option>
-
-          <option>
-            Mama
-          </option>
-
-          <option>
-            Mlezi
-          </option>
-
-          <option>
-            Mwingine
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Namba ya Simu
-          <span class="required">*</span>
-        </label>
-
-        <input
-          type="tel"
-          id="parentPhone"
-          placeholder="Mfano: 0712345678"
-          required
-        >
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Barua Pepe
-        </label>
-
-        <input
-          type="email"
-          id="parentEmail"
-          placeholder="Mfano: jina@email.com"
-        >
-
-      </div>
-
-
-      <div class="field full">
-
-        <label>
-          Anwani ya Makazi
-          <span class="required">*</span>
-        </label>
-
-        <textarea
-          id="parentAddress"
-          placeholder="Mtaa, Kata, Wilaya, Mkoa..."
-          required
-        ></textarea>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- NYARAKA -->
-
-  <section class="section">
-
-    <h2>📎 4. Nyaraka Zinazohitajika</h2>
-
-    <div class="upload-box">
-
-      <p>
-        Nakala ya Cheti cha Kuzaliwa
-      </p>
-
-      <input
-        type="file"
-        id="birthCertificateFile"
-        accept=".pdf,.jpg,.jpeg,.png"
-      >
-
+      <label>Namba ya Cheti cha Kuzaliwa</label>
+      <input type="text" id="birthCertificate">
     </div>
 
 
-    <div class="upload-box">
+    <div class="card">
+      <h2>2. Taarifa za Masomo</h2>
 
-      <p>
-        Picha ya Mwanafunzi
-      </p>
+      <label>Darasa/Form Unayoomba *</label>
+      <select id="classApplying" required>
+        <option value="">Chagua</option>
+        <option>Awali</option>
+        <option>Darasa la Kwanza</option>
+        <option>Darasa la Pili</option>
+        <option>Darasa la Tatu</option>
+        <option>Darasa la Nne</option>
+        <option>Darasa la Tano</option>
+        <option>Darasa la Sita</option>
+        <option>Darasa la Saba</option>
+        <option>Form One</option>
+        <option>Form Two</option>
+        <option>Form Three</option>
+        <option>Form Four</option>
+        <option>Form Five</option>
+        <option>Form Six</option>
+      </select>
 
-      <input
-        type="file"
-        id="studentPhoto"
-        accept=".jpg,.jpeg,.png"
-      >
+      <label>Shule Uliyotoka</label>
+      <input type="text" id="previousSchool">
 
+      <label>Anwani ya Shule Uliyotoka</label>
+      <textarea id="previousSchoolAddress"></textarea>
     </div>
 
 
-    <div class="upload-box">
+    <div class="card">
+      <h2>3. Taarifa za Mzazi / Mlezi</h2>
 
-      <p>
-        Nyaraka nyingine kama zinahitajika
-      </p>
+      <label>Jina Kamili la Mzazi/Mlezi *</label>
+      <input type="text" id="guardianName" required>
 
-      <input
-        type="file"
-        id="otherDocument"
-        accept=".pdf,.jpg,.jpeg,.png"
-      >
+      <label>Uhusiano na Mwanafunzi *</label>
+      <select id="relationship" required>
+        <option value="">Chagua</option>
+        <option>Baba</option>
+        <option>Mama</option>
+        <option>Mlezi</option>
+        <option>Ndugu</option>
+        <option>Mwingine</option>
+      </select>
 
-    </div>
+      <div class="row">
+        <div>
+          <label>Namba ya Simu *</label>
+          <input type="tel" id="guardianPhone" required>
+        </div>
 
-  </section>
+        <div>
+          <label>Email</label>
+          <input type="email" id="guardianEmail">
+        </div>
+      </div>
 
-
-  <!-- UTHIBITISHO -->
-
-  <section class="section">
-
-    <h2>✅ 5. Uthibitisho</h2>
-
-    <div class="terms">
-
-      Tafadhali hakikisha taarifa zote ulizoingiza
-      ni sahihi kabla ya kuwasilisha maombi.
-      Taarifa hizi zitatumika katika mchakato
-      wa maombi ya kujiunga na shule.
-
-    </div>
-
-
-    <div class="checkbox-row">
-
-      <input
-        type="checkbox"
-        id="confirm"
-      >
-
-      <label for="confirm">
-        Ninathibitisha kuwa taarifa nilizotoa
-        ni sahihi na ninakubali masharti ya
-        maombi.
-      </label>
-
+      <label>Anwani ya Makazi *</label>
+      <textarea id="guardianAddress" required></textarea>
     </div>
 
 
-    <button
-      type="button"
-      class="submit-btn"
-      onclick="submitApplication()"
-    >
-      🚀 Wasilisha Maombi
-    </button>
+    <div class="card">
+      <h2>4. Nyaraka Muhimu</h2>
 
-    <p class="note">
-      * Taarifa zenye alama hii ni lazima zijazwe.
-    </p>
+      <label>Cheti cha Kuzaliwa</label>
+      <input type="file" id="birthCertificateFile" accept=".pdf,.jpg,.jpeg,.png">
+      <div class="file-note">
+        PDF, JPG, JPEG au PNG
+      </div>
 
-  </section>
+      <label>Picha ya Mwanafunzi</label>
+      <input type="file" id="studentPhoto" accept=".jpg,.jpeg,.png">
+      <div class="file-note">
+        JPG, JPEG au PNG
+      </div>
 
-</main>
+      <label>Nyaraka Nyingine</label>
+      <input type="file" id="otherDocument" accept=".pdf,.jpg,.jpeg,.png">
+      <div class="file-note">
+        PDF, JPG, JPEG au PNG
+      </div>
+    </div>
 
 
-<footer class="footer">
+    <div class="card">
 
+      <h2>5. Uthibitisho</h2>
+
+      <div class="confirmation">
+        <input type="checkbox" id="agreement">
+
+        <label for="agreement">
+          Ninathibitisha kuwa taarifa nilizotoa ni za kweli na sahihi.
+          Nakubali masharti ya maombi ya shule.
+        </label>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        Wasilisha Maombi
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
+
+<div class="footer">
   © 2026 Shule Portal Tanzania
-
-</footer>
+</div>
 
 
 <script>
 
-function submitApplication() {
+document
+  .getElementById("applicationForm")
+  .addEventListener("submit", function(event){
 
-  const firstName =
-    document.getElementById("firstName").value.trim();
+    event.preventDefault();
 
-  const lastName =
-    document.getElementById("lastName").value.trim();
+    const agreement =
+      document.getElementById("agreement").checked;
 
-  const gender =
-    document.getElementById("gender").value;
+    if(!agreement){
 
-  const dateOfBirth =
-    document.getElementById("dateOfBirth").value;
+      alert(
+        "Tafadhali kubali uthibitisho wa taarifa kabla ya kuendelea."
+      );
 
-  const classApplying =
-    document.getElementById("classApplying").value;
-
-  const parentName =
-    document.getElementById("parentName").value.trim();
-
-  const relationship =
-    document.getElementById("relationship").value;
-
-  const parentPhone =
-    document.getElementById("parentPhone").value.trim();
-
-  const parentAddress =
-    document.getElementById("parentAddress").value.trim();
-
-  const confirm =
-    document.getElementById("confirm").checked;
+      return;
+    }
 
 
-  if (
-    !firstName ||
-    !lastName ||
-    !gender ||
-    !dateOfBirth ||
-    !classApplying ||
-    !parentName ||
-    !relationship ||
-    !parentPhone ||
-    !parentAddress
-  ) {
+    const firstName =
+      document.getElementById("firstName").value.trim();
 
-    alert(
-      "Tafadhali jaza taarifa zote muhimu."
+    const lastName =
+      document.getElementById("lastName").value.trim();
+
+
+    if(!firstName || !lastName){
+
+      alert(
+        "Tafadhali jaza jina la mwanafunzi."
+      );
+
+      return;
+    }
+
+
+    const applicationNumber =
+      "SPT-" +
+      new Date().getFullYear() +
+      "-" +
+      Math.floor(
+        100000 + Math.random() * 900000
+      );
+
+
+    localStorage.setItem(
+      "applicationNumber",
+      applicationNumber
     );
 
-    return;
-  }
-
-
-  if (!confirm) {
-
-    alert(
-      "Tafadhali thibitisha kuwa taarifa zako ni sahihi."
+    localStorage.setItem(
+      "studentName",
+      firstName + " " + lastName
     );
 
-    return;
-  }
+
+    alert(
+      "Maombi yamepokelewa kwa mafanikio!\\n\\n" +
+      "Application Number: " +
+      applicationNumber
+    );
 
 
-  alert(
-    "Maombi yameandaliwa kwa ajili ya kuwasilishwa.\\n\\n" +
-    "Kumbuka: Mfumo bado haujaunganishwa na database. " +
-    "Baada ya database kuunganishwa, maombi yatahifadhiwa " +
-    "na namba ya maombi itatengenezwa moja kwa moja."
-  );
+    window.location.href =
+      "application-success.html";
 
-}
+});
 
 </script>
 
