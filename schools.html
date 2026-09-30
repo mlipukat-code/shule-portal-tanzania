@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simamia Shule - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 20px;
+    }
+
+    .back {
+      background: white;
+      color: #1565c0;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .title {
+      margin-bottom: 20px;
+    }
+
+    .title h2 {
+      color: #1565c0;
+      margin-bottom: 6px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .box h3 {
+      color: #1565c0;
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 15px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .save-btn {
+      margin-top: 18px;
+      background: #1565c0;
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 9px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .edit {
+      background: #1565c0;
+      color: white;
+      border: none;
+      padding: 7px 11px;
+      border-radius: 6px;
+      margin-right: 5px;
+    }
+
+    .delete {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 7px 11px;
+      border-radius: 6px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 25px;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .header h1 {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>🏫 Shule Portal Tanzania</h1>
+    <a href="admin-dashboard.html" class="back">← Dashboard</a>
+  </header>
+
+  <main class="container">
+
+    <div class="title">
+      <h2>Simamia Shule</h2>
+      <p>Ongeza na simamia shule zinazouza fomu kupitia mfumo.</p>
+    </div>
+
+    <section class="box">
+      <h3>➕ Ongeza Shule</h3>
+
+      <form id="schoolForm">
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Jina la Shule</label>
+            <input
+              type="text"
+              id="schoolName"
+              placeholder="Mfano: Bright Future School"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Region</label>
+            <input
+              type="text"
+              id="region"
+              placeholder="Mfano: Dar es Salaam"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>District</label>
+            <input
+              type="text"
+              id="district"
+              placeholder="Mfano: Kinondoni"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Aina ya Shule</label>
+            <select id="schoolType" required>
+              <option value="">Chagua</option>
+              <option>Primary</option>
+              <option>Secondary</option>
+              <option>Primary & Secondary</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Bei ya Fomu (TZS)</label>
+            <input
+              type="number"
+              id="formPrice"
+              placeholder="10000"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Simu ya Shule</label>
+            <input
+              type="tel"
+              id="phone"
+              placeholder="07XXXXXXXX"
+              required
+            >
+          </div>
+
+          <div class="field full">
+            <label>Anwani ya Shule</label>
+            <input
+              type="text"
+              id="address"
+              placeholder="Weka anwani ya shule"
+              required
+            >
+          </div>
+
+        </div>
+
+        <button type="submit" class="save-btn">
+          Hifadhi Shule
+        </button>
+
+      </form>
+    </section>
+
+    <section class="box">
+      <h3>🏫 Shule Zilizosajiliwa</h3>
+
+      <div class="table-container">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Shule</th>
+              <th>Region</th>
+              <th>District</th>
+              <th>Aina</th>
+              <th>Bei ya Fomu</th>
+              <th>Hatua</th>
+            </tr>
+          </thead>
+
+          <tbody id="schoolList">
+            <tr>
+              <td colspan="6" class="empty">
+                Hakuna shule iliyoongezwa bado.
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    document.getElementById("schoolForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      alert("Taarifa za shule zimepokelewa. Database itawezesha kuhifadhi taarifa hizi moja kwa moja.");
+
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>
