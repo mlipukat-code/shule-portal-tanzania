@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Maombi Yamepokelewa - Shule Portal Tanzania</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f7fb;
+  color:#1f2937;
+}
+
+.header{
+  background:#0b5ed7;
+  color:white;
+  text-align:center;
+  padding:20px 15px;
+}
+
+.header h1{
+  margin:0;
+  font-size:23px;
+}
+
+.header p{
+  margin:6px 0 0;
+  font-size:14px;
+}
+
+.container{
+  max-width:650px;
+  margin:35px auto;
+  padding:0 15px;
+}
+
+.success-card{
+  background:white;
+  border-radius:14px;
+  padding:30px 20px;
+  text-align:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.09);
+}
+
+.icon{
+  width:70px;
+  height:70px;
+  margin:0 auto 15px;
+  border-radius:50%;
+  background:#198754;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  font-weight:bold;
+}
+
+.success-card h2{
+  color:#198754;
+  margin:10px 0;
+}
+
+.success-card p{
+  color:#64748b;
+  line-height:1.6;
+}
+
+.application-box{
+  background:#f1f6ff;
+  border:1px solid #cfe0ff;
+  border-radius:10px;
+  padding:18px;
+  margin:22px 0;
+}
+
+.application-label{
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:7px;
+}
+
+.application-number{
+  font-size:25px;
+  font-weight:bold;
+  color:#0b5ed7;
+  letter-spacing:1px;
+  word-break:break-word;
+}
+
+.details{
+  text-align:left;
+  margin-top:20px;
+}
+
+.detail-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:11px 0;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.detail-row:last-child{
+  border-bottom:none;
+}
+
+.detail-label{
+  color:#64748b;
+}
+
+.detail-value{
+  font-weight:bold;
+  text-align:right;
+}
+
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:25px;
+}
+
+button,
+a{
+  width:100%;
+  padding:13px;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  text-decoration:none;
+  text-align:center;
+  cursor:pointer;
+}
+
+.print-btn{
+  background:#0b5ed7;
+  color:white;
+  border:none;
+}
+
+.track-btn{
+  background:#198754;
+  color:white;
+}
+
+.home-btn{
+  background:#e9ecef;
+  color:#212529;
+}
+
+.notice{
+  margin-top:20px;
+  background:#fff8e1;
+  border-left:4px solid #ffc107;
+  padding:12px;
+  text-align:left;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.footer{
+  text-align:center;
+  padding:25px 15px;
+  color:#64748b;
+  font-size:13px;
+}
+
+@media(max-width:500px){
+
+  .success-card{
+    padding:25px 15px;
+  }
+
+  .application-number{
+    font-size:21px;
+  }
+
+  .detail-row{
+    flex-direction:column;
+    gap:4px;
+  }
+
+  .detail-value{
+    text-align:left;
+  }
+}
+
+@media print{
+
+  .header,
+  .buttons,
+  .footer{
+    display:none;
+  }
+
+  body{
+    background:white;
+  }
+
+  .container{
+    margin:0 auto;
+  }
+
+  .success-card{
+    box-shadow:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>Shule Portal Tanzania</h1>
+  <p>Huduma za Maombi ya Shule Mtandaoni</p>
+</div>
+
+
+<div class="container">
+
+  <div class="success-card">
+
+    <div class="icon">✓</div>
+
+    <h2>Maombi Yamepokelewa!</h2>
+
+    <p>
+      Hongera! Maombi yako yamewasilishwa kwa mafanikio.
+      Tafadhali hifadhi namba yako ya maombi kwa ajili ya
+      kufuatilia hatua ya maombi yako.
+    </p>
+
+
+    <div class="application-box">
+
+      <div class="application-label">
+        APPLICATION NUMBER
+      </div>
+
+      <div
+        class="application-number"
+        id="applicationNumber">
+        Inapakia...
+      </div>
+
+    </div>
+
+
+    <div class="details">
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Mwanafunzi
+        </div>
+
+        <div
+          class="detail-value"
+          id="studentName">
+          -
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Shule
+        </div>
+
+        <div class="detail-value">
+          Shule ya Mfano Academy
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Mkoa
+        </div>
+
+        <div class="detail-value">
+          Dar es Salaam
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Mwaka wa Masomo
+        </div>
+
+        <div class="detail-value">
+          2026
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Hali ya Maombi
+        </div>
+
+        <div class="detail-value">
+          Imepokelewa
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="notice">
+      <strong>Muhimu:</strong>
+      Hii ni namba yako ya maombi. Usipoteze namba hii.
+      Itatumika kufuatilia maombi yako katika mfumo.
+    </div>
+
+
+    <div class="buttons">
+
+      <button
+        class="print-btn"
+        onclick="window.print()">
+        🖨️ Chapisha / Hifadhi PDF
+      </button>
+
+
+      <a
+        href="#"
+        class="track-btn"
+        onclick="trackApplication(event)">
+        🔎 Fuatilia Maombi
+      </a>
+
+
+      <a
+        href="index.html"
+        class="home-btn">
+        🏠 Rudi Mwanzo
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="footer">
+  © 2026 Shule Portal Tanzania
+</div>
+
+
+<script>
+
+const applicationNumber =
+  localStorage.getItem("applicationNumber");
+
+const studentName =
+  localStorage.getItem("studentName");
+
+
+if(applicationNumber){
+
+  document.getElementById(
+    "applicationNumber"
+  ).textContent = applicationNumber;
+
+}else{
+
+  document.getElementById(
+    "applicationNumber"
+  ).textContent = "Haijapatikana";
+
+}
+
+
+if(studentName){
+
+  document.getElementById(
+    "studentName"
+  ).textContent = studentName;
+
+}
+
+
+function trackApplication(event){
+
+  event.preventDefault();
+
+  alert(
+    "Sehemu ya kufuatilia maombi itaunganishwa na database katika hatua inayofuata."
+  );
+
+}
+
+</script>
+
+</body>
+</html>
