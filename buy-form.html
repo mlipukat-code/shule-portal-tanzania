@@ -148,6 +148,7 @@
       display: flex;
       justify-content: space-between;
       padding: 9px 0;
+      gap: 15px;
     }
 
     .total {
@@ -170,6 +171,7 @@
     }
 
     .continue-btn {
+      display: block;
       width: 100%;
       border: none;
       background: #1565c0;
@@ -180,6 +182,8 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 20px;
+      text-align: center;
+      text-decoration: none;
     }
 
     .continue-btn:hover {
@@ -197,6 +201,7 @@
 
       .summary-row {
         gap: 15px;
+        flex-wrap: wrap;
       }
     }
   </style>
@@ -206,11 +211,15 @@
 
 <header class="header">
   <div class="header-inner">
-    <div class="logo">🏫 Shule Portal Tanzania</div>
+
+    <div class="logo">
+      🏫 Shule Portal Tanzania
+    </div>
 
     <a href="school-details.html" class="back">
       ← Rudi
     </a>
+
   </div>
 </header>
 
@@ -295,12 +304,12 @@
       utaweza kujaza fomu ya maombi.
     </div>
 
-    <button
+    <a
+      href="payment.html"
       class="continue-btn"
-      onclick="continuePayment()"
     >
       Endelea na Malipo →
-    </button>
+    </a>
 
   </section>
 
@@ -322,27 +331,6 @@ function updatePrice() {
 
   document.getElementById("totalPrice").textContent =
     "TZS " + price.toLocaleString();
-
-}
-
-
-function continuePayment() {
-
-  const selected =
-    document.querySelector(
-      'input[name="applicationForm"]:checked'
-    );
-
-  if (!selected) {
-    alert("Tafadhali chagua fomu.");
-    return;
-  }
-
-  alert(
-    "Hatua inayofuata ni malipo ya TZS " +
-    Number(selected.value).toLocaleString() +
-    "."
-  );
 
 }
 
