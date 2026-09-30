@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malipo - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 20px;
+    }
+
+    .back {
+      background: white;
+      color: #1565c0;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .title {
+      margin-bottom: 20px;
+    }
+
+    .title h2 {
+      color: #1565c0;
+      margin-bottom: 6px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: white;
+      padding: 18px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .stat h3 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 7px;
+    }
+
+    .number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1565c0;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .box h3 {
+      color: #1565c0;
+      margin-bottom: 18px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .status {
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .confirmed {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .pending {
+      background: #fff8e1;
+      color: #f57f17;
+    }
+
+    .failed {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .view-btn {
+      background: #1565c0;
+      color: white;
+      border: none;
+      padding: 7px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 30px;
+    }
+
+    .info {
+      background: #fff8e1;
+      color: #795548;
+      padding: 12px;
+      border-radius: 9px;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>🏫 Shule Portal Tanzania</h1>
+    <a href="admin-dashboard.html" class="back">← Dashboard</a>
+  </header>
+
+  <main class="container">
+
+    <div class="title">
+      <h2>Malipo ya Fomu</h2>
+      <p>Simamia na fuatilia malipo yote ya waombaji.</p>
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-icon">💰</div>
+        <h3>Jumla ya Malipo</h3>
+        <div class="number">TZS 0</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">✅</div>
+        <h3>Yaliyothibitishwa</h3>
+        <div class="number">0</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">⏳</div>
+        <h3>Yanasubiri</h3>
+        <div class="number">0</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">❌</div>
+        <h3>Yaliyoshindikana</h3>
+        <div class="number">0</div>
+      </div>
+
+    </div>
+
+    <section class="box">
+
+      <h3>🔎 Tafuta Malipo</h3>
+
+      <div class="info">
+        Mfumo utaweza kufuatilia malipo kwa Application Number,
+        jina la mwombaji, shule na hali ya malipo baada ya database
+        na payment gateway kuunganishwa.
+      </div>
+
+      <div class="filters">
+
+        <input
+          type="text"
+          placeholder="Application Number au jina"
+        >
+
+        <select>
+          <option value="">Shule zote</option>
+          <option>Shule ya Mfano Academy</option>
+          <option>Bright Future School</option>
+          <option>St. Joseph School</option>
+        </select>
+
+        <select>
+          <option value="">Hali zote</option>
+          <option>Confirmed</option>
+          <option>Pending</option>
+          <option>Failed</option>
+        </select>
+
+      </div>
+
+    </section>
+
+    <section class="box">
+
+      <h3>📋 Orodha ya Malipo</h3>
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Application No.</th>
+              <th>Mwanafunzi</th>
+              <th>Shule</th>
+              <th>Kiasi</th>
+              <th>Tarehe</th>
+              <th>Hali</th>
+              <th>Hatua</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td colspan="8" class="empty">
+                Hakuna malipo yaliyopokelewa bado.
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+</html>
