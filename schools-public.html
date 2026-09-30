@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tafuta Shule - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .home {
+      background: white;
+      color: #1565c0;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 20px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .intro h1 {
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .intro p {
+      color: #666;
+    }
+
+    .search-box {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .search-box h2 {
+      color: #1565c0;
+      margin-bottom: 15px;
+      font-size: 19px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 12px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .search-btn {
+      background: #1565c0;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .search-btn:hover {
+      background: #0d47a1;
+    }
+
+    .results-title {
+      color: #1565c0;
+      margin-bottom: 15px;
+    }
+
+    .schools {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .school-card {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .school-top {
+      background: #e3f2fd;
+      padding: 20px;
+      text-align: center;
+      font-size: 45px;
+    }
+
+    .school-content {
+      padding: 18px;
+    }
+
+    .school-content h3 {
+      color: #1565c0;
+      margin-bottom: 10px;
+    }
+
+    .school-info {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+
+    .price {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 9px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .view-btn {
+      display: block;
+      text-align: center;
+      background: #1565c0;
+      color: white;
+      padding: 11px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .view-btn:hover {
+      background: #0d47a1;
+    }
+
+    .note {
+      margin-top: 25px;
+      background: #fff8e1;
+      color: #795548;
+      padding: 13px;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .empty {
+      display: none;
+      background: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 14px;
+      color: #777;
+    }
+
+    @media (max-width: 900px) {
+      .filters {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .schools {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        gap: 10px;
+      }
+
+      .logo {
+        font-size: 16px;
+      }
+
+      .filters,
+      .schools {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">🏫 Shule Portal Tanzania</div>
+    <a href="index.html" class="home">← Mwanzo</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="intro">
+    <h1>Tafuta Shule</h1>
+    <p>Tafuta shule na upate taarifa za fomu za maombi mtandaoni.</p>
+  </section>
+
+  <section class="search-box">
+
+    <h2>🔎 Tafuta Shule</h2>
+
+    <div class="filters">
+
+      <input
+        type="text"
+        id="schoolSearch"
+        placeholder="Andika jina la shule..."
+      >
+
+      <select id="region">
+        <option value="">Mikoa yote</option>
+        <option>Dar es Salaam</option>
+        <option>Arusha</option>
+        <option>Dodoma</option>
+        <option>Mwanza</option>
+        <option>Mbeya</option>
+        <option>Morogoro</option>
+      </select>
+
+      <select id="type">
+        <option value="">Aina zote</option>
+        <option>Primary</option>
+        <option>Secondary</option>
+        <option>Primary & Secondary</option>
+      </select>
+
+      <button class="search-btn" onclick="searchSchools()">
+        Tafuta
+      </button>
+
+    </div>
+
+  </section>
+
+  <h2 class="results-title">🏫 Shule Zinazopatikana</h2>
+
+  <div class="schools" id="schoolsList">
+
+    <div class="school-card"
+         data-name="Shule ya Mfano Academy"
+         data-region="Dar es Salaam"
+         data-type="Primary & Secondary">
+
+      <div class="school-top">🏫</div>
+
+      <div class="school-content">
+
+        <h3>Shule ya Mfano Academy</h3>
+
+        <div class="school-info">
+          📍 Dar es Salaam<br>
+          🎓 Primary & Secondary<br>
+          📞 0600000000
+        </div>
+
+        <div class="price">
+          Fomu: TZS 10,000
+        </div>
+
+        <a href="#" class="view-btn"
+           onclick="schoolDetails('Shule ya Mfano Academy')">
+          Angalia Shule
+        </a>
+
+      </div>
+    </div>
+
+
+    <div class="school-card"
+         data-name="Bright Future School"
+         data-region="Arusha"
+         data-type="Primary">
+
+      <div class="school-top">🏫</div>
+
+      <div class="school-content">
+
+        <h3>Bright Future School</h3>
+
+        <div class="school-info">
+          📍 Arusha<br>
+          🎓 Primary<br>
+          📞 0600000001
+        </div>
+
+        <div class="price">
+          Fomu: TZS 5,000
+        </div>
+
+        <a href="#" class="view-btn"
+           onclick="schoolDetails('Bright Future School')">
+          Angalia Shule
+        </a>
+
+      </div>
+    </div>
+
+
+    <div class="school-card"
+         data-name="St. Joseph School"
+         data-region="Dodoma"
+         data-type="Secondary">
+
+      <div class="school-top">🏫</div>
+
+      <div class="school-content">
+
+        <h3>St. Joseph School</h3>
+
+        <div class="school-info">
+          📍 Dodoma<br>
+          🎓 Secondary<br>
+          📞 0600000002
+        </div>
+
+        <div class="price">
+          Fomu: TZS 10,000
+        </div>
+
+        <a href="#" class="view-btn"
+           onclick="schoolDetails('St. Joseph School')">
+          Angalia Shule
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="empty" id="emptyMessage">
+    Hakuna shule inayolingana na utafutaji wako.
+  </div>
+
+  <div class="note">
+    ℹ️ Taarifa za shule zinazoonekana hapa ni za mfano kwa sasa.
+    Baada ya database kuunganishwa, shule zote zilizosajiliwa zitaonekana
+    moja kwa moja.
+  </div>
+
+</main>
+
+<script>
+
+function searchSchools() {
+
+  const search =
+    document.getElementById("schoolSearch")
+      .value.toLowerCase();
+
+  const region =
+    document.getElementById("region").value;
+
+  const type =
+    document.getElementById("type").value;
+
+  const cards =
+    document.querySelectorAll(".school-card");
+
+  let found = 0;
+
+  cards.forEach(card => {
+
+    const name =
+      card.dataset.name.toLowerCase();
+
+    const cardRegion =
+      card.dataset.region;
+
+    const cardType =
+      card.dataset.type;
+
+    const matchName =
+      name.includes(search);
+
+    const matchRegion =
+      !region || cardRegion === region;
+
+    const matchType =
+      !type || cardType === type;
+
+    if (matchName && matchRegion && matchType) {
+      card.style.display = "block";
+      found++;
+    } else {
+      card.style.display = "none";
+    }
+
+  });
+
+  document.getElementById("emptyMessage").style.display =
+    found === 0 ? "block" : "none";
+}
+
+
+function schoolDetails(school) {
+
+  alert(
+    "Umechagua: " + school +
+    "\\n\\nHatua inayofuata ni kuangalia taarifa za shule na kununua fomu."
+  );
+
+}
+
+</script>
+
+</body>
+</html>
