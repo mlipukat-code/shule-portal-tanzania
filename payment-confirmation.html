@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Uthibitisho wa Malipo - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+      line-height: 1.5;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+    }
+
+    .header-inner {
+      max-width: 700px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .back {
+      background: white;
+      color: #1565c0;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 25px 15px 40px;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .title h1 {
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .title p {
+      color: #666;
+    }
+
+    .card {
+      background: white;
+      padding: 23px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      color: #1565c0;
+      font-size: 19px;
+      margin-bottom: 18px;
+    }
+
+    .summary {
+      background: #e3f2fd;
+      padding: 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 8px 0;
+    }
+
+    .amount {
+      color: #2e7d32;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .option {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+
+    .option label {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .option input {
+      margin-top: 4px;
+    }
+
+    .option p {
+      color: #666;
+      font-size: 14px;
+      margin-top: 7px;
+      margin-left: 25px;
+    }
+
+    .field {
+      margin-top: 18px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input[type="text"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .notice {
+      background: #fff8e1;
+      color: #795548;
+      padding: 14px;
+      border-radius: 9px;
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      background: #1565c0;
+      color: white;
+      padding: 15px;
+      border-radius: 9px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background: #0d47a1;
+    }
+
+    .footer {
+      text-align: center;
+      color: #777;
+      padding: 25px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 500px) {
+
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .summary-row {
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .container {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <div class="logo">
+      🏫 Shule Portal Tanzania
+    </div>
+
+    <a href="payment.html" class="back">
+      ← Rudi
+    </a>
+
+  </div>
+
+</header>
+
+
+<main class="container">
+
+  <section class="title">
+
+    <h1>💳 Uthibitisho wa Malipo</h1>
+
+    <p>
+      Kamilisha taarifa za malipo ya fomu.
+    </p>
+
+  </section>
+
+
+  <div class="card">
+
+    <div class="summary">
+
+      <div class="summary-row">
+        <span>Shule</span>
+        <strong>Shule ya Mfano Academy</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Fomu</span>
+        <strong>Maombi ya Kujiunga</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Namba ya Maombi</span>
+        <strong>SPT-2026-0001</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Kiasi</span>
+        <span class="amount">TZS 10,000</span>
+      </div>
+
+    </div>
+
+
+    <h2>Chagua Njia ya Malipo</h2>
+
+
+    <div class="option">
+
+      <label>
+
+        <input
+          type="radio"
+          name="paymentMethod"
+          value="mobile"
+        >
+
+        <span>
+          📱 Malipo kwa Simu
+        </span>
+
+      </label>
+
+      <p>
+        M-Pesa / Airtel Money / Mixx by Yas / HaloPesa
+      </p>
+
+    </div>
+
+
+    <div class="option">
+
+      <label>
+
+        <input
+          type="radio"
+          name="paymentMethod"
+          value="bank"
+        >
+
+        <span>
+          🏦 Benki
+        </span>
+
+      </label>
+
+      <p>
+        Malipo kupitia benki yatathibitishwa na mfumo.
+      </p>
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="phone">
+        Namba ya Simu iliyotumika kulipa
+      </label>
+
+      <input
+        type="tel"
+        id="phone"
+        placeholder="Mfano: 0712345678"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="transaction">
+        Transaction / Reference Number
+      </label>
+
+      <input
+        type="text"
+        id="transaction"
+        placeholder="Mfano: TXN123456789"
+      >
+
+    </div>
+
+
+    <div class="notice">
+
+      ℹ️ Kwa sasa ukurasa huu ni wa maandalizi.
+      Mfumo bado haujaunganishwa na huduma ya malipo
+      halisi. Baada ya payment gateway kuunganishwa,
+      mfumo utaweza kuthibitisha malipo moja kwa moja.
+
+    </div>
+
+
+    <button
+      class="btn"
+      type="button"
+      onclick="confirmPayment()"
+    >
+      ✅ Thibitisha Malipo
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Baada ya Malipo</h2>
+
+    <p>
+      Malipo yakithibitishwa, mwombaji ataweza
+      kuendelea kujaza fomu ya maombi na kupokea
+      namba ya maombi.
+    </p>
+
+  </div>
+
+</main>
+
+
+<footer class="footer">
+
+  © 2026 Shule Portal Tanzania
+
+</footer>
+
+
+<script>
+
+function confirmPayment() {
+
+  const method =
+    document.querySelector(
+      'input[name="paymentMethod"]:checked'
+    );
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const transaction =
+    document.getElementById("transaction").value.trim();
+
+
+  if (!method) {
+
+    alert(
+      "Tafadhali chagua njia ya malipo."
+    );
+
+    return;
+  }
+
+
+  if (!phone) {
+
+    alert(
+      "Tafadhali ingiza namba ya simu."
+    );
+
+    return;
+  }
+
+
+  if (!transaction) {
+
+    alert(
+      "Tafadhali ingiza Transaction / Reference Number."
+    );
+
+    return;
+  }
+
+
+  alert(
+    "Taarifa za malipo zimepokelewa.\\n\\n" +
+    "Namba ya Transaction: " +
+    transaction +
+    "\\n\\n" +
+    "Mfumo wa malipo halisi utaunganisha " +
+    "uthibitisho wa malipo na hatua ya kujaza fomu."
+  );
+
+}
+
+</script>
+
+</body>
+</html>
