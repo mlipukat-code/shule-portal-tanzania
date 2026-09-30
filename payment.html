@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malipo ya Fomu - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    .header {
+      background: #0b5ed7;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 30px auto;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .school {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0b5ed7;
+      margin-bottom: 8px;
+    }
+
+    .amount {
+      font-size: 30px;
+      font-weight: bold;
+      color: #198754;
+      margin: 15px 0;
+    }
+
+    .payment-option {
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    .payment-option:hover {
+      border-color: #0b5ed7;
+    }
+
+    .payment-option input {
+      margin-right: 10px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 9px;
+      background: #0b5ed7;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background: #084298;
+    }
+
+    .notice {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 9px;
+      margin-top: 15px;
+      line-height: 1.5;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 10px;
+      color: #0b5ed7;
+      text-decoration: none;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 25px;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>Shule Portal Tanzania</h1>
+    <p>Malipo ya Fomu ya Maombi</p>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <div class="school">Shule ya Mfano Academy</div>
+      <p>Dar es Salaam</p>
+      <p>Fomu ya Maombi ya Kujiunga</p>
+
+      <div class="amount">TZS 10,000</div>
+
+      <p><strong>Namba ya Maombi:</strong> SPT-2026-0001</p>
+    </div>
+
+    <div class="card">
+      <h2>Chagua Njia ya Malipo</h2>
+
+      <div class="payment-option">
+        <label>
+          <input type="radio" name="payment" value="mobile">
+          Malipo kwa Simu
+        </label>
+        <p>M-Pesa / Airtel Money / Mixx by Yas / HaloPesa</p>
+      </div>
+
+      <div class="payment-option">
+        <label>
+          <input type="radio" name="payment" value="bank">
+          Benki
+        </label>
+        <p>Malipo kupitia akaunti ya benki ya shule</p>
+      </div>
+
+      <div style="margin-top:20px;">
+        <label for="phone">Namba ya Simu</label>
+        <input
+          type="tel"
+          id="phone"
+          placeholder="Mfano: 0712345678"
+        >
+      </div>
+
+      <div class="notice">
+        <strong>Kumbuka:</strong><br>
+        Huu ni ukurasa wa maandalizi ya mfumo wa malipo.
+        Malipo halisi yataunganishwa baada ya kuchagua huduma
+        rasmi ya malipo.
+      </div>
+
+      <button class="btn" onclick="startPayment()">
+        Endelea na Malipo
+      </button>
+
+      <a class="back" href="buy-form.html">
+        ← Rudi kwenye Fomu
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 Shule Portal Tanzania
+  </div>
+
+  <script>
+    function startPayment() {
+
+      const payment = document.querySelector(
+        'input[name="payment"]:checked'
+      );
+
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!payment) {
+        alert("Tafadhali chagua njia ya malipo.");
+        return;
+      }
+
+      if (!phone) {
+        alert("Tafadhali ingiza namba ya simu.");
+        return;
+      }
+
+      alert(
+        "Umechagua malipo kwa: " +
+        payment.value +
+        "\\nNamba ya simu: " +
+        phone +
+        "\\n\\nMalipo halisi yataunganishwa kwenye hatua inayofuata."
+      );
+    }
+  </script>
+
+</body>
+</html>
