@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Taarifa za Shule - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .back {
+      background: white;
+      color: #1565c0;
+      padding: 9px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 20px;
+    }
+
+    .school-header {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .school-icon {
+      width: 80px;
+      height: 80px;
+      margin: auto auto 15px;
+      border-radius: 50%;
+      background: #e3f2fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .school-header h1 {
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .school-header p {
+      color: #666;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .box h2 {
+      color: #1565c0;
+      font-size: 19px;
+      margin-bottom: 18px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 13px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: #666;
+    }
+
+    .value {
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .form-card {
+      border: 2px solid #e3f2fd;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .form-card h3 {
+      color: #1565c0;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    .period {
+      background: #fff8e1;
+      color: #795548;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .buy-btn {
+      display: block;
+      width: 100%;
+      background: #1565c0;
+      color: white;
+      text-align: center;
+      padding: 13px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .buy-btn:hover {
+      background: #0d47a1;
+    }
+
+    .contact p {
+      padding: 8px 0;
+      color: #555;
+    }
+
+    .notice {
+      background: #e3f2fd;
+      color: #0d47a1;
+      padding: 14px;
+      border-radius: 9px;
+      margin-top: 5px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .header-inner {
+        gap: 10px;
+      }
+
+      .logo {
+        font-size: 16px;
+      }
+
+      .school-header {
+        padding: 22px 15px;
+      }
+
+      .info-row {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .value {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">🏫 Shule Portal Tanzania</div>
+
+    <a href="schools-public.html" class="back">
+      ← Tafuta Shule
+    </a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="school-header">
+
+    <div class="school-icon">
+      🏫
+    </div>
+
+    <h1>Shule ya Mfano Academy</h1>
+
+    <p>
+      Dar es Salaam • Primary & Secondary
+    </p>
+
+  </section>
+
+
+  <div class="grid">
+
+    <div>
+
+      <section class="box">
+
+        <h2>📋 Taarifa za Shule</h2>
+
+        <div class="info-row">
+          <span class="label">Jina la Shule</span>
+          <span class="value">Shule ya Mfano Academy</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Mkoa</span>
+          <span class="value">Dar es Salaam</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Wilaya</span>
+          <span class="value">Kinondoni</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Aina ya Shule</span>
+          <span class="value">Primary & Secondary</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Anwani</span>
+          <span class="value">Dar es Salaam, Tanzania</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Simu</span>
+          <span class="value">0600000000</span>
+        </div>
+
+      </section>
+
+
+      <section class="box">
+
+        <h2>📄 Fomu Zinazopatikana</h2>
+
+        <div class="form-card">
+
+          <h3>Fomu ya Maombi ya Kujiunga</h3>
+
+          <p>
+            Fomu ya maombi ya mwanafunzi kwa mwaka wa masomo.
+          </p>
+
+          <div class="price">
+            TZS 10,000
+          </div>
+
+          <div class="period">
+            📅 Kipindi cha Maombi:<br>
+            01 Januari - 30 Novemba
+          </div>
+
+          <a
+            href="buy-form.html"
+            class="buy-btn"
+          >
+            🛒 Nunua Fomu
+          </a>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <div>
+
+      <section class="box contact">
+
+        <h2>📞 Mawasiliano</h2>
+
+        <p>📍 Dar es Salaam, Tanzania</p>
+
+        <p>📞 0600000000</p>
+
+        <p>✉️ info@mfanoacademy.co.tz</p>
+
+      </section>
+
+
+      <section class="box">
+
+        <h2>ℹ️ Muhimu</h2>
+
+        <div class="notice">
+          Hakikisha unasoma taarifa zote za shule
+          kabla ya kununua fomu.
+
+          <br><br>
+
+          Baada ya malipo kuthibitishwa,
+          utaweza kujaza fomu ya maombi
+          mtandaoni.
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+</main>
+
+</body>
+</html>
