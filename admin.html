@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e3f2fd, #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #1565c0;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0d47a1;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #1565c0;
+      text-decoration: none;
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 12px;
+      background: #fff8e1;
+      border-radius: 10px;
+      color: #795548;
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <div class="logo">🏫</div>
+
+    <h1>Admin Login</h1>
+
+    <p class="subtitle">
+      Shule Portal Tanzania
+    </p>
+
+    <form id="loginForm">
+
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Ingiza email"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Ingiza password"
+        required
+      >
+
+      <button type="submit">
+        Ingia
+      </button>
+
+    </form>
+
+    <a href="/" class="back">
+      ← Rudi kwenye ukurasa mkuu
+    </a>
+
+    <div class="note">
+      Mfumo wa login utaunganishwa na database katika hatua inayofuata.
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      alert("Login itaunganishwa na mfumo wa Admin baada ya database kuwekwa.");
+    });
+  </script>
+
+</body>
+</html>
