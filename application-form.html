@@ -76,6 +76,7 @@
       border: 1px solid #ccc;
       border-radius: 7px;
       font-size: 16px;
+      background: white;
     }
 
     textarea {
@@ -106,21 +107,15 @@
       padding: 12px;
       margin-top: 15px;
       border-radius: 7px;
-      text-align: center;
+      text-align: left;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
 
     .error {
       background: #ffe5e5;
       color: #a00000;
-    }
-
-    .loading {
-      background: #fff4d6;
-      color: #7a5600;
-    }
-
-    .required {
-      color: red;
+      border: 1px solid #ffb3b3;
     }
 
     .loading-school {
@@ -128,6 +123,14 @@
       padding: 15px;
       color: #0b74b8;
       font-weight: bold;
+    }
+
+    .required {
+      color: red;
+    }
+
+    .section-title {
+      margin-top: 30px;
     }
 
     @media (max-width: 600px) {
@@ -156,12 +159,17 @@
 
   <div class="card">
 
+    <!-- SCHOOL LOADING -->
+
     <div
       id="schoolLoading"
       class="loading-school"
     >
       Inapakia taarifa za shule...
     </div>
+
+
+    <!-- SCHOOL INFORMATION -->
 
     <div
       id="schoolInfo"
@@ -194,9 +202,13 @@
     </div>
 
 
+    <!-- APPLICATION FORM -->
+
     <h2>Taarifa za Mwanafunzi</h2>
 
     <form id="applicationForm">
+
+      <!-- STUDENT NAME -->
 
       <label>
         Jina Kamili la Mwanafunzi
@@ -206,9 +218,12 @@
       <input
         type="text"
         id="studentName"
+        placeholder="Mfano: John Mlipuka"
         required
       >
 
+
+      <!-- GENDER -->
 
       <label>
         Jinsia
@@ -235,6 +250,8 @@
       </select>
 
 
+      <!-- DATE OF BIRTH -->
+
       <label>
         Tarehe ya Kuzaliwa
         <span class="required">*</span>
@@ -247,20 +264,89 @@
       >
 
 
+      <!-- CLASS -->
+
       <label>
         Darasa / Kidato
         <span class="required">*</span>
       </label>
 
-      <input
-        type="text"
+      <select
         id="classLevel"
-        placeholder="Mfano: Darasa la 1 / Kidato cha 1"
         required
       >
 
+        <option value="">
+          -- Chagua Darasa / Kidato --
+        </option>
 
-      <h2 style="margin-top:30px;">
+        <optgroup label="Shule ya Msingi">
+
+          <option value="Darasa la 1">
+            Darasa la 1
+          </option>
+
+          <option value="Darasa la 2">
+            Darasa la 2
+          </option>
+
+          <option value="Darasa la 3">
+            Darasa la 3
+          </option>
+
+          <option value="Darasa la 4">
+            Darasa la 4
+          </option>
+
+          <option value="Darasa la 5">
+            Darasa la 5
+          </option>
+
+          <option value="Darasa la 6">
+            Darasa la 6
+          </option>
+
+          <option value="Darasa la 7">
+            Darasa la 7
+          </option>
+
+        </optgroup>
+
+
+        <optgroup label="Sekondari">
+
+          <option value="Kidato cha 1">
+            Kidato cha 1
+          </option>
+
+          <option value="Kidato cha 2">
+            Kidato cha 2
+          </option>
+
+          <option value="Kidato cha 3">
+            Kidato cha 3
+          </option>
+
+          <option value="Kidato cha 4">
+            Kidato cha 4
+          </option>
+
+          <option value="Kidato cha 5">
+            Kidato cha 5
+          </option>
+
+          <option value="Kidato cha 6">
+            Kidato cha 6
+          </option>
+
+        </optgroup>
+
+      </select>
+
+
+      <!-- PARENT -->
+
+      <h2 class="section-title">
         Taarifa za Mzazi / Mlezi
       </h2>
 
@@ -273,9 +359,12 @@
       <input
         type="text"
         id="parentName"
+        placeholder="Jina kamili la mzazi/mlezi"
         required
       >
 
+
+      <!-- PHONE -->
 
       <label>
         Namba ya Simu
@@ -290,6 +379,8 @@
       >
 
 
+      <!-- EMAIL -->
+
       <label>
         Barua Pepe
       </label>
@@ -301,6 +392,8 @@
       >
 
 
+      <!-- ADDRESS -->
+
       <label>
         Anwani ya Makazi
       </label>
@@ -311,11 +404,15 @@
       ></textarea>
 
 
+      <!-- MESSAGE -->
+
       <div
         id="message"
         class="message"
       ></div>
 
+
+      <!-- SUBMIT -->
 
       <button
         type="submit"
@@ -335,7 +432,7 @@
 <script>
 
   // ==========================================
-  // GET URL PARAMETERS
+  // URL PARAMETERS
   // ==========================================
 
   const params =
@@ -402,14 +499,14 @@
   // ==========================================
 
   function showMessage(
-    text,
-    type
+    text
   ) {
 
-    message.textContent = text;
+    message.textContent =
+      text;
 
     message.className =
-      "message " + type;
+      "message error";
 
     message.style.display =
       "block";
@@ -429,8 +526,7 @@
         "⚠️ Hakuna shule iliyochaguliwa.";
 
       showMessage(
-        "Tafadhali rudi kwenye Tafuta Shule na uchague shule.",
-        "error"
+        "Tafadhali rudi kwenye Tafuta Shule na uchague shule."
       );
 
       return;
@@ -453,7 +549,8 @@
       if (!response.ok) {
 
         throw new Error(
-          "Server imeshindwa kutoa taarifa za shule."
+          "Server imeshindwa kutoa taarifa za shule. HTTP " +
+          response.status
         );
 
       }
@@ -469,7 +566,7 @@
       ) {
 
         throw new Error(
-          "Taarifa za shule hazijapatikana."
+          "Taarifa za shule hazijapatikana kutoka server."
         );
 
       }
@@ -489,8 +586,9 @@
           "⚠️ Shule haikupatikana.";
 
         showMessage(
-          "Shule uliyochagua haipatikani au haijawezeshwa.",
-          "error"
+          "Shule yenye ID " +
+          schoolId +
+          " haikupatikana."
         );
 
         return;
@@ -499,7 +597,7 @@
 
 
       // ======================================
-      // SHOW SCHOOL INFORMATION
+      // DISPLAY SCHOOL
       // ======================================
 
       schoolName.textContent =
@@ -535,14 +633,7 @@
 
 
       // ======================================
-      // PREFILL ONLY BASIC INFORMATION
-      // ======================================
-      //
-      // Tunahifadhi jina, simu na email
-      // kutoka ukurasa uliopita.
-      //
-      // DARASA/KIDATO HAIJAZWI TENA.
-      //
+      // PREFILL BASIC DETAILS
       // ======================================
 
       document.getElementById(
@@ -561,6 +652,11 @@
         params.get("email") || "";
 
 
+      // Muhimu:
+      // class_level HAITOKI URL.
+      // Mtumiaji atachagua mwenyewe.
+
+
     } catch (error) {
 
       console.error(
@@ -572,8 +668,8 @@
         "⚠️ Imeshindikana kupakia taarifa za shule.";
 
       showMessage(
-        "Kuna tatizo la kuwasiliana na server. Tafadhali jaribu tena.",
-        "error"
+        "Kosa: " +
+        error.message
       );
 
     }
@@ -611,7 +707,7 @@
 
 
         // --------------------------------------
-        // COLLECT DATA
+        // DATA
         // --------------------------------------
 
         const applicationData = {
@@ -646,8 +742,7 @@
               .getElementById(
                 "classLevel"
               )
-              .value
-              .trim(),
+              .value,
 
           parent_name:
             document
@@ -685,7 +780,7 @@
 
 
         // --------------------------------------
-        // SEND TO BACKEND
+        // SEND APPLICATION
         // --------------------------------------
 
         try {
@@ -713,12 +808,17 @@
             await response.json();
 
 
+          // ------------------------------------
+          // ERROR FROM SERVER
+          // ------------------------------------
+
           if (
             !response.ok ||
             !result.success
           ) {
 
             throw new Error(
+              result.error ||
               result.message ||
               "Imeshindikana kuhifadhi maombi."
             );
@@ -752,7 +852,7 @@
 
 
           // ------------------------------------
-          // PAYMENT PAGE
+          // GO TO PAYMENT
           // ------------------------------------
 
           const nextUrl =
@@ -796,9 +896,8 @@
 
 
           showMessage(
-            error.message ||
-            "Kuna tatizo. Tafadhali jaribu tena.",
-            "error"
+            "Imeshindikana kuhifadhi maombi.\n\n" +
+            error.message
           );
 
 
