@@ -26,8 +26,8 @@
       width: 100%;
       max-width: 420px;
       background: white;
-      padding: 30px;
-      border-radius: 18px;
+      padding: 32px 25px;
+      border-radius: 16px;
       box-shadow: 0 8px 30px rgba(0,0,0,0.12);
     }
 
@@ -39,14 +39,15 @@
 
     h1 {
       text-align: center;
-      color: #1565c0;
-      margin-bottom: 8px;
+      color: #0d47a1;
+      margin-bottom: 6px;
     }
 
     .subtitle {
       text-align: center;
       color: #666;
       margin-bottom: 25px;
+      font-size: 14px;
     }
 
     label {
@@ -60,43 +61,56 @@
       width: 100%;
       padding: 13px;
       border: 1px solid #ccc;
-      border-radius: 10px;
-      margin-bottom: 18px;
+      border-radius: 8px;
+      margin-bottom: 17px;
       font-size: 16px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #1976d2;
     }
 
     button {
       width: 100%;
       padding: 14px;
       border: none;
-      border-radius: 10px;
-      background: #1565c0;
+      border-radius: 8px;
+      background: #1976d2;
       color: white;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #0d47a1;
+    button:disabled {
+      background: #90caf9;
     }
 
-    .back {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: #1565c0;
-      text-decoration: none;
-    }
-
-    .note {
-      margin-top: 20px;
+    #message {
+      margin-top: 18px;
       padding: 12px;
-      background: #fff8e1;
-      border-radius: 10px;
-      color: #795548;
-      font-size: 13px;
+      border-radius: 8px;
+      display: none;
       text-align: center;
+      font-size: 14px;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 22px;
+      color: #777;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -107,11 +121,11 @@
 
     <div class="logo">🏫</div>
 
-    <h1>Admin Login</h1>
+    <h1>Shule Portal Tanzania</h1>
 
-    <p class="subtitle">
-      Shule Portal Tanzania
-    </p>
+    <div class="subtitle">
+      Ingia kama Admin Mkuu
+    </div>
 
     <form id="loginForm">
 
@@ -119,39 +133,89 @@
       <input
         type="email"
         id="email"
-        placeholder="Ingiza email"
+        placeholder="Weka email ya Admin"
         required
+        autocomplete="username"
       >
 
       <label for="password">Password</label>
       <input
         type="password"
         id="password"
-        placeholder="Ingiza password"
+        placeholder="Weka password"
         required
+        autocomplete="current-password"
       >
 
-      <button type="submit">
+      <button type="submit" id="loginButton">
         Ingia
       </button>
 
     </form>
 
-    <a href="/" class="back">
-      ← Rudi kwenye ukurasa mkuu
-    </a>
+    <div id="message"></div>
 
-    <div class="note">
-      Mfumo wa login utaunganishwa na database katika hatua inayofuata.
+    <div class="footer">
+      © 2026 Shule Portal Tanzania
     </div>
 
   </div>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = type;
+      message.style.display = "block";
+    }
+
+    loginForm.addEventListener("submit", async function(event) {
       event.preventDefault();
 
-      alert("Login itaunganishwa na mfumo wa Admin baada ya database kuwekwa.");
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      loginButton.disabled = true;
+      loginButton.textContent = "Inaingia...";
+      message.style.display = "none";
+
+      try {
+        const response = await fetch("/api/admin/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Email au password si sahihi.");
+        }
+
+        if (data.token) {
+          localStorage.setItem("admin_token", data.token);
+        }
+
+        showMessage("Umeingia kikamilifu. Inafungua Dashboard...", "success");
+
+        setTimeout(() => {
+          window.location.href = "/admin-dashboard.html";
+        }, 700);
+
+      } catch (error) {
+        showMessage(error.message, "error");
+
+        loginButton.disabled = false;
+        loginButton.textContent = "Ingia";
+      }
     });
   </script>
 
