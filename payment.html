@@ -3,230 +3,520 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Malipo ya Fomu - Shule Portal Tanzania</title>
+
+  <title>Lipia Fomu - Shule Portal Tanzania</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background: #f4f7fb;
       color: #1f2937;
     }
 
-    .header {
+    header {
       background: #0b5ed7;
       color: white;
       padding: 20px;
       text-align: center;
     }
 
-    .header h1 {
+    header h1 {
+      margin: 0 0 6px;
       font-size: 24px;
-      margin-bottom: 6px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 14px;
     }
 
     .container {
-      max-width: 650px;
+      max-width: 600px;
       margin: 30px auto;
-      padding: 15px;
+      padding: 0 15px;
     }
 
     .card {
       background: white;
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .school {
-      font-size: 20px;
-      font-weight: bold;
+    .card h2 {
+      margin-top: 0;
       color: #0b5ed7;
-      margin-bottom: 8px;
     }
 
-    .amount {
-      font-size: 30px;
-      font-weight: bold;
-      color: #198754;
-      margin: 15px 0;
-    }
-
-    .payment-option {
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
+    .summary {
+      background: #f8fafc;
+      border-radius: 8px;
       padding: 15px;
-      margin-top: 12px;
-      cursor: pointer;
+      margin-bottom: 20px;
     }
 
-    .payment-option:hover {
-      border-color: #0b5ed7;
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 8px 0;
+      border-bottom: 1px solid #e5e7eb;
     }
 
-    .payment-option input {
-      margin-right: 10px;
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: #6b7280;
+    }
+
+    .value {
+      font-weight: bold;
+      text-align: right;
     }
 
     label {
-      font-weight: bold;
       display: block;
-      margin-bottom: 8px;
+      margin-top: 16px;
+      margin-bottom: 7px;
+      font-weight: bold;
     }
 
-    input[type="text"],
-    input[type="tel"] {
+    input,
+    select {
       width: 100%;
-      padding: 13px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
       font-size: 16px;
+      background: white;
     }
 
-    .btn {
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #0b5ed7;
+    }
+
+    .amount {
+      font-size: 26px;
+      color: #0b5ed7;
+      font-weight: bold;
+    }
+
+    .info {
+      margin-top: 18px;
+      padding: 12px;
+      background: #eaf3ff;
+      border-radius: 7px;
+      font-size: 14px;
+      color: #174a7c;
+    }
+
+    button {
       width: 100%;
-      padding: 15px;
+      margin-top: 22px;
+      padding: 14px;
       border: none;
-      border-radius: 9px;
+      border-radius: 8px;
       background: #0b5ed7;
       color: white;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 20px;
     }
 
-    .btn:hover {
-      background: #084298;
+    button:hover {
+      opacity: 0.92;
     }
 
-    .notice {
-      background: #fff3cd;
-      padding: 15px;
-      border-radius: 9px;
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
       margin-top: 15px;
-      line-height: 1.5;
+      padding: 12px;
+      border-radius: 7px;
     }
 
-    .back {
-      display: inline-block;
-      margin-top: 10px;
-      color: #0b5ed7;
-      text-decoration: none;
+    .error {
+      background: #f8d7da;
+      color: #842029;
     }
 
-    .footer {
-      text-align: center;
-      padding: 25px;
-      color: #777;
-      font-size: 14px;
+    .success {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        margin-top: 15px;
+      }
+
+      .card {
+        padding: 18px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="header">
-    <h1>Shule Portal Tanzania</h1>
-    <p>Malipo ya Fomu ya Maombi</p>
-  </div>
+<header>
+  <h1>Shule Portal Tanzania</h1>
+  <p>Malipo ya Fomu ya Maombi</p>
+</header>
 
-  <div class="container">
+<div class="container">
 
-    <div class="card">
-      <div class="school">Shule ya Mfano Academy</div>
-      <p>Dar es Salaam</p>
-      <p>Fomu ya Maombi ya Kujiunga</p>
+  <div class="card">
 
-      <div class="amount">TZS 10,000</div>
+    <h2>Fanya Malipo</h2>
 
-      <p><strong>Namba ya Maombi:</strong> SPT-2026-0001</p>
+    <div id="loading">
+      Inapakia taarifa za ombi...
     </div>
 
-    <div class="card">
-      <h2>Chagua Njia ya Malipo</h2>
+    <div id="paymentContent" style="display:none;">
 
-      <div class="payment-option">
-        <label>
-          <input type="radio" name="payment" value="mobile">
-          Malipo kwa Simu
-        </label>
-        <p>M-Pesa / Airtel Money / Mixx by Yas / HaloPesa</p>
+      <div class="summary">
+
+        <div class="row">
+          <span class="label">Application Number</span>
+          <span class="value" id="applicationNumber">-</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Mwombaji</span>
+          <span class="value" id="applicantName">-</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Shule</span>
+          <span class="value" id="schoolName">-</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Fomu</span>
+          <span class="value" id="formName">-</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Kiasi</span>
+          <span class="value amount" id="amount">TZS 0</span>
+        </div>
+
       </div>
 
-      <div class="payment-option">
-        <label>
-          <input type="radio" name="payment" value="bank">
-          Benki
-        </label>
-        <p>Malipo kupitia akaunti ya benki ya shule</p>
+      <label for="network">
+        Chagua Mtandao wa Simu
+      </label>
+
+      <select id="network">
+
+        <option value="">
+          -- Chagua mtandao --
+        </option>
+
+        <option value="vodacom">
+          Vodacom M-Pesa
+        </option>
+
+        <option value="airtel">
+          Airtel Money
+        </option>
+
+        <option value="tigo">
+          Tigo Pesa
+        </option>
+
+        <option value="halopesa">
+          HaloPesa
+        </option>
+
+      </select>
+
+      <label for="phone">
+        Namba ya Simu
+      </label>
+
+      <input
+        type="tel"
+        id="phone"
+        placeholder="Mfano: 0712345678"
+        maxlength="15"
+      >
+
+      <div class="info">
+        Baada ya kuunganisha payment gateway, taarifa hizi
+        zitatumika kuanzisha ombi la malipo kupitia mtandao
+        uliochagua.
       </div>
 
-      <div style="margin-top:20px;">
-        <label for="phone">Namba ya Simu</label>
-        <input
-          type="tel"
-          id="phone"
-          placeholder="Mfano: 0712345678"
-        >
-      </div>
-
-      <div class="notice">
-        <strong>Kumbuka:</strong><br>
-        Huu ni ukurasa wa maandalizi ya mfumo wa malipo.
-        Malipo halisi yataunganishwa baada ya kuchagua huduma
-        rasmi ya malipo.
-      </div>
-
-      <button class="btn" onclick="startPayment()">
+      <button id="payButton" onclick="startPayment()">
         Endelea na Malipo
       </button>
 
-      <a class="back" href="buy-form.html">
-        ← Rudi kwenye Fomu
-      </a>
+      <div id="message" class="message"></div>
+
     </div>
 
   </div>
 
-  <div class="footer">
-    © 2026 Shule Portal Tanzania
-  </div>
+</div>
 
-  <script>
-    function startPayment() {
+<script>
 
-      const payment = document.querySelector(
-        'input[name="payment"]:checked'
+  const API_APPLICATIONS = "/api/applications";
+
+  let application = null;
+
+
+  function showMessage(message, type) {
+
+    const box = document.getElementById("message");
+
+    box.textContent = message;
+
+    box.className =
+      "message " +
+      type;
+
+    box.style.display = "block";
+  }
+
+
+  function formatAmount(amount) {
+
+    return Number(amount || 0)
+      .toLocaleString("sw-TZ");
+
+  }
+
+
+  async function loadApplication() {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
       );
 
-      const phone = document.getElementById("phone").value.trim();
+    const applicationId =
+      params.get("application_id");
 
-      if (!payment) {
-        alert("Tafadhali chagua njia ya malipo.");
-        return;
-      }
 
-      if (!phone) {
-        alert("Tafadhali ingiza namba ya simu.");
-        return;
-      }
+    if (!applicationId) {
 
-      alert(
-        "Umechagua malipo kwa: " +
-        payment.value +
-        "\\nNamba ya simu: " +
-        phone +
-        "\\n\\nMalipo halisi yataunganishwa kwenye hatua inayofuata."
-      );
+      document.getElementById("loading").textContent =
+        "Application ID haijapatikana.";
+
+      return;
+
     }
-  </script>
+
+
+    try {
+
+      const response =
+        await fetch(API_APPLICATIONS);
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Imeshindikana kupata taarifa za maombi."
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      const applications =
+        Array.isArray(data)
+          ? data
+          : Array.isArray(data.applications)
+          ? data.applications
+          : [];
+
+
+      application =
+        applications.find(
+          item =>
+            String(item.id) ===
+            String(applicationId)
+        );
+
+
+      if (!application) {
+
+        document.getElementById("loading").textContent =
+          "Ombi halijapatikana.";
+
+        return;
+
+      }
+
+
+      document.getElementById(
+        "applicationNumber"
+      ).textContent =
+        application.application_number || "-";
+
+
+      document.getElementById(
+        "applicantName"
+      ).textContent =
+        application.applicant_name || "-";
+
+
+      document.getElementById(
+        "schoolName"
+      ).textContent =
+        application.school_name || "-";
+
+
+      document.getElementById(
+        "formName"
+      ).textContent =
+        application.form_name || "-";
+
+
+      document.getElementById(
+        "amount"
+      ).textContent =
+        "TZS " +
+        formatAmount(
+          application.amount ||
+          application.form_price ||
+          0
+        );
+
+
+      document.getElementById(
+        "paymentContent"
+      ).style.display = "block";
+
+
+      document.getElementById(
+        "loading"
+      ).style.display = "none";
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      document.getElementById("loading").textContent =
+        "Kuna tatizo la kupata taarifa za ombi.";
+
+    }
+
+  }
+
+
+  async function startPayment() {
+
+    const network =
+      document.getElementById(
+        "network"
+      ).value;
+
+
+    const phone =
+      document.getElementById(
+        "phone"
+      ).value.trim();
+
+
+    if (!network) {
+
+      showMessage(
+        "Tafadhali chagua mtandao wa simu.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (!phone) {
+
+      showMessage(
+        "Tafadhali weka namba ya simu.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (!application) {
+
+      showMessage(
+        "Taarifa za ombi hazijapatikana.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById(
+        "payButton"
+      );
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Inaandaa malipo...";
+
+
+    /*
+      HAPA TUTAUNGANISHA FLUTTERWAVE
+      BAADA YA KUWEKA SERVER-SIDE API.
+
+      Kwa sasa hatusemi malipo yamefanyika.
+    */
+
+
+    setTimeout(() => {
+
+      button.disabled = false;
+
+      button.textContent =
+        "Endelea na Malipo";
+
+
+      showMessage(
+        "Ukurasa wa malipo umeandaliwa. Payment gateway bado haijaunganishwa.",
+        "success"
+      );
+
+    }, 800);
+
+  }
+
+
+  loadApplication();
+
+</script>
 
 </body>
 </html>
