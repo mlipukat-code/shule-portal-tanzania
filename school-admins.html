@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School Admins - Shule Portal Tanzania</title>
+
+  <title>Shule Portal Tanzania - School Admins</title>
 
   <style>
     * {
@@ -14,57 +15,50 @@
     }
 
     body {
-      background: #f4f7fb;
+      background: #f4f8fb;
       color: #222;
     }
 
-    .header {
-      background: #1565c0;
+    header {
+      background: #0879c9;
       color: white;
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 18px;
     }
 
-    .header h1 {
-      font-size: 20px;
+    header h1 {
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1100px;
+      margin: 25px auto;
     }
 
     .back {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #0879c9;
       text-decoration: none;
       font-weight: bold;
     }
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .title {
-      margin-bottom: 20px;
-    }
-
-    .title h2 {
-      color: #1565c0;
-      margin-bottom: 6px;
-    }
-
-    .box {
+    .card {
       background: white;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      padding: 22px;
+      border-radius: 12px;
       margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .box h3 {
-      color: #1565c0;
+    h2 {
+      color: #0879c9;
       margin-bottom: 18px;
     }
 
@@ -74,31 +68,68 @@
       gap: 15px;
     }
 
-    .field label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 7px;
+    .field {
+      display: flex;
+      flex-direction: column;
     }
 
-    .field input,
-    .field select {
-      width: 100%;
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input,
+    select {
       padding: 12px;
       border: 1px solid #ccc;
-      border-radius: 9px;
+      border-radius: 7px;
       font-size: 15px;
+      width: 100%;
+      background: white;
     }
 
-    .save-btn {
-      margin-top: 18px;
-      background: #1565c0;
+    button {
+      background: #0879c9;
       color: white;
       border: none;
       padding: 13px 22px;
-      border-radius: 9px;
-      font-size: 16px;
-      font-weight: bold;
+      border-radius: 7px;
       cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 18px;
+    }
+
+    button:hover {
+      background: #0565a8;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 7px;
+      display: none;
+    }
+
+    .success {
+      background: #dff5e5;
+      color: #176b2c;
+    }
+
+    .error {
+      background: #fde1e1;
+      color: #a40000;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #0879c9;
     }
 
     .table-container {
@@ -108,201 +139,726 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 700px;
+      min-width: 800px;
     }
 
     th,
     td {
-      padding: 13px;
-      border-bottom: 1px solid #eee;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
       text-align: left;
+      font-size: 14px;
     }
 
     th {
-      background: #e3f2fd;
-      color: #1565c0;
+      background: #0879c9;
+      color: white;
     }
 
-    .edit {
-      background: #1565c0;
-      color: white;
-      border: none;
-      padding: 7px 11px;
-      border-radius: 6px;
-      margin-right: 5px;
-    }
-
-    .delete {
-      background: #d32f2f;
-      color: white;
-      border: none;
-      padding: 7px 11px;
-      border-radius: 6px;
+    tr:hover {
+      background: #f5faff;
     }
 
     .empty {
       text-align: center;
-      color: #777;
       padding: 25px;
+      color: #777;
     }
 
-    .info {
-      background: #fff8e1;
-      color: #795548;
-      padding: 12px;
-      border-radius: 9px;
-      margin-bottom: 18px;
-      font-size: 14px;
+    .status {
+      font-weight: bold;
     }
 
     @media (max-width: 700px) {
+
       .form-grid {
         grid-template-columns: 1fr;
       }
 
-      .header h1 {
-        font-size: 16px;
+      .field.full {
+        grid-column: auto;
       }
+
+      .card {
+        padding: 16px;
+      }
+
+      header h1 {
+        font-size: 19px;
+      }
+
     }
   </style>
 </head>
 
 <body>
 
-  <header class="header">
-    <h1>🏫 Shule Portal Tanzania</h1>
-    <a href="admin-dashboard.html" class="back">← Dashboard</a>
-  </header>
+<header>
 
-  <main class="container">
+  <h1>Shule Portal Tanzania</h1>
 
-    <div class="title">
-      <h2>School Admins</h2>
-      <p>Simamia akaunti za wasimamizi wa shule.</p>
-    </div>
+  <p>
+    Usimamizi wa School Admins
+  </p>
 
-    <section class="box">
+</header>
 
-      <h3>➕ Tengeneza School Admin</h3>
 
-      <div class="info">
-        Kila shule inaweza kuwa na School Admin wake kwa ajili ya kusimamia
-        maombi na taarifa za shule.
-      </div>
+<div class="container">
 
-      <form id="adminForm">
+  <a
+    href="admin-dashboard.html"
+    class="back"
+  >
+    ← Rudi Dashboard
+  </a>
 
-        <div class="form-grid">
 
-          <div class="field">
-            <label>Jina Kamili</label>
-            <input
-              type="text"
-              id="fullName"
-              placeholder="Mfano: John Joseph"
-              required
-            >
-          </div>
+  <!-- ADD ADMIN -->
 
-          <div class="field">
-            <label>Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="admin@shule.co.tz"
-              required
-            >
-          </div>
+  <div class="card">
 
-          <div class="field">
-            <label>Namba ya Simu</label>
-            <input
-              type="tel"
-              id="phone"
-              placeholder="07XXXXXXXX"
-              required
-            >
-          </div>
+    <h2>
+      Ongeza School Admin
+    </h2>
 
-          <div class="field">
-            <label>Shule</label>
-            <select id="school" required>
-              <option value="">Chagua shule</option>
-              <option>Shule ya Mfano Academy</option>
-              <option>Bright Future School</option>
-              <option>St. Joseph School</option>
-            </select>
-          </div>
 
-          <div class="field">
-            <label>Password ya Mwanzo</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Weka password"
-              required
-            >
-          </div>
+    <form id="adminForm">
+
+      <div class="form-grid">
+
+
+        <div class="field">
+
+          <label>
+            Jina Kamili *
+          </label>
+
+          <input
+            type="text"
+            id="full_name"
+            required
+            placeholder="Mfano: John Mwakalinga"
+          >
 
         </div>
 
-        <button type="submit" class="save-btn">
-          Tengeneza Akaunti
-        </button>
 
-      </form>
+        <div class="field">
 
-    </section>
+          <label>
+            Email *
+          </label>
 
-    <section class="box">
+          <input
+            type="email"
+            id="email"
+            required
+            placeholder="admin@shule.co.tz"
+          >
 
-      <h3>👨‍💼 School Admins Waliosajiliwa</h3>
+        </div>
 
-      <div class="table-container">
 
-        <table>
+        <div class="field">
 
-          <thead>
-            <tr>
-              <th>Jina</th>
-              <th>Email</th>
-              <th>Simu</th>
-              <th>Shule</th>
-              <th>Hali</th>
-              <th>Hatua</th>
-            </tr>
-          </thead>
+          <label>
+            Namba ya Simu
+          </label>
 
-          <tbody id="adminList">
+          <input
+            type="text"
+            id="phone"
+            placeholder="0712345678"
+          >
 
-            <tr>
-              <td colspan="6" class="empty">
-                Hakuna School Admin aliyesajiliwa bado.
-              </td>
-            </tr>
+        </div>
 
-          </tbody>
 
-        </table>
+        <div class="field">
+
+          <label>
+            Shule *
+          </label>
+
+          <select
+            id="school_id"
+            required
+          >
+
+            <option value="">
+              Inapakia shule...
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Password ya Mwanzo *
+          </label>
+
+          <input
+            type="password"
+            id="password"
+            required
+            minlength="6"
+            placeholder="Angalau herufi 6"
+          >
+
+        </div>
+
 
       </div>
 
-    </section>
 
-  </main>
+      <button type="submit">
+        Ongeza School Admin
+      </button>
 
-  <script>
-    document.getElementById("adminForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+    </form>
 
-      alert(
-        "Akaunti ya School Admin imepokelewa. " +
-        "Database itawezesha kuhifadhi akaunti hii na login halisi."
+
+    <div
+      id="message"
+      class="message"
+    ></div>
+
+  </div>
+
+
+
+  <!-- ADMIN LIST -->
+
+  <div class="card">
+
+    <h2>
+      Orodha ya School Admins
+    </h2>
+
+
+    <div
+      id="loading"
+      class="loading"
+    >
+      Inapakia School Admins...
+    </div>
+
+
+    <div class="table-container">
+
+      <table
+        id="adminsTable"
+        style="display:none;"
+      >
+
+        <thead>
+
+          <tr>
+
+            <th>#</th>
+
+            <th>Jina</th>
+
+            <th>Email</th>
+
+            <th>Simu</th>
+
+            <th>Shule</th>
+
+            <th>Hali</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody
+          id="adminsBody"
+        ></tbody>
+
+      </table>
+
+    </div>
+
+
+    <div
+      id="empty"
+      class="empty"
+      style="display:none;"
+    >
+      Hakuna School Admin aliyeongezwa bado.
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+  const adminForm =
+    document.getElementById("adminForm");
+
+  const message =
+    document.getElementById("message");
+
+  const schoolSelect =
+    document.getElementById("school_id");
+
+  const adminsBody =
+    document.getElementById("adminsBody");
+
+  const adminsTable =
+    document.getElementById("adminsTable");
+
+  const loading =
+    document.getElementById("loading");
+
+  const empty =
+    document.getElementById("empty");
+
+
+
+  function showMessage(
+    text,
+    type
+  ) {
+
+    message.textContent =
+      text;
+
+    message.className =
+      "message " + type;
+
+    message.style.display =
+      "block";
+
+  }
+
+
+
+  function escapeHtml(
+    value
+  ) {
+
+    if (
+      value === null ||
+      value === undefined
+    ) {
+
+      return "";
+
+    }
+
+
+    return String(value)
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
       );
 
-      this.reset();
-    });
-  </script>
+  }
+
+
+
+  // ================================
+  // LOAD SCHOOLS
+  // ================================
+
+  async function loadSchools() {
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/schools"
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+
+        throw new Error(
+          "Imeshindikana kupata shule."
+        );
+
+      }
+
+
+      schoolSelect.innerHTML =
+        '<option value="">Chagua shule</option>';
+
+
+      if (
+        data.schools.length === 0
+      ) {
+
+        schoolSelect.innerHTML =
+          '<option value="">Hakuna shule</option>';
+
+        return;
+
+      }
+
+
+      data.schools.forEach(
+        school => {
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            school.id;
+
+          option.textContent =
+            school.name +
+            " - " +
+            school.region;
+
+          schoolSelect.appendChild(
+            option
+          );
+
+        }
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Load schools error:",
+        error
+      );
+
+      schoolSelect.innerHTML =
+        '<option value="">Imeshindikana kupata shule</option>';
+
+    }
+
+  }
+
+
+
+  // ================================
+  // LOAD ADMINS
+  // ================================
+
+  async function loadAdmins() {
+
+    loading.style.display =
+      "block";
+
+    adminsTable.style.display =
+      "none";
+
+    empty.style.display =
+      "none";
+
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/school-admins"
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+
+        throw new Error(
+          "Imeshindikana kupata School Admins."
+        );
+
+      }
+
+
+      adminsBody.innerHTML =
+        "";
+
+
+      if (
+        !data.admins ||
+        data.admins.length === 0
+      ) {
+
+        loading.style.display =
+          "none";
+
+        empty.style.display =
+          "block";
+
+        return;
+
+      }
+
+
+      data.admins.forEach(
+        (admin, index) => {
+
+          const row =
+            document.createElement(
+              "tr"
+            );
+
+
+          row.innerHTML = `
+
+            <td>
+              ${index + 1}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                admin.full_name
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                admin.email
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                admin.phone || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                admin.school_name
+              )}
+            </td>
+
+            <td class="status">
+              ${escapeHtml(
+                admin.status
+              )}
+            </td>
+
+          `;
+
+
+          adminsBody.appendChild(
+            row
+          );
+
+        }
+      );
+
+
+      loading.style.display =
+        "none";
+
+      adminsTable.style.display =
+        "table";
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Load admins error:",
+        error
+      );
+
+      loading.style.display =
+        "none";
+
+      showMessage(
+        "Imeshindikana kupata School Admins kutoka database.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+
+  // ================================
+  // ADD ADMIN
+  // ================================
+
+  adminForm.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+
+      const adminData = {
+
+        full_name:
+          document
+            .getElementById(
+              "full_name"
+            )
+            .value
+            .trim(),
+
+        email:
+          document
+            .getElementById(
+              "email"
+            )
+            .value
+            .trim(),
+
+        phone:
+          document
+            .getElementById(
+              "phone"
+            )
+            .value
+            .trim(),
+
+        school_id:
+          document
+            .getElementById(
+              "school_id"
+            )
+            .value,
+
+        password:
+          document
+            .getElementById(
+              "password"
+            )
+            .value
+
+      };
+
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/school-admins",
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify(
+                  adminData
+                )
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+
+          throw new Error(
+            data.message ||
+            "Imeshindikana kuongeza School Admin."
+          );
+
+        }
+
+
+        showMessage(
+          "School Admin ameongezwa kwa mafanikio na kuhifadhiwa kwenye database.",
+          "success"
+        );
+
+
+        adminForm.reset();
+
+
+        await loadAdmins();
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Add admin error:",
+          error
+        );
+
+
+        showMessage(
+          error.message ||
+          "Imeshindikana kuhifadhi School Admin.",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+
+
+  // ================================
+  // START
+  // ================================
+
+  loadSchools();
+
+  loadAdmins();
+
+</script>
 
 </body>
 </html>
