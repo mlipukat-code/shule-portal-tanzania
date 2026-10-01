@@ -9,160 +9,98 @@
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background: #f4f7fb;
       color: #222;
     }
 
     .header {
-      background: #1565c0;
+      background: #0b5ed7;
       color: white;
-      padding: 18px 20px;
+      padding: 20px;
+      text-align: center;
     }
 
-    .header-inner {
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
     }
 
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .back {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
+    .header p {
+      margin: 7px 0 0;
+      font-size: 14px;
+      opacity: 0.95;
     }
 
     .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 25px 20px;
+      width: 94%;
+      max-width: 800px;
+      margin: 25px auto;
     }
 
-    .school-header {
+    .card {
       background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .school-icon {
-      width: 80px;
-      height: 80px;
-      margin: auto auto 15px;
-      border-radius: 50%;
-      background: #e3f2fd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-    }
-
-    .school-header h1 {
-      color: #1565c0;
-      margin-bottom: 8px;
-    }
-
-    .school-header p {
-      color: #666;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-    }
-
-    .box {
-      background: white;
-      padding: 22px;
       border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .school-name {
+      color: #0b5ed7;
+      font-size: 28px;
+      margin-top: 0;
       margin-bottom: 20px;
+      text-align: center;
     }
 
-    .box h2 {
-      color: #1565c0;
-      font-size: 19px;
-      margin-bottom: 18px;
+    .info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
     }
 
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 13px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .info-row:last-child {
-      border-bottom: none;
+    .info-box {
+      background: #f7f9fc;
+      border-radius: 10px;
+      padding: 15px;
+      border-left: 4px solid #0b5ed7;
     }
 
     .label {
+      display: block;
       color: #666;
+      font-size: 13px;
+      margin-bottom: 5px;
     }
 
     .value {
+      font-size: 16px;
       font-weight: bold;
-      text-align: right;
-    }
-
-    .form-card {
-      border: 2px solid #e3f2fd;
-      border-radius: 12px;
-      padding: 18px;
-    }
-
-    .form-card h3 {
-      color: #1565c0;
-      margin-bottom: 10px;
+      color: #222;
     }
 
     .price {
-      background: #e8f5e9;
-      color: #2e7d32;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      margin: 15px 0;
+      color: #198754;
+      font-size: 20px;
     }
 
-    .period {
-      background: #fff8e1;
-      color: #795548;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      margin-bottom: 15px;
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+      flex-wrap: wrap;
     }
 
-    .buy-btn {
-      display: block;
-      width: 100%;
-      background: #1565c0;
-      color: white;
+    .btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 18px;
+      border-radius: 8px;
       text-align: center;
-      padding: 13px;
-      border-radius: 9px;
       text-decoration: none;
       font-weight: bold;
       border: none;
@@ -170,51 +108,73 @@
       font-size: 15px;
     }
 
-    .buy-btn:hover {
-      background: #0d47a1;
+    .btn-primary {
+      background: #0b5ed7;
+      color: white;
     }
 
-    .contact p {
-      padding: 8px 0;
+    .btn-primary:hover {
+      background: #084298;
+    }
+
+    .btn-secondary {
+      background: #198754;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #146c43;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #0b5ed7;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 10px;
+      font-size: 18px;
       color: #555;
     }
 
-    .notice {
-      background: #e3f2fd;
-      color: #0d47a1;
-      padding: 14px;
-      border-radius: 9px;
-      margin-top: 5px;
-      line-height: 1.6;
-      font-size: 14px;
+    .error {
+      background: #f8d7da;
+      color: #842029;
+      padding: 18px;
+      border-radius: 10px;
+      text-align: center;
     }
 
-    @media (max-width: 800px) {
-      .grid {
+    .success-note {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e7f5ff;
+      border-radius: 10px;
+      color: #084298;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .info {
         grid-template-columns: 1fr;
       }
-    }
 
-    @media (max-width: 500px) {
-      .header-inner {
-        gap: 10px;
+      .card {
+        padding: 18px;
       }
 
-      .logo {
-        font-size: 16px;
+      .school-name {
+        font-size: 23px;
       }
 
-      .school-header {
-        padding: 22px 15px;
-      }
-
-      .info-row {
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .value {
-        text-align: left;
+      .btn {
+        min-width: 100%;
       }
     }
   </style>
@@ -222,146 +182,280 @@
 
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <div class="logo">🏫 Shule Portal Tanzania</div>
-
-    <a href="schools-public.html" class="back">
-      ← Tafuta Shule
-    </a>
+  <div class="header">
+    <h1>🏫 Shule Portal Tanzania</h1>
+    <p>Taarifa za Shule</p>
   </div>
-</header>
 
-<main class="container">
+  <div class="container">
 
-  <section class="school-header">
-
-    <div class="school-icon">
-      🏫
-    </div>
-
-    <h1>Shule ya Mfano Academy</h1>
-
-    <p>
-      Dar es Salaam • Primary & Secondary
-    </p>
-
-  </section>
-
-
-  <div class="grid">
-
-    <div>
-
-      <section class="box">
-
-        <h2>📋 Taarifa za Shule</h2>
-
-        <div class="info-row">
-          <span class="label">Jina la Shule</span>
-          <span class="value">Shule ya Mfano Academy</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Mkoa</span>
-          <span class="value">Dar es Salaam</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Wilaya</span>
-          <span class="value">Kinondoni</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Aina ya Shule</span>
-          <span class="value">Primary & Secondary</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Anwani</span>
-          <span class="value">Dar es Salaam, Tanzania</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Simu</span>
-          <span class="value">0600000000</span>
-        </div>
-
-      </section>
-
-
-      <section class="box">
-
-        <h2>📄 Fomu Zinazopatikana</h2>
-
-        <div class="form-card">
-
-          <h3>Fomu ya Maombi ya Kujiunga</h3>
-
-          <p>
-            Fomu ya maombi ya mwanafunzi kwa mwaka wa masomo.
-          </p>
-
-          <div class="price">
-            TZS 10,000
-          </div>
-
-          <div class="period">
-            📅 Kipindi cha Maombi:<br>
-            01 Januari - 30 Novemba
-          </div>
-
-          <a
-            href="buy-form.html"
-            class="buy-btn"
-          >
-            🛒 Nunua Fomu
-          </a>
-
-        </div>
-
-      </section>
-
-    </div>
-
-
-    <div>
-
-      <section class="box contact">
-
-        <h2>📞 Mawasiliano</h2>
-
-        <p>📍 Dar es Salaam, Tanzania</p>
-
-        <p>📞 0600000000</p>
-
-        <p>✉️ info@mfanoacademy.co.tz</p>
-
-      </section>
-
-
-      <section class="box">
-
-        <h2>ℹ️ Muhimu</h2>
-
-        <div class="notice">
-          Hakikisha unasoma taarifa zote za shule
-          kabla ya kununua fomu.
-
-          <br><br>
-
-          Baada ya malipo kuthibitishwa,
-          utaweza kujaza fomu ya maombi
-          mtandaoni.
-        </div>
-
-      </section>
-
+    <div id="content">
+      <div class="loading">
+        Inapakia taarifa za shule...
+      </div>
     </div>
 
   </div>
 
-</main>
+  <script>
+    const API_URL = "/api/schools";
+
+    function formatMoney(amount) {
+      if (amount === null || amount === undefined || amount === "") {
+        return "Haijawekwa";
+      }
+
+      const number = Number(amount);
+
+      if (isNaN(number)) {
+        return amount;
+      }
+
+      return "TSh " + number.toLocaleString("en-TZ");
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) {
+        return "Haijawekwa";
+      }
+
+      const date = new Date(dateString);
+
+      if (isNaN(date.getTime())) {
+        return dateString;
+      }
+
+      return date.toLocaleDateString("sw-TZ", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    }
+
+    function escapeHtml(value) {
+      if (value === null || value === undefined) {
+        return "";
+      }
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function loadSchool() {
+
+      const content = document.getElementById("content");
+
+      try {
+
+        const params = new URLSearchParams(window.location.search);
+        const schoolId = params.get("id");
+
+        if (!schoolId) {
+          content.innerHTML = `
+            <div class="card">
+              <div class="error">
+                <h3>Shule haijachaguliwa</h3>
+                <p>Tafadhali rudi kwenye ukurasa wa kutafuta shule.</p>
+              </div>
+
+              <a class="back" href="/schools-public.html">
+                ← Rudi Kutafuta Shule
+              </a>
+            </div>
+          `;
+
+          return;
+        }
+
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+          throw new Error("API haikupatikana.");
+        }
+
+        const data = await response.json();
+
+        if (!data.success || !Array.isArray(data.schools)) {
+          throw new Error("Taarifa za shule hazijapatikana.");
+        }
+
+        const school = data.schools.find(
+          item => String(item.id) === String(schoolId)
+        );
+
+        if (!school) {
+
+          content.innerHTML = `
+            <div class="card">
+              <div class="error">
+                <h3>Shule haijapatikana</h3>
+                <p>Shule uliyochagua haipo kwenye mfumo au haijawezeshwa.</p>
+              </div>
+
+              <a class="back" href="/schools-public.html">
+                ← Rudi Kutafuta Shule
+              </a>
+            </div>
+          `;
+
+          return;
+        }
+
+        content.innerHTML = `
+
+          <div class="card">
+
+            <h2 class="school-name">
+              ${escapeHtml(school.name)}
+            </h2>
+
+            <div class="info">
+
+              <div class="info-box">
+                <span class="label">Mkoa</span>
+                <span class="value">
+                  ${escapeHtml(school.region || "Haijawekwa")}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Wilaya</span>
+                <span class="value">
+                  ${escapeHtml(school.district || "Haijawekwa")}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Anwani</span>
+                <span class="value">
+                  ${escapeHtml(school.address || "Haijawekwa")}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Simu</span>
+                <span class="value">
+                  ${escapeHtml(school.phone || "Haijawekwa")}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Barua pepe</span>
+                <span class="value">
+                  ${escapeHtml(school.email || "Haijawekwa")}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Aina ya Shule</span>
+                <span class="value">
+                  ${escapeHtml(school.school_type || school.type || "Haijawekwa")}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Bei ya Fomu</span>
+                <span class="value price">
+                  ${formatMoney(school.form_price || school.price)}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Hali ya Maombi</span>
+                <span class="value">
+                  ${school.status === "active" ? "Maombi Yapo Wazi" : "Maombi Yamefungwa"}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Maombi yanaanza</span>
+                <span class="value">
+                  ${formatDate(school.application_start)}
+                </span>
+              </div>
+
+              <div class="info-box">
+                <span class="label">Maombi yanafunga</span>
+                <span class="value">
+                  ${formatDate(school.application_end)}
+                </span>
+              </div>
+
+            </div>
+
+            <div class="success-note">
+              <strong>Maelekezo:</strong><br>
+              Kama unataka kuomba nafasi katika shule hii,
+              bonyeza kitufe cha <strong>Nunua Fomu</strong> hapa chini
+              ili kuendelea na hatua inayofuata.
+            </div>
+
+            <div class="buttons">
+
+              <a
+                class="btn btn-primary"
+                href="/buy-form.html?school_id=${encodeURIComponent(school.id)}"
+              >
+                📝 Nunua Fomu
+              </a>
+
+              <a
+                class="btn btn-secondary"
+                href="/buy-form.html?school_id=${encodeURIComponent(school.id)}"
+              >
+                ➜ Endelea na Maombi
+              </a>
+
+            </div>
+
+            <a
+              class="back"
+              href="/schools-public.html"
+            >
+              ← Rudi Kutafuta Shule
+            </a>
+
+          </div>
+
+        `;
+
+      } catch (error) {
+
+        console.error(error);
+
+        content.innerHTML = `
+          <div class="card">
+
+            <div class="error">
+              <h3>Imeshindikana kupata taarifa</h3>
+
+              <p>
+                Kuna tatizo wakati wa kupata taarifa za shule.
+              </p>
+
+              <p>
+                Tafadhali jaribu tena.
+              </p>
+            </div>
+
+            <a
+              class="back"
+              href="/schools-public.html"
+            >
+              ← Rudi Kutafuta Shule
+            </a>
+
+          </div>
+        `;
+      }
+    }
+
+    loadSchool();
+  </script>
 
 </body>
 </html>
