@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Admin Dashboard - Shule Portal Tanzania</title>
 
-  <!-- SECURITY CHECK -->
   <script>
     (function () {
       const token = localStorage.getItem("admin_token");
@@ -17,6 +17,7 @@
   </script>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -100,6 +101,26 @@
       font-size: 14px;
     }
 
+    .refresh-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+    }
+
+    .refresh-button {
+      border: none;
+      background: #1565c0;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .refresh-button:disabled {
+      opacity: 0.7;
+    }
+
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -129,6 +150,11 @@
       font-size: 26px;
       font-weight: bold;
       color: #1565c0;
+    }
+
+    .amount {
+      font-size: 20px;
+      word-break: break-word;
     }
 
     .section-title {
@@ -179,11 +205,42 @@
       padding: 20px;
       border-radius: 14px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
     }
 
     .activity h3 {
       color: #1565c0;
       margin-bottom: 15px;
+    }
+
+    .activity-item {
+      border-bottom: 1px solid #eee;
+      padding: 12px 0;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .activity-info {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .activity-badge {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 4px 8px;
+      border-radius: 5px;
+      background: #e3f2fd;
+      color: #1565c0;
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .empty {
@@ -199,7 +256,24 @@
       color: #c62828;
     }
 
+    .dashboard-error {
+      display: none;
+      background: #ffebee;
+      color: #c62828;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .loading {
+      color: #777;
+      font-size: 14px;
+    }
+
     @media (max-width: 800px) {
+
       .stats {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -207,9 +281,11 @@
       .menu {
         grid-template-columns: repeat(2, 1fr);
       }
+
     }
 
     @media (max-width: 500px) {
+
       .stats,
       .menu {
         grid-template-columns: 1fr;
@@ -227,7 +303,17 @@
       .logout {
         width: 100%;
       }
+
+      .refresh-row {
+        justify-content: stretch;
+      }
+
+      .refresh-button {
+        width: 100%;
+      }
+
     }
+
   </style>
 </head>
 
@@ -240,17 +326,25 @@
   <div id="page">
 
     <header class="header">
-      <h1>🏫 Shule Portal Tanzania</h1>
+
+      <h1>
+        🏫 Shule Portal Tanzania
+      </h1>
 
       <button id="logoutButton" class="logout">
         🚪 Toka
       </button>
+
     </header>
+
 
     <main class="container">
 
       <div class="welcome">
-        <h2>Admin Dashboard</h2>
+
+        <h2>
+          Admin Dashboard
+        </h2>
 
         <p>
           Karibu kwenye mfumo wa usimamizi wa Shule Portal Tanzania.
@@ -259,233 +353,795 @@
         <div id="adminName" class="admin-name">
           👤 Admin Mkuu
         </div>
+
       </div>
+
+
+      <div id="dashboardError" class="dashboard-error">
+        Imeshindikana kupata taarifa za Dashboard.
+      </div>
+
+
+      <div class="refresh-row">
+
+        <button
+          id="refreshButton"
+          class="refresh-button"
+        >
+          🔄 Sasisha Dashboard
+        </button>
+
+      </div>
+
+
+      <!-- STATS -->
 
       <div class="stats">
 
-        <div class="stat">
-          <div class="stat-icon">🏫</div>
-          <h3>Shule Zilizosajiliwa</h3>
-          <div class="number">0</div>
-        </div>
 
         <div class="stat">
-          <div class="stat-icon">🎫</div>
-          <h3>Fomu Zilizouzwa</h3>
-          <div class="number">0</div>
+
+          <div class="stat-icon">
+            🏫
+          </div>
+
+          <h3>
+            Shule Zilizosajiliwa
+          </h3>
+
+          <div
+            id="totalSchools"
+            class="number"
+          >
+            0
+          </div>
+
         </div>
 
-        <div class="stat">
-          <div class="stat-icon">💰</div>
-          <h3>Malipo</h3>
-          <div class="number">TZS 0</div>
-        </div>
 
         <div class="stat">
-          <div class="stat-icon">📋</div>
-          <h3>Maombi</h3>
-          <div class="number">0</div>
+
+          <div class="stat-icon">
+            🎫
+          </div>
+
+          <h3>
+            Fomu Zilizouzwa
+          </h3>
+
+          <div
+            id="soldForms"
+            class="number"
+          >
+            0
+          </div>
+
         </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            💰
+          </div>
+
+          <h3>
+            Malipo
+          </h3>
+
+          <div
+            id="totalPayments"
+            class="number"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            📋
+          </div>
+
+          <h3>
+            Maombi
+          </h3>
+
+          <div
+            id="totalApplications"
+            class="number"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            💵
+          </div>
+
+          <h3>
+            Kiasi Kilicholipwa
+          </h3>
+
+          <div
+            id="totalPaidAmount"
+            class="number amount"
+          >
+            TZS 0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            ⏳
+          </div>
+
+          <h3>
+            Malipo Pending
+          </h3>
+
+          <div
+            id="pendingPayments"
+            class="number"
+          >
+            0
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon">
+            📄
+          </div>
+
+          <h3>
+            Jumla ya Fomu
+          </h3>
+
+          <div
+            id="totalForms"
+            class="number"
+          >
+            0
+          </div>
+
+        </div>
+
 
       </div>
+
+
+      <!-- MENU -->
 
       <h2 class="section-title">
         ⚙️ Usimamizi wa Mfumo
       </h2>
 
+
       <div class="menu">
 
-        <a href="schools.html" class="menu-card">
-          <div class="menu-icon">🏫</div>
-          <h3>Simamia Shule</h3>
+
+        <a
+          href="schools.html"
+          class="menu-card"
+        >
+
+          <div class="menu-icon">
+            🏫
+          </div>
+
+          <h3>
+            Simamia Shule
+          </h3>
+
           <p>
             Ongeza, hariri na simamia shule zilizosajiliwa.
           </p>
+
         </a>
 
-        <a href="school-admins.html" class="menu-card">
-          <div class="menu-icon">👨‍💼</div>
-          <h3>School Admins</h3>
+
+        <a
+          href="school-admins.html"
+          class="menu-card"
+        >
+
+          <div class="menu-icon">
+            👨‍💼
+          </div>
+
+          <h3>
+            School Admins
+          </h3>
+
           <p>
             Simamia akaunti za wasimamizi wa shule.
           </p>
+
         </a>
 
-        <a href="school-forms.html" class="menu-card">
-          <div class="menu-icon">🎫</div>
-          <h3>Fomu za Shule</h3>
+
+        <a
+          href="school-forms.html"
+          class="menu-card"
+        >
+
+          <div class="menu-icon">
+            🎫
+          </div>
+
+          <h3>
+            Fomu za Shule
+          </h3>
+
           <p>
             Simamia aina, bei na muda wa fomu za shule.
           </p>
+
         </a>
 
-        <a href="applications.html" class="menu-card">
-          <div class="menu-icon">📋</div>
-          <h3>Maombi</h3>
+
+        <a
+          href="applications.html"
+          class="menu-card"
+        >
+
+          <div class="menu-icon">
+            📋
+          </div>
+
+          <h3>
+            Maombi
+          </h3>
+
           <p>
             Angalia na simamia maombi ya wanafunzi.
           </p>
+
         </a>
 
-        <a href="payments.html" class="menu-card">
-          <div class="menu-icon">💰</div>
-          <h3>Malipo</h3>
+
+        <a
+          href="payments.html"
+          class="menu-card"
+        >
+
+          <div class="menu-icon">
+            💰
+          </div>
+
+          <h3>
+            Malipo
+          </h3>
+
           <p>
             Fuatilia malipo yote ya fomu za shule.
           </p>
+
         </a>
 
-        <a href="reports.html" class="menu-card">
-          <div class="menu-icon">📊</div>
-          <h3>Ripoti</h3>
+
+        <a
+          href="reports.html"
+          class="menu-card"
+        >
+
+          <div class="menu-icon">
+            📊
+          </div>
+
+          <h3>
+            Ripoti
+          </h3>
+
           <p>
             Angalia ripoti za mauzo, malipo na maombi.
           </p>
+
         </a>
 
-        <a href="#" class="menu-card" onclick="settingsMessage(); return false;">
-          <div class="menu-icon">⚙️</div>
-          <h3>Settings</h3>
+
+        <a
+          href="#"
+          class="menu-card"
+          onclick="settingsMessage(); return false;"
+        >
+
+          <div class="menu-icon">
+            ⚙️
+          </div>
+
+          <h3>
+            Settings
+          </h3>
+
           <p>
             Usimamizi wa mipangilio ya mfumo.
           </p>
+
         </a>
+
 
       </div>
 
+
+      <!-- RECENT APPLICATIONS -->
+
       <section class="activity">
 
-        <h3>🕒 Shughuli za Hivi Karibuni</h3>
+        <h3>
+          📝 Maombi ya Hivi Karibuni
+        </h3>
 
-        <div class="empty">
-          Hakuna shughuli mpya kwa sasa.
+        <div id="recentApplications">
+
+          <div class="empty loading">
+            Inapakia...
+          </div>
+
         </div>
 
       </section>
+
+
+      <!-- RECENT PAYMENTS -->
+
+      <section class="activity">
+
+        <h3>
+          💰 Malipo ya Hivi Karibuni
+        </h3>
+
+        <div id="recentPayments">
+
+          <div class="empty loading">
+            Inapakia...
+          </div>
+
+        </div>
+
+      </section>
+
 
     </main>
 
   </div>
 
+
   <div id="errorBox" class="error-box">
+
     Session ya Admin imekwisha au si sahihi.
+
     <br><br>
+
     Inakurudisha kwenye Login...
+
   </div>
+
 
   <script>
 
     const token = localStorage.getItem("admin_token");
 
+
+    /*
+     * FORMAT YA FEDHA
+     */
+
+    function formatMoney(amount) {
+
+      const number = Number(amount || 0);
+
+      return "TZS " + number.toLocaleString("en-TZ");
+
+    }
+
+
+    /*
+     * FORMAT YA TAREHE
+     */
+
+    function formatDate(dateValue) {
+
+      if (!dateValue) {
+        return "";
+      }
+
+      const date = new Date(dateValue);
+
+      if (isNaN(date.getTime())) {
+        return dateValue;
+      }
+
+      return date.toLocaleString("sw-TZ", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+
+    }
+
+
+    /*
+     * CHECK ADMIN
+     */
+
     async function checkAdmin() {
 
       if (!token) {
+
         window.location.replace("/admin.html");
+
         return;
       }
 
+
       try {
 
-        const response = await fetch("/api/admin/me", {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer " + token
-          },
-          cache: "no-store"
-        });
+        const response = await fetch(
+          "/api/admin/me",
+          {
+            method: "GET",
+
+            headers: {
+              "Authorization": "Bearer " + token
+            },
+
+            cache: "no-store"
+          }
+        );
+
 
         const data = await response.json();
+
 
         if (!response.ok || !data.admin) {
 
           localStorage.removeItem("admin_token");
 
-          document.getElementById("checking").style.display = "none";
-          document.getElementById("errorBox").style.display = "block";
+          document.getElementById(
+            "checking"
+          ).style.display = "none";
+
+
+          document.getElementById(
+            "errorBox"
+          ).style.display = "block";
+
 
           setTimeout(function () {
+
             window.location.replace("/admin.html");
+
           }, 800);
+
 
           return;
         }
 
+
         if (data.admin.name) {
 
-          document.getElementById("adminName").textContent =
+          document.getElementById(
+            "adminName"
+          ).textContent =
             "👤 " + data.admin.name;
 
-        } else if (data.admin.email) {
+        }
 
-          document.getElementById("adminName").textContent =
+        else if (data.admin.email) {
+
+          document.getElementById(
+            "adminName"
+          ).textContent =
             "👤 " + data.admin.email;
 
         }
 
-        document.getElementById("checking").style.display = "none";
-        document.getElementById("page").style.display = "block";
 
-      } catch (error) {
+        document.getElementById(
+          "checking"
+        ).style.display = "none";
+
+
+        document.getElementById(
+          "page"
+        ).style.display = "block";
+
+
+        await loadDashboard();
+
+
+      }
+
+      catch (error) {
 
         console.error(error);
 
         localStorage.removeItem("admin_token");
 
-        document.getElementById("checking").style.display = "none";
-        document.getElementById("errorBox").style.display = "block";
+
+        document.getElementById(
+          "checking"
+        ).style.display = "none";
+
+
+        document.getElementById(
+          "errorBox"
+        ).style.display = "block";
+
 
         setTimeout(function () {
+
           window.location.replace("/admin.html");
+
         }, 800);
+
       }
+
     }
 
 
-    async function logout() {
+    /*
+     * LOAD DASHBOARD
+     */
 
-      const button = document.getElementById("logoutButton");
+    async function loadDashboard() {
 
-      button.disabled = true;
-      button.textContent = "Inatoka...";
+      const refreshButton =
+        document.getElementById("refreshButton");
+
+
+      const errorBox =
+        document.getElementById("dashboardError");
+
+
+      refreshButton.disabled = true;
+
+      refreshButton.textContent =
+        "⏳ Inapakia...";
+
+
+      errorBox.style.display = "none";
+
 
       try {
 
-        await fetch("/api/admin/logout", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer " + token
+        const response = await fetch(
+          "/api/admin/dashboard",
+          {
+            method: "GET",
+
+            headers: {
+              "Authorization": "Bearer " + token
+            },
+
+            cache: "no-store"
           }
-        });
+        );
 
-      } catch (error) {
 
-        console.error(error);
+        if (response.status === 401) {
+
+          localStorage.removeItem("admin_token");
+
+          window.location.replace("/admin.html");
+
+          return;
+        }
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || data.success === false) {
+
+          throw new Error(
+            data.message ||
+            "Dashboard API error"
+          );
+
+        }
+
+
+        /*
+         * STATS
+         */
+
+        const stats =
+          data.stats || {};
+
+
+        document.getElementById(
+          "totalSchools"
+        ).textContent =
+          Number(
+            stats.schools ??
+            stats.totalSchools ??
+            0
+          ).toLocaleString();
+
+
+        document.getElementById(
+          "soldForms"
+        ).textContent =
+          Number(
+            stats.soldForms ??
+            stats.paidPayments ??
+            stats.formsSold ??
+            0
+          ).toLocaleString();
+
+
+        document.getElementById(
+          "totalPayments"
+        ).textContent =
+          Number(
+            stats.payments ??
+            stats.totalPayments ??
+            0
+          ).toLocaleString();
+
+
+        document.getElementById(
+          "totalApplications"
+        ).textContent =
+          Number(
+            stats.applications ??
+            stats.totalApplications ??
+            0
+          ).toLocaleString();
+
+
+        document.getElementById(
+          "totalPaidAmount"
+        ).textContent =
+          formatMoney(
+            stats.totalPaidAmount ??
+            stats.paidAmount ??
+            0
+          );
+
+
+        document.getElementById(
+          "pendingPayments"
+        ).textContent =
+          Number(
+            stats.pendingPayments ??
+            stats.pending ??
+            0
+          ).toLocaleString();
+
+
+        document.getElementById(
+          "totalForms"
+        ).textContent =
+          Number(
+            stats.forms ??
+            stats.totalForms ??
+            0
+          ).toLocaleString();
+
+
+        /*
+         * RECENT APPLICATIONS
+         */
+
+        renderApplications(
+          data.recentApplications ||
+          data.latestApplications ||
+          []
+        );
+
+
+        /*
+         * RECENT PAYMENTS
+         */
+
+        renderPayments(
+          data.recentPayments ||
+          data.latestPayments ||
+          []
+        );
+
 
       }
 
-      localStorage.removeItem("admin_token");
+      catch (error) {
 
-      window.location.replace("/admin.html");
+        console.error(
+          "Dashboard error:",
+          error
+        );
+
+
+        errorBox.textContent =
+          "⚠️ Imeshindikana kupata taarifa za Dashboard. Tafadhali bonyeza Sasisha Dashboard.";
+
+
+        errorBox.style.display =
+          "block";
+
+      }
+
+
+      finally {
+
+        refreshButton.disabled = false;
+
+        refreshButton.textContent =
+          "🔄 Sasisha Dashboard";
+
+      }
+
     }
 
 
-    document
-      .getElementById("logoutButton")
-      .addEventListener("click", logout);
+    /*
+     * RECENT APPLICATIONS
+     */
+
+    function renderApplications(applications) {
+
+      const container =
+        document.getElementById(
+          "recentApplications"
+        );
 
 
-    function settingsMessage() {
+      if (!Array.isArray(applications) ||
+          applications.length === 0) {
 
-      alert(
-        "Settings itaunganishwa katika hatua inayofuata."
-      );
+        container.innerHTML =
+          '<div class="empty">Hakuna maombi mapya kwa sasa.</div>';
 
-    }
+        return;
+      }
 
 
-    checkAdmin();
+      container.innerHTML = "";
 
-  </script>
 
-</body>
-</html>
+      applications.slice(0, 10).forEach(
+        function (application) {
+
+          const item =
+            document.createElement("div");
+
+
+          item.className =
+            "activity-item";
+
+
+          const applicant =
+            application.full_name ||
+            application.applicant_name ||
+            application.name ||
+            "Mwombaji";
+
+
+          const applicationNumber =
+            application.application_number ||
+            application.applicationNumber ||
+            application.id ||
+            "";
+
+
+          const school =
+            application.school_name ||
+            application.school ||
+            "";
+
+
+          const status =
+            application.status
