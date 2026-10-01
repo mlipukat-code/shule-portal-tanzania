@@ -187,7 +187,39 @@ app.get("/api/schools", async (req, res) => {
 
 });
 
+// ==========================================
+// DATABASE TABLE CHECK
+// ==========================================
 
+app.get("/api/database-check", async (req, res) => {
+
+  try {
+
+    const result = await pool.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+        AND table_name IN ('applications', 'payments')
+      ORDER BY table_name;
+    `);
+
+    res.json({
+      success: true,
+      tables: result.rows.map(row => row.table_name)
+    });
+
+  } catch (error) {
+
+    console.error("Database check error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Imeshindikana kukagua database."
+    });
+
+  }
+
+});
 // ==========================================
 // START SERVER
 // ==========================================
