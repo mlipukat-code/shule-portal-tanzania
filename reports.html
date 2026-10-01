@@ -3,41 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ripoti - Shule Portal Tanzania</title>
+  <title>Reports - Shule Portal Tanzania</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background: #f4f7fb;
-      color: #222;
+      color: #1f2937;
     }
 
-    .header {
-      background: #1565c0;
+    header {
+      background: #0b5ed7;
       color: white;
       padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
-    .header h1 {
-      font-size: 20px;
+    header h1 {
+      margin: 0;
+      font-size: 22px;
     }
 
-    .back {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
+    header p {
+      margin: 6px 0 0;
+      opacity: 0.9;
     }
 
     .container {
@@ -46,317 +39,620 @@
       padding: 20px;
     }
 
-    .title {
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
-    .title h2 {
-      color: #1565c0;
-      margin-bottom: 6px;
-    }
-
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-    }
-
-    .box h3 {
-      color: #1565c0;
-      margin-bottom: 18px;
-    }
-
-    .filters {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .filters input,
-    .filters select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ccc;
-      border-radius: 9px;
-      font-size: 14px;
-    }
-
-    .btn {
-      background: #1565c0;
+    .back-btn {
+      text-decoration: none;
+      background: #6c757d;
       color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .refresh-btn {
       border: none;
-      padding: 11px 18px;
+      background: #198754;
+      color: white;
+      padding: 10px 15px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
-    }
-
-    .btn:hover {
-      background: #0d47a1;
+      font-size: 14px;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .card {
       background: white;
+      border-radius: 12px;
       padding: 20px;
-      border-radius: 14px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .card-icon {
+    .card .icon {
       font-size: 28px;
-      margin-bottom: 8px;
     }
 
-    .card h4 {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 8px;
+    .card h3 {
+      margin: 10px 0 5px;
+      font-size: 15px;
+      color: #6b7280;
     }
 
-    .number {
-      font-size: 24px;
+    .card .number {
+      font-size: 26px;
       font-weight: bold;
-      color: #1565c0;
+      color: #111827;
     }
 
-    .table-container {
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 19px;
+    }
+
+    .table-wrap {
       overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 800px;
+      min-width: 650px;
     }
 
     th,
     td {
-      padding: 13px;
-      border-bottom: 1px solid #eee;
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
       text-align: left;
+      font-size: 14px;
     }
 
     th {
-      background: #e3f2fd;
-      color: #1565c0;
+      background: #f8fafc;
     }
 
-    .info {
-      background: #fff8e1;
-      color: #795548;
-      padding: 12px;
-      border-radius: 9px;
-      margin-bottom: 18px;
-      font-size: 14px;
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .approved {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .rejected {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .paid {
+      background: #d1e7dd;
+      color: #0f5132;
     }
 
     .empty {
       text-align: center;
-      color: #777;
+      padding: 25px;
+      color: #6b7280;
+    }
+
+    .loading {
+      text-align: center;
       padding: 30px;
+      color: #6b7280;
     }
 
-    @media (max-width: 800px) {
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .filters {
-        grid-template-columns: 1fr;
-      }
+    .error {
+      background: #f8d7da;
+      color: #842029;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
-    @media (max-width: 500px) {
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .header h1 {
-        font-size: 16px;
-      }
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #6b7280;
+      font-size: 13px;
     }
   </style>
 </head>
 
 <body>
 
-<header class="header">
-  <h1>🏫 Shule Portal Tanzania</h1>
-  <a href="admin-dashboard.html" class="back">← Dashboard</a>
+<header>
+  <h1>📊 Shule Portal Tanzania</h1>
+  <p>Reports Dashboard - Admin Mkuu</p>
 </header>
 
-<main class="container">
+<div class="container">
 
-  <div class="title">
-    <h2>📊 Ripoti za Mfumo</h2>
-    <p>Angalia taarifa za mauzo, malipo na maombi ya wanafunzi.</p>
+  <div class="topbar">
+    <a href="admin-dashboard.html" class="back-btn">
+      ← Rudi Dashboard
+    </a>
+
+    <button class="refresh-btn" onclick="loadReports()">
+      🔄 Refresh Reports
+    </button>
   </div>
 
-  <section class="box">
+  <div id="message"></div>
 
-    <h3>📅 Chagua Kipindi cha Ripoti</h3>
+  <div id="loading" class="loading">
+    ⏳ Inapakia ripoti...
+  </div>
 
-    <div class="filters">
+  <div id="content" style="display:none;">
 
-      <input type="date">
+    <div class="cards">
 
-      <input type="date">
+      <div class="card">
+        <div class="icon">🏫</div>
+        <h3>Jumla ya Shule</h3>
+        <div class="number" id="totalSchools">0</div>
+      </div>
 
-      <select>
-        <option value="">Aina ya Ripoti</option>
-        <option>Mauzo ya Fomu</option>
-        <option>Malipo</option>
-        <option>Maombi ya Wanafunzi</option>
-        <option>Ripoti ya Shule</option>
-      </select>
+      <div class="card">
+        <div class="icon">📄</div>
+        <h3>Jumla ya Fomu</h3>
+        <div class="number" id="totalForms">0</div>
+      </div>
+
+      <div class="card">
+        <div class="icon">📝</div>
+        <h3>Applications</h3>
+        <div class="number" id="totalApplications">0</div>
+      </div>
+
+      <div class="card">
+        <div class="icon">💳</div>
+        <h3>Malipo</h3>
+        <div class="number" id="totalPayments">0</div>
+      </div>
+
+      <div class="card">
+        <div class="icon">💰</div>
+        <h3>Kiasi Kilicholipwa</h3>
+        <div class="number" id="totalPaid">TZS 0</div>
+      </div>
+
+      <div class="card">
+        <div class="icon">⏳</div>
+        <h3>Pending Applications</h3>
+        <div class="number" id="pendingApplications">0</div>
+      </div>
 
     </div>
 
-    <br>
+    <div class="section">
+      <h2>📝 Applications kwa Status</h2>
 
-    <button class="btn" onclick="generateReport()">
-      📊 Tengeneza Ripoti
-    </button>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Idadi</th>
+            </tr>
+          </thead>
 
-    <button class="btn" onclick="downloadReport()">
-      📥 Pakua Ripoti
-    </button>
-
-  </section>
-
-  <div class="cards">
-
-    <div class="card">
-      <div class="card-icon">🎫</div>
-      <h4>Fomu Zilizouzwa</h4>
-      <div class="number">0</div>
+          <tbody id="applicationStatusTable">
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="card-icon">💰</div>
-      <h4>Jumla ya Mapato</h4>
-      <div class="number">TZS 0</div>
+    <div class="section">
+      <h2>🏫 Applications kwa Shule</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Shule</th>
+              <th>Applications</th>
+            </tr>
+          </thead>
+
+          <tbody id="schoolReportTable">
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="card-icon">📋</div>
-      <h4>Maombi</h4>
-      <div class="number">0</div>
-    </div>
+    <div class="section">
+      <h2>💳 Muhtasari wa Malipo</h2>
 
-    <div class="card">
-      <div class="card-icon">🏫</div>
-      <h4>Shule</h4>
-      <div class="number">0</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Idadi</th>
+              <th>Kiasi</th>
+            </tr>
+          </thead>
+
+          <tbody id="paymentReportTable">
+          </tbody>
+        </table>
+      </div>
     </div>
 
   </div>
 
-  <section class="box">
+</div>
 
-    <h3>🏫 Mauzo kwa Shule</h3>
-
-    <div class="info">
-      Taarifa hizi zitaanza kuonekana baada ya mfumo kuunganishwa
-      na database na mauzo ya fomu kuanza.
-    </div>
-
-    <div class="table-container">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Shule</th>
-            <th>Fomu Zilizouzwa</th>
-            <th>Mapato</th>
-            <th>Maombi</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td colspan="4" class="empty">
-              Hakuna taarifa za mauzo bado.
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-  <section class="box">
-
-    <h3>📋 Muhtasari wa Ripoti</h3>
-
-    <div class="table-container">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Aina ya Taarifa</th>
-            <th>Idadi</th>
-            <th>Kiasi</th>
-            <th>Hali</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td>Fomu Zilizouzwa</td>
-            <td>0</td>
-            <td>TZS 0</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Malipo</td>
-            <td>0</td>
-            <td>TZS 0</td>
-            <td>-</td>
-          </tr>
-
-          <tr>
-            <td>Maombi</td>
-            <td>0</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-</main>
+<footer>
+  © 2026 Shule Portal Tanzania
+</footer>
 
 <script>
-  function generateReport() {
-    alert("Ripoti itazalishwa baada ya database kuunganishwa.");
+
+const API = "";
+
+function getToken() {
+  return localStorage.getItem("admin_token");
+}
+
+async function fetchWithTimeout(url, options = {}, timeout = 8000) {
+
+  const controller = new AbortController();
+
+  const timer = setTimeout(() => {
+    controller.abort();
+  }, timeout);
+
+  try {
+
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+
+    return response;
+
+  } finally {
+
+    clearTimeout(timer);
+
+  }
+}
+
+
+async function loadReports() {
+
+  const loading = document.getElementById("loading");
+  const content = document.getElementById("content");
+  const message = document.getElementById("message");
+
+  loading.style.display = "block";
+  content.style.display = "none";
+  message.innerHTML = "";
+
+  const token = getToken();
+
+  if (!token) {
+
+    message.innerHTML = `
+      <div class="error">
+        ⚠️ Session ya Admin haijapatikana.
+        Tafadhali login tena.
+      </div>
+    `;
+
+    loading.style.display = "none";
+    return;
   }
 
-  function downloadReport() {
-    alert("Upakuaji wa ripoti utawezeshwa baada ya database kuunganishwa.");
+  try {
+
+    /*
+      Tunatumia dashboard API iliyopo tayari.
+      Hii inatupa statistics kutoka PostgreSQL.
+    */
+
+    const response = await fetchWithTimeout(
+      API + "/api/admin/dashboard",
+      {
+        headers: {
+          "Authorization": "Bearer " + token,
+          "Accept": "application/json"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+
+      throw new Error(
+        data.message || "Imeshindikana kupata reports."
+      );
+
+    }
+
+    const stats = data.stats || data.statistics || {};
+
+    document.getElementById("totalSchools").textContent =
+      stats.totalSchools ?? 0;
+
+    document.getElementById("totalForms").textContent =
+      stats.totalForms ?? 0;
+
+    document.getElementById("totalApplications").textContent =
+      stats.totalApplications ?? 0;
+
+    document.getElementById("totalPayments").textContent =
+      stats.totalPayments ?? 0;
+
+    document.getElementById("totalPaid").textContent =
+      "TZS " + Number(stats.totalPaid || 0).toLocaleString();
+
+    document.getElementById("pendingApplications").textContent =
+      stats.pendingApplications ?? 0;
+
+
+    /*
+      APPLICATION STATUS
+    */
+
+    const applications =
+      Array.isArray(data.recentApplications)
+        ? data.recentApplications
+        : [];
+
+    const statusTable =
+      document.getElementById("applicationStatusTable");
+
+    const statusCount = {};
+
+    applications.forEach(app => {
+
+      const status = app.status || "unknown";
+
+      statusCount[status] =
+        (statusCount[status] || 0) + 1;
+
+    });
+
+    statusTable.innerHTML = "";
+
+    if (Object.keys(statusCount).length === 0) {
+
+      statusTable.innerHTML = `
+        <tr>
+          <td colspan="2" class="empty">
+            Hakuna applications za kuonyesha.
+          </td>
+        </tr>
+      `;
+
+    } else {
+
+      Object.entries(statusCount).forEach(([status, count]) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>
+            <span class="status ${status}">
+              ${status}
+            </span>
+          </td>
+
+          <td>
+            ${count}
+          </td>
+        `;
+
+        statusTable.appendChild(row);
+
+      });
+
+    }
+
+
+    /*
+      APPLICATIONS KWA SHULE
+    */
+
+    const schoolTable =
+      document.getElementById("schoolReportTable");
+
+    const schoolCount = {};
+
+    applications.forEach(app => {
+
+      const school =
+        app.school_name ||
+        app.school ||
+        "Haijulikani";
+
+      schoolCount[school] =
+        (schoolCount[school] || 0) + 1;
+
+    });
+
+    schoolTable.innerHTML = "";
+
+    if (Object.keys(schoolCount).length === 0) {
+
+      schoolTable.innerHTML = `
+        <tr>
+          <td colspan="2" class="empty">
+            Hakuna data ya shule.
+          </td>
+        </tr>
+      `;
+
+    } else {
+
+      Object.entries(schoolCount).forEach(([school, count]) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${school}</td>
+          <td>${count}</td>
+        `;
+
+        schoolTable.appendChild(row);
+
+      });
+
+    }
+
+
+    /*
+      PAYMENTS
+    */
+
+    const payments =
+      Array.isArray(data.recentPayments)
+        ? data.recentPayments
+        : [];
+
+    const paymentTable =
+      document.getElementById("paymentReportTable");
+
+    const paymentSummary = {};
+
+    payments.forEach(payment => {
+
+      const status =
+        payment.status || "unknown";
+
+      const amount =
+        Number(
+          payment.amount ||
+          payment.paid_amount ||
+          0
+        );
+
+      if (!paymentSummary[status]) {
+
+        paymentSummary[status] = {
+          count: 0,
+          amount: 0
+        };
+
+      }
+
+      paymentSummary[status].count++;
+      paymentSummary[status].amount += amount;
+
+    });
+
+    paymentTable.innerHTML = "";
+
+    if (Object.keys(paymentSummary).length === 0) {
+
+      paymentTable.innerHTML = `
+        <tr>
+          <td colspan="3" class="empty">
+            Hakuna malipo yaliyorekodiwa.
+          </td>
+        </tr>
+      `;
+
+    } else {
+
+      Object.entries(paymentSummary).forEach(
+        ([status, item]) => {
+
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td>
+              <span class="status ${status}">
+                ${status}
+              </span>
+            </td>
+
+            <td>
+              ${item.count}
+            </td>
+
+            <td>
+              TZS ${item.amount.toLocaleString()}
+            </td>
+          `;
+
+          paymentTable.appendChild(row);
+
+        }
+      );
+
+    }
+
+
+    loading.style.display = "none";
+    content.style.display = "block";
+
+  } catch (error) {
+
+    loading.style.display = "none";
+
+    let errorMessage =
+      "Imeshindikana kupakia Reports.";
+
+    if (error.name === "AbortError") {
+
+      errorMessage =
+        "Server haikujibu ndani ya sekunde 8.";
+
+    } else if (error.message) {
+
+      errorMessage = error.message;
+
+    }
+
+    message.innerHTML = `
+      <div class="error">
+        ❌ ${errorMessage}
+      </div>
+    `;
+
   }
+
+}
+
+
+loadReports();
+
 </script>
 
 </body>
