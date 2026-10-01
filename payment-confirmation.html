@@ -4,437 +4,583 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Uthibitisho wa Malipo - Shule Portal Tanzania</title>
+  <title>Kuthibitisha Malipo - Shule Portal Tanzania</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
-      background: #f4f7fb;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f8fb;
       color: #222;
-      line-height: 1.5;
     }
 
-    .header {
-      background: #1565c0;
+    header {
+      background: #0b78b8;
       color: white;
-      padding: 18px 20px;
+      padding: 20px 15px;
+      text-align: center;
     }
 
-    .header-inner {
-      max-width: 700px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
+    header h1 {
+      margin: 0;
+      font-size: 24px;
     }
 
-    .logo {
-      font-size: 19px;
-      font-weight: bold;
-    }
-
-    .back {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
+    header p {
+      margin: 6px 0 0;
+      font-size: 14px;
     }
 
     .container {
+      width: 92%;
       max-width: 700px;
-      margin: auto;
-      padding: 25px 15px 40px;
-    }
-
-    .title {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .title h1 {
-      color: #1565c0;
-      margin-bottom: 8px;
-    }
-
-    .title p {
-      color: #666;
+      margin: 25px auto;
     }
 
     .card {
       background: white;
-      padding: 23px;
-      border-radius: 14px;
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 18px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
     }
 
-    .card h2 {
-      color: #1565c0;
-      font-size: 19px;
+    .school-name {
+      color: #0b78b8;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .school-info {
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: bold;
       margin-bottom: 18px;
     }
 
-    .summary {
-      background: #e3f2fd;
-      padding: 18px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-
-    .summary-row {
+    .row {
       display: flex;
       justify-content: space-between;
       gap: 15px;
-      padding: 8px 0;
+      padding: 11px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: #666;
+    }
+
+    .value {
+      font-weight: bold;
+      text-align: right;
     }
 
     .amount {
-      color: #2e7d32;
-      font-size: 25px;
-      font-weight: bold;
-    }
-
-    .option {
-      border: 2px solid #e0e0e0;
+      text-align: center;
+      background: #eaf6ff;
+      border: 2px solid #0b78b8;
       border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 12px;
+      padding: 20px;
+      margin-top: 20px;
     }
 
-    .option label {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .option input {
-      margin-top: 4px;
-    }
-
-    .option p {
-      color: #666;
-      font-size: 14px;
-      margin-top: 7px;
-      margin-left: 25px;
-    }
-
-    .field {
-      margin-top: 18px;
-    }
-
-    .field label {
+    .amount small {
       display: block;
-      font-weight: bold;
-      margin-bottom: 7px;
+      color: #555;
+      margin-bottom: 5px;
     }
 
-    input[type="text"],
-    input[type="tel"] {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
+    .amount strong {
+      display: block;
+      color: #0b78b8;
+      font-size: 30px;
     }
 
     .notice {
-      background: #fff8e1;
-      color: #795548;
-      padding: 14px;
-      border-radius: 9px;
+      background: #fff8df;
+      border-left: 5px solid #e0a800;
+      padding: 15px;
+      line-height: 1.6;
       margin-top: 18px;
-      font-size: 14px;
+      border-radius: 6px;
     }
 
     .btn {
       width: 100%;
       border: none;
-      background: #1565c0;
-      color: white;
+      border-radius: 8px;
       padding: 15px;
-      border-radius: 9px;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 20px;
+      margin-top: 12px;
     }
 
-    .btn:hover {
-      background: #0d47a1;
+    .btn-confirm {
+      background: #0b78b8;
+      color: white;
     }
 
-    .footer {
+    .btn-confirm:hover {
+      background: #095f91;
+    }
+
+    .btn-back {
+      background: #eeeeee;
+      color: #333;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .error {
+      color: #b00020;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    footer {
       text-align: center;
       color: #777;
-      padding: 25px;
-      font-size: 14px;
-    }
-
-    @media (max-width: 500px) {
-
-      .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .summary-row {
-        flex-direction: column;
-        gap: 3px;
-      }
-
-      .container {
-        padding-left: 12px;
-        padding-right: 12px;
-      }
-
-      .card {
-        padding: 18px;
-      }
+      font-size: 13px;
+      padding: 25px 10px;
     }
   </style>
 </head>
 
 <body>
 
-<header class="header">
-
-  <div class="header-inner">
-
-    <div class="logo">
-      🏫 Shule Portal Tanzania
-    </div>
-
-    <a href="payment.html" class="back">
-      ← Rudi
-    </a>
-
-  </div>
-
+<header>
+  <h1>🏫 Shule Portal Tanzania</h1>
+  <p>Kuthibitisha Malipo</p>
 </header>
 
+<div class="container">
 
-<main class="container">
+  <div id="loading" class="card loading">
+    Inapakia taarifa za malipo...
+  </div>
 
-  <section class="title">
+  <div id="content" style="display:none;">
 
-    <h1>💳 Uthibitisho wa Malipo</h1>
+    <!-- SHULE -->
+    <div class="card">
 
-    <p>
-      Kamilisha taarifa za malipo ya fomu.
-    </p>
+      <div class="school-name" id="schoolName"></div>
 
-  </section>
+      <div class="school-info">
+        <div>
+          <strong>Mkoa:</strong>
+          <span id="schoolRegion"></span>
+        </div>
 
+        <div>
+          <strong>Wilaya:</strong>
+          <span id="schoolDistrict"></span>
+        </div>
 
-  <div class="card">
+        <div>
+          <strong>Aina ya Shule:</strong>
+          <span id="schoolType"></span>
+        </div>
 
-    <div class="summary">
-
-      <div class="summary-row">
-        <span>Shule</span>
-        <strong>Shule ya Mfano Academy</strong>
-      </div>
-
-      <div class="summary-row">
-        <span>Fomu</span>
-        <strong>Maombi ya Kujiunga</strong>
-      </div>
-
-      <div class="summary-row">
-        <span>Namba ya Maombi</span>
-        <strong>SPT-2026-0001</strong>
-      </div>
-
-      <div class="summary-row">
-        <span>Kiasi</span>
-        <span class="amount">TZS 10,000</span>
+        <div>
+          <strong>Simu:</strong>
+          <span id="schoolPhone"></span>
+        </div>
       </div>
 
     </div>
 
 
-    <h2>Chagua Njia ya Malipo</h2>
+    <!-- MWOMBAJI -->
+    <div class="card">
 
+      <div class="title">
+        👤 Taarifa za Mwombaji
+      </div>
 
-    <div class="option">
+      <div class="row">
+        <span class="label">Mwanafunzi</span>
+        <span class="value" id="studentName"></span>
+      </div>
 
-      <label>
+      <div class="row">
+        <span class="label">Darasa/Form</span>
+        <span class="value" id="classLevel"></span>
+      </div>
 
-        <input
-          type="radio"
-          name="paymentMethod"
-          value="mobile"
-        >
+      <div class="row">
+        <span class="label">Mzazi/Mlezi</span>
+        <span class="value" id="parentName"></span>
+      </div>
 
-        <span>
-          📱 Malipo kwa Simu
-        </span>
+      <div class="row">
+        <span class="label">Simu</span>
+        <span class="value" id="phone"></span>
+      </div>
 
-      </label>
-
-      <p>
-        M-Pesa / Airtel Money / Mixx by Yas / HaloPesa
-      </p>
-
-    </div>
-
-
-    <div class="option">
-
-      <label>
-
-        <input
-          type="radio"
-          name="paymentMethod"
-          value="bank"
-        >
-
-        <span>
-          🏦 Benki
-        </span>
-
-      </label>
-
-      <p>
-        Malipo kupitia benki yatathibitishwa na mfumo.
-      </p>
+      <div class="row">
+        <span class="label">Barua pepe</span>
+        <span class="value" id="email"></span>
+      </div>
 
     </div>
 
 
-    <div class="field">
+    <!-- MALIPO -->
+    <div class="card">
 
-      <label for="phone">
-        Namba ya Simu iliyotumika kulipa
-      </label>
+      <div class="title">
+        💳 Thibitisha Malipo
+      </div>
 
-      <input
-        type="tel"
-        id="phone"
-        placeholder="Mfano: 0712345678"
-      >
+      <div class="row">
+        <span class="label">Huduma</span>
+        <span class="value">Fomu ya Maombi</span>
+      </div>
+
+      <div class="row">
+        <span class="label">Shule</span>
+        <span class="value" id="paymentSchool"></span>
+      </div>
+
+      <div class="amount">
+
+        <small>Kiasi cha Kulipa</small>
+
+        <strong id="amount">
+          TSh 0
+        </strong>
+
+      </div>
+
+      <div class="notice">
+        ℹ️ Hii ni hatua ya kuthibitisha taarifa za malipo.
+        Mfumo wa malipo halisi utaunganishwa baada ya hatua hii
+        kuthibitishwa kuwa inafanya kazi vizuri.
+      </div>
+
+      <button
+        class="btn btn-confirm"
+        onclick="confirmPayment()">
+        ✅ Thibitisha na Endelea
+      </button>
+
+      <button
+        class="btn btn-back"
+        onclick="history.back()">
+        ← Rudi
+      </button>
 
     </div>
-
-
-    <div class="field">
-
-      <label for="transaction">
-        Transaction / Reference Number
-      </label>
-
-      <input
-        type="text"
-        id="transaction"
-        placeholder="Mfano: TXN123456789"
-      >
-
-    </div>
-
-
-    <div class="notice">
-
-      ℹ️ Kwa sasa ukurasa huu ni wa maandalizi.
-      Mfumo bado haujaunganishwa na huduma ya malipo
-      halisi. Baada ya payment gateway kuunganishwa,
-      mfumo utaweza kuthibitisha malipo moja kwa moja.
-
-    </div>
-
-
-    <button
-      class="btn"
-      type="button"
-      onclick="confirmPayment()"
-    >
-      ✅ Thibitisha Malipo
-    </button>
 
   </div>
 
 
-  <div class="card">
-
-    <h2>Baada ya Malipo</h2>
-
-    <p>
-      Baada ya taarifa za malipo kuthibitishwa,
-      mwombaji ataendelea kwenye fomu ya maombi.
-    </p>
-
+  <div
+    id="errorBox"
+    class="card error"
+    style="display:none;">
   </div>
 
-</main>
+</div>
 
 
-<footer class="footer">
-
+<footer>
   © 2026 Shule Portal Tanzania
-
 </footer>
 
 
 <script>
 
-function confirmPayment() {
+  const params = new URLSearchParams(
+    window.location.search
+  );
 
-  const method =
-    document.querySelector(
-      'input[name="paymentMethod"]:checked'
-    );
+  const schoolId =
+    params.get("school_id");
+
+  const studentName =
+    params.get("student_name") || "";
+
+  const gender =
+    params.get("gender") || "";
+
+  const dateOfBirth =
+    params.get("date_of_birth") || "";
+
+  const classLevel =
+    params.get("class_level") || "";
+
+  const parentName =
+    params.get("parent_name") || "";
 
   const phone =
-    document.getElementById("phone").value.trim();
+    params.get("phone") || "";
 
-  const transaction =
-    document.getElementById("transaction").value.trim();
+  const email =
+    params.get("email") || "";
+
+  const address =
+    params.get("address") || "";
 
 
-  if (!method) {
+  async function loadConfirmation() {
 
-    alert(
-      "Tafadhali chagua njia ya malipo."
-    );
+    if (!schoolId) {
 
-    return;
+      showError(
+        "Taarifa ya shule haijapatikana."
+      );
+
+      return;
+    }
+
+    try {
+
+      const response =
+        await fetch("/api/schools");
+
+      const data =
+        await response.json();
+
+      if (
+        !data.success ||
+        !data.schools
+      ) {
+
+        showError(
+          "Imeshindikana kupata taarifa za shule."
+        );
+
+        return;
+      }
+
+
+      const school =
+        data.schools.find(
+          s =>
+            String(s.id) ===
+            String(schoolId)
+        );
+
+
+      if (!school) {
+
+        showError(
+          "Shule uliyochagua haijapatikana."
+        );
+
+        return;
+      }
+
+
+      // TAARIFA ZA SHULE
+
+      document.getElementById(
+        "schoolName"
+      ).textContent =
+        school.name || "-";
+
+
+      document.getElementById(
+        "schoolRegion"
+      ).textContent =
+        school.region || "-";
+
+
+      document.getElementById(
+        "schoolDistrict"
+      ).textContent =
+        school.district || "-";
+
+
+      document.getElementById(
+        "schoolType"
+      ).textContent =
+        school.school_type ||
+        school.type ||
+        "-";
+
+
+      document.getElementById(
+        "schoolPhone"
+      ).textContent =
+        school.phone || "-";
+
+
+      // MWOMBAJI
+
+      document.getElementById(
+        "studentName"
+      ).textContent =
+        studentName || "-";
+
+
+      document.getElementById(
+        "classLevel"
+      ).textContent =
+        classLevel || "-";
+
+
+      document.getElementById(
+        "parentName"
+      ).textContent =
+        parentName || "-";
+
+
+      document.getElementById(
+        "phone"
+      ).textContent =
+        phone || "-";
+
+
+      document.getElementById(
+        "email"
+      ).textContent =
+        email || "-";
+
+
+      // MALIPO
+
+      document.getElementById(
+        "paymentSchool"
+      ).textContent =
+        school.name || "-";
+
+
+      const price =
+        Number(
+          school.form_price ||
+          school.price ||
+          0
+        );
+
+
+      document.getElementById(
+        "amount"
+      ).textContent =
+        "TSh " +
+        price.toLocaleString("en-TZ");
+
+
+      // HIFADHI TAARIFA
+
+      sessionStorage.setItem(
+        "selectedSchool",
+        JSON.stringify(school)
+      );
+
+
+      // ONESHA UKURASA
+
+      document.getElementById(
+        "loading"
+      ).style.display =
+        "none";
+
+      document.getElementById(
+        "content"
+      ).style.display =
+        "block";
+
+    } catch (error) {
+
+      console.error(error);
+
+      showError(
+        "Kuna tatizo la kuwasiliana na mfumo. Tafadhali jaribu tena."
+      );
+    }
   }
 
 
-  if (!phone) {
+  function confirmPayment() {
 
-    alert(
-      "Tafadhali ingiza namba ya simu."
-    );
+    /*
+      Kwa sasa hatujaunganisha
+      payment gateway halisi.
 
-    return;
+      Tunatuma taarifa zote kwenda
+      application-success.html.
+    */
+
+    const nextUrl =
+      "/application-success.html?" +
+
+      "school_id=" +
+      encodeURIComponent(schoolId) +
+
+      "&student_name=" +
+      encodeURIComponent(studentName) +
+
+      "&gender=" +
+      encodeURIComponent(gender) +
+
+      "&date_of_birth=" +
+      encodeURIComponent(dateOfBirth) +
+
+      "&class_level=" +
+      encodeURIComponent(classLevel) +
+
+      "&parent_name=" +
+      encodeURIComponent(parentName) +
+
+      "&phone=" +
+      encodeURIComponent(phone) +
+
+      "&email=" +
+      encodeURIComponent(email) +
+
+      "&address=" +
+      encodeURIComponent(address);
+
+
+    window.location.href =
+      nextUrl;
   }
 
 
-  if (!transaction) {
+  function showError(message) {
 
-    alert(
-      "Tafadhali ingiza Transaction / Reference Number."
-    );
+    document.getElementById(
+      "loading"
+    ).style.display =
+      "none";
 
-    return;
+
+    const errorBox =
+      document.getElementById(
+        "errorBox"
+      );
+
+
+    errorBox.textContent =
+      message;
+
+
+    errorBox.style.display =
+      "block";
   }
 
 
-  window.location.href =
-    "application-form.html";
-
-}
+  loadConfirmation();
 
 </script>
 
