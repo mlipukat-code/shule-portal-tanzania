@@ -187,6 +187,7 @@ app.get("/api/schools", async (req, res) => {
 
 });
 
+
 // ==========================================
 // DATABASE TABLE CHECK
 // ==========================================
@@ -210,16 +211,299 @@ app.get("/api/database-check", async (req, res) => {
 
   } catch (error) {
 
-    console.error("Database check error:", error);
+    console.error(
+      "Database check error:",
+      error
+    );
 
     res.status(500).json({
       success: false,
-      message: "Imeshindikana kukagua database."
+      message:
+        "Imeshindikana kukagua database."
     });
 
   }
 
 });
+
+
+// ==========================================
+// CREATE APPLICATION
+// ==========================================
+
+app.post("/api/applications", async (req, res) => {
+
+  const {
+    school_id,
+    student_name,
+    gender,
+    date_of_birth,
+    class_level,
+    parent_name,
+    phone,
+    email,
+    address
+  } = req.body;
+
+
+  // ----------------------------------------
+  // VALIDATION
+  // ----------------------------------------
+
+  if (
+    !school_id ||
+    !student_name ||
+    !class_level ||
+    !parent_name ||
+    !phone
+  ) {
+
+    return res.status(400).json({
+      success: false,
+      message:
+        "Tafadhali jaza taarifa muhimu za mwanafunzi."
+    });
+
+  }
+
+
+  const client = await pool.connect();
+
+
+  try {
+
+    await client.query("BEGIN");
+
+
+    // --------------------------------------
+    // CHECK SCHOOL
+    // --------------------------------------
+
+    const schoolResult = await client.query(
+      `
+        SELECT
+          id,
+          name,
+          form_price,
+          status
+        FROM schools
+        WHERE id = $1
+          AND status = 'active'
+      `,
+      [school_id]
+    );
+
+
+    if (schoolResult.rows.length === 0) {
+
+      await client.query("ROLLBACK");
+
+      return res.status(404).json({
+        success: false,
+        message:
+          "Shule haipatikani au haijawezeshwa."
+      });
+
+    }
+
+
+    const school = schoolResult.rows[0];
+
+
+    // --------------------------------------
+    // GENERATE APPLICATION NUMBER
+    // --------------------------------------
+
+    const applicationNumber =
+      "SPT-" +
+      new Date().getFullYear() +
+      "-" +
+      Date.now();
+
+
+    // --------------------------------------
+    // SAVE APPLICATION
+    // --------------------------------------
+
+    const applicationResult = await client.query(
+      `
+        INSERT INTO applications (
+          school_id,
+          student_name,
+          gender,
+          date_of_birth,
+          class_level,
+          parent_name,
+          phone,
+          email,
+          address,
+          application_number,
+          status
+        )
+        VALUES (
+          $1,
+          $2,
+          $3,
+          $4,
+          $5,
+          $6,
+          $7,
+          $8,
+          $9,
+          $10,
+          'pending'
+        )
+        RETURNING
+          id,
+          school_id,
+          student_name,
+          gender,
+          date_of_birth,
+          class_level,
+          parent_name,
+          phone,
+          email,
+          address,
+          application_number,
+          status,
+          created_at
+      `,
+      [
+        school_id,
+        student_name,
+        gender || null,
+        date_of_birth || null,
+        class_level,
+        parent_name,
+        phone,
+        email || null,
+        address || null,
+        applicationNumber
+      ]
+    );
+
+
+    const application =
+      applicationResult.rows[0];
+
+
+    // --------------------------------------
+    // GENERATE PAYMENT REFERENCE
+    // --------------------------------------
+
+    const paymentReference =
+      "PAY-" +
+      new Date().getFullYear() +
+      "-" +
+      Date.now();
+
+
+    // --------------------------------------
+    // CREATE PENDING PAYMENT
+    // --------------------------------------
+
+    const paymentResult = await client.query(
+      `
+        INSERT INTO payments (
+          application_id,
+          amount,
+          payment_reference,
+          status
+        )
+        VALUES (
+          $1,
+          $2,
+          $3,
+          'pending'
+        )
+        RETURNING
+          id,
+          application_id,
+          amount,
+          payment_reference,
+          status,
+          created_at
+      `,
+      [
+        application.id,
+        school.form_price,
+        paymentReference
+      ]
+    );
+
+
+    const payment =
+      paymentResult.rows[0];
+
+
+    await client.query("COMMIT");
+
+
+    // --------------------------------------
+    // RESPONSE
+    // --------------------------------------
+
+    res.status(201).json({
+
+      success: true,
+
+      message:
+        "Maombi yamehifadhiwa na payment order imeundwa.",
+
+      application: {
+        id: application.id,
+        application_number:
+          application.application_number,
+        student_name:
+          application.student_name,
+        school_id:
+          application.school_id,
+        status:
+          application.status
+      },
+
+      payment: {
+        id: payment.id,
+        amount: payment.amount,
+        payment_reference:
+          payment.payment_reference,
+        status:
+          payment.status
+      },
+
+      school: {
+        id: school.id,
+        name: school.name,
+        form_price:
+          school.form_price
+      }
+
+    });
+
+  } catch (error) {
+
+    await client.query("ROLLBACK");
+
+    console.error(
+      "Create application error:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message:
+        "Imeshindikana kuhifadhi maombi."
+    });
+
+  } finally {
+
+    client.release();
+
+  }
+
+});
+
+
 // ==========================================
 // START SERVER
 // ==========================================
