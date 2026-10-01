@@ -52,6 +52,10 @@ function hashPassword(password) {
 
 function verifyPassword(password, storedHash) {
 
+  if (!storedHash || !storedHash.includes(":")) {
+    return false;
+  }
+
   const parts =
     storedHash.split(":");
 
@@ -176,21 +180,13 @@ async function initializeDatabase() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS school_admins (
         id SERIAL PRIMARY KEY,
-
         full_name VARCHAR(255) NOT NULL,
-
         email VARCHAR(255) NOT NULL UNIQUE,
-
         phone VARCHAR(30),
-
         school_id INTEGER NOT NULL,
-
         password_hash TEXT NOT NULL,
-
         status VARCHAR(30) NOT NULL DEFAULT 'active',
-
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
         CONSTRAINT fk_school_admin_school
@@ -208,21 +204,13 @@ async function initializeDatabase() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS school_forms (
         id SERIAL PRIMARY KEY,
-
         school_id INTEGER NOT NULL,
-
         form_name VARCHAR(255) NOT NULL,
-
         price NUMERIC(12,2) NOT NULL DEFAULT 0,
-
         status VARCHAR(30) NOT NULL DEFAULT 'active',
-
         application_start DATE,
-
         application_end DATE,
-
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
         CONSTRAINT fk_school_form_school
@@ -513,6 +501,20 @@ async function requireAdmin(req, res, next) {
       authHeader.substring(7);
 
 
+    if (!token) {
+
+      return res.status(401).json({
+
+        success: false,
+
+        message:
+          "Admin token haipo."
+
+      });
+
+    }
+
+
     const result =
       await pool.query(
         `
@@ -764,7 +766,7 @@ app.post("/api/admin/login", async (req, res) => {
     }
 
 
-    // Remove old sessions for this admin
+    // Remove old sessions
 
     await pool.query(
       `
@@ -885,6 +887,162 @@ app.get(
       }
 
     });
+
+  }
+);
+
+
+// =====================================================
+// ADMIN DASHBOARD STATISTICS
+// =====================================================
+
+app.get(
+  "/api/admin/dashboard",
+  requireAdmin,
+  async (req, res) => {
+
+    try {
+
+      // -----------------------------------------------
+      // COUNT SCHOOLS
+      // -----------------------------------------------
+
+      const schoolsResult =
+        await pool.query(`
+          SELECT COUNT(*)::INTEGER AS total
+          FROM schools
+        `);
+
+
+      // -----------------------------------------------
+      // COUNT SCHOOL FORMS
+      // -----------------------------------------------
+
+      const formsResult =
+        await pool.query(`
+          SELECT COUNT(*)::INTEGER AS total
+          FROM school_forms
+        `);
+
+
+      // -----------------------------------------------
+      // COUNT APPLICATIONS
+      // -----------------------------------------------
+
+      const applicationsResult =
+        await pool.query(`
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+        `);
+
+
+      // -----------------------------------------------
+      // COUNT PAYMENTS
+      // -----------------------------------------------
+
+      const paymentsResult =
+        await pool.query(`
+          SELECT
+            COUNT(*)::INTEGER AS total,
+            COALESCE(
+              SUM(
+                CASE
+                  WHEN status = 'paid'
+                  THEN amount
+                  ELSE 0
+                END
+              ),
+              0
+            )::NUMERIC AS paid_amount
+          FROM payments
+        `);
+
+
+      // -----------------------------------------------
+      // COUNT PENDING PAYMENTS
+      // -----------------------------------------------
+
+      const pendingPaymentsResult =
+        await pool.query(`
+          SELECT COUNT(*)::INTEGER AS total
+          FROM payments
+          WHERE status = 'pending'
+        `);
+
+
+      // -----------------------------------------------
+      // APPLICATION STATUS
+      // -----------------------------------------------
+
+      const pendingApplicationsResult =
+        await pool.query(`
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE status = 'pending'
+        `);
+
+
+      const approvedApplicationsResult =
+        await pool.query(`
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE status = 'approved'
+        `);
+
+
+      res.json({
+
+        success: true,
+
+        statistics: {
+
+          schools:
+            schoolsResult.rows[0].total,
+
+          forms:
+            formsResult.rows[0].total,
+
+          applications:
+            applicationsResult.rows[0].total,
+
+          payments:
+            paymentsResult.rows[0].total,
+
+          pending_payments:
+            pendingPaymentsResult.rows[0].total,
+
+          paid_amount:
+            paymentsResult.rows[0].paid_amount,
+
+          pending_applications:
+            pendingApplicationsResult.rows[0].total,
+
+          approved_applications:
+            approvedApplicationsResult.rows[0].total
+
+        }
+
+      });
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Dashboard statistics error:",
+        error
+      );
+
+      res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kupata takwimu za Dashboard."
+
+      });
+
+    }
 
   }
 );
