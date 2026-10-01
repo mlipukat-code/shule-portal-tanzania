@@ -3,69 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fomu za Shule - Shule Portal Tanzania</title>
+
+  <title>School Forms - Shule Portal Tanzania</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background: #f4f7fb;
-      color: #222;
+      color: #1f2937;
     }
 
     .header {
-      background: #1565c0;
+      background: #0d6efd;
       color: white;
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 20px;
     }
 
     .header h1 {
-      font-size: 20px;
+      margin: 0 0 5px;
+      font-size: 24px;
     }
 
-    .back {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
+    .header p {
+      margin: 0;
+      opacity: 0.9;
     }
 
     .container {
-      max-width: 1150px;
-      margin: auto;
-      padding: 20px;
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 0 15px;
     }
 
-    .title {
-      margin-bottom: 20px;
-    }
-
-    .title h2 {
-      color: #1565c0;
-      margin-bottom: 6px;
-    }
-
-    .box {
+    .card {
       background: white;
+      border-radius: 12px;
       padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
       margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .box h3 {
-      color: #1565c0;
-      margin-bottom: 18px;
+    .card h2 {
+      margin-top: 0;
+      color: #0d6efd;
     }
 
     .form-grid {
@@ -74,18 +59,21 @@
       gap: 15px;
     }
 
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+
     .field label {
-      display: block;
       font-weight: bold;
-      margin-bottom: 7px;
+      margin-bottom: 6px;
     }
 
     .field input,
     .field select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 9px;
+      padding: 11px;
+      border: 1px solid #ced4da;
+      border-radius: 7px;
       font-size: 15px;
     }
 
@@ -93,16 +81,36 @@
       grid-column: 1 / -1;
     }
 
-    .save-btn {
-      margin-top: 18px;
-      background: #1565c0;
+    button {
+      background: #0d6efd;
       color: white;
       border: none;
-      padding: 13px 22px;
-      border-radius: 9px;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 12px 20px;
+      border-radius: 7px;
       cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #0b5ed7;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 7px;
+      display: none;
+    }
+
+    .success {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #842029;
     }
 
     .table-container {
@@ -112,69 +120,34 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      min-width: 800px;
     }
 
     th,
     td {
-      padding: 13px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #dee2e6;
+      padding: 12px;
       text-align: left;
     }
 
     th {
-      background: #e3f2fd;
-      color: #1565c0;
+      background: #e9f2ff;
+      color: #0d6efd;
     }
 
-    .status-open {
-      background: #e8f5e9;
-      color: #2e7d32;
-      padding: 6px 10px;
+    .badge {
+      padding: 5px 9px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
-    }
-
-    .status-closed {
-      background: #ffebee;
-      color: #c62828;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .edit {
-      background: #1565c0;
-      color: white;
-      border: none;
-      padding: 7px 11px;
-      border-radius: 6px;
-      margin-right: 5px;
-    }
-
-    .delete {
-      background: #d32f2f;
-      color: white;
-      border: none;
-      padding: 7px 11px;
-      border-radius: 6px;
+      background: #d1e7dd;
+      color: #0f5132;
     }
 
     .empty {
       text-align: center;
-      color: #777;
-      padding: 25px;
-    }
-
-    .info {
-      background: #fff8e1;
-      color: #795548;
-      padding: 12px;
-      border-radius: 9px;
-      margin-bottom: 18px;
-      font-size: 14px;
+      padding: 20px;
+      color: #6c757d;
     }
 
     @media (max-width: 700px) {
@@ -185,133 +158,135 @@
       .full {
         grid-column: auto;
       }
-
-      .header h1 {
-        font-size: 16px;
-      }
     }
   </style>
 </head>
 
 <body>
 
-  <header class="header">
-    <h1>🏫 Shule Portal Tanzania</h1>
-    <a href="admin-dashboard.html" class="back">← Dashboard</a>
-  </header>
+  <div class="header">
+    <h1>Shule Portal Tanzania</h1>
+    <p>Usimamizi wa Fomu za Shule</p>
+  </div>
 
-  <main class="container">
+  <div class="container">
 
-    <div class="title">
-      <h2>Fomu za Shule</h2>
-      <p>Simamia fomu zinazouzwa kupitia Shule Portal Tanzania.</p>
-    </div>
+    <div class="card">
 
-    <section class="box">
+      <h2>➕ Ongeza Fomu ya Shule</h2>
 
-      <h3>➕ Tengeneza Fomu</h3>
-
-      <div class="info">
-        Hapa Admin Mkuu ataweka bei, kipindi cha maombi na hali ya fomu.
-        Taarifa hizi zitaunganishwa na database baadaye.
-      </div>
-
-      <form id="formManager">
+      <form id="formAdd">
 
         <div class="form-grid">
 
           <div class="field">
             <label>Shule</label>
-            <select id="school" required>
-              <option value="">Chagua shule</option>
-              <option>Shule ya Mfano Academy</option>
-              <option>Bright Future School</option>
-              <option>St. Joseph School</option>
+
+            <select id="school_id" required>
+              <option value="">-- Chagua Shule --</option>
             </select>
           </div>
+
 
           <div class="field">
             <label>Aina ya Fomu</label>
-            <select id="formType" required>
-              <option value="">Chagua aina</option>
-              <option>Application Form - Primary</option>
-              <option>Application Form - Secondary</option>
-              <option>Admission Form</option>
-            </select>
+
+            <input
+              type="text"
+              id="form_name"
+              placeholder="Mfano: Fomu ya Kidato cha Kwanza"
+              required
+            >
           </div>
+
 
           <div class="field">
             <label>Bei ya Fomu (TZS)</label>
+
             <input
               type="number"
               id="price"
-              placeholder="10000"
               min="0"
+              placeholder="Mfano: 10000"
               required
             >
           </div>
+
 
           <div class="field">
             <label>Hali ya Fomu</label>
-            <select id="status" required>
-              <option value="open">🟢 Ipo wazi</option>
-              <option value="closed">🔴 Imefungwa</option>
+
+            <select id="status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
             </select>
           </div>
 
+
           <div class="field">
             <label>Tarehe ya Kuanza</label>
+
             <input
               type="date"
-              id="startDate"
-              required
+              id="application_start"
             >
           </div>
 
+
           <div class="field">
             <label>Tarehe ya Mwisho</label>
+
             <input
               type="date"
-              id="endDate"
-              required
+              id="application_end"
             >
+          </div>
+
+
+          <div class="field full">
+
+            <button type="submit">
+              💾 Hifadhi Fomu
+            </button>
+
           </div>
 
         </div>
 
-        <button type="submit" class="save-btn">
-          Hifadhi Fomu
-        </button>
-
       </form>
 
-    </section>
+      <div id="message" class="message"></div>
 
-    <section class="box">
+    </div>
 
-      <h3>📝 Fomu Zilizopo</h3>
+
+    <div class="card">
+
+      <h2>📋 Fomu Zilizopo</h2>
 
       <div class="table-container">
 
         <table>
 
           <thead>
+
             <tr>
+              <th>#</th>
               <th>Shule</th>
               <th>Aina ya Fomu</th>
               <th>Bei</th>
-              <th>Kuanza</th>
-              <th>Kuisha</th>
               <th>Hali</th>
-              <th>Hatua</th>
+              <th>Kuanza</th>
+              <th>Mwisho</th>
             </tr>
+
           </thead>
 
-          <tbody id="formList">
+          <tbody id="formsTable">
 
             <tr>
               <td colspan="7" class="empty">
-                Hakuna fomu iliyowekwa bado.
+                Inapakia...
               </td>
             </tr>
 
@@ -321,22 +296,274 @@
 
       </div>
 
-    </section>
+    </div>
 
-  </main>
+  </div>
 
-  <script>
-    document.getElementById("formManager").addEventListener("submit", function(event) {
+
+<script>
+
+  // ================================
+  // LOAD SCHOOLS
+  // ================================
+
+  async function loadSchools() {
+
+    try {
+
+      const response =
+        await fetch("/api/schools");
+
+      const data =
+        await response.json();
+
+      const select =
+        document.getElementById("school_id");
+
+      select.innerHTML =
+        '<option value="">-- Chagua Shule --</option>';
+
+      if (data.success && data.schools.length > 0) {
+
+        data.schools.forEach(school => {
+
+          const option =
+            document.createElement("option");
+
+          option.value =
+            school.id;
+
+          option.textContent =
+            school.name +
+            " - " +
+            school.region;
+
+          select.appendChild(option);
+
+        });
+
+      }
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  // ================================
+  // LOAD FORMS
+  // ================================
+
+  async function loadForms() {
+
+    const table =
+      document.getElementById("formsTable");
+
+    try {
+
+      const response =
+        await fetch("/api/school-forms");
+
+      const data =
+        await response.json();
+
+      if (
+        !data.success ||
+        data.forms.length === 0
+      ) {
+
+        table.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty">
+              Hakuna fomu zilizohifadhiwa bado.
+            </td>
+          </tr>
+        `;
+
+        return;
+
+      }
+
+
+      table.innerHTML = "";
+
+
+      data.forms.forEach((form, index) => {
+
+        const row =
+          document.createElement("tr");
+
+        row.innerHTML = `
+
+          <td>${index + 1}</td>
+
+          <td>${form.school_name}</td>
+
+          <td>${form.form_name}</td>
+
+          <td>
+            TZS ${Number(form.price).toLocaleString()}
+          </td>
+
+          <td>
+            <span class="badge">
+              ${form.status}
+            </span>
+          </td>
+
+          <td>
+            ${form.application_start || "-"}
+          </td>
+
+          <td>
+            ${form.application_end || "-"}
+          </td>
+
+        `;
+
+        table.appendChild(row);
+
+      });
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      table.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty">
+            Imeshindikana kupakia fomu.
+          </td>
+        </tr>
+      `;
+
+    }
+
+  }
+
+
+  // ================================
+  // ADD FORM
+  // ================================
+
+  document
+    .getElementById("formAdd")
+    .addEventListener("submit", async function(event) {
+
       event.preventDefault();
 
-      alert(
-        "Fomu imepokelewa. " +
-        "Database itawezesha kuhifadhi taarifa hizi na kuanza mauzo halisi."
-      );
 
-      this.reset();
+      const message =
+        document.getElementById("message");
+
+
+      const payload = {
+
+        school_id:
+          document.getElementById("school_id").value,
+
+        form_name:
+          document.getElementById("form_name").value,
+
+        price:
+          document.getElementById("price").value,
+
+        status:
+          document.getElementById("status").value,
+
+        application_start:
+          document.getElementById("application_start").value,
+
+        application_end:
+          document.getElementById("application_end").value
+
+      };
+
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/school-forms",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(payload)
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            "Imeshindikana kuhifadhi fomu."
+          );
+
+        }
+
+
+        message.className =
+          "message success";
+
+        message.style.display =
+          "block";
+
+        message.textContent =
+          "✅ " + data.message;
+
+
+        document
+          .getElementById("formAdd")
+          .reset();
+
+
+        await loadForms();
+
+      }
+
+      catch (error) {
+
+        message.className =
+          "message error";
+
+        message.style.display =
+          "block";
+
+        message.textContent =
+          "❌ " + error.message;
+
+      }
+
     });
-  </script>
+
+
+  // ================================
+  // START
+  // ================================
+
+  loadSchools();
+
+  loadForms();
+
+</script>
 
 </body>
 </html>
