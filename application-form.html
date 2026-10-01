@@ -123,6 +123,13 @@
       color: red;
     }
 
+    .loading-school {
+      text-align: center;
+      padding: 15px;
+      color: #0b74b8;
+      font-weight: bold;
+    }
+
     @media (max-width: 600px) {
       .container {
         width: 96%;
@@ -149,8 +156,20 @@
 
   <div class="card">
 
-    <div class="school-info">
-      <h2 id="schoolName">Inapakia shule...</h2>
+    <div
+      id="schoolLoading"
+      class="loading-school"
+    >
+      Inapakia taarifa za shule...
+    </div>
+
+    <div
+      id="schoolInfo"
+      class="school-info"
+      style="display:none;"
+    >
+
+      <h2 id="schoolName">-</h2>
 
       <p>
         <strong>Mkoa:</strong>
@@ -171,7 +190,9 @@
         <strong>Gharama ya Fomu:</strong>
         TSh <span id="formPrice">-</span>
       </p>
+
     </div>
+
 
     <h2>Taarifa za Mwanafunzi</h2>
 
@@ -194,10 +215,23 @@
         <span class="required">*</span>
       </label>
 
-      <select id="gender" required>
-        <option value="">-- Chagua Jinsia --</option>
-        <option value="Male">Mwanaume</option>
-        <option value="Female">Mwanamke</option>
+      <select
+        id="gender"
+        required
+      >
+
+        <option value="">
+          -- Chagua Jinsia --
+        </option>
+
+        <option value="Male">
+          Mwanaume
+        </option>
+
+        <option value="Female">
+          Mwanamke
+        </option>
+
       </select>
 
 
@@ -286,6 +320,7 @@
       <button
         type="submit"
         id="submitButton"
+        disabled
       >
         Endelea na Malipo 💳
       </button>
@@ -300,7 +335,7 @@
 <script>
 
   // ==========================================
-  // GET SCHOOL ID
+  // GET URL PARAMETERS
   // ==========================================
 
   const params =
@@ -316,40 +351,68 @@
   // ELEMENTS
   // ==========================================
 
+  const schoolLoading =
+    document.getElementById(
+      "schoolLoading"
+    );
+
+  const schoolInfo =
+    document.getElementById(
+      "schoolInfo"
+    );
+
   const schoolName =
-    document.getElementById("schoolName");
+    document.getElementById(
+      "schoolName"
+    );
 
   const schoolRegion =
-    document.getElementById("schoolRegion");
+    document.getElementById(
+      "schoolRegion"
+    );
 
   const schoolDistrict =
-    document.getElementById("schoolDistrict");
+    document.getElementById(
+      "schoolDistrict"
+    );
 
   const schoolType =
-    document.getElementById("schoolType");
+    document.getElementById(
+      "schoolType"
+    );
 
   const formPrice =
-    document.getElementById("formPrice");
+    document.getElementById(
+      "formPrice"
+    );
 
   const message =
-    document.getElementById("message");
+    document.getElementById(
+      "message"
+    );
 
   const submitButton =
-    document.getElementById("submitButton");
+    document.getElementById(
+      "submitButton"
+    );
 
 
   // ==========================================
-  // SHOW MESSAGE
+  // MESSAGE
   // ==========================================
 
-  function showMessage(text, type) {
+  function showMessage(
+    text,
+    type
+  ) {
 
     message.textContent = text;
 
     message.className =
       "message " + type;
 
-    message.style.display = "block";
+    message.style.display =
+      "block";
 
   }
 
@@ -362,10 +425,13 @@
 
     if (!schoolId) {
 
-      schoolName.textContent =
-        "Shule haijachaguliwa.";
+      schoolLoading.textContent =
+        "⚠️ Hakuna shule iliyochaguliwa.";
 
-      submitButton.disabled = true;
+      showMessage(
+        "Tafadhali rudi kwenye Tafuta Shule na uchague shule.",
+        "error"
+      );
 
       return;
 
@@ -375,7 +441,23 @@
     try {
 
       const response =
-        await fetch("/api/schools");
+        await fetch(
+          `${window.location.origin}/api/schools`,
+          {
+            method: "GET",
+            cache: "no-store"
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Server imeshindwa kutoa taarifa za shule."
+        );
+
+      }
+
 
       const data =
         await response.json();
@@ -383,11 +465,11 @@
 
       if (
         !data.success ||
-        !data.schools
+        !Array.isArray(data.schools)
       ) {
 
         throw new Error(
-          "Imeshindikana kupata shule."
+          "Taarifa za shule hazijapatikana."
         );
 
       }
@@ -403,18 +485,25 @@
 
       if (!school) {
 
-        schoolName.textContent =
-          "Shule haikupatikana.";
+        schoolLoading.textContent =
+          "⚠️ Shule haikupatikana.";
 
-        submitButton.disabled = true;
+        showMessage(
+          "Shule uliyochagua haipatikani au haijawezeshwa.",
+          "error"
+        );
 
         return;
 
       }
 
 
+      // ======================================
+      // SHOW SCHOOL INFORMATION
+      // ======================================
+
       schoolName.textContent =
-        school.name;
+        school.name || "-";
 
       schoolRegion.textContent =
         school.region || "-";
@@ -423,17 +512,38 @@
         school.district || "-";
 
       schoolType.textContent =
-        school.school_type || "-";
+        school.school_type ||
+        school.type ||
+        "-";
 
       formPrice.textContent =
         Number(
-          school.form_price
+          school.form_price ||
+          school.price ||
+          0
         ).toLocaleString();
 
 
-      // --------------------------------------
-      // PREFILL DATA FROM PREVIOUS PAGE
-      // --------------------------------------
+      schoolLoading.style.display =
+        "none";
+
+      schoolInfo.style.display =
+        "block";
+
+      submitButton.disabled =
+        false;
+
+
+      // ======================================
+      // PREFILL ONLY BASIC INFORMATION
+      // ======================================
+      //
+      // Tunahifadhi jina, simu na email
+      // kutoka ukurasa uliopita.
+      //
+      // DARASA/KIDATO HAIJAZWI TENA.
+      //
+      // ======================================
 
       document.getElementById(
         "studentName"
@@ -450,20 +560,21 @@
       ).value =
         params.get("email") || "";
 
-      document.getElementById(
-        "classLevel"
-      ).value =
-        params.get("class_level") || "";
-
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        "Load school error:",
+        error
+      );
 
-      schoolName.textContent =
-        "Kuna tatizo la kupakia taarifa za shule.";
+      schoolLoading.textContent =
+        "⚠️ Imeshindikana kupakia taarifa za shule.";
 
-      submitButton.disabled = true;
+      showMessage(
+        "Kuna tatizo la kuwasiliana na server. Tafadhali jaribu tena.",
+        "error"
+      );
 
     }
 
@@ -475,7 +586,9 @@
   // ==========================================
 
   document
-    .getElementById("applicationForm")
+    .getElementById(
+      "applicationForm"
+    )
     .addEventListener(
       "submit",
       async function(event) {
@@ -483,67 +596,103 @@
         event.preventDefault();
 
 
-        submitButton.disabled = true;
+        // --------------------------------------
+        // DISABLE BUTTON
+        // --------------------------------------
+
+        submitButton.disabled =
+          true;
 
         submitButton.textContent =
           "Inahifadhi maombi...";
 
+        message.style.display =
+          "none";
 
-        message.style.display = "none";
 
+        // --------------------------------------
+        // COLLECT DATA
+        // --------------------------------------
 
         const applicationData = {
 
-          school_id: Number(schoolId),
+          school_id:
+            Number(schoolId),
 
           student_name:
-            document.getElementById(
-              "studentName"
-            ).value.trim(),
+            document
+              .getElementById(
+                "studentName"
+              )
+              .value
+              .trim(),
 
           gender:
-            document.getElementById(
-              "gender"
-            ).value,
+            document
+              .getElementById(
+                "gender"
+              )
+              .value,
 
           date_of_birth:
-            document.getElementById(
-              "dateOfBirth"
-            ).value,
+            document
+              .getElementById(
+                "dateOfBirth"
+              )
+              .value,
 
           class_level:
-            document.getElementById(
-              "classLevel"
-            ).value.trim(),
+            document
+              .getElementById(
+                "classLevel"
+              )
+              .value
+              .trim(),
 
           parent_name:
-            document.getElementById(
-              "parentName"
-            ).value.trim(),
+            document
+              .getElementById(
+                "parentName"
+              )
+              .value
+              .trim(),
 
           phone:
-            document.getElementById(
-              "phone"
-            ).value.trim(),
+            document
+              .getElementById(
+                "phone"
+              )
+              .value
+              .trim(),
 
           email:
-            document.getElementById(
-              "email"
-            ).value.trim(),
+            document
+              .getElementById(
+                "email"
+              )
+              .value
+              .trim(),
 
           address:
-            document.getElementById(
-              "address"
-            ).value.trim()
+            document
+              .getElementById(
+                "address"
+              )
+              .value
+              .trim()
 
         };
 
+
+        // --------------------------------------
+        // SEND TO BACKEND
+        // --------------------------------------
 
         try {
 
           const response =
             await fetch(
-              "/api/applications",
+              `${window.location.origin}/api/applications`,
               {
                 method: "POST",
 
@@ -564,8 +713,10 @@
             await response.json();
 
 
-          if (!response.ok ||
-              !result.success) {
+          if (
+            !response.ok ||
+            !result.success
+          ) {
 
             throw new Error(
               result.message ||
@@ -575,9 +726,9 @@
           }
 
 
-          // ==================================
-          // SAVE APPLICATION DATA LOCALLY
-          // ==================================
+          // ------------------------------------
+          // SAVE REFERENCES
+          // ------------------------------------
 
           sessionStorage.setItem(
             "application_id",
@@ -600,9 +751,9 @@
           );
 
 
-          // ==================================
-          // GO TO PAYMENT
-          // ==================================
+          // ------------------------------------
+          // PAYMENT PAGE
+          // ------------------------------------
 
           const nextUrl =
             "/payment.html" +
@@ -638,7 +789,11 @@
 
         } catch (error) {
 
-          console.error(error);
+          console.error(
+            "Application submit error:",
+            error
+          );
+
 
           showMessage(
             error.message ||
@@ -646,7 +801,9 @@
             "error"
           );
 
-          submitButton.disabled = false;
+
+          submitButton.disabled =
+            false;
 
           submitButton.textContent =
             "Endelea na Malipo 💳";
@@ -657,4 +814,13 @@
     );
 
 
-  //
+  // ==========================================
+  // START
+  // ==========================================
+
+  loadSchool();
+
+</script>
+
+</body>
+</html>
