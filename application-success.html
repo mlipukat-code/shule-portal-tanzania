@@ -1,414 +1,452 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Maombi Yamepokelewa - Shule Portal Tanzania</title>
+  <title>Maombi Yamekamilika - Shule Portal Tanzania</title>
 
-<style>
-*{
-  box-sizing:border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f4f7fb;
-  color:#1f2937;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f8fb;
+      color: #222;
+    }
 
-.header{
-  background:#0b5ed7;
-  color:white;
-  text-align:center;
-  padding:20px 15px;
-}
+    header {
+      background: #0b78b8;
+      color: white;
+      padding: 20px 15px;
+      text-align: center;
+    }
 
-.header h1{
-  margin:0;
-  font-size:23px;
-}
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
 
-.header p{
-  margin:6px 0 0;
-  font-size:14px;
-}
+    header p {
+      margin: 6px 0 0;
+    }
 
-.container{
-  max-width:650px;
-  margin:35px auto;
-  padding:0 15px;
-}
+    .container {
+      width: 92%;
+      max-width: 700px;
+      margin: 25px auto;
+    }
 
-.success-card{
-  background:white;
-  border-radius:14px;
-  padding:30px 20px;
-  text-align:center;
-  box-shadow:0 4px 18px rgba(0,0,0,.09);
-}
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
 
-.icon{
-  width:70px;
-  height:70px;
-  margin:0 auto 15px;
-  border-radius:50%;
-  background:#198754;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:38px;
-  font-weight:bold;
-}
+    .success {
+      text-align: center;
+    }
 
-.success-card h2{
-  color:#198754;
-  margin:10px 0;
-}
+    .success-icon {
+      font-size: 55px;
+    }
 
-.success-card p{
-  color:#64748b;
-  line-height:1.6;
-}
+    .success h2 {
+      color: #168a45;
+      margin: 10px 0;
+    }
 
-.application-box{
-  background:#f1f6ff;
-  border:1px solid #cfe0ff;
-  border-radius:10px;
-  padding:18px;
-  margin:22px 0;
-}
+    .school-name {
+      color: #0b78b8;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
 
-.application-label{
-  font-size:13px;
-  color:#64748b;
-  margin-bottom:7px;
-}
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 11px 0;
+      border-bottom: 1px solid #eee;
+    }
 
-.application-number{
-  font-size:25px;
-  font-weight:bold;
-  color:#0b5ed7;
-  letter-spacing:1px;
-  word-break:break-word;
-}
+    .row:last-child {
+      border-bottom: none;
+    }
 
-.details{
-  text-align:left;
-  margin-top:20px;
-}
+    .label {
+      color: #666;
+    }
 
-.detail-row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  padding:11px 0;
-  border-bottom:1px solid #e5e7eb;
-}
+    .value {
+      font-weight: bold;
+      text-align: right;
+    }
 
-.detail-row:last-child{
-  border-bottom:none;
-}
+    .notice {
+      background: #fff8df;
+      border-left: 5px solid #e0a800;
+      padding: 15px;
+      line-height: 1.6;
+      border-radius: 6px;
+    }
 
-.detail-label{
-  color:#64748b;
-}
+    .btn {
+      width: 100%;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.detail-value{
-  font-weight:bold;
-  text-align:right;
-}
+    .btn-home {
+      background: #0b78b8;
+      color: white;
+    }
 
-.buttons{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:25px;
-}
+    .btn-search {
+      background: #eee;
+      color: #333;
+    }
 
-button,
-a{
-  width:100%;
-  padding:13px;
-  border-radius:8px;
-  font-size:15px;
-  font-weight:bold;
-  text-decoration:none;
-  text-align:center;
-  cursor:pointer;
-}
+    .loading {
+      text-align: center;
+      padding: 30px;
+    }
 
-.print-btn{
-  background:#0b5ed7;
-  color:white;
-  border:none;
-}
+    .error {
+      color: #b00020;
+      text-align: center;
+    }
 
-.track-btn{
-  background:#198754;
-  color:white;
-}
-
-.home-btn{
-  background:#e9ecef;
-  color:#212529;
-}
-
-.notice{
-  margin-top:20px;
-  background:#fff8e1;
-  border-left:4px solid #ffc107;
-  padding:12px;
-  text-align:left;
-  font-size:13px;
-  line-height:1.5;
-}
-
-.footer{
-  text-align:center;
-  padding:25px 15px;
-  color:#64748b;
-  font-size:13px;
-}
-
-@media(max-width:500px){
-
-  .success-card{
-    padding:25px 15px;
-  }
-
-  .application-number{
-    font-size:21px;
-  }
-
-  .detail-row{
-    flex-direction:column;
-    gap:4px;
-  }
-
-  .detail-value{
-    text-align:left;
-  }
-}
-
-@media print{
-
-  .header,
-  .buttons,
-  .footer{
-    display:none;
-  }
-
-  body{
-    background:white;
-  }
-
-  .container{
-    margin:0 auto;
-  }
-
-  .success-card{
-    box-shadow:none;
-  }
-}
-</style>
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 13px;
+      padding: 25px 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="header">
-  <h1>Shule Portal Tanzania</h1>
-  <p>Huduma za Maombi ya Shule Mtandaoni</p>
-</div>
-
+<header>
+  <h1>🏫 Shule Portal Tanzania</h1>
+  <p>Maombi ya Shule</p>
+</header>
 
 <div class="container">
 
-  <div class="success-card">
+  <div id="loading" class="card loading">
+    Inapakia taarifa...
+  </div>
 
-    <div class="icon">✓</div>
+  <div id="content" style="display:none;">
 
-    <h2>Maombi Yamepokelewa!</h2>
+    <div class="card success">
 
-    <p>
-      Hongera! Maombi yako yamewasilishwa kwa mafanikio.
-      Tafadhali hifadhi namba yako ya maombi kwa ajili ya
-      kufuatilia hatua ya maombi yako.
-    </p>
-
-
-    <div class="application-box">
-
-      <div class="application-label">
-        APPLICATION NUMBER
+      <div class="success-icon">
+        ⚠️
       </div>
 
-      <div
-        class="application-number"
-        id="applicationNumber">
-        Inapakia...
+      <h2>
+        Hatua ya Maombi
+      </h2>
+
+      <p>
+        Taarifa zako zimepokelewa na mfumo.
+      </p>
+
+    </div>
+
+
+    <!-- SHULE -->
+
+    <div class="card">
+
+      <div class="school-name" id="schoolName"></div>
+
+      <div class="row">
+        <span class="label">Mkoa</span>
+        <span class="value" id="region"></span>
+      </div>
+
+      <div class="row">
+        <span class="label">Wilaya</span>
+        <span class="value" id="district"></span>
+      </div>
+
+      <div class="row">
+        <span class="label">Aina ya Shule</span>
+        <span class="value" id="schoolType"></span>
       </div>
 
     </div>
 
 
-    <div class="details">
+    <!-- MWOMBAJI -->
 
-      <div class="detail-row">
+    <div class="card">
 
-        <div class="detail-label">
-          Mwanafunzi
-        </div>
+      <h3>👤 Taarifa za Mwombaji</h3>
 
-        <div
-          class="detail-value"
-          id="studentName">
-          -
-        </div>
-
+      <div class="row">
+        <span class="label">Mwanafunzi</span>
+        <span class="value" id="studentName"></span>
       </div>
 
-
-      <div class="detail-row">
-
-        <div class="detail-label">
-          Shule
-        </div>
-
-        <div class="detail-value">
-          Shule ya Mfano Academy
-        </div>
-
+      <div class="row">
+        <span class="label">Darasa/Form</span>
+        <span class="value" id="classLevel"></span>
       </div>
 
-
-      <div class="detail-row">
-
-        <div class="detail-label">
-          Mkoa
-        </div>
-
-        <div class="detail-value">
-          Dar es Salaam
-        </div>
-
+      <div class="row">
+        <span class="label">Mzazi/Mlezi</span>
+        <span class="value" id="parentName"></span>
       </div>
 
-
-      <div class="detail-row">
-
-        <div class="detail-label">
-          Mwaka wa Masomo
-        </div>
-
-        <div class="detail-value">
-          2026
-        </div>
-
-      </div>
-
-
-      <div class="detail-row">
-
-        <div class="detail-label">
-          Hali ya Maombi
-        </div>
-
-        <div class="detail-value">
-          Imepokelewa
-        </div>
-
+      <div class="row">
+        <span class="label">Simu</span>
+        <span class="value" id="phone"></span>
       </div>
 
     </div>
 
 
-    <div class="notice">
-      <strong>Muhimu:</strong>
-      Hii ni namba yako ya maombi. Usipoteze namba hii.
-      Itatumika kufuatilia maombi yako katika mfumo.
-    </div>
+    <div class="card">
 
+      <div class="notice">
+        ⚠️ <strong>Malipo hayajathibitishwa.</strong><br><br>
 
-    <div class="buttons">
-
-      <button
-        class="print-btn"
-        onclick="window.print()">
-        🖨️ Chapisha / Hifadhi PDF
-      </button>
-
-
-      <a
-        href="#"
-        class="track-btn"
-        onclick="trackApplication(event)">
-        🔎 Fuatilia Maombi
-      </a>
-
-
-      <a
-        href="index.html"
-        class="home-btn">
-        🏠 Rudi Mwanzo
-      </a>
+        Mfumo hautaruhusu kupakua au kuchapisha
+        fomu ya mwisho mpaka malipo ya ada ya maombi
+        yatakapothibitishwa.
+      </div>
 
     </div>
 
+
+    <button
+      class="btn btn-search"
+      onclick="window.location.href='/schools-public.html'">
+
+      🔎 Tafuta Shule Nyingine
+
+    </button>
+
+
+    <button
+      class="btn btn-home"
+      onclick="window.location.href='/'">
+
+      🏠 Rudi Mwanzo
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="errorBox"
+    class="card error"
+    style="display:none;">
   </div>
 
 </div>
 
 
-<div class="footer">
+<footer>
   © 2026 Shule Portal Tanzania
-</div>
+</footer>
 
 
 <script>
 
-const applicationNumber =
-  localStorage.getItem("applicationNumber");
-
-const studentName =
-  localStorage.getItem("studentName");
-
-
-if(applicationNumber){
-
-  document.getElementById(
-    "applicationNumber"
-  ).textContent = applicationNumber;
-
-}else{
-
-  document.getElementById(
-    "applicationNumber"
-  ).textContent = "Haijapatikana";
-
-}
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
 
 
-if(studentName){
-
-  document.getElementById(
-    "studentName"
-  ).textContent = studentName;
-
-}
+  const schoolId =
+    params.get("school_id");
 
 
-function trackApplication(event){
+  const studentName =
+    params.get("student_name") || "";
 
-  event.preventDefault();
 
-  alert(
-    "Sehemu ya kufuatilia maombi itaunganishwa na database katika hatua inayofuata."
-  );
+  const classLevel =
+    params.get("class_level") || "";
 
-}
+
+  const parentName =
+    params.get("parent_name") || "";
+
+
+  const phone =
+    params.get("phone") || "";
+
+
+  async function loadApplication() {
+
+    if (!schoolId) {
+
+      showError(
+        "Taarifa ya shule haijapatikana."
+      );
+
+      return;
+    }
+
+
+    try {
+
+      const response =
+        await fetch("/api/schools");
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !data.success ||
+        !data.schools
+      ) {
+
+        showError(
+          "Imeshindikana kupata taarifa za shule."
+        );
+
+        return;
+      }
+
+
+      const school =
+        data.schools.find(
+          s =>
+            String(s.id) ===
+            String(schoolId)
+        );
+
+
+      if (!school) {
+
+        showError(
+          "Shule uliyochagua haijapatikana."
+        );
+
+        return;
+      }
+
+
+      document.getElementById(
+        "schoolName"
+      ).textContent =
+        school.name || "-";
+
+
+      document.getElementById(
+        "region"
+      ).textContent =
+        school.region || "-";
+
+
+      document.getElementById(
+        "district"
+      ).textContent =
+        school.district || "-";
+
+
+      document.getElementById(
+        "schoolType"
+      ).textContent =
+        school.school_type ||
+        school.type ||
+        "-";
+
+
+      document.getElementById(
+        "studentName"
+      ).textContent =
+        studentName || "-";
+
+
+      document.getElementById(
+        "classLevel"
+      ).textContent =
+        classLevel || "-";
+
+
+      document.getElementById(
+        "parentName"
+      ).textContent =
+        parentName || "-";
+
+
+      document.getElementById(
+        "phone"
+      ).textContent =
+        phone || "-";
+
+
+      document.getElementById(
+        "loading"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "content"
+      ).style.display =
+        "block";
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showError(
+        "Kuna tatizo la kuwasiliana na mfumo."
+      );
+    }
+  }
+
+
+  function showError(message) {
+
+    document.getElementById(
+      "loading"
+    ).style.display =
+      "none";
+
+
+    const box =
+      document.getElementById(
+        "errorBox"
+      );
+
+
+    box.textContent =
+      message;
+
+
+    box.style.display =
+      "block";
+  }
+
+
+  loadApplication();
 
 </script>
 
