@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - Shule Portal Tanzania</title>
 
+  <!-- SECURITY CHECK -->
+  <script>
+    (function () {
+      const token = localStorage.getItem("admin_token");
+
+      if (!token) {
+        window.location.replace("/admin.html");
+      }
+    })();
+  </script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -16,6 +27,22 @@
     body {
       background: #f4f7fb;
       color: #222;
+    }
+
+    #page {
+      display: none;
+    }
+
+    .checking {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      color: #1565c0;
+      font-size: 17px;
+      font-weight: bold;
     }
 
     .header {
@@ -35,12 +62,16 @@
     .logout {
       background: white;
       color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
+      padding: 10px 15px;
       border: none;
-      text-decoration: none;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
+      font-size: 14px;
+    }
+
+    .logout:disabled {
+      opacity: 0.7;
     }
 
     .container {
@@ -64,9 +95,9 @@
 
     .admin-name {
       margin-top: 8px;
-      font-size: 14px;
       color: #1565c0;
       font-weight: bold;
+      font-size: 14px;
     }
 
     .stats {
@@ -161,11 +192,11 @@
       padding: 25px;
     }
 
-    .loading {
+    .error-box {
+      display: none;
       text-align: center;
-      padding: 40px;
-      color: #666;
-      font-size: 16px;
+      padding: 30px;
+      color: #c62828;
     }
 
     @media (max-width: 800px) {
@@ -186,12 +217,11 @@
 
       .header {
         flex-direction: column;
-        align-items: stretch;
         text-align: center;
       }
 
       .header h1 {
-        font-size: 16px;
+        font-size: 17px;
       }
 
       .logout {
@@ -203,21 +233,21 @@
 
 <body>
 
-  <header class="header">
-    <h1>🏫 Shule Portal Tanzania</h1>
+  <div id="checking" class="checking">
+    🔐 Inathibitisha Admin...
+  </div>
 
-    <button class="logout" id="logoutButton">
-      🚪 Toka
-    </button>
-  </header>
+  <div id="page">
 
-  <main class="container">
+    <header class="header">
+      <h1>🏫 Shule Portal Tanzania</h1>
 
-    <div id="loading" class="loading">
-      🔄 Inathibitisha Admin...
-    </div>
+      <button id="logoutButton" class="logout">
+        🚪 Toka
+      </button>
+    </header>
 
-    <div id="dashboardContent" style="display:none;">
+    <main class="container">
 
       <div class="welcome">
         <h2>Admin Dashboard</h2>
@@ -226,7 +256,7 @@
           Karibu kwenye mfumo wa usimamizi wa Shule Portal Tanzania.
         </p>
 
-        <div class="admin-name" id="adminName">
+        <div id="adminName" class="admin-name">
           👤 Admin Mkuu
         </div>
       </div>
@@ -235,33 +265,25 @@
 
         <div class="stat">
           <div class="stat-icon">🏫</div>
-
           <h3>Shule Zilizosajiliwa</h3>
-
           <div class="number">0</div>
         </div>
 
         <div class="stat">
           <div class="stat-icon">🎫</div>
-
           <h3>Fomu Zilizouzwa</h3>
-
           <div class="number">0</div>
         </div>
 
         <div class="stat">
           <div class="stat-icon">💰</div>
-
           <h3>Malipo</h3>
-
           <div class="number">TZS 0</div>
         </div>
 
         <div class="stat">
           <div class="stat-icon">📋</div>
-
           <h3>Maombi</h3>
-
           <div class="number">0</div>
         </div>
 
@@ -275,9 +297,7 @@
 
         <a href="schools.html" class="menu-card">
           <div class="menu-icon">🏫</div>
-
           <h3>Simamia Shule</h3>
-
           <p>
             Ongeza, hariri na simamia shule zilizosajiliwa.
           </p>
@@ -285,9 +305,7 @@
 
         <a href="school-admins.html" class="menu-card">
           <div class="menu-icon">👨‍💼</div>
-
           <h3>School Admins</h3>
-
           <p>
             Simamia akaunti za wasimamizi wa shule.
           </p>
@@ -295,9 +313,7 @@
 
         <a href="school-forms.html" class="menu-card">
           <div class="menu-icon">🎫</div>
-
           <h3>Fomu za Shule</h3>
-
           <p>
             Simamia aina, bei na muda wa fomu za shule.
           </p>
@@ -305,9 +321,7 @@
 
         <a href="applications.html" class="menu-card">
           <div class="menu-icon">📋</div>
-
           <h3>Maombi</h3>
-
           <p>
             Angalia na simamia maombi ya wanafunzi.
           </p>
@@ -315,9 +329,7 @@
 
         <a href="payments.html" class="menu-card">
           <div class="menu-icon">💰</div>
-
           <h3>Malipo</h3>
-
           <p>
             Fuatilia malipo yote ya fomu za shule.
           </p>
@@ -325,9 +337,7 @@
 
         <a href="reports.html" class="menu-card">
           <div class="menu-icon">📊</div>
-
           <h3>Ripoti</h3>
-
           <p>
             Angalia ripoti za mauzo, malipo na maombi.
           </p>
@@ -335,9 +345,7 @@
 
         <a href="#" class="menu-card" onclick="settingsMessage(); return false;">
           <div class="menu-icon">⚙️</div>
-
           <h3>Settings</h3>
-
           <p>
             Usimamizi wa mipangilio ya mfumo.
           </p>
@@ -347,9 +355,7 @@
 
       <section class="activity">
 
-        <h3>
-          🕒 Shughuli za Hivi Karibuni
-        </h3>
+        <h3>🕒 Shughuli za Hivi Karibuni</h3>
 
         <div class="empty">
           Hakuna shughuli mpya kwa sasa.
@@ -357,25 +363,24 @@
 
       </section>
 
-    </div>
+    </main>
 
-  </main>
+  </div>
+
+  <div id="errorBox" class="error-box">
+    Session ya Admin imekwisha au si sahihi.
+    <br><br>
+    Inakurudisha kwenye Login...
+  </div>
 
   <script>
 
-    /*
-      ==========================================
-      ADMIN DASHBOARD SECURITY
-      ==========================================
-    */
-
     const token = localStorage.getItem("admin_token");
 
-    async function verifyAdmin() {
+    async function checkAdmin() {
 
-      // Kama hakuna token kabisa
       if (!token) {
-        window.location.href = "/admin.html";
+        window.location.replace("/admin.html");
         return;
       }
 
@@ -383,97 +388,91 @@
 
         const response = await fetch("/api/admin/me", {
           method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token
+          },
+          cache: "no-store"
+        });
 
+        const data = await response.json();
+
+        if (!response.ok || !data.admin) {
+
+          localStorage.removeItem("admin_token");
+
+          document.getElementById("checking").style.display = "none";
+          document.getElementById("errorBox").style.display = "block";
+
+          setTimeout(function () {
+            window.location.replace("/admin.html");
+          }, 800);
+
+          return;
+        }
+
+        if (data.admin.name) {
+
+          document.getElementById("adminName").textContent =
+            "👤 " + data.admin.name;
+
+        } else if (data.admin.email) {
+
+          document.getElementById("adminName").textContent =
+            "👤 " + data.admin.email;
+
+        }
+
+        document.getElementById("checking").style.display = "none";
+        document.getElementById("page").style.display = "block";
+
+      } catch (error) {
+
+        console.error(error);
+
+        localStorage.removeItem("admin_token");
+
+        document.getElementById("checking").style.display = "none";
+        document.getElementById("errorBox").style.display = "block";
+
+        setTimeout(function () {
+          window.location.replace("/admin.html");
+        }, 800);
+      }
+    }
+
+
+    async function logout() {
+
+      const button = document.getElementById("logoutButton");
+
+      button.disabled = true;
+      button.textContent = "Inatoka...";
+
+      try {
+
+        await fetch("/api/admin/logout", {
+          method: "POST",
           headers: {
             "Authorization": "Bearer " + token
           }
         });
 
-        const data = await response.json();
-
-        // Session si halali
-        if (!response.ok) {
-
-          localStorage.removeItem("admin_token");
-
-          window.location.href = "/admin.html";
-
-          return;
-        }
-
-        // Onyesha jina la Admin
-        if (data.admin) {
-
-          const name =
-            data.admin.name ||
-            data.admin.email ||
-            "Admin Mkuu";
-
-          document.getElementById("adminName").textContent =
-            "👤 " + name;
-        }
-
-        // Ficha loading
-        document.getElementById("loading").style.display = "none";
-
-        // Onyesha dashboard
-        document.getElementById("dashboardContent").style.display = "block";
-
       } catch (error) {
 
-        console.error("Admin verification error:", error);
+        console.error(error);
 
-        localStorage.removeItem("admin_token");
-
-        window.location.href = "/admin.html";
       }
+
+      localStorage.removeItem("admin_token");
+
+      window.location.replace("/admin.html");
     }
 
 
-    /*
-      ==========================================
-      LOGOUT
-      ==========================================
-    */
-
     document
       .getElementById("logoutButton")
-      .addEventListener("click", async function () {
+      .addEventListener("click", logout);
 
-        const button = this;
-
-        button.disabled = true;
-        button.textContent = "Inatoka...";
-
-        try {
-
-          await fetch("/api/admin/logout", {
-            method: "POST",
-
-            headers: {
-              "Authorization": "Bearer " + token
-            }
-          });
-
-        } catch (error) {
-
-          console.error("Logout error:", error);
-
-        } finally {
-
-          localStorage.removeItem("admin_token");
-
-          window.location.href = "/admin.html";
-        }
-
-      });
-
-
-    /*
-      ==========================================
-      SETTINGS
-      ==========================================
-    */
 
     function settingsMessage() {
 
@@ -484,13 +483,7 @@
     }
 
 
-    /*
-      ==========================================
-      ANZA SECURITY CHECK
-      ==========================================
-    */
-
-    verifyAdmin();
+    checkAdmin();
 
   </script>
 
