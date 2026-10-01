@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simamia Shule - Shule Portal Tanzania</title>
+
+  <title>Shule Portal Tanzania - Shule</title>
 
   <style>
     * {
@@ -14,57 +15,42 @@
     }
 
     body {
-      background: #f4f7fb;
+      background: #f4f8fb;
       color: #222;
     }
 
-    .header {
-      background: #1565c0;
+    header {
+      background: #0879c9;
       color: white;
-      padding: 18px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 18px;
     }
 
-    .header h1 {
-      font-size: 20px;
+    header h1 {
+      font-size: 22px;
+      margin-bottom: 5px;
     }
 
-    .back {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
     }
 
     .container {
+      width: 95%;
       max-width: 1100px;
-      margin: auto;
-      padding: 20px;
+      margin: 25px auto;
     }
 
-    .title {
-      margin-bottom: 20px;
-    }
-
-    .title h2 {
-      color: #1565c0;
-      margin-bottom: 6px;
-    }
-
-    .box {
+    .card {
       background: white;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      padding: 22px;
+      border-radius: 12px;
       margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    .box h3 {
-      color: #1565c0;
+    h2 {
+      color: #0879c9;
       margin-bottom: 18px;
     }
 
@@ -74,35 +60,67 @@
       gap: 15px;
     }
 
-    .field label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 7px;
+    .field {
+      display: flex;
+      flex-direction: column;
     }
 
-    .field input,
-    .field select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 9px;
-      font-size: 15px;
-    }
-
-    .full {
+    .field.full {
       grid-column: 1 / -1;
     }
 
-    .save-btn {
-      margin-top: 18px;
-      background: #1565c0;
+    label {
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 15px;
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    button {
+      background: #0879c9;
       color: white;
       border: none;
       padding: 13px 22px;
-      border-radius: 9px;
-      font-size: 16px;
-      font-weight: bold;
+      border-radius: 7px;
       cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 18px;
+    }
+
+    button:hover {
+      background: #0565a8;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 7px;
+      display: none;
+    }
+
+    .success {
+      background: #dff5e5;
+      color: #176b2c;
+    }
+
+    .error {
+      background: #fde1e1;
+      color: #a40000;
     }
 
     .table-container {
@@ -112,42 +130,36 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 750px;
+      min-width: 850px;
     }
 
     th,
     td {
-      padding: 13px;
-      border-bottom: 1px solid #eee;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
       text-align: left;
+      font-size: 14px;
     }
 
     th {
-      background: #e3f2fd;
-      color: #1565c0;
+      background: #0879c9;
+      color: white;
     }
 
-    .edit {
-      background: #1565c0;
-      color: white;
-      border: none;
-      padding: 7px 11px;
-      border-radius: 6px;
-      margin-right: 5px;
-    }
-
-    .delete {
-      background: #d32f2f;
-      color: white;
-      border: none;
-      padding: 7px 11px;
-      border-radius: 6px;
+    tr:hover {
+      background: #f5faff;
     }
 
     .empty {
       text-align: center;
-      color: #777;
       padding: 25px;
+      color: #777;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #0879c9;
     }
 
     @media (max-width: 700px) {
@@ -155,12 +167,16 @@
         grid-template-columns: 1fr;
       }
 
-      .full {
+      .field.full {
         grid-column: auto;
       }
 
-      .header h1 {
-        font-size: 16px;
+      .card {
+        padding: 16px;
+      }
+
+      header h1 {
+        font-size: 19px;
       }
     }
   </style>
@@ -168,145 +184,423 @@
 
 <body>
 
-  <header class="header">
-    <h1>🏫 Shule Portal Tanzania</h1>
-    <a href="admin-dashboard.html" class="back">← Dashboard</a>
-  </header>
+<header>
+  <h1>Shule Portal Tanzania</h1>
+  <p>Usimamizi wa Shule</p>
+</header>
 
-  <main class="container">
+<div class="container">
 
-    <div class="title">
-      <h2>Simamia Shule</h2>
-      <p>Ongeza na simamia shule zinazouza fomu kupitia mfumo.</p>
-    </div>
+  <!-- ADD SCHOOL -->
+  <div class="card">
 
-    <section class="box">
-      <h3>➕ Ongeza Shule</h3>
+    <h2>Ongeza Shule</h2>
 
-      <form id="schoolForm">
+    <form id="schoolForm">
 
-        <div class="form-grid">
+      <div class="form-grid">
 
-          <div class="field">
-            <label>Jina la Shule</label>
-            <input
-              type="text"
-              id="schoolName"
-              placeholder="Mfano: Bright Future School"
-              required
-            >
-          </div>
-
-          <div class="field">
-            <label>Region</label>
-            <input
-              type="text"
-              id="region"
-              placeholder="Mfano: Dar es Salaam"
-              required
-            >
-          </div>
-
-          <div class="field">
-            <label>District</label>
-            <input
-              type="text"
-              id="district"
-              placeholder="Mfano: Kinondoni"
-              required
-            >
-          </div>
-
-          <div class="field">
-            <label>Aina ya Shule</label>
-            <select id="schoolType" required>
-              <option value="">Chagua</option>
-              <option>Primary</option>
-              <option>Secondary</option>
-              <option>Primary & Secondary</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Bei ya Fomu (TZS)</label>
-            <input
-              type="number"
-              id="formPrice"
-              placeholder="10000"
-              required
-            >
-          </div>
-
-          <div class="field">
-            <label>Simu ya Shule</label>
-            <input
-              type="tel"
-              id="phone"
-              placeholder="07XXXXXXXX"
-              required
-            >
-          </div>
-
-          <div class="field full">
-            <label>Anwani ya Shule</label>
-            <input
-              type="text"
-              id="address"
-              placeholder="Weka anwani ya shule"
-              required
-            >
-          </div>
-
+        <div class="field">
+          <label>Jina la Shule *</label>
+          <input
+            type="text"
+            id="name"
+            required
+            placeholder="Mfano: Mlipuka Academy">
         </div>
 
-        <button type="submit" class="save-btn">
-          Hifadhi Shule
-        </button>
+        <div class="field">
+          <label>Mkoa *</label>
+          <input
+            type="text"
+            id="region"
+            required
+            placeholder="Mfano: Dar es Salaam">
+        </div>
 
-      </form>
-    </section>
+        <div class="field">
+          <label>Wilaya *</label>
+          <input
+            type="text"
+            id="district"
+            required
+            placeholder="Mfano: Kinondoni">
+        </div>
 
-    <section class="box">
-      <h3>🏫 Shule Zilizosajiliwa</h3>
+        <div class="field">
+          <label>Aina ya Shule *</label>
+          <select id="school_type" required>
+            <option value="">Chagua aina</option>
+            <option value="Primary">Primary</option>
+            <option value="Secondary">Secondary</option>
+            <option value="Primary & Secondary">Primary & Secondary</option>
+          </select>
+        </div>
 
-      <div class="table-container">
+        <div class="field">
+          <label>Bei ya Fomu (TZS) *</label>
+          <input
+            type="number"
+            id="form_price"
+            required
+            min="0"
+            placeholder="10000">
+        </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Shule</th>
-              <th>Region</th>
-              <th>District</th>
-              <th>Aina</th>
-              <th>Bei ya Fomu</th>
-              <th>Hatua</th>
-            </tr>
-          </thead>
+        <div class="field">
+          <label>Namba ya Simu</label>
+          <input
+            type="text"
+            id="phone"
+            placeholder="0712345678">
+        </div>
 
-          <tbody id="schoolList">
-            <tr>
-              <td colspan="6" class="empty">
-                Hakuna shule iliyoongezwa bado.
-              </td>
-            </tr>
-          </tbody>
+        <div class="field">
+          <label>Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="info@shule.co.tz">
+        </div>
 
-        </table>
+        <div class="field">
+          <label>Tarehe ya Kuanza Maombi</label>
+          <input
+            type="date"
+            id="application_start">
+        </div>
+
+        <div class="field">
+          <label>Tarehe ya Mwisho wa Maombi</label>
+          <input
+            type="date"
+            id="application_end">
+        </div>
+
+        <div class="field full">
+          <label>Anwani ya Shule</label>
+          <textarea
+            id="address"
+            placeholder="Andika anwani ya shule"></textarea>
+        </div>
 
       </div>
-    </section>
 
-  </main>
+      <button type="submit">
+        Ongeza Shule
+      </button>
 
-  <script>
-    document.getElementById("schoolForm").addEventListener("submit", function(event) {
+    </form>
+
+    <div id="message" class="message"></div>
+
+  </div>
+
+
+  <!-- SCHOOL LIST -->
+  <div class="card">
+
+    <h2>Orodha ya Shule</h2>
+
+    <div id="loading" class="loading">
+      Inapakia taarifa za shule...
+    </div>
+
+    <div class="table-container">
+
+      <table id="schoolsTable" style="display:none;">
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Jina la Shule</th>
+            <th>Mkoa</th>
+            <th>Wilaya</th>
+            <th>Aina</th>
+            <th>Bei ya Fomu</th>
+            <th>Simu</th>
+            <th>Hali</th>
+          </tr>
+        </thead>
+
+        <tbody id="schoolsBody"></tbody>
+
+      </table>
+
+    </div>
+
+    <div id="empty" class="empty" style="display:none;">
+      Hakuna shule iliyoongezwa bado.
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  const form = document.getElementById("schoolForm");
+  const message = document.getElementById("message");
+  const schoolsBody = document.getElementById("schoolsBody");
+  const schoolsTable = document.getElementById("schoolsTable");
+  const loading = document.getElementById("loading");
+  const empty = document.getElementById("empty");
+
+
+  function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+      "message " + type;
+
+    message.style.display = "block";
+
+  }
+
+
+  function escapeHtml(value) {
+
+    if (value === null || value === undefined) {
+      return "";
+    }
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  function formatMoney(value) {
+
+    const number = Number(value || 0);
+
+    return number.toLocaleString("en-US") + " TZS";
+
+  }
+
+
+  async function loadSchools() {
+
+    loading.style.display = "block";
+    schoolsTable.style.display = "none";
+    empty.style.display = "none";
+
+    try {
+
+      const response =
+        await fetch("/api/schools");
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          data.message ||
+          "Imeshindikana kupata shule."
+        );
+
+      }
+
+
+      schoolsBody.innerHTML = "";
+
+
+      if (!data.schools || data.schools.length === 0) {
+
+        loading.style.display = "none";
+        empty.style.display = "block";
+
+        return;
+      }
+
+
+      data.schools.forEach((school, index) => {
+
+        const row =
+          document.createElement("tr");
+
+        row.innerHTML = `
+
+          <td>${index + 1}</td>
+
+          <td>
+            ${escapeHtml(school.name)}
+          </td>
+
+          <td>
+            ${escapeHtml(school.region)}
+          </td>
+
+          <td>
+            ${escapeHtml(school.district)}
+          </td>
+
+          <td>
+            ${escapeHtml(school.school_type)}
+          </td>
+
+          <td>
+            ${formatMoney(school.form_price)}
+          </td>
+
+          <td>
+            ${escapeHtml(school.phone || "-")}
+          </td>
+
+          <td>
+            ${escapeHtml(school.status || "active")}
+          </td>
+
+        `;
+
+        schoolsBody.appendChild(row);
+
+      });
+
+
+      loading.style.display = "none";
+      schoolsTable.style.display = "table";
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Load schools error:",
+        error
+      );
+
+      loading.style.display = "none";
+
+      showMessage(
+        "Imeshindikana kupata taarifa za shule kutoka database.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  form.addEventListener(
+    "submit",
+    async function(event) {
+
       event.preventDefault();
 
-      alert("Taarifa za shule zimepokelewa. Database itawezesha kuhifadhi taarifa hizi moja kwa moja.");
 
-      this.reset();
-    });
-  </script>
+      const schoolData = {
+
+        name:
+          document.getElementById("name").value.trim(),
+
+        region:
+          document.getElementById("region").value.trim(),
+
+        district:
+          document.getElementById("district").value.trim(),
+
+        school_type:
+          document.getElementById("school_type").value,
+
+        form_price:
+          document.getElementById("form_price").value,
+
+        phone:
+          document.getElementById("phone").value.trim(),
+
+        email:
+          document.getElementById("email").value.trim(),
+
+        application_start:
+          document.getElementById("application_start").value,
+
+        application_end:
+          document.getElementById("application_end").value,
+
+        address:
+          document.getElementById("address").value.trim()
+
+      };
+
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/schools",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(schoolData)
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+          throw new Error(
+            data.message ||
+            "Imeshindikana kuhifadhi shule."
+          );
+
+        }
+
+
+        showMessage(
+          "Shule imeongezwa kwa mafanikio na imehifadhiwa kwenye database.",
+          "success"
+        );
+
+
+        form.reset();
+
+
+        await loadSchools();
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Add school error:",
+          error
+        );
+
+        showMessage(
+          error.message ||
+          "Imeshindikana kuhifadhi taarifa za shule.",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+
+  loadSchools();
+
+</script>
 
 </body>
 </html>
