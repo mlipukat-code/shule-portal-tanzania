@@ -33,11 +33,14 @@ app.use(express.static(__dirname));
 // =====================================================
 
 function hashPassword(password) {
-  const salt = crypto.randomBytes(16).toString("hex");
 
-  const hash = crypto
-    .scryptSync(password, salt, 64)
-    .toString("hex");
+  const salt =
+    crypto.randomBytes(16).toString("hex");
+
+  const hash =
+    crypto
+      .scryptSync(password, salt, 64)
+      .toString("hex");
 
   return `${salt}:${hash}`;
 }
@@ -48,11 +51,16 @@ function hashPassword(password) {
 // =====================================================
 
 function verifyPassword(password, storedHash) {
-  if (!storedHash || !storedHash.includes(":")) {
+
+  if (
+    !storedHash ||
+    !storedHash.includes(":")
+  ) {
     return false;
   }
 
-  const parts = storedHash.split(":");
+  const parts =
+    storedHash.split(":");
 
   if (parts.length !== 2) {
     return false;
@@ -61,14 +69,21 @@ function verifyPassword(password, storedHash) {
   const salt = parts[0];
   const originalHash = parts[1];
 
-  const hash = crypto
-    .scryptSync(password, salt, 64)
-    .toString("hex");
+  const hash =
+    crypto
+      .scryptSync(password, salt, 64)
+      .toString("hex");
 
-  const hashBuffer = Buffer.from(hash, "hex");
-  const originalBuffer = Buffer.from(originalHash, "hex");
+  const hashBuffer =
+    Buffer.from(hash, "hex");
 
-  if (hashBuffer.length !== originalBuffer.length) {
+  const originalBuffer =
+    Buffer.from(originalHash, "hex");
+
+  if (
+    hashBuffer.length !==
+    originalBuffer.length
+  ) {
     return false;
   }
 
@@ -84,12 +99,15 @@ function verifyPassword(password, storedHash) {
 // =====================================================
 
 function generateApplicationNumber() {
-  const year = new Date().getFullYear();
 
-  const random = crypto
-    .randomBytes(4)
-    .toString("hex")
-    .toUpperCase();
+  const year =
+    new Date().getFullYear();
+
+  const random =
+    crypto
+      .randomBytes(4)
+      .toString("hex")
+      .toUpperCase();
 
   return `SPT-${year}-${random}`;
 }
@@ -100,12 +118,15 @@ function generateApplicationNumber() {
 // =====================================================
 
 function generatePaymentReference() {
-  const year = new Date().getFullYear();
 
-  const random = crypto
-    .randomBytes(4)
-    .toString("hex")
-    .toUpperCase();
+  const year =
+    new Date().getFullYear();
+
+  const random =
+    crypto
+      .randomBytes(4)
+      .toString("hex")
+      .toUpperCase();
 
   return `PAY-${year}-${random}`;
 }
@@ -116,6 +137,7 @@ function generatePaymentReference() {
 // =====================================================
 
 function generateSessionToken() {
+
   return crypto
     .randomBytes(32)
     .toString("hex");
@@ -344,7 +366,9 @@ async function initializeDatabase() {
   `);
 
 
-  console.log("Database tables ziko tayari.");
+  console.log(
+    "Database tables ziko tayari."
+  );
 
 
   // ===================================================
@@ -366,7 +390,10 @@ async function initializeDatabase() {
     ).trim();
 
 
-  if (!adminEmail || !adminPassword) {
+  if (
+    !adminEmail ||
+    !adminPassword
+  ) {
 
     console.log(
       "WARNING: ADMIN_EMAIL au ADMIN_PASSWORD haijawekwa Railway Variables."
@@ -392,7 +419,9 @@ async function initializeDatabase() {
     hashPassword(adminPassword);
 
 
-  if (existingAdmin.rows.length === 0) {
+  if (
+    existingAdmin.rows.length === 0
+  ) {
 
     await pool.query(
       `
@@ -449,7 +478,11 @@ async function initializeDatabase() {
 // ADMIN AUTHENTICATION
 // =====================================================
 
-async function requireAdmin(req, res, next) {
+async function requireAdmin(
+  req,
+  res,
+  next
+) {
 
   try {
 
@@ -474,7 +507,9 @@ async function requireAdmin(req, res, next) {
 
 
     const token =
-      authHeader.substring(7).trim();
+      authHeader
+        .substring(7)
+        .trim();
 
 
     if (!token) {
@@ -521,7 +556,8 @@ async function requireAdmin(req, res, next) {
           admin_sessions.session_token = $1
 
         AND
-          admin_sessions.expires_at > CURRENT_TIMESTAMP
+          admin_sessions.expires_at >
+          CURRENT_TIMESTAMP
 
         AND
           admin_users.status = 'active'
@@ -532,7 +568,9 @@ async function requireAdmin(req, res, next) {
       );
 
 
-    if (result.rows.length === 0) {
+    if (
+      result.rows.length === 0
+    ) {
 
       return res.status(401).json({
 
@@ -576,13 +614,19 @@ async function requireAdmin(req, res, next) {
 // HOME
 // =====================================================
 
-app.get("/", (req, res) => {
+app.get(
+  "/",
+  (req, res) => {
 
-  res.sendFile(
-    path.join(__dirname, "index.html")
-  );
+    res.sendFile(
+      path.join(
+        __dirname,
+        "index.html"
+      )
+    );
 
-});
+  }
+);
 
 
 // =====================================================
@@ -649,16 +693,23 @@ app.post(
     try {
 
       const email =
-        String(req.body.email || "")
+        String(
+          req.body.email || ""
+        )
           .trim()
           .toLowerCase();
 
 
       const password =
-        String(req.body.password || "");
+        String(
+          req.body.password || ""
+        );
 
 
-      if (!email || !password) {
+      if (
+        !email ||
+        !password
+      ) {
 
         return res.status(400).json({
 
@@ -698,7 +749,9 @@ app.post(
         );
 
 
-      if (result.rows.length === 0) {
+      if (
+        result.rows.length === 0
+      ) {
 
         return res.status(401).json({
 
@@ -715,7 +768,9 @@ app.post(
         result.rows[0];
 
 
-      if (admin.status !== "active") {
+      if (
+        admin.status !== "active"
+      ) {
 
         return res.status(403).json({
 
@@ -778,7 +833,8 @@ app.post(
         (
           $1,
           $2,
-          CURRENT_TIMESTAMP + INTERVAL '12 hours'
+          CURRENT_TIMESTAMP +
+          INTERVAL '12 hours'
         )
         `,
         [
@@ -903,48 +959,89 @@ app.get(
 
         paidPaymentsResult,
 
+        pendingApplicationsResult,
+
         recentApplicationsResult,
 
         recentPaymentsResult
 
       ] = await Promise.all([
 
+        // 1. SCHOOLS
+
         pool.query(`
-          SELECT COUNT(*)::INTEGER AS total
+          SELECT
+            COUNT(*)::INTEGER AS total
           FROM schools
         `),
 
+
+        // 2. FORMS
+
         pool.query(`
-          SELECT COUNT(*)::INTEGER AS total
+          SELECT
+            COUNT(*)::INTEGER AS total
           FROM school_forms
         `),
 
+
+        // 3. APPLICATIONS
+
         pool.query(`
-          SELECT COUNT(*)::INTEGER AS total
+          SELECT
+            COUNT(*)::INTEGER AS total
           FROM applications
         `),
 
+
+        // 4. PAYMENTS
+
         pool.query(`
-          SELECT COUNT(*)::INTEGER AS total
+          SELECT
+            COUNT(*)::INTEGER AS total
           FROM payments
         `),
 
+
+        // 5. PENDING PAYMENTS
+
         pool.query(`
-          SELECT COUNT(*)::INTEGER AS total
+          SELECT
+            COUNT(*)::INTEGER AS total
           FROM payments
           WHERE status = 'pending'
         `),
 
+
+        // 6. PAID PAYMENTS
+
         pool.query(`
           SELECT
+
             COUNT(*)::INTEGER AS total,
+
             COALESCE(
               SUM(amount),
               0
             ) AS amount
+
           FROM payments
+
           WHERE status = 'paid'
         `),
+
+
+        // 7. PENDING APPLICATIONS
+
+        pool.query(`
+          SELECT
+            COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE status = 'pending'
+        `),
+
+
+        // 8. RECENT APPLICATIONS
 
         pool.query(`
           SELECT
@@ -975,10 +1072,14 @@ app.get(
             ON school_forms.id =
                applications.form_id
 
-          ORDER BY applications.id DESC
+          ORDER BY
+            applications.id DESC
 
           LIMIT 10
         `),
+
+
+        // 9. RECENT PAYMENTS
 
         pool.query(`
           SELECT
@@ -1011,7 +1112,8 @@ app.get(
             ON schools.id =
                applications.school_id
 
-          ORDER BY payments.id DESC
+          ORDER BY
+            payments.id DESC
 
           LIMIT 10
         `)
@@ -1019,56 +1121,157 @@ app.get(
       ]);
 
 
+      // =================================================
+      // RAW VALUES
+      // =================================================
+
+      const totalSchools =
+        Number(
+          schoolsResult.rows[0].total || 0
+        );
+
+      const totalForms =
+        Number(
+          formsResult.rows[0].total || 0
+        );
+
+      const totalApplications =
+        Number(
+          applicationsResult.rows[0].total || 0
+        );
+
+      const totalPayments =
+        Number(
+          paymentsResult.rows[0].total || 0
+        );
+
+      const pendingPayments =
+        Number(
+          pendingPaymentsResult.rows[0].total || 0
+        );
+
+      const paidPayments =
+        Number(
+          paidPaymentsResult.rows[0].total || 0
+        );
+
+      const totalPaid =
+        Number(
+          paidPaymentsResult.rows[0].amount || 0
+        );
+
+      const pendingApplications =
+        Number(
+          pendingApplicationsResult.rows[0].total || 0
+        );
+
+
+      // =================================================
+      // RESPONSE
+      // =================================================
+
       return res.json({
 
         success: true,
 
+
+        // -----------------------------------------------
+        // STATS
+        // -----------------------------------------------
+
         stats: {
 
+          // Original names
+
           schools:
-            Number(
-              schoolsResult.rows[0].total || 0
-            ),
+            totalSchools,
 
           forms:
-            Number(
-              formsResult.rows[0].total || 0
-            ),
+            totalForms,
 
           applications:
-            Number(
-              applicationsResult.rows[0].total || 0
-            ),
+            totalApplications,
 
           payments:
-            Number(
-              paymentsResult.rows[0].total || 0
-            ),
+            totalPayments,
 
           paidPayments:
-            Number(
-              paidPaymentsResult.rows[0].total || 0
-            ),
+            paidPayments,
 
           soldForms:
-            Number(
-              paidPaymentsResult.rows[0].total || 0
-            ),
+            paidPayments,
 
           pendingPayments:
-            Number(
-              pendingPaymentsResult.rows[0].total || 0
-            ),
+            pendingPayments,
 
           totalPaidAmount:
-            Number(
-              paidPaymentsResult.rows[0].amount || 0
-            )
+            totalPaid,
+
+
+          // Names used by Reports
+
+          totalSchools:
+            totalSchools,
+
+          totalForms:
+            totalForms,
+
+          totalApplications:
+            totalApplications,
+
+          totalPayments:
+            totalPayments,
+
+          totalPaid:
+            totalPaid,
+
+          pendingApplications:
+            pendingApplications
 
         },
 
+
+        // -----------------------------------------------
+        // STATISTICS ALIAS
+        // -----------------------------------------------
+
+        statistics: {
+
+          totalSchools:
+            totalSchools,
+
+          totalForms:
+            totalForms,
+
+          totalApplications:
+            totalApplications,
+
+          totalPayments:
+            totalPayments,
+
+          totalPaid:
+            totalPaid,
+
+          pendingPayments:
+            pendingPayments,
+
+          pendingApplications:
+            pendingApplications
+
+        },
+
+
+        // -----------------------------------------------
+        // RECENT APPLICATIONS
+        // -----------------------------------------------
+
         recentApplications:
           recentApplicationsResult.rows,
+
+
+        // -----------------------------------------------
+        // RECENT PAYMENTS
+        // -----------------------------------------------
 
         recentPayments:
           recentPaymentsResult.rows
@@ -1113,7 +1316,9 @@ app.post(
         DELETE FROM admin_sessions
         WHERE session_token = $1
         `,
-        [req.admin.session_token]
+        [
+          req.admin.session_token
+        ]
       );
 
 
@@ -1265,7 +1470,6 @@ app.post(
           RETURNING *
           `,
           [
-
             name,
             region,
             district,
@@ -1276,7 +1480,6 @@ app.post(
             email || null,
             application_start || null,
             application_end || null
-
           ]
         );
 
@@ -1351,7 +1554,8 @@ app.get(
             ON schools.id =
                school_admins.school_id
 
-          ORDER BY school_admins.id DESC
+          ORDER BY
+            school_admins.id DESC
         `);
 
 
@@ -1449,7 +1653,9 @@ app.post(
         );
 
 
-      if (school.rows.length === 0) {
+      if (
+        school.rows.length === 0
+      ) {
 
         return res.status(404).json({
 
@@ -1531,7 +1737,9 @@ app.post(
       );
 
 
-      if (error.code === "23505") {
+      if (
+        error.code === "23505"
+      ) {
 
         return res.status(409).json({
 
@@ -1595,7 +1803,8 @@ app.get(
             ON schools.id =
                school_forms.school_id
 
-          ORDER BY school_forms.id DESC
+          ORDER BY
+            school_forms.id DESC
         `);
 
 
@@ -1669,7 +1878,9 @@ app.post(
       }
 
 
-      if (Number(price) < 0) {
+      if (
+        Number(price) < 0
+      ) {
 
         return res.status(400).json({
 
@@ -1693,7 +1904,9 @@ app.post(
         );
 
 
-      if (school.rows.length === 0) {
+      if (
+        school.rows.length === 0
+      ) {
 
         return res.status(404).json({
 
@@ -1837,7 +2050,8 @@ app.get(
             ON school_forms.id =
                applications.form_id
 
-          ORDER BY applications.id DESC
+          ORDER BY
+            applications.id DESC
 
         `);
 
@@ -1951,7 +2165,9 @@ app.post(
         );
 
 
-      if (formResult.rows.length === 0) {
+      if (
+        formResult.rows.length === 0
+      ) {
 
         return res.status(400).json({
 
@@ -1968,7 +2184,9 @@ app.post(
         formResult.rows[0];
 
 
-      if (selectedForm.status !== "active") {
+      if (
+        selectedForm.status !== "active"
+      ) {
 
         return res.status(400).json({
 
@@ -2089,7 +2307,9 @@ app.post(
       );
 
 
-      if (error.code === "23505") {
+      if (
+        error.code === "23505"
+      ) {
 
         return res.status(409).json({
 
@@ -2168,7 +2388,8 @@ app.get(
             ON schools.id =
                applications.school_id
 
-          ORDER BY payments.id DESC
+          ORDER BY
+            payments.id DESC
 
         `);
 
@@ -2241,7 +2462,9 @@ app.post(
       }
 
 
-      if (Number(amount) <= 0) {
+      if (
+        Number(amount) <= 0
+      ) {
 
         return res.status(400).json({
 
@@ -2279,7 +2502,9 @@ app.post(
         );
 
 
-      if (applicationResult.rows.length === 0) {
+      if (
+        applicationResult.rows.length === 0
+      ) {
 
         return res.status(404).json({
 
@@ -2389,7 +2614,9 @@ app.post(
       );
 
 
-      if (error.code === "23505") {
+      if (
+        error.code === "23505"
+      ) {
 
         return res.status(409).json({
 
