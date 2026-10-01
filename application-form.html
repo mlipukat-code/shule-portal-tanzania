@@ -14,15 +14,15 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f7fb;
+      background: #f4f8fb;
       color: #222;
     }
 
     header {
-      background: #0b5ed7;
+      background: #0b74b8;
       color: white;
+      padding: 18px;
       text-align: center;
-      padding: 22px 15px;
     }
 
     header h1 {
@@ -30,87 +30,41 @@
       font-size: 24px;
     }
 
-    header p {
-      margin: 7px 0 0;
-      font-size: 14px;
-    }
-
     .container {
       width: 94%;
-      max-width: 750px;
+      max-width: 850px;
       margin: 25px auto;
     }
 
     .card {
       background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      padding: 22px;
       margin-bottom: 20px;
-    }
-
-    .school-name {
-      text-align: center;
-      color: #0b5ed7;
-      font-size: 27px;
-      margin: 0 0 8px;
-    }
-
-    .school-subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 25px;
-    }
-
-    .school-info {
-      background: #f7f9fc;
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 25px;
-    }
-
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 9px 0;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .info-row:last-child {
-      border-bottom: none;
-    }
-
-    .label {
-      color: #666;
-    }
-
-    .value {
-      font-weight: bold;
-      text-align: right;
-    }
-
-    .price {
-      color: #198754;
-      font-size: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
     h2 {
-      color: #0b5ed7;
-      font-size: 20px;
+      color: #0b74b8;
       margin-top: 0;
     }
 
-    h3 {
-      color: #0b5ed7;
-      font-size: 18px;
-      margin-top: 28px;
+    .school-info {
+      background: #eef7fd;
+      border-left: 5px solid #0b74b8;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .school-info p {
+      margin: 7px 0;
     }
 
     label {
       display: block;
       font-weight: bold;
-      margin-top: 16px;
+      margin-top: 15px;
       margin-bottom: 6px;
     }
 
@@ -118,11 +72,10 @@
     select,
     textarea {
       width: 100%;
-      padding: 13px;
+      padding: 12px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      background: white;
+      border-radius: 7px;
+      font-size: 16px;
     }
 
     textarea {
@@ -130,87 +83,57 @@
       resize: vertical;
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #0b5ed7;
-    }
-
-    .btn {
+    button {
       width: 100%;
-      padding: 15px;
       border: none;
       border-radius: 8px;
-      margin-top: 25px;
-      font-size: 16px;
+      padding: 14px;
+      margin-top: 22px;
+      background: #0b74b8;
+      color: white;
+      font-size: 17px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .btn-primary {
-      background: #198754;
-      color: white;
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
     }
 
-    .btn-primary:hover {
-      background: #146c43;
-    }
-
-    .btn-back {
-      display: block;
+    .message {
+      display: none;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 7px;
       text-align: center;
-      margin-top: 18px;
-      color: #0b5ed7;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .notice {
-      background: #e7f5ff;
-      color: #084298;
-      padding: 15px;
-      border-radius: 10px;
-      line-height: 1.6;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #555;
     }
 
     .error {
-      background: #f8d7da;
-      color: #842029;
-      padding: 18px;
-      border-radius: 10px;
-      text-align: center;
+      background: #ffe5e5;
+      color: #a00000;
+    }
+
+    .loading {
+      background: #fff4d6;
+      color: #7a5600;
     }
 
     .required {
-      color: #dc3545;
+      color: red;
     }
 
     @media (max-width: 600px) {
+      .container {
+        width: 96%;
+      }
 
       .card {
-        padding: 18px;
+        padding: 16px;
       }
 
-      .school-name {
-        font-size: 22px;
-      }
-
-      .info-row {
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .value {
-        text-align: left;
+      header h1 {
+        font-size: 20px;
       }
     }
   </style>
@@ -219,142 +142,240 @@
 <body>
 
 <header>
-  <h1>🏫 Shule Portal Tanzania</h1>
-  <p>Fomu ya Maombi ya Kujiunga na Shule</p>
+  <h1>📝 Fomu ya Maombi ya Shule</h1>
 </header>
 
 <div class="container">
 
-  <div id="content">
+  <div class="card">
 
-    <div class="loading">
-      Inapakia fomu...
+    <div class="school-info">
+      <h2 id="schoolName">Inapakia shule...</h2>
+
+      <p>
+        <strong>Mkoa:</strong>
+        <span id="schoolRegion">-</span>
+      </p>
+
+      <p>
+        <strong>Wilaya:</strong>
+        <span id="schoolDistrict">-</span>
+      </p>
+
+      <p>
+        <strong>Aina ya Shule:</strong>
+        <span id="schoolType">-</span>
+      </p>
+
+      <p>
+        <strong>Gharama ya Fomu:</strong>
+        TSh <span id="formPrice">-</span>
+      </p>
     </div>
+
+    <h2>Taarifa za Mwanafunzi</h2>
+
+    <form id="applicationForm">
+
+      <label>
+        Jina Kamili la Mwanafunzi
+        <span class="required">*</span>
+      </label>
+
+      <input
+        type="text"
+        id="studentName"
+        required
+      >
+
+
+      <label>
+        Jinsia
+        <span class="required">*</span>
+      </label>
+
+      <select id="gender" required>
+        <option value="">-- Chagua Jinsia --</option>
+        <option value="Male">Mwanaume</option>
+        <option value="Female">Mwanamke</option>
+      </select>
+
+
+      <label>
+        Tarehe ya Kuzaliwa
+        <span class="required">*</span>
+      </label>
+
+      <input
+        type="date"
+        id="dateOfBirth"
+        required
+      >
+
+
+      <label>
+        Darasa / Kidato
+        <span class="required">*</span>
+      </label>
+
+      <input
+        type="text"
+        id="classLevel"
+        placeholder="Mfano: Darasa la 1 / Kidato cha 1"
+        required
+      >
+
+
+      <h2 style="margin-top:30px;">
+        Taarifa za Mzazi / Mlezi
+      </h2>
+
+
+      <label>
+        Jina la Mzazi / Mlezi
+        <span class="required">*</span>
+      </label>
+
+      <input
+        type="text"
+        id="parentName"
+        required
+      >
+
+
+      <label>
+        Namba ya Simu
+        <span class="required">*</span>
+      </label>
+
+      <input
+        type="tel"
+        id="phone"
+        placeholder="Mfano: 0765447073"
+        required
+      >
+
+
+      <label>
+        Barua Pepe
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="example@gmail.com"
+      >
+
+
+      <label>
+        Anwani ya Makazi
+      </label>
+
+      <textarea
+        id="address"
+        placeholder="Andika anwani ya makazi..."
+      ></textarea>
+
+
+      <div
+        id="message"
+        class="message"
+      ></div>
+
+
+      <button
+        type="submit"
+        id="submitButton"
+      >
+        Endelea na Malipo 💳
+      </button>
+
+    </form>
 
   </div>
 
 </div>
 
+
 <script>
 
-  const API_URL = "/api/schools";
+  // ==========================================
+  // GET SCHOOL ID
+  // ==========================================
 
-  let selectedSchool = null;
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const schoolId =
+    params.get("school_id");
 
 
-  function escapeHtml(value) {
+  // ==========================================
+  // ELEMENTS
+  // ==========================================
 
-    if (value === null || value === undefined) {
-      return "";
-    }
+  const schoolName =
+    document.getElementById("schoolName");
 
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+  const schoolRegion =
+    document.getElementById("schoolRegion");
+
+  const schoolDistrict =
+    document.getElementById("schoolDistrict");
+
+  const schoolType =
+    document.getElementById("schoolType");
+
+  const formPrice =
+    document.getElementById("formPrice");
+
+  const message =
+    document.getElementById("message");
+
+  const submitButton =
+    document.getElementById("submitButton");
+
+
+  // ==========================================
+  // SHOW MESSAGE
+  // ==========================================
+
+  function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+      "message " + type;
+
+    message.style.display = "block";
+
   }
 
 
-  function formatMoney(amount) {
+  // ==========================================
+  // LOAD SCHOOL
+  // ==========================================
 
-    if (
-      amount === null ||
-      amount === undefined ||
-      amount === ""
-    ) {
-      return "Haijawekwa";
+  async function loadSchool() {
+
+    if (!schoolId) {
+
+      schoolName.textContent =
+        "Shule haijachaguliwa.";
+
+      submitButton.disabled = true;
+
+      return;
+
     }
-
-    const number = Number(amount);
-
-    if (isNaN(number)) {
-      return amount;
-    }
-
-    return "TSh " + number.toLocaleString("en-TZ");
-  }
-
-
-  function formatDate(dateString) {
-
-    if (!dateString) {
-      return "Haijawekwa";
-    }
-
-    const date = new Date(dateString);
-
-    if (isNaN(date.getTime())) {
-      return dateString;
-    }
-
-    return date.toLocaleDateString("sw-TZ", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    });
-  }
-
-
-  async function loadApplicationForm() {
-
-    const content =
-      document.getElementById("content");
 
 
     try {
 
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-
-      const schoolId =
-        params.get("school_id");
-
-
-      if (!schoolId) {
-
-        content.innerHTML = `
-          <div class="card">
-
-            <div class="error">
-
-              <h3>Shule haijachaguliwa</h3>
-
-              <p>
-                Tafadhali rudi na uchague shule
-                kabla ya kuanza maombi.
-              </p>
-
-            </div>
-
-            <a
-              class="btn-back"
-              href="/schools-public.html"
-            >
-              ← Rudi Kutafuta Shule
-            </a>
-
-          </div>
-        `;
-
-        return;
-      }
-
-
       const response =
-        await fetch(API_URL);
-
-
-      if (!response.ok) {
-        throw new Error(
-          "Imeshindikana kupata shule."
-        );
-      }
-
+        await fetch("/api/schools");
 
       const data =
         await response.json();
@@ -362,611 +383,278 @@
 
       if (
         !data.success ||
-        !Array.isArray(data.schools)
+        !data.schools
       ) {
+
         throw new Error(
-          "Taarifa za shule hazijapatikana."
+          "Imeshindikana kupata shule."
         );
+
       }
 
 
-      selectedSchool =
+      const school =
         data.schools.find(
-          school =>
-            String(school.id) ===
+          item =>
+            String(item.id) ===
             String(schoolId)
         );
 
 
-      if (!selectedSchool) {
+      if (!school) {
 
-        content.innerHTML = `
-          <div class="card">
+        schoolName.textContent =
+          "Shule haikupatikana.";
 
-            <div class="error">
-
-              <h3>Shule haijapatikana</h3>
-
-              <p>
-                Shule uliyochagua haipo
-                kwenye mfumo.
-              </p>
-
-            </div>
-
-            <a
-              class="btn-back"
-              href="/schools-public.html"
-            >
-              ← Rudi Kutafuta Shule
-            </a>
-
-          </div>
-        `;
+        submitButton.disabled = true;
 
         return;
+
       }
 
 
-      const price =
-        selectedSchool.form_price ||
-        selectedSchool.price;
+      schoolName.textContent =
+        school.name;
+
+      schoolRegion.textContent =
+        school.region || "-";
+
+      schoolDistrict.textContent =
+        school.district || "-";
+
+      schoolType.textContent =
+        school.school_type || "-";
+
+      formPrice.textContent =
+        Number(
+          school.form_price
+        ).toLocaleString();
 
 
-      /*
-       * Pokea taarifa zilizotumwa kutoka
-       * buy-form.html
-       */
-      const previousStudentName =
+      // --------------------------------------
+      // PREFILL DATA FROM PREVIOUS PAGE
+      // --------------------------------------
+
+      document.getElementById(
+        "studentName"
+      ).value =
         params.get("student_name") || "";
 
-      const previousPhone =
+      document.getElementById(
+        "phone"
+      ).value =
         params.get("phone") || "";
 
-      const previousEmail =
+      document.getElementById(
+        "email"
+      ).value =
         params.get("email") || "";
 
-      const previousClass =
+      document.getElementById(
+        "classLevel"
+      ).value =
         params.get("class_level") || "";
-
-
-      content.innerHTML = `
-
-        <div class="card">
-
-          <h1 class="school-name">
-            ${escapeHtml(selectedSchool.name)}
-          </h1>
-
-          <div class="school-subtitle">
-            Fomu ya Maombi ya Kujiunga
-          </div>
-
-
-          <div class="school-info">
-
-            <div class="info-row">
-
-              <span class="label">
-                🏫 Shule
-              </span>
-
-              <span class="value">
-                ${escapeHtml(selectedSchool.name)}
-              </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-              <span class="label">
-                📍 Mkoa
-              </span>
-
-              <span class="value">
-                ${escapeHtml(
-                  selectedSchool.region ||
-                  "Haijawekwa"
-                )}
-              </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-              <span class="label">
-                📍 Wilaya
-              </span>
-
-              <span class="value">
-                ${escapeHtml(
-                  selectedSchool.district ||
-                  "Haijawekwa"
-                )}
-              </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-              <span class="label">
-                🏫 Aina ya Shule
-              </span>
-
-              <span class="value">
-                ${escapeHtml(
-                  selectedSchool.school_type ||
-                  selectedSchool.type ||
-                  "Haijawekwa"
-                )}
-              </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-              <span class="label">
-                💰 Bei ya Fomu
-              </span>
-
-              <span class="value price">
-                ${formatMoney(price)}
-              </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-              <span class="label">
-                📅 Maombi yanaanza
-              </span>
-
-              <span class="value">
-                ${formatDate(
-                  selectedSchool.application_start
-                )}
-              </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-              <span class="label">
-                📅 Maombi yanafunga
-              </span>
-
-              <span class="value">
-                ${formatDate(
-                  selectedSchool.application_end
-                )}
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <div class="notice">
-
-            <strong>Umechagua:</strong>
-            ${escapeHtml(selectedSchool.name)}
-            <br><br>
-
-            Tafadhali jaza taarifa za mwanafunzi
-            kwa usahihi. Taarifa hizi zitatumika
-            katika mchakato wa maombi ya kujiunga.
-
-          </div>
-
-
-          <h2>
-            👨‍🎓 Taarifa za Mwanafunzi
-          </h2>
-
-
-          <form
-            id="applicationForm"
-            onsubmit="submitApplication(event)"
-          >
-
-            <label for="studentName">
-              Jina kamili la mwanafunzi
-              <span class="required">*</span>
-            </label>
-
-            <input
-              type="text"
-              id="studentName"
-              value="${escapeHtml(previousStudentName)}"
-              placeholder="Mfano: Juma Hassan Mussa"
-              required
-            >
-
-
-            <label for="gender">
-              Jinsia
-              <span class="required">*</span>
-            </label>
-
-            <select id="gender" required>
-
-              <option value="">
-                Chagua jinsia
-              </option>
-
-              <option value="Mwanaume">
-                Mwanaume
-              </option>
-
-              <option value="Mwanamke">
-                Mwanamke
-              </option>
-
-            </select>
-
-
-            <label for="dateOfBirth">
-              Tarehe ya kuzaliwa
-              <span class="required">*</span>
-            </label>
-
-            <input
-              type="date"
-              id="dateOfBirth"
-              required
-            >
-
-
-            <label for="classLevel">
-              Darasa/Kidato anachoomba
-              <span class="required">*</span>
-            </label>
-
-            <select id="classLevel" required>
-
-              <option value="">
-                Chagua darasa/kidato
-              </option>
-
-              <option value="Awali">
-                Awali
-              </option>
-
-              <option value="Darasa la 1">
-                Darasa la 1
-              </option>
-
-              <option value="Darasa la 2">
-                Darasa la 2
-              </option>
-
-              <option value="Darasa la 3">
-                Darasa la 3
-              </option>
-
-              <option value="Darasa la 4">
-                Darasa la 4
-              </option>
-
-              <option value="Darasa la 5">
-                Darasa la 5
-              </option>
-
-              <option value="Darasa la 6">
-                Darasa la 6
-              </option>
-
-              <option value="Darasa la 7">
-                Darasa la 7
-              </option>
-
-              <option value="Kidato cha 1">
-                Kidato cha 1
-              </option>
-
-              <option value="Kidato cha 2">
-                Kidato cha 2
-              </option>
-
-              <option value="Kidato cha 3">
-                Kidato cha 3
-              </option>
-
-              <option value="Kidato cha 4">
-                Kidato cha 4
-              </option>
-
-              <option value="Kidato cha 5">
-                Kidato cha 5
-              </option>
-
-              <option value="Kidato cha 6">
-                Kidato cha 6
-              </option>
-
-            </select>
-
-
-            <h3>
-              👨‍👩‍👧 Taarifa za Mzazi/Mlezi
-            </h3>
-
-
-            <label for="parentName">
-              Jina la mzazi/mlezi
-              <span class="required">*</span>
-            </label>
-
-            <input
-              type="text"
-              id="parentName"
-              placeholder="Jina kamili la mzazi/mlezi"
-              required
-            >
-
-
-            <label for="phone">
-              Namba ya simu
-              <span class="required">*</span>
-            </label>
-
-            <input
-              type="tel"
-              id="phone"
-              value="${escapeHtml(previousPhone)}"
-              placeholder="Mfano: 0712345678"
-              required
-            >
-
-
-            <label for="email">
-              Barua pepe
-            </label>
-
-            <input
-              type="email"
-              id="email"
-              value="${escapeHtml(previousEmail)}"
-              placeholder="Mfano: mzazi@email.com"
-            >
-
-
-            <label for="address">
-              Anwani ya mzazi/mlezi
-              <span class="required">*</span>
-            </label>
-
-            <textarea
-              id="address"
-              placeholder="Andika anwani ya makazi"
-              required
-            ></textarea>
-
-
-            <button
-              type="submit"
-              class="btn btn-primary"
-            >
-              ➜ Endelea
-            </button>
-
-          </form>
-
-
-          <a
-            class="btn-back"
-            href="/buy-form.html?school_id=${encodeURIComponent(selectedSchool.id)}"
-          >
-            ← Rudi kwenye taarifa za fomu
-          </a>
-
-        </div>
-
-      `;
-
-
-      /*
-       * Kama darasa lilitumwa kutoka
-       * buy-form.html, lichague lenyewe.
-       */
-      if (previousClass) {
-
-        const classSelect =
-          document.getElementById("classLevel");
-
-        const exists =
-          Array.from(
-            classSelect.options
-          ).some(
-            option =>
-              option.value === previousClass
-          );
-
-        if (exists) {
-          classSelect.value = previousClass;
-        }
-
-      }
 
 
     } catch (error) {
 
       console.error(error);
 
-      content.innerHTML = `
-        <div class="card">
+      schoolName.textContent =
+        "Kuna tatizo la kupakia taarifa za shule.";
 
-          <div class="error">
-
-            <h3>Hitilafu imetokea</h3>
-
-            <p>
-              Imeshindikana kufungua
-              fomu ya maombi.
-            </p>
-
-          </div>
-
-          <a
-            class="btn-back"
-            href="/schools-public.html"
-          >
-            ← Rudi Kutafuta Shule
-          </a>
-
-        </div>
-      `;
+      submitButton.disabled = true;
 
     }
 
   }
 
 
-  function submitApplication(event) {
+  // ==========================================
+  // SUBMIT APPLICATION
+  // ==========================================
 
-    event.preventDefault();
+  document
+    .getElementById("applicationForm")
+    .addEventListener(
+      "submit",
+      async function(event) {
 
-
-    if (!selectedSchool) {
-
-      alert(
-        "Taarifa za shule hazijapatikana."
-      );
-
-      return;
-    }
+        event.preventDefault();
 
 
-    const studentName =
-      document.getElementById(
-        "studentName"
-      ).value.trim();
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+          "Inahifadhi maombi...";
 
 
-    const gender =
-      document.getElementById(
-        "gender"
-      ).value;
+        message.style.display = "none";
 
 
-    const dateOfBirth =
-      document.getElementById(
-        "dateOfBirth"
-      ).value;
+        const applicationData = {
+
+          school_id: Number(schoolId),
+
+          student_name:
+            document.getElementById(
+              "studentName"
+            ).value.trim(),
+
+          gender:
+            document.getElementById(
+              "gender"
+            ).value,
+
+          date_of_birth:
+            document.getElementById(
+              "dateOfBirth"
+            ).value,
+
+          class_level:
+            document.getElementById(
+              "classLevel"
+            ).value.trim(),
+
+          parent_name:
+            document.getElementById(
+              "parentName"
+            ).value.trim(),
+
+          phone:
+            document.getElementById(
+              "phone"
+            ).value.trim(),
+
+          email:
+            document.getElementById(
+              "email"
+            ).value.trim(),
+
+          address:
+            document.getElementById(
+              "address"
+            ).value.trim()
+
+        };
 
 
-    const classLevel =
-      document.getElementById(
-        "classLevel"
-      ).value;
+        try {
+
+          const response =
+            await fetch(
+              "/api/applications",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify(
+                    applicationData
+                  )
+              }
+            );
 
 
-    const parentName =
-      document.getElementById(
-        "parentName"
-      ).value.trim();
+          const result =
+            await response.json();
 
 
-    const phone =
-      document.getElementById(
-        "phone"
-      ).value.trim();
+          if (!response.ok ||
+              !result.success) {
+
+            throw new Error(
+              result.message ||
+              "Imeshindikana kuhifadhi maombi."
+            );
+
+          }
 
 
-    const email =
-      document.getElementById(
-        "email"
-      ).value.trim();
+          // ==================================
+          // SAVE APPLICATION DATA LOCALLY
+          // ==================================
+
+          sessionStorage.setItem(
+            "application_id",
+            result.application.id
+          );
+
+          sessionStorage.setItem(
+            "application_number",
+            result.application.application_number
+          );
+
+          sessionStorage.setItem(
+            "payment_id",
+            result.payment.id
+          );
+
+          sessionStorage.setItem(
+            "payment_reference",
+            result.payment.payment_reference
+          );
 
 
-    const address =
-      document.getElementById(
-        "address"
-      ).value.trim();
+          // ==================================
+          // GO TO PAYMENT
+          // ==================================
+
+          const nextUrl =
+            "/payment.html" +
+            "?school_id=" +
+            encodeURIComponent(
+              schoolId
+            ) +
+
+            "&application_id=" +
+            encodeURIComponent(
+              result.application.id
+            ) +
+
+            "&application_number=" +
+            encodeURIComponent(
+              result.application.application_number
+            ) +
+
+            "&payment_id=" +
+            encodeURIComponent(
+              result.payment.id
+            ) +
+
+            "&payment_reference=" +
+            encodeURIComponent(
+              result.payment.payment_reference
+            );
 
 
-    const params =
-      new URLSearchParams();
+          window.location.href =
+            nextUrl;
 
 
-    /*
-     * SHULE ILIYOTEULIWA
-     */
-    params.set(
-      "school_id",
-      selectedSchool.id
+        } catch (error) {
+
+          console.error(error);
+
+          showMessage(
+            error.message ||
+            "Kuna tatizo. Tafadhali jaribu tena.",
+            "error"
+          );
+
+          submitButton.disabled = false;
+
+          submitButton.textContent =
+            "Endelea na Malipo 💳";
+
+        }
+
+      }
     );
 
 
-    params.set(
-      "student_name",
-      studentName
-    );
-
-
-    params.set(
-      "gender",
-      gender
-    );
-
-
-    params.set(
-      "date_of_birth",
-      dateOfBirth
-    );
-
-
-    params.set(
-      "class_level",
-      classLevel
-    );
-
-
-    params.set(
-      "parent_name",
-      parentName
-    );
-
-
-    params.set(
-      "phone",
-      phone
-    );
-
-
-    params.set(
-      "email",
-      email
-    );
-
-
-    params.set(
-      "address",
-      address
-    );
-
-
-    /*
-     * Kwa sasa tunaenda kwenye
-     * payment.html huku tukibeba
-     * taarifa zote.
-     */
-    window.location.href =
-      "/payment.html?" +
-      params.toString();
-
-  }
-
-
-  loadApplicationForm();
-
-</script>
-
-</body>
-</html>
+  //
