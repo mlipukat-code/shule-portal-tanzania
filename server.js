@@ -98,9 +98,43 @@ async function initializeDatabase() {
     `);
 
 
+    // ================================
+    // SCHOOL FORMS TABLE
+    // ================================
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS school_forms (
+        id SERIAL PRIMARY KEY,
+
+        school_id INTEGER NOT NULL,
+
+        form_name VARCHAR(255) NOT NULL,
+
+        price NUMERIC(12,2) NOT NULL DEFAULT 0,
+
+        status VARCHAR(30) NOT NULL DEFAULT 'active',
+
+        application_start DATE,
+
+        application_end DATE,
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        CONSTRAINT fk_school_form_school
+          FOREIGN KEY (school_id)
+          REFERENCES schools(id)
+          ON DELETE RESTRICT
+      );
+    `);
+
+
     console.log("Schools table iko tayari.");
 
     console.log("School Admins table iko tayari.");
+
+    console.log("School Forms table iko tayari.");
 
   }
 
@@ -577,6 +611,218 @@ app.post("/api/school-admins", async (req, res) => {
 
       message:
         "Imeshindikana kuongeza School Admin."
+
+    });
+
+  }
+
+});
+
+
+// ================================
+// GET SCHOOL FORMS
+// ================================
+
+app.get("/api/school-forms", async (req, res) => {
+
+  try {
+
+    const result =
+      await pool.query(`
+        SELECT
+          school_forms.id,
+          school_forms.school_id,
+          schools.name AS school_name,
+          school_forms.form_name,
+          school_forms.price,
+          school_forms.status,
+          school_forms.application_start,
+          school_forms.application_end,
+          school_forms.created_at
+        FROM school_forms
+        INNER JOIN schools
+          ON schools.id = school_forms.school_id
+        ORDER BY school_forms.id DESC
+      `);
+
+
+    res.json({
+
+      success: true,
+
+      forms:
+        result.rows
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Get school forms error:",
+      error
+    );
+
+    res.status(500).json({
+
+      success: false,
+
+      message:
+        "Imeshindikana kupata fomu za shule."
+
+    });
+
+  }
+
+});
+
+
+// ================================
+// ADD SCHOOL FORM
+// ================================
+
+app.post("/api/school-forms", async (req, res) => {
+
+  try {
+
+    const {
+
+      school_id,
+      form_name,
+      price,
+      status,
+      application_start,
+      application_end
+
+    } = req.body;
+
+
+    if (
+
+      !school_id ||
+      !form_name ||
+      price === undefined
+
+    ) {
+
+      return res.status(400).json({
+
+        success: false,
+
+        message:
+          "Tafadhali jaza taarifa muhimu za fomu."
+
+      });
+
+    }
+
+
+    if (Number(price) < 0) {
+
+      return res.status(400).json({
+
+        success: false,
+
+        message:
+          "Bei ya fomu haiwezi kuwa chini ya sifuri."
+
+      });
+
+    }
+
+
+    // Hakikisha shule ipo
+
+    const school =
+      await pool.query(
+
+        `
+        SELECT id, name
+        FROM schools
+        WHERE id = $1
+        `,
+
+        [school_id]
+
+      );
+
+
+    if (school.rows.length === 0) {
+
+      return res.status(404).json({
+
+        success: false,
+
+        message:
+          "Shule iliyochaguliwa haipo."
+
+      });
+
+    }
+
+
+    const result =
+      await pool.query(
+
+        `
+        INSERT INTO school_forms
+        (
+          school_id,
+          form_name,
+          price,
+          status,
+          application_start,
+          application_end
+        )
+
+        VALUES
+        ($1,$2,$3,$4,$5,$6)
+
+        RETURNING *
+        `,
+
+        [
+
+          school_id,
+          form_name,
+          price,
+          status || "active",
+          application_start || null,
+          application_end || null
+
+        ]
+
+      );
+
+
+    res.status(201).json({
+
+      success: true,
+
+      message:
+        "Fomu ya shule imeongezwa na kuhifadhiwa kwenye database.",
+
+      form:
+        result.rows[0]
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Add school form error:",
+      error
+    );
+
+    res.status(500).json({
+
+      success: false,
+
+      message:
+        "Imeshindikana kuongeza fomu ya shule."
 
     });
 
