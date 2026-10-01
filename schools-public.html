@@ -2,813 +2,891 @@
 <html lang="sw">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Tafuta Shule - Shule Portal Tanzania</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background: #f4f7fb;
-      color: #222;
+      color: #1f2937;
     }
 
-    .header {
-      background: #1565c0;
+    header {
+      background: #0b5ed7;
       color: white;
       padding: 18px 20px;
     }
 
     .header-inner {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 15px;
     }
 
     .logo {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
     }
 
-    .home {
-      background: white;
-      color: #1565c0;
-      padding: 9px 14px;
-      border-radius: 8px;
+    .back-link {
+      color: white;
       text-decoration: none;
-      font-weight: bold;
+      background: rgba(255,255,255,0.15);
+      padding: 9px 13px;
+      border-radius: 8px;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 25px 20px;
+    main {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 0 15px;
     }
 
-    .intro {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .intro h1 {
-      color: #1565c0;
-      margin-bottom: 8px;
-    }
-
-    .intro p {
-      color: #666;
-    }
-
-    .search-box {
+    .hero {
       background: white;
-      padding: 20px;
       border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      margin-bottom: 25px;
+      padding: 25px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+      margin-bottom: 20px;
     }
 
-    .search-box h2 {
-      color: #1565c0;
-      margin-bottom: 15px;
-      font-size: 19px;
+    .hero h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: #0b5ed7;
+    }
+
+    .hero p {
+      margin-bottom: 0;
+      color: #64748b;
     }
 
     .filters {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
-      gap: 12px;
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+      margin-bottom: 20px;
     }
 
-    .filters input,
-    .filters select {
+    .filter-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select {
       width: 100%;
       padding: 12px;
-      border: 1px solid #ccc;
+      border: 1px solid #d1d5db;
       border-radius: 9px;
-      font-size: 14px;
+      font-size: 15px;
+      outline: none;
       background: white;
     }
 
-    .search-btn {
-      background: #1565c0;
-      color: white;
-      border: none;
-      padding: 12px 18px;
+    input:focus,
+    select:focus {
+      border-color: #0b5ed7;
+    }
+
+    .status {
+      margin: 15px 0;
+      padding: 12px;
       border-radius: 9px;
-      cursor: pointer;
-      font-weight: bold;
+      display: none;
     }
 
-    .search-btn:hover {
-      background: #0d47a1;
+    .status.loading {
+      display: block;
+      background: #e8f1ff;
+      color: #0b5ed7;
     }
 
-    .results-title {
-      color: #1565c0;
-      margin-bottom: 15px;
+    .status.error {
+      display: block;
+      background: #fee2e2;
+      color: #b91c1c;
     }
 
-    .schools {
+    .status.success {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .results-header h2 {
+      margin: 0;
+    }
+
+    .school-count {
+      color: #64748b;
+    }
+
+    .schools-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
       gap: 18px;
     }
 
     .school-card {
       background: white;
       border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    .school-top {
-      background: #e3f2fd;
       padding: 20px;
-      text-align: center;
-      font-size: 45px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+      transition: transform 0.15s ease,
+                  box-shadow 0.15s ease;
     }
 
-    .school-content {
-      padding: 18px;
+    .school-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 22px rgba(0,0,0,0.10);
     }
 
-    .school-content h3 {
-      color: #1565c0;
-      margin-bottom: 10px;
+    .school-name {
+      color: #0b5ed7;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 12px;
     }
 
     .school-info {
-      color: #666;
-      font-size: 14px;
-      line-height: 1.8;
-      margin-bottom: 14px;
+      margin: 8px 0;
+      color: #475569;
+    }
+
+    .school-info strong {
+      color: #1f2937;
     }
 
     .price {
-      background: #e8f5e9;
-      color: #2e7d32;
-      padding: 9px;
-      border-radius: 8px;
+      margin-top: 14px;
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 14px;
-      text-align: center;
+      color: #198754;
     }
 
-    .view-btn {
-      display: block;
-      text-align: center;
-      background: #1565c0;
-      color: white;
-      padding: 11px;
-      border-radius: 8px;
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
       text-decoration: none;
-      font-weight: bold;
-    }
-
-    .view-btn:hover {
-      background: #0d47a1;
-    }
-
-    .loading {
-      background: white;
-      padding: 30px;
-      text-align: center;
-      border-radius: 14px;
-      color: #1565c0;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    .empty {
-      display: none;
-      background: white;
-      padding: 30px;
-      text-align: center;
-      border-radius: 14px;
-      color: #777;
-    }
-
-    .error {
-      display: none;
-      background: #ffebee;
-      color: #c62828;
-      padding: 20px;
-      text-align: center;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .note {
-      margin-top: 25px;
-      background: #fff8e1;
-      color: #795548;
-      padding: 13px;
+      display: inline-block;
+      padding: 11px 15px;
       border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
       font-size: 14px;
     }
 
-    @media (max-width: 900px) {
+    .btn-primary {
+      background: #0b5ed7;
+      color: white;
+    }
 
-      .filters {
-        grid-template-columns: 1fr 1fr;
-      }
+    .btn-secondary {
+      background: #e9ecef;
+      color: #212529;
+    }
 
-      .schools {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .empty {
+      background: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 14px;
+      color: #64748b;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+    }
 
+    footer {
+      margin-top: 40px;
+      padding: 25px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
     }
 
     @media (max-width: 600px) {
-
       .header-inner {
-        gap: 10px;
+        flex-direction: column;
+        align-items: flex-start;
       }
 
-      .logo {
-        font-size: 16px;
+      .hero {
+        padding: 20px;
       }
 
-      .filters,
-      .schools {
-        grid-template-columns: 1fr;
+      .school-card {
+        padding: 17px;
       }
-
     }
   </style>
 </head>
 
 <body>
 
-<header class="header">
+  <header>
+    <div class="header-inner">
 
-  <div class="header-inner">
+      <div class="logo">
+        🏫 Shule Portal Tanzania
+      </div>
 
-    <div class="logo">
-      🏫 Shule Portal Tanzania
+      <a
+        href="/"
+        class="back-link"
+      >
+        ← Mwanzo
+      </a>
+
+    </div>
+  </header>
+
+
+  <main>
+
+    <section class="hero">
+
+      <h1>Tafuta Shule</h1>
+
+      <p>
+        Tafuta shule, angalia taarifa zake na endelea
+        kwenye mchakato wa kuomba fomu mtandaoni.
+      </p>
+
+    </section>
+
+
+    <section class="filters">
+
+      <div class="filter-grid">
+
+        <div>
+          <label for="search">
+            Tafuta kwa jina
+          </label>
+
+          <input
+            type="text"
+            id="search"
+            placeholder="Mfano: Mlipuka Academy"
+          >
+        </div>
+
+
+        <div>
+          <label for="region">
+            Mkoa
+          </label>
+
+          <select id="region">
+            <option value="">
+              Mikoa yote
+            </option>
+          </select>
+        </div>
+
+
+        <div>
+          <label for="district">
+            Wilaya
+          </label>
+
+          <select id="district">
+            <option value="">
+              Wilaya zote
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+
+    <div class="results-header">
+
+      <h2>
+        Shule Zinazopatikana
+      </h2>
+
+      <div
+        id="schoolCount"
+        class="school-count"
+      >
+        Shule 0
+      </div>
+
     </div>
 
-    <a href="index.html" class="home">
-      ← Mwanzo
-    </a>
 
-  </div>
+    <section
+      id="schoolsGrid"
+      class="schools-grid"
+    ></section>
 
-</header>
-
-
-<main class="container">
-
-  <section class="intro">
-
-    <h1>Tafuta Shule</h1>
-
-    <p>
-      Tafuta shule na upate taarifa za fomu za maombi mtandaoni.
-    </p>
-
-  </section>
+  </main>
 
 
-  <section class="search-box">
+  <footer>
 
-    <h2>🔎 Tafuta Shule</h2>
+    © 2026 Shule Portal Tanzania
 
-    <div class="filters">
+  </footer>
 
-      <input
-        type="text"
-        id="schoolSearch"
-        placeholder="Andika jina la shule..."
-      >
 
-      <select id="region">
+  <script>
 
+    const API_URL = "/api/schools";
+
+    let schools = [];
+
+
+    // ==========================================
+    // ELEMENTS
+    // ==========================================
+
+    const searchInput =
+      document.getElementById("search");
+
+    const regionSelect =
+      document.getElementById("region");
+
+    const districtSelect =
+      document.getElementById("district");
+
+    const schoolsGrid =
+      document.getElementById("schoolsGrid");
+
+    const schoolCount =
+      document.getElementById("schoolCount");
+
+    const statusBox =
+      document.getElementById("status");
+
+
+    // ==========================================
+    // STATUS
+    // ==========================================
+
+    function showStatus(
+      message,
+      type
+    ) {
+
+      statusBox.textContent =
+        message;
+
+      statusBox.className =
+        "status " + type;
+    }
+
+
+    function hideStatus() {
+
+      statusBox.textContent = "";
+
+      statusBox.className =
+        "status";
+    }
+
+
+    // ==========================================
+    // LOAD SCHOOLS
+    // ==========================================
+
+    async function loadSchools() {
+
+      showStatus(
+        "Inapakia taarifa za shule...",
+        "loading"
+      );
+
+      try {
+
+        const response =
+          await fetch(API_URL);
+
+        if (!response.ok) {
+
+          throw new Error(
+            "HTTP " + response.status
+          );
+        }
+
+        const data =
+          await response.json();
+
+        if (!data.success) {
+
+          throw new Error(
+            data.message ||
+            "Imeshindikana kupata shule."
+          );
+        }
+
+        schools =
+          Array.isArray(data.schools)
+            ? data.schools
+            : [];
+
+        populateRegions();
+
+        populateDistricts();
+
+        renderSchools();
+
+        if (schools.length > 0) {
+
+          showStatus(
+            "Taarifa za shule zimepatikana.",
+            "success"
+          );
+
+          setTimeout(
+            hideStatus,
+            2500
+          );
+
+        } else {
+
+          showStatus(
+            "Hakuna shule iliyosajiliwa kwa sasa.",
+            "error"
+          );
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Load schools error:",
+          error
+        );
+
+        showStatus(
+          "Imeshindikana kupata shule. Tafadhali jaribu tena.",
+          "error"
+        );
+
+        schoolsGrid.innerHTML = "";
+
+        schoolCount.textContent =
+          "Shule 0";
+      }
+    }
+
+
+    // ==========================================
+    // REGIONS
+    // ==========================================
+
+    function populateRegions() {
+
+      const regions =
+        [...new Set(
+          schools
+            .map(
+              school =>
+                school.region
+            )
+            .filter(Boolean)
+        )]
+        .sort();
+
+      regionSelect.innerHTML = `
         <option value="">
           Mikoa yote
         </option>
+      `;
 
-      </select>
+      regions.forEach(
+        region => {
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            region;
+
+          option.textContent =
+            region;
+
+          regionSelect.appendChild(
+            option
+          );
+        }
+      );
+    }
 
 
-      <select id="type">
+    // ==========================================
+    // DISTRICTS
+    // ==========================================
 
+    function populateDistricts() {
+
+      const selectedRegion =
+        regionSelect.value;
+
+      const filtered =
+        selectedRegion
+          ? schools.filter(
+              school =>
+                school.region ===
+                selectedRegion
+            )
+          : schools;
+
+      const districts =
+        [...new Set(
+          filtered
+            .map(
+              school =>
+                school.district
+            )
+            .filter(Boolean)
+        )]
+        .sort();
+
+      districtSelect.innerHTML = `
         <option value="">
-          Aina zote
+          Wilaya zote
         </option>
+      `;
 
-      </select>
+      districts.forEach(
+        district => {
 
+          const option =
+            document.createElement(
+              "option"
+            );
 
-      <button
-        class="search-btn"
-        onclick="searchSchools()"
-      >
-        Tafuta
-      </button>
+          option.value =
+            district;
 
-    </div>
+          option.textContent =
+            district;
 
-  </section>
-
-
-  <div
-    class="error"
-    id="errorMessage"
-  >
-    Imeshindikana kupata taarifa za shule.
-  </div>
-
-
-  <h2 class="results-title">
-    🏫 Shule Zinazopatikana
-  </h2>
-
-
-  <div
-    class="loading"
-    id="loading"
-  >
-    ⏳ Inapakia shule...
-  </div>
-
-
-  <div
-    class="schools"
-    id="schoolsList"
-  ></div>
-
-
-  <div
-    class="empty"
-    id="emptyMessage"
-  >
-    Hakuna shule inayolingana na utafutaji wako.
-  </div>
-
-
-  <div class="note">
-
-    ℹ️ Shule zinazoonekana hapa zinatoka moja kwa moja
-    kwenye mfumo wa Shule Portal Tanzania.
-
-  </div>
-
-</main>
-
-
-<script>
-
-let schools = [];
-
-
-/* =========================
-   LOAD SCHOOLS
-========================= */
-
-async function loadSchools() {
-
-  const loading =
-    document.getElementById("loading");
-
-  const error =
-    document.getElementById("errorMessage");
-
-  try {
-
-    loading.style.display = "block";
-
-    error.style.display = "none";
-
-
-    const response =
-      await fetch("/api/schools");
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        "Imeshindikana kupata shule"
+          districtSelect.appendChild(
+            option
+          );
+        }
       );
-
     }
 
 
-    const data =
-      await response.json();
+    // ==========================================
+    // FILTER
+    // ==========================================
+
+    function getFilteredSchools() {
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+      const region =
+        regionSelect.value;
+
+      const district =
+        districtSelect.value;
+
+      return schools.filter(
+        school => {
+
+          const name =
+            String(
+              school.name || ""
+            ).toLowerCase();
+
+          const schoolRegion =
+            String(
+              school.region || ""
+            );
+
+          const schoolDistrict =
+            String(
+              school.district || ""
+            );
+
+          const matchesSearch =
+            !search ||
+            name.includes(search);
+
+          const matchesRegion =
+            !region ||
+            schoolRegion === region;
+
+          const matchesDistrict =
+            !district ||
+            schoolDistrict === district;
+
+          return (
+            matchesSearch &&
+            matchesRegion &&
+            matchesDistrict
+          );
+        }
+      );
+    }
 
 
-    /*
-      API inaweza kurudisha:
+    // ==========================================
+    // RENDER
+    // ==========================================
 
-      [
-        {...},
-        {...}
-      ]
+    function renderSchools() {
 
-      au:
+      const filtered =
+        getFilteredSchools();
 
-      {
-        schools: [...]
+      schoolCount.textContent =
+        `Shule ${filtered.length}`;
+
+      schoolsGrid.innerHTML = "";
+
+      if (filtered.length === 0) {
+
+        schoolsGrid.innerHTML = `
+          <div class="empty">
+            <h3>
+              Hakuna shule inayolingana
+            </h3>
+
+            <p>
+              Jaribu kubadilisha jina,
+              mkoa au wilaya unayotafuta.
+            </p>
+          </div>
+        `;
+
+        return;
       }
-    */
 
-    if (Array.isArray(data)) {
 
-      schools = data;
+      filtered.forEach(
+        school => {
 
-    } else if (Array.isArray(data.schools)) {
+          const card =
+            document.createElement(
+              "div"
+            );
 
-      schools = data.schools;
+          card.className =
+            "school-card";
 
-    } else {
 
-      schools = [];
+          const price =
+            Number(
+              school.form_price ??
+              school.price ??
+              0
+            );
 
-    }
 
+          const formattedPrice =
+            price.toLocaleString(
+              "en-US"
+            );
 
-    populateFilters();
 
-    renderSchools(schools);
+          card.innerHTML = `
 
-  }
+            <div class="school-name">
+              ${escapeHtml(
+                school.name ||
+                "Jina halijapatikana"
+              )}
+            </div>
 
-  catch (error) {
 
-    console.error(error);
+            <div class="school-info">
+              <strong>Mkoa:</strong>
+              ${escapeHtml(
+                school.region ||
+                "-"
+              )}
+            </div>
 
-    document.getElementById(
-      "errorMessage"
-    ).style.display = "block";
 
-  }
+            <div class="school-info">
+              <strong>Wilaya:</strong>
+              ${escapeHtml(
+                school.district ||
+                "-"
+              )}
+            </div>
 
-  finally {
 
-    loading.style.display = "none";
+            <div class="school-info">
+              <strong>Aina:</strong>
+              ${escapeHtml(
+                school.school_type ||
+                school.type ||
+                "-"
+              )}
+            </div>
 
-  }
 
-}
+            <div class="school-info">
+              <strong>Simu:</strong>
+              ${escapeHtml(
+                school.phone ||
+                "-"
+              )}
+            </div>
 
 
+            <div class="school-info">
+              <strong>Anwani:</strong>
+              ${escapeHtml(
+                school.address ||
+                "-"
+              )}
+            </div>
 
-/* =========================
-   FILTER OPTIONS
-========================= */
 
-function populateFilters() {
+            <div class="price">
+              Fomu:
+              TSh ${formattedPrice}
+            </div>
 
-  const regionSelect =
-    document.getElementById("region");
 
-  const typeSelect =
-    document.getElementById("type");
+            <div class="actions">
 
+              <a
+                class="btn btn-primary"
+                href="/school-details.html?id=${encodeURIComponent(
+                  school.id
+                )}"
+              >
+                Taarifa zaidi
+              </a>
 
-  const regions =
-    [...new Set(
-      schools
-        .map(school => school.region)
-        .filter(Boolean)
-    )]
-    .sort();
 
+              <a
+                class="btn btn-secondary"
+                href="/buy-form.html?school_id=${encodeURIComponent(
+                  school.id
+                )}"
+              >
+                Nunua Fomu
+              </a>
 
-  const types =
-    [...new Set(
-      schools
-        .map(school => school.type || school.level)
-        .filter(Boolean)
-    )]
-    .sort();
+            </div>
 
+          `;
 
-  regionSelect.innerHTML =
-    '<option value="">Mikoa yote</option>';
-
-
-  regions.forEach(region => {
-
-    const option =
-      document.createElement("option");
-
-    option.value = region;
-
-    option.textContent = region;
-
-    regionSelect.appendChild(option);
-
-  });
-
-
-  typeSelect.innerHTML =
-    '<option value="">Aina zote</option>';
-
-
-  types.forEach(type => {
-
-    const option =
-      document.createElement("option");
-
-    option.value = type;
-
-    option.textContent = type;
-
-    typeSelect.appendChild(option);
-
-  });
-
-}
-
-
-
-/* =========================
-   DISPLAY SCHOOLS
-========================= */
-
-function renderSchools(list) {
-
-  const container =
-    document.getElementById("schoolsList");
-
-  const empty =
-    document.getElementById("emptyMessage");
-
-
-  container.innerHTML = "";
-
-
-  if (!list.length) {
-
-    empty.style.display = "block";
-
-    return;
-
-  }
-
-
-  empty.style.display = "none";
-
-
-  list.forEach(school => {
-
-    const card =
-      document.createElement("div");
-
-    card.className = "school-card";
-
-
-    const name =
-      school.name || "Jina la shule halijawekwa";
-
-
-    const region =
-      school.region || "-";
-
-
-    const district =
-      school.district || school.area || "";
-
-
-    const type =
-      school.type ||
-      school.level ||
-      "Haijawekwa";
-
-
-    const phone =
-      school.phone || "-";
-
-
-    const price =
-      school.form_price ??
-      school.formPrice ??
-      school.price ??
-      0;
-
-
-    let locationText = region;
-
-    if (district) {
-
-      locationText +=
-        " - " + district;
-
-    }
-
-
-    card.innerHTML = `
-
-      <div class="school-top">
-        🏫
-      </div>
-
-      <div class="school-content">
-
-        <h3>
-          ${escapeHtml(name)}
-        </h3>
-
-        <div class="school-info">
-
-          📍 ${escapeHtml(locationText)}
-          <br>
-
-          🎓 ${escapeHtml(type)}
-          <br>
-
-          📞 ${escapeHtml(phone)}
-
-        </div>
-
-
-        <div class="price">
-
-          Fomu:
-          TZS ${formatMoney(price)}
-
-        </div>
-
-
-        <a
-          href="school-details.html?id=${encodeURIComponent(school.id)}"
-          class="view-btn"
-        >
-          Angalia Shule
-        </a>
-
-      </div>
-
-    `;
-
-
-    container.appendChild(card);
-
-  });
-
-}
-
-
-
-/* =========================
-   SEARCH
-========================= */
-
-function searchSchools() {
-
-  const search =
-    document
-      .getElementById("schoolSearch")
-      .value
-      .trim()
-      .toLowerCase();
-
-
-  const region =
-    document.getElementById("region").value;
-
-
-  const type =
-    document.getElementById("type").value;
-
-
-  const filtered =
-    schools.filter(school => {
-
-      const name =
-        String(
-          school.name || ""
-        ).toLowerCase();
-
-
-      const schoolRegion =
-        String(
-          school.region || ""
-        );
-
-
-      const schoolType =
-        String(
-          school.type ||
-          school.level ||
-          ""
-        );
-
-
-      const matchName =
-        name.includes(search);
-
-
-      const matchRegion =
-        !region ||
-        schoolRegion === region;
-
-
-      const matchType =
-        !type ||
-        schoolType === type;
-
-
-      return (
-        matchName &&
-        matchRegion &&
-        matchType
+          schoolsGrid.appendChild(
+            card
+          );
+        }
       );
-
-    });
-
-
-  renderSchools(filtered);
-
-}
+    }
 
 
+    // ==========================================
+    // ESCAPE HTML
+    // ==========================================
 
-/* =========================
-   FORMAT MONEY
-========================= */
+    function escapeHtml(value) {
 
-function formatMoney(amount) {
-
-  const number =
-    Number(amount) || 0;
-
-
-  return number.toLocaleString(
-    "en-TZ"
-  );
-
-}
-
-
-
-/* =========================
-   HTML SAFETY
-========================= */
-
-function escapeHtml(value) {
-
-  return String(value)
-
-    .replace(/&/g, "&amp;")
-
-    .replace(/</g, "&lt;")
-
-    .replace(/>/g, "&gt;")
-
-    .replace(/"/g, "&quot;")
-
-    .replace(/'/g, "&#039;");
-
-}
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
+    }
 
 
+    // ==========================================
+    // EVENTS
+    // ==========================================
 
-/* =========================
-   LIVE SEARCH
-========================= */
-
-document
-  .getElementById("schoolSearch")
-  .addEventListener(
-    "input",
-    searchSchools
-  );
+    searchInput.addEventListener(
+      "input",
+      renderSchools
+    );
 
 
-document
-  .getElementById("region")
-  .addEventListener(
-    "change",
-    searchSchools
-  );
+    regionSelect.addEventListener(
+      "change",
+      () => {
+
+        populateDistricts();
+
+        districtSelect.value = "";
+
+        renderSchools();
+
+      }
+    );
 
 
-document
-  .getElementById("type")
-  .addEventListener(
-    "change",
-    searchSchools
-  );
+    districtSelect.addEventListener(
+      "change",
+      renderSchools
+    );
 
 
+    // ==========================================
+    // START
+    // ==========================================
 
-/* =========================
-   START
-========================= */
+    loadSchools();
 
-loadSchools();
-
-</script>
+  </script>
 
 </body>
 </html>
