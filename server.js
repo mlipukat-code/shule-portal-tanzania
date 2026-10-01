@@ -35,6 +35,25 @@ function hashPassword(password) {
 
 
 // ================================
+// APPLICATION NUMBER
+// ================================
+
+function generateApplicationNumber() {
+
+  const year =
+    new Date().getFullYear();
+
+  const random =
+    crypto.randomBytes(4)
+      .toString("hex")
+      .toUpperCase();
+
+  return `SPT-${year}-${random}`;
+
+}
+
+
+// ================================
 // DATABASE INITIALIZATION
 // ================================
 
@@ -130,11 +149,64 @@ async function initializeDatabase() {
     `);
 
 
+    // ================================
+    // APPLICATIONS TABLE
+    // ================================
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS applications (
+
+        id SERIAL PRIMARY KEY,
+
+        application_number VARCHAR(50) NOT NULL UNIQUE,
+
+        school_id INTEGER NOT NULL,
+
+        form_id INTEGER NOT NULL,
+
+        applicant_name VARCHAR(255) NOT NULL,
+
+        applicant_gender VARCHAR(30),
+
+        applicant_date_of_birth DATE,
+
+        parent_name VARCHAR(255),
+
+        parent_phone VARCHAR(30),
+
+        parent_email VARCHAR(255),
+
+        address TEXT,
+
+        status VARCHAR(50) NOT NULL DEFAULT 'pending',
+
+        payment_status VARCHAR(50) NOT NULL DEFAULT 'unpaid',
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        CONSTRAINT fk_application_school
+          FOREIGN KEY (school_id)
+          REFERENCES schools(id)
+          ON DELETE RESTRICT,
+
+        CONSTRAINT fk_application_form
+          FOREIGN KEY (form_id)
+          REFERENCES school_forms(id)
+          ON DELETE RESTRICT
+
+      );
+    `);
+
+
     console.log("Schools table iko tayari.");
 
     console.log("School Admins table iko tayari.");
 
     console.log("School Forms table iko tayari.");
+
+    console.log("Applications table iko tayari.");
 
   }
 
@@ -494,8 +566,6 @@ app.post("/api/school-admins", async (req, res) => {
     }
 
 
-    // Hakikisha shule ipo
-
     const school =
       await pool.query(
 
@@ -523,8 +593,6 @@ app.post("/api/school-admins", async (req, res) => {
 
     }
 
-
-    // Hash password kabla ya kuihifadhi
 
     const passwordHash =
       hashPassword(password);
@@ -732,8 +800,6 @@ app.post("/api/school-forms", async (req, res) => {
     }
 
 
-    // Hakikisha shule ipo
-
     const school =
       await pool.query(
 
@@ -823,6 +889,366 @@ app.post("/api/school-forms", async (req, res) => {
 
       message:
         "Imeshindikana kuongeza fomu ya shule."
+
+    });
+
+  }
+
+});
+
+
+// ================================
+// GET APPLICATIONS
+// ================================
+
+app.get("/api/applications", async (req, res) => {
+
+  try {
+
+    const result =
+      await pool.query(`
+
+        SELECT
+
+          applications.id,
+
+          applications.application_number,
+
+          applications.school_id,
+
+          schools.name AS school_name,
+
+          applications.form_id,
+
+          school_forms.form_name,
+
+          school_forms.price AS form_price,
+
+          applications.applicant_name,
+
+          applications.applicant_gender,
+
+          applications.applicant_date_of_birth,
+
+          applications.parent_name,
+
+          applications.parent_phone,
+
+          applications.parent_email,
+
+          applications.address,
+
+          applications.status,
+
+          applications.payment_status,
+
+          applications.created_at,
+
+          applications.updated_at
+
+        FROM applications
+
+        INNER JOIN schools
+          ON schools.id = applications.school_id
+
+        INNER JOIN school_forms
+          ON school_forms.id = applications.form_id
+
+        ORDER BY applications.id DESC
+
+      `);
+
+
+    res.json({
+
+      success: true,
+
+      applications:
+        result.rows
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Get applications error:",
+      error
+    );
+
+    res.status(500).json({
+
+      success: false,
+
+      message:
+        "Imeshindikana kupata Applications."
+
+    });
+
+  }
+
+});
+
+
+// ================================
+// ADD APPLICATION
+// ================================
+
+app.post("/api/applications", async (req, res) => {
+
+  try {
+
+    const {
+
+      school_id,
+      form_id,
+      applicant_name,
+      applicant_gender,
+      applicant_date_of_birth,
+      parent_name,
+      parent_phone,
+      parent_email,
+      address
+
+    } = req.body;
+
+
+    if (
+
+      !school_id ||
+      !form_id ||
+      !applicant_name
+
+    ) {
+
+      return res.status(400).json({
+
+        success: false,
+
+        message:
+          "Shule, fomu na jina la mwombaji ni lazima."
+
+      });
+
+    }
+
+
+    // ================================
+    // HAKIKI SHULE NA FOMU
+    // ================================
+
+    const formResult =
+      await pool.query(
+
+        `
+        SELECT
+          school_forms.id,
+          school_forms.school_id,
+          school_forms.form_name,
+          school_forms.price,
+          school_forms.status,
+          schools.name AS school_name
+
+        FROM school_forms
+
+        INNER JOIN schools
+          ON schools.id = school_forms.school_id
+
+        WHERE
+          school_forms.id = $1
+
+        AND
+          school_forms.school_id = $2
+        `,
+
+        [
+          form_id,
+          school_id
+        ]
+
+      );
+
+
+    if (formResult.rows.length === 0) {
+
+      return res.status(400).json({
+
+        success: false,
+
+        message:
+          "Fomu hii haihusiani na shule iliyochaguliwa."
+
+      });
+
+    }
+
+
+    const selectedForm =
+      formResult.rows[0];
+
+
+    if (
+      selectedForm.status !== "active"
+    ) {
+
+      return res.status(400).json({
+
+        success: false,
+
+        message:
+          "Fomu hii haipo kwenye hali ya kupokea maombi."
+
+      });
+
+    }
+
+
+    // ================================
+    // GENERATE APPLICATION NUMBER
+    // ================================
+
+    let applicationNumber;
+
+    let exists = true;
+
+
+    while (exists) {
+
+      applicationNumber =
+        generateApplicationNumber();
+
+
+      const check =
+        await pool.query(
+
+          `
+          SELECT id
+          FROM applications
+          WHERE application_number = $1
+          `,
+
+          [applicationNumber]
+
+        );
+
+
+      exists =
+        check.rows.length > 0;
+
+    }
+
+
+    // ================================
+    // SAVE APPLICATION
+    // ================================
+
+    const result =
+      await pool.query(
+
+        `
+        INSERT INTO applications
+        (
+          application_number,
+          school_id,
+          form_id,
+          applicant_name,
+          applicant_gender,
+          applicant_date_of_birth,
+          parent_name,
+          parent_phone,
+          parent_email,
+          address
+        )
+
+        VALUES
+        (
+          $1,$2,$3,$4,$5,
+          $6,$7,$8,$9,$10
+        )
+
+        RETURNING *
+
+        `,
+
+        [
+
+          applicationNumber,
+
+          school_id,
+
+          form_id,
+
+          applicant_name,
+
+          applicant_gender || null,
+
+          applicant_date_of_birth || null,
+
+          parent_name || null,
+
+          parent_phone || null,
+
+          parent_email || null,
+
+          address || null
+
+        ]
+
+      );
+
+
+    res.status(201).json({
+
+      success: true,
+
+      message:
+        "Application imehifadhiwa kwa mafanikio.",
+
+      application:
+        result.rows[0],
+
+      school:
+        selectedForm.school_name,
+
+      form:
+        selectedForm.form_name,
+
+      price:
+        selectedForm.price
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Add application error:",
+      error
+    );
+
+
+    if (error.code === "23505") {
+
+      return res.status(409).json({
+
+        success: false,
+
+        message:
+          "Application number tayari ipo. Jaribu tena."
+
+      });
+
+    }
+
+
+    res.status(500).json({
+
+      success: false,
+
+      message:
+        "Imeshindikana kuhifadhi Application."
 
     });
 
