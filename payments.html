@@ -189,6 +189,7 @@
   <div id="errorBox" class="error"></div>
 
   <div class="cards">
+
     <div class="card">
       <small>Malipo Yote</small>
       <strong id="totalPayments">0</strong>
@@ -208,11 +209,13 @@
       <small>Kiasi Kilichorekodiwa</small>
       <strong id="totalAmount">TZS 0</strong>
     </div>
+
   </div>
 
   <div class="table-box">
 
     <table>
+
       <thead>
         <tr>
           <th>#</th>
@@ -230,12 +233,15 @@
       </thead>
 
       <tbody id="paymentsTableBody">
+
         <tr>
           <td colspan="11" class="empty">
             Inapakia...
           </td>
         </tr>
+
       </tbody>
+
     </table>
 
   </div>
@@ -243,9 +249,11 @@
 </div>
 
 <script>
+
   const API = "/api/payments";
 
   async function loadPayments() {
+
     const tbody = document.getElementById("paymentsTableBody");
     const errorBox = document.getElementById("errorBox");
 
@@ -253,22 +261,40 @@
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="11" class="empty">Inapakia...</td>
+        <td colspan="11" class="empty">
+          Inapakia...
+        </td>
       </tr>
     `;
 
     try {
+
       const response = await fetch(API);
 
       if (!response.ok) {
-        throw new Error("Imeshindikana kupata taarifa za malipo.");
+        throw new Error(
+          "Imeshindikana kupata taarifa za malipo."
+        );
       }
 
-      const payments = await response.json();
+      const data = await response.json();
+
+      /*
+        API inaweza kurudisha:
+        1. Array moja kwa moja
+        2. Object yenye payments
+      */
+
+      const payments = Array.isArray(data)
+        ? data
+        : Array.isArray(data.payments)
+        ? data.payments
+        : [];
 
       updateStats(payments);
 
-      if (!payments.length) {
+      if (payments.length === 0) {
+
         tbody.innerHTML = `
           <tr>
             <td colspan="11" class="empty">
@@ -276,64 +302,100 @@
             </td>
           </tr>
         `;
+
         return;
       }
 
-      tbody.innerHTML = payments.map((payment, index) => {
+      tbody.innerHTML = payments.map(
+        (payment, index) => {
 
-        const status = (payment.status || "pending").toLowerCase();
+          const status =
+            String(payment.status || "pending")
+            .toLowerCase();
 
-        const statusClass =
-          status === "paid"
-            ? "paid"
-            : status === "failed"
-            ? "failed"
-            : "pending";
+          let statusClass = "pending";
 
-        const date = payment.created_at
-          ? new Date(payment.created_at).toLocaleString("sw-TZ")
-          : "-";
+          if (status === "paid") {
+            statusClass = "paid";
+          }
 
-        const amount = Number(payment.amount || 0)
-          .toLocaleString("sw-TZ");
+          if (status === "failed") {
+            statusClass = "failed";
+          }
 
-        return `
-          <tr>
-            <td>${index + 1}</td>
+          const date = payment.created_at
+            ? new Date(
+                payment.created_at
+              ).toLocaleString("sw-TZ")
+            : "-";
 
-            <td>${payment.payment_reference || "-"}</td>
+          const amount = Number(
+            payment.amount || 0
+          ).toLocaleString("sw-TZ");
 
-            <td>${payment.application_number || "-"}</td>
+          return `
+            <tr>
 
-            <td>${payment.applicant_name || "-"}</td>
+              <td>
+                ${index + 1}
+              </td>
 
-            <td>${payment.school_name || "-"}</td>
+              <td>
+                ${payment.payment_reference || "-"}
+              </td>
 
-            <td>TZS ${amount}</td>
+              <td>
+                ${payment.application_number || "-"}
+              </td>
 
-            <td>${payment.payment_method || "-"}</td>
+              <td>
+                ${payment.applicant_name || "-"}
+              </td>
 
-            <td>${payment.transaction_id || "-"}</td>
+              <td>
+                ${payment.school_name || "-"}
+              </td>
 
-            <td>${payment.payer_phone || "-"}</td>
+              <td>
+                TZS ${amount}
+              </td>
 
-            <td>
-              <span class="status ${statusClass}">
-                ${status.toUpperCase()}
-              </span>
-            </td>
+              <td>
+                ${payment.payment_method || "-"}
+              </td>
 
-            <td>${date}</td>
-          </tr>
-        `;
+              <td>
+                ${payment.transaction_id || "-"}
+              </td>
 
-      }).join("");
+              <td>
+                ${payment.payer_phone || "-"}
+              </td>
+
+              <td>
+                <span class="status ${statusClass}">
+                  ${status.toUpperCase()}
+                </span>
+              </td>
+
+              <td>
+                ${date}
+              </td>
+
+            </tr>
+          `;
+
+        }
+      ).join("");
 
     } catch (error) {
 
       console.error(error);
 
-      errorBox.textContent = error.message;
+      errorBox.textContent =
+        error.message ||
+        "Kuna tatizo kwenye mfumo.";
+
       errorBox.style.display = "block";
 
       tbody.innerHTML = `
@@ -346,39 +408,52 @@
     }
   }
 
+
   function updateStats(payments) {
 
     const total = payments.length;
 
     const pending = payments.filter(
-      p => (p.status || "").toLowerCase() === "pending"
+      payment =>
+        String(payment.status || "")
+        .toLowerCase() === "pending"
     ).length;
 
     const paid = payments.filter(
-      p => (p.status || "").toLowerCase() === "paid"
+      payment =>
+        String(payment.status || "")
+        .toLowerCase() === "paid"
     ).length;
 
     const amount = payments.reduce(
-      (sum, p) => sum + Number(p.amount || 0),
+      (sum, payment) =>
+        sum + Number(payment.amount || 0),
       0
     );
 
-    document.getElementById("totalPayments").textContent = total;
+    document.getElementById(
+      "totalPayments"
+    ).textContent = total;
 
-    document.getElementById("pendingPayments").textContent = pending;
+    document.getElementById(
+      "pendingPayments"
+    ).textContent = pending;
 
-    document.getElementById("paidPayments").textContent = paid;
+    document.getElementById(
+      "paidPayments"
+    ).textContent = paid;
 
-    document.getElementById("totalAmount").textContent =
-      "TZS " + amount.toLocaleString("sw-TZ");
+    document.getElementById(
+      "totalAmount"
+    ).textContent =
+      "TZS " +
+      amount.toLocaleString("sw-TZ");
   }
 
+
   loadPayments();
+
 </script>
 
 </body>
 </html>
-
-Baada ya kubandika: bonyeza Commit changes.
-
-Ukimaliza, niambie tu “Nimecommit”.
