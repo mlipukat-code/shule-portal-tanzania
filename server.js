@@ -24,9 +24,9 @@ async function setupDatabase() {
 
   try {
 
-    // --------------------------------------
+    // ======================================
     // APPLICATIONS TABLE
-    // --------------------------------------
+    // ======================================
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS applications (
@@ -48,13 +48,18 @@ async function setupDatabase() {
     `);
 
 
-    // --------------------------------------
-    // ADD MISSING COLUMNS IF NECESSARY
-    // --------------------------------------
+    // ======================================
+    // APPLICATION COLUMNS
+    // ======================================
 
     await pool.query(`
       ALTER TABLE applications
       ADD COLUMN IF NOT EXISTS school_id INTEGER;
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS form_id INTEGER;
     `);
 
     await pool.query(`
@@ -121,9 +126,20 @@ async function setupDatabase() {
     `);
 
 
-    // --------------------------------------
+    // ======================================
+    // IMPORTANT:
+    // form_id IS NOT REQUIRED FOR NOW
+    // ======================================
+
+    await pool.query(`
+      ALTER TABLE applications
+      ALTER COLUMN form_id DROP NOT NULL;
+    `);
+
+
+    // ======================================
     // PAYMENTS TABLE
-    // --------------------------------------
+    // ======================================
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS payments (
@@ -140,9 +156,9 @@ async function setupDatabase() {
     `);
 
 
-    // --------------------------------------
-    // ADD MISSING PAYMENT COLUMNS
-    // --------------------------------------
+    // ======================================
+    // PAYMENT COLUMNS
+    // ======================================
 
     await pool.query(`
       ALTER TABLE payments
@@ -188,9 +204,9 @@ async function setupDatabase() {
     `);
 
 
-    // --------------------------------------
+    // ======================================
     // UNIQUE INDEXES
-    // --------------------------------------
+    // ======================================
 
     await pool.query(`
       CREATE UNIQUE INDEX IF NOT EXISTS
@@ -337,7 +353,8 @@ app.get(
 
       const result =
         await pool.query(`
-          SELECT table_name
+          SELECT
+            table_name
           FROM information_schema.tables
           WHERE table_schema = 'public'
           AND table_name IN (
@@ -366,7 +383,8 @@ app.get(
         success: false,
         message:
           "Imeshindikana kukagua database.",
-        error: error.message
+        error:
+          error.message
       });
 
     }
@@ -396,9 +414,9 @@ app.post(
     } = req.body;
 
 
-    // --------------------------------------
+    // ======================================
     // VALIDATION
-    // --------------------------------------
+    // ======================================
 
     if (!school_id) {
 
@@ -410,6 +428,7 @@ app.post(
 
     }
 
+
     if (!student_name) {
 
       return res.status(400).json({
@@ -419,6 +438,7 @@ app.post(
       });
 
     }
+
 
     if (!gender) {
 
@@ -430,6 +450,7 @@ app.post(
 
     }
 
+
     if (!date_of_birth) {
 
       return res.status(400).json({
@@ -439,6 +460,7 @@ app.post(
       });
 
     }
+
 
     if (!class_level) {
 
@@ -450,6 +472,7 @@ app.post(
 
     }
 
+
     if (!parent_name) {
 
       return res.status(400).json({
@@ -459,6 +482,7 @@ app.post(
       });
 
     }
+
 
     if (!phone) {
 
@@ -471,9 +495,9 @@ app.post(
     }
 
 
-    // --------------------------------------
+    // ======================================
     // DATABASE CLIENT
-    // --------------------------------------
+    // ======================================
 
     const client =
       await pool.connect();
@@ -481,12 +505,14 @@ app.post(
 
     try {
 
-      await client.query("BEGIN");
+      await client.query(
+        "BEGIN"
+      );
 
 
-      // ------------------------------------
+      // ====================================
       // CHECK SCHOOL
-      // ------------------------------------
+      // ====================================
 
       const schoolResult =
         await client.query(
@@ -500,7 +526,9 @@ app.post(
           WHERE id = $1
           AND status = 'active'
           `,
-          [school_id]
+          [
+            Number(school_id)
+          ]
         );
 
 
@@ -525,12 +553,14 @@ app.post(
         schoolResult.rows[0];
 
 
-      // ------------------------------------
-      // APPLICATION NUMBER
-      // ------------------------------------
+      // ====================================
+      // GENERATE APPLICATION NUMBER
+      // ====================================
 
       const applicationNumber =
         "SPT-" +
+        new Date().getFullYear() +
+        "-" +
         Date.now() +
         "-" +
         Math.floor(
@@ -538,15 +568,16 @@ app.post(
         );
 
 
-      // ------------------------------------
+      // ====================================
       // INSERT APPLICATION
-      // ------------------------------------
+      // ====================================
 
       const applicationResult =
         await client.query(
           `
           INSERT INTO applications (
             school_id,
+            form_id,
             student_name,
             gender,
             date_of_birth,
@@ -561,6 +592,7 @@ app.post(
 
           VALUES (
             $1,
+            NULL,
             $2,
             $3,
             $4::date,
@@ -576,6 +608,7 @@ app.post(
           RETURNING
             id,
             school_id,
+            form_id,
             student_name,
             gender,
             date_of_birth,
@@ -607,12 +640,14 @@ app.post(
         applicationResult.rows[0];
 
 
-      // ------------------------------------
-      // PAYMENT REFERENCE
-      // ------------------------------------
+      // ====================================
+      // GENERATE PAYMENT REFERENCE
+      // ====================================
 
       const paymentReference =
         "PAY-" +
+        new Date().getFullYear() +
+        "-" +
         Date.now() +
         "-" +
         Math.floor(
@@ -620,9 +655,9 @@ app.post(
         );
 
 
-      // ------------------------------------
-      // INSERT PAYMENT
-      // ------------------------------------
+      // ====================================
+      // CREATE PENDING PAYMENT
+      // ====================================
 
       const paymentResult =
         await client.query(
@@ -661,18 +696,18 @@ app.post(
         paymentResult.rows[0];
 
 
-      // ------------------------------------
+      // ====================================
       // COMMIT
-      // ------------------------------------
+      // ====================================
 
       await client.query(
         "COMMIT"
       );
 
 
-      // ------------------------------------
+      // ====================================
       // RESPONSE
-      // ------------------------------------
+      // ====================================
 
       return res.status(201).json({
 
@@ -682,6 +717,7 @@ app.post(
           "Maombi yamehifadhiwa na payment order imeundwa.",
 
         application: {
+
           id:
             application.id,
 
@@ -694,11 +730,16 @@ app.post(
           school_id:
             application.school_id,
 
+          form_id:
+            application.form_id,
+
           status:
             application.status
+
         },
 
         payment: {
+
           id:
             payment.id,
 
@@ -710,9 +751,11 @@ app.post(
 
           status:
             payment.status
+
         },
 
         school: {
+
           id:
             school.id,
 
@@ -721,15 +764,16 @@ app.post(
 
           form_price:
             school.form_price
+
         }
 
       });
 
     } catch (error) {
 
-      // ------------------------------------
+      // ====================================
       // ROLLBACK
-      // ------------------------------------
+      // ====================================
 
       try {
 
@@ -749,19 +793,15 @@ app.post(
       }
 
 
-      // ------------------------------------
-      // LOG REAL ERROR
-      // ------------------------------------
+      // ====================================
+      // REAL ERROR
+      // ====================================
 
       console.error(
         "CREATE APPLICATION ERROR:",
         error
       );
 
-
-      // ------------------------------------
-      // RETURN REAL ERROR
-      // ------------------------------------
 
       return res.status(500).json({
 
@@ -806,17 +846,27 @@ app.get(
           `
           SELECT
             a.*,
+
             p.id AS payment_id,
+
             p.amount,
+
             p.payment_reference,
+
             p.status AS payment_status,
+
             p.paid_at
+
           FROM applications a
+
           LEFT JOIN payments p
             ON p.application_id = a.id
+
           WHERE a.id = $1
           `,
-          [req.params.id]
+          [
+            req.params.id
+          ]
         );
 
 
@@ -833,10 +883,13 @@ app.get(
       }
 
 
-      res.json({
+      return res.json({
+
         success: true,
+
         application:
           result.rows[0]
+
       });
 
     } catch (error) {
@@ -846,12 +899,16 @@ app.get(
         error
       );
 
-      res.status(500).json({
+      return res.status(500).json({
+
         success: false,
+
         message:
           "Imeshindikana kupata application.",
+
         error:
           error.message
+
       });
 
     }
@@ -880,5 +937,6 @@ async function startServer() {
   );
 
 }
+
 
 startServer();
