@@ -34,28 +34,42 @@ async function setupDatabase() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS applications (
         id SERIAL PRIMARY KEY,
+        application_number VARCHAR(100),
         school_id INTEGER,
         form_id INTEGER,
-        student_name VARCHAR(255),
+
         applicant_name VARCHAR(255),
-        gender VARCHAR(50),
-        date_of_birth DATE,
-        class_level VARCHAR(100),
+        applicant_gender VARCHAR(50),
+        applicant_date_of_birth DATE,
+
         parent_name VARCHAR(255),
-        phone VARCHAR(50),
-        email VARCHAR(255),
+        parent_phone VARCHAR(50),
+        parent_email VARCHAR(255),
+
         address TEXT,
-        application_number VARCHAR(100),
+
         status VARCHAR(30) DEFAULT 'pending',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+        payment_status VARCHAR(30)
+        NOT NULL DEFAULT 'unpaid',
+
+        created_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP,
+
+        updated_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP
       );
     `);
 
 
     // ==================================================
-    // ADD CURRENT COLUMNS IF MISSING
+    // EXISTING APPLICATION COLUMNS
     // ==================================================
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS application_number VARCHAR(100);
+    `);
 
     await pool.query(`
       ALTER TABLE applications
@@ -69,12 +83,71 @@ async function setupDatabase() {
 
     await pool.query(`
       ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS student_name VARCHAR(255);
+      ADD COLUMN IF NOT EXISTS applicant_name VARCHAR(255);
     `);
 
     await pool.query(`
       ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS applicant_name VARCHAR(255);
+      ADD COLUMN IF NOT EXISTS applicant_gender VARCHAR(50);
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS applicant_date_of_birth DATE;
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS parent_name VARCHAR(255);
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS parent_phone VARCHAR(50);
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS parent_email VARCHAR(255);
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS address TEXT;
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS status VARCHAR(30)
+      DEFAULT 'pending';
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS payment_status VARCHAR(30)
+      DEFAULT 'unpaid';
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP
+      DEFAULT CURRENT_TIMESTAMP;
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP
+      DEFAULT CURRENT_TIMESTAMP;
+    `);
+
+
+    // ==================================================
+    // NEW COLUMNS
+    // ==================================================
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS student_name VARCHAR(255);
     `);
 
     await pool.query(`
@@ -94,11 +167,6 @@ async function setupDatabase() {
 
     await pool.query(`
       ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS parent_name VARCHAR(255);
-    `);
-
-    await pool.query(`
-      ALTER TABLE applications
       ADD COLUMN IF NOT EXISTS phone VARCHAR(50);
     `);
 
@@ -107,76 +175,16 @@ async function setupDatabase() {
       ADD COLUMN IF NOT EXISTS email VARCHAR(255);
     `);
 
-    await pool.query(`
-      ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS address TEXT;
-    `);
-
-    await pool.query(`
-      ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS application_number VARCHAR(100);
-    `);
-
-    await pool.query(`
-      ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS status VARCHAR(30)
-      DEFAULT 'pending';
-    `);
-
-    await pool.query(`
-      ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP
-      DEFAULT CURRENT_TIMESTAMP;
-    `);
-
-    await pool.query(`
-      ALTER TABLE applications
-      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP
-      DEFAULT CURRENT_TIMESTAMP;
-    `);
-
 
     // ==================================================
-    // REMOVE NOT NULL FROM LEGACY COLUMNS
+    // PAYMENT STATUS SAFETY
     // ==================================================
 
-    const applicationColumns = [
-      "school_id",
-      "form_id",
-      "student_name",
-      "applicant_name",
-      "gender",
-      "date_of_birth",
-      "class_level",
-      "parent_name",
-      "phone",
-      "email",
-      "address",
-      "application_number",
-      "status",
-      "created_at",
-      "updated_at"
-    ];
-
-    for (const column of applicationColumns) {
-
-      try {
-
-        await pool.query(`
-          ALTER TABLE applications
-          ALTER COLUMN "${column}" DROP NOT NULL;
-        `);
-
-      } catch (error) {
-
-        console.log(
-          `Could not alter applications.${column}:`,
-          error.message
-        );
-
-      }
-
-    }
+    await pool.query(`
+      UPDATE applications
+      SET payment_status = 'unpaid'
+      WHERE payment_status IS NULL;
+    `);
 
 
     // ==================================================
@@ -186,14 +194,25 @@ async function setupDatabase() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS payments (
         id SERIAL PRIMARY KEY,
+
         application_id INTEGER,
+
         amount NUMERIC(12,2),
+
         payment_reference VARCHAR(150),
+
         provider_reference VARCHAR(150),
-        status VARCHAR(30) DEFAULT 'pending',
+
+        status VARCHAR(30)
+        DEFAULT 'pending',
+
         paid_at TIMESTAMP NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+        created_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP,
+
+        updated_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP
       );
     `);
 
@@ -244,42 +263,6 @@ async function setupDatabase() {
       ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP
       DEFAULT CURRENT_TIMESTAMP;
     `);
-
-
-    // ==================================================
-    // PAYMENT LEGACY NOT NULL FIX
-    // ==================================================
-
-    const paymentColumns = [
-      "application_id",
-      "amount",
-      "payment_reference",
-      "provider_reference",
-      "status",
-      "paid_at",
-      "created_at",
-      "updated_at"
-    ];
-
-    for (const column of paymentColumns) {
-
-      try {
-
-        await pool.query(`
-          ALTER TABLE payments
-          ALTER COLUMN "${column}" DROP NOT NULL;
-        `);
-
-      } catch (error) {
-
-        console.log(
-          `Could not alter payments.${column}:`,
-          error.message
-        );
-
-      }
-
-    }
 
 
     // ==================================================
@@ -532,7 +515,7 @@ app.get(
 
 
 // ======================================================
-// APPLICATION SCHEMA CHECK
+// APPLICATION SCHEMA
 // ======================================================
 
 app.get(
@@ -583,76 +566,6 @@ app.get(
 
       console.error(
         "APPLICATION SCHEMA ERROR:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        error:
-          error.message
-
-      });
-
-    }
-
-  }
-);
-
-
-// ======================================================
-// PAYMENT SCHEMA CHECK
-// ======================================================
-
-app.get(
-  "/api/payment-schema",
-  async (req, res) => {
-
-    try {
-
-      const result =
-        await pool.query(`
-
-          SELECT
-
-            ordinal_position,
-
-            column_name,
-
-            data_type,
-
-            is_nullable,
-
-            column_default
-
-          FROM information_schema.columns
-
-          WHERE table_schema = 'public'
-
-          AND table_name = 'payments'
-
-          ORDER BY ordinal_position;
-
-        `);
-
-
-      res.json({
-
-        success: true,
-
-        table:
-          "payments",
-
-        columns:
-          result.rows
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "PAYMENT SCHEMA ERROR:",
         error
       );
 
@@ -911,13 +824,31 @@ app.post(
 
           INSERT INTO applications (
 
+            application_number,
+
             school_id,
 
             form_id,
 
-            student_name,
-
             applicant_name,
+
+            applicant_gender,
+
+            applicant_date_of_birth,
+
+            parent_name,
+
+            parent_phone,
+
+            parent_email,
+
+            address,
+
+            status,
+
+            payment_status,
+
+            student_name,
 
             gender,
 
@@ -925,17 +856,9 @@ app.post(
 
             class_level,
 
-            parent_name,
-
             phone,
 
-            email,
-
-            address,
-
-            application_number,
-
-            status
+            email
 
           )
 
@@ -943,17 +866,15 @@ app.post(
 
             $1,
 
+            $2,
+
             NULL,
-
-            $2,
-
-            $2,
 
             $3,
 
-            $4::date,
+            $4,
 
-            $5,
+            $5::date,
 
             $6,
 
@@ -963,9 +884,21 @@ app.post(
 
             $9,
 
+            'pending',
+
+            'unpaid',
+
+            $3,
+
+            $4,
+
+            $5::date,
+
             $10,
 
-            'pending'
+            $7,
+
+            $8
 
           )
 
@@ -973,13 +906,31 @@ app.post(
 
             id,
 
+            application_number,
+
             school_id,
 
             form_id,
 
-            student_name,
-
             applicant_name,
+
+            applicant_gender,
+
+            applicant_date_of_birth,
+
+            parent_name,
+
+            parent_phone,
+
+            parent_email,
+
+            address,
+
+            status,
+
+            payment_status,
+
+            student_name,
 
             gender,
 
@@ -987,23 +938,17 @@ app.post(
 
             class_level,
 
-            parent_name,
-
             phone,
 
             email,
-
-            address,
-
-            application_number,
-
-            status,
 
             created_at
 
           `,
 
           [
+
+            applicationNumber,
 
             Number(school_id),
 
@@ -1013,8 +958,6 @@ app.post(
 
             date_of_birth,
 
-            class_level,
-
             parent_name,
 
             phone,
@@ -1023,7 +966,7 @@ app.post(
 
             address || null,
 
-            applicationNumber
+            class_level
 
           ]
 
@@ -1056,7 +999,7 @@ app.post(
 
 
       // ==================================================
-      // CREATE PENDING PAYMENT
+      // CREATE PAYMENT
       // ==================================================
 
       const paymentResult =
@@ -1140,7 +1083,7 @@ app.post(
         success: true,
 
         message:
-          "Maombi yamehifadhiwa na payment order imeundwa.",
+          "Maombi yamehifadhiwa. Payment order iko PENDING.",
 
 
         application: {
@@ -1161,7 +1104,10 @@ app.post(
             application.form_id,
 
           status:
-            application.status
+            application.status,
+
+          payment_status:
+            application.payment_status
 
         },
 
@@ -1220,10 +1166,6 @@ app.post(
       }
 
 
-      // ==================================================
-      // ERROR LOG
-      // ==================================================
-
       console.error(
         "CREATE APPLICATION ERROR:",
         error
@@ -1272,7 +1214,6 @@ app.get(
     try {
 
       const result =
-
         await pool.query(
 
           `
@@ -1287,7 +1228,7 @@ app.get(
 
             p.payment_reference,
 
-            p.status AS payment_status,
+            p.status AS payment_status_from_payments,
 
             p.paid_at
 
