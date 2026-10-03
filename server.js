@@ -32,7 +32,9 @@ async function setupDatabase() {
       CREATE TABLE IF NOT EXISTS applications (
         id SERIAL PRIMARY KEY,
         school_id INTEGER NOT NULL,
+        form_id INTEGER,
         student_name VARCHAR(255) NOT NULL,
+        applicant_name VARCHAR(255),
         gender VARCHAR(50),
         date_of_birth DATE,
         class_level VARCHAR(100),
@@ -65,6 +67,11 @@ async function setupDatabase() {
     await pool.query(`
       ALTER TABLE applications
       ADD COLUMN IF NOT EXISTS student_name VARCHAR(255);
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS applicant_name VARCHAR(255);
     `);
 
     await pool.query(`
@@ -127,13 +134,21 @@ async function setupDatabase() {
 
 
     // ======================================
-    // IMPORTANT:
-    // form_id IS NOT REQUIRED FOR NOW
+    // LEGACY COLUMNS FIX
     // ======================================
 
+    // form_id si lazima kwa mfumo wetu wa sasa
     await pool.query(`
       ALTER TABLE applications
       ALTER COLUMN form_id DROP NOT NULL;
+    `);
+
+
+    // applicant_name ni column ya zamani.
+    // Tutatumia student_name kama jina kuu.
+    await pool.query(`
+      ALTER TABLE applications
+      ALTER COLUMN applicant_name DROP NOT NULL;
     `);
 
 
@@ -579,6 +594,7 @@ app.post(
             school_id,
             form_id,
             student_name,
+            applicant_name,
             gender,
             date_of_birth,
             class_level,
@@ -593,6 +609,7 @@ app.post(
           VALUES (
             $1,
             NULL,
+            $2,
             $2,
             $3,
             $4::date,
@@ -610,6 +627,7 @@ app.post(
             school_id,
             form_id,
             student_name,
+            applicant_name,
             gender,
             date_of_birth,
             class_level,
