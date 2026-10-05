@@ -1,5 +1,6 @@
 const express = require("express");
 const { Pool } = require("pg");
+const crypto = require("crypto");
 
 const app = express();
 
@@ -232,6 +233,77 @@ async function setupDatabase() {
 
 
     // -------------------------------------------------
+    // SCHOOL ADMINS TABLE
+    // -------------------------------------------------
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS school_admins (
+        id SERIAL PRIMARY KEY,
+        school_id INTEGER NOT NULL,
+        full_name VARCHAR(255) NOT NULL,
+        phone VARCHAR(50),
+        email VARCHAR(255),
+        password_hash TEXT NOT NULL,
+        status VARCHAR(30) DEFAULT 'active',
+        last_login TIMESTAMP NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS school_id INTEGER
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS full_name VARCHAR(255)
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS phone VARCHAR(50)
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS email VARCHAR(255)
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS password_hash TEXT
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS status VARCHAR(30) DEFAULT 'active'
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS last_login TIMESTAMP NULL
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `);
+
+    await pool.query(`
+      ALTER TABLE school_admins
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `);
+
+    await pool.query(`
+      UPDATE school_admins
+      SET status = 'active'
+      WHERE status IS NULL
+    `);
+
+
+    // -------------------------------------------------
     // INDEXES
     // -------------------------------------------------
 
@@ -264,12 +336,28 @@ async function setupDatabase() {
       ON applications(school_id)
     `);
 
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS school_admins_school_id_idx
+      ON school_admins(school_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS school_admins_status_idx
+      ON school_admins(status)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS school_admins_email_idx
+      ON school_admins(email)
+    `);
 
     console.log("✅ Database setup completed");
 
   } catch (error) {
+
     console.error("❌ Database setup error:", error);
     throw error;
+
   }
 }
 
@@ -562,8 +650,6 @@ app.get("/api/admin/schools", async (req, res) => {
       ORDER BY s.id DESC
     `, values);
 
-
-    // GLOBAL STATISTICS
     const statsResult = await pool.query(`
       SELECT
         COUNT(*)::INTEGER AS total_schools,
@@ -584,8 +670,6 @@ app.get("/api/admin/schools", async (req, res) => {
       FROM applications
     `);
 
-
-    // REGIONS
     const regionsResult = await pool.query(`
       SELECT DISTINCT region
       FROM schools
@@ -594,30 +678,22 @@ app.get("/api/admin/schools", async (req, res) => {
       ORDER BY region ASC
     `);
 
-
     const stats = statsResult.rows[0];
 
     res.json({
       success: true,
-
       schools: schoolsResult.rows,
-
       count: schoolsResult.rows.length,
-
       total_schools:
         Number(stats.total_schools || 0),
-
       active_schools:
         Number(stats.active_schools || 0),
-
       inactive_schools:
         Number(stats.inactive_schools || 0),
-
       total_applicants:
         Number(
           applicantsResult.rows[0].total_applicants || 0
         ),
-
       all_regions:
         regionsResult.rows
           .map(row => row.region)
@@ -736,7 +812,6 @@ app.post("/api/admin/schools", async (req, res) => {
       status
     } = req.body;
 
-
     if (!name || !name.trim()) {
 
       return res.status(400).json({
@@ -773,7 +848,6 @@ app.post("/api/admin/schools", async (req, res) => {
 
     }
 
-
     const price = Number(form_price);
 
     if (!Number.isFinite(price) || price < 0) {
@@ -785,12 +859,10 @@ app.post("/api/admin/schools", async (req, res) => {
 
     }
 
-
     const finalStatus =
       ["active", "inactive"].includes(status)
         ? status
         : "active";
-
 
     if (
       application_start &&
@@ -806,7 +878,6 @@ app.post("/api/admin/schools", async (req, res) => {
       });
 
     }
-
 
     const result = await pool.query(`
       INSERT INTO schools (
@@ -845,7 +916,6 @@ app.post("/api/admin/schools", async (req, res) => {
       application_end || null,
       finalStatus
     ]);
-
 
     res.status(201).json({
       success: true,
@@ -890,7 +960,6 @@ app.put("/api/admin/schools/:id", async (req, res) => {
 
     }
 
-
     const {
       name,
       region,
@@ -904,7 +973,6 @@ app.put("/api/admin/schools/:id", async (req, res) => {
       application_end,
       status
     } = req.body;
-
 
     if (!name || !name.trim()) {
 
@@ -933,7 +1001,6 @@ app.put("/api/admin/schools/:id", async (req, res) => {
 
     }
 
-
     const price = Number(form_price);
 
     if (!Number.isFinite(price) || price < 0) {
@@ -945,12 +1012,10 @@ app.put("/api/admin/schools/:id", async (req, res) => {
 
     }
 
-
     const finalStatus =
       ["active", "inactive"].includes(status)
         ? status
         : "active";
-
 
     if (
       application_start &&
@@ -966,7 +1031,6 @@ app.put("/api/admin/schools/:id", async (req, res) => {
       });
 
     }
-
 
     const result = await pool.query(`
       UPDATE schools
@@ -1002,7 +1066,6 @@ app.put("/api/admin/schools/:id", async (req, res) => {
       id
     ]);
 
-
     if (!result.rows.length) {
 
       return res.status(404).json({
@@ -1011,7 +1074,6 @@ app.put("/api/admin/schools/:id", async (req, res) => {
       });
 
     }
-
 
     res.json({
       success: true,
@@ -1049,7 +1111,6 @@ app.put("/api/admin/schools/:id/status", async (req, res) => {
 
     const { status } = req.body;
 
-
     if (!Number.isInteger(id)) {
 
       return res.status(400).json({
@@ -1058,7 +1119,6 @@ app.put("/api/admin/schools/:id/status", async (req, res) => {
       });
 
     }
-
 
     if (!["active", "inactive"].includes(status)) {
 
@@ -1070,7 +1130,6 @@ app.put("/api/admin/schools/:id/status", async (req, res) => {
 
     }
 
-
     const result = await pool.query(`
       UPDATE schools
       SET
@@ -1080,7 +1139,6 @@ app.put("/api/admin/schools/:id/status", async (req, res) => {
       RETURNING *
     `, [status, id]);
 
-
     if (!result.rows.length) {
 
       return res.status(404).json({
@@ -1089,7 +1147,6 @@ app.put("/api/admin/schools/:id/status", async (req, res) => {
       });
 
     }
-
 
     res.json({
       success: true,
@@ -1135,23 +1192,17 @@ app.delete("/api/admin/schools/:id", async (req, res) => {
 
     }
 
-
-    // Check applications first
     const applicationsResult = await pool.query(`
       SELECT COUNT(*)::INTEGER AS count
       FROM applications
       WHERE school_id = $1
     `, [id]);
 
-
     const applicationCount =
       Number(
         applicationsResult.rows[0].count || 0
       );
 
-
-    // If applications exist, do not physically delete.
-    // Instead deactivate the school.
     if (applicationCount > 0) {
 
       const result = await pool.query(`
@@ -1163,7 +1214,6 @@ app.delete("/api/admin/schools/:id", async (req, res) => {
         RETURNING *
       `, [id]);
 
-
       if (!result.rows.length) {
 
         return res.status(404).json({
@@ -1172,7 +1222,6 @@ app.delete("/api/admin/schools/:id", async (req, res) => {
         });
 
       }
-
 
       return res.json({
         success: true,
@@ -1185,14 +1234,11 @@ app.delete("/api/admin/schools/:id", async (req, res) => {
 
     }
 
-
-    // No applications — safe to delete
     const result = await pool.query(`
       DELETE FROM schools
       WHERE id = $1
       RETURNING *
     `, [id]);
-
 
     if (!result.rows.length) {
 
@@ -1202,7 +1248,6 @@ app.delete("/api/admin/schools/:id", async (req, res) => {
       });
 
     }
-
 
     res.json({
       success: true,
@@ -1259,7 +1304,6 @@ app.post("/api/applications", async (req, res) => {
       email
     } = req.body;
 
-
     if (!school_id) {
 
       return res.status(400).json({
@@ -1269,14 +1313,12 @@ app.post("/api/applications", async (req, res) => {
 
     }
 
-
     const schoolResult = await client.query(`
       SELECT *
       FROM schools
       WHERE id = $1
         AND status = 'active'
     `, [school_id]);
-
 
     if (!schoolResult.rows.length) {
 
@@ -1286,7 +1328,6 @@ app.post("/api/applications", async (req, res) => {
       });
 
     }
-
 
     const school = schoolResult.rows[0];
 
@@ -1315,7 +1356,6 @@ app.post("/api/applications", async (req, res) => {
       parent_email ||
       null;
 
-
     if (!finalStudentName.trim()) {
 
       return res.status(400).json({
@@ -1325,15 +1365,12 @@ app.post("/api/applications", async (req, res) => {
 
     }
 
-
     const applicationNumber =
       `SPT-${new Date().getFullYear()}-` +
       `${Date.now()}-` +
       `${Math.floor(Math.random() * 90) + 10}`;
 
-
     await client.query("BEGIN");
-
 
     const applicationResult = await client.query(`
       INSERT INTO applications (
@@ -1388,17 +1425,13 @@ app.post("/api/applications", async (req, res) => {
       finalEmail
     ]);
 
-
     const application =
       applicationResult.rows[0];
 
-
-    // Create payment order
     const paymentReference =
       `PAY-${new Date().getFullYear()}-` +
       `${Date.now()}-` +
       `${Math.floor(Math.random() * 900) + 100}`;
-
 
     const paymentResult = await client.query(`
       INSERT INTO payments (
@@ -1428,9 +1461,7 @@ app.post("/api/applications", async (req, res) => {
       school.form_price
     ]);
 
-
     await client.query("COMMIT");
-
 
     res.status(201).json({
       success: true,
@@ -1505,7 +1536,6 @@ app.get("/api/applications/:id", async (req, res) => {
       WHERE a.id = $1
     `, [id]);
 
-
     if (!result.rows.length) {
 
       return res.status(404).json({
@@ -1514,7 +1544,6 @@ app.get("/api/applications/:id", async (req, res) => {
       });
 
     }
-
 
     res.json({
       success: true,
@@ -1545,7 +1574,6 @@ app.get(
 
       const applicationNumber =
         req.params.applicationNumber;
-
 
       const result = await pool.query(`
         SELECT
@@ -1580,7 +1608,6 @@ app.get(
         WHERE a.application_number = $1
       `, [applicationNumber]);
 
-
       if (!result.rows.length) {
 
         return res.status(404).json({
@@ -1590,7 +1617,6 @@ app.get(
         });
 
       }
-
 
       res.json({
         success: true,
@@ -1630,10 +1656,8 @@ app.get("/api/admin/applications", async (req, res) => {
       payment_status = ""
     } = req.query;
 
-
     const values = [];
     const conditions = [];
-
 
     if (search.trim()) {
 
@@ -1652,7 +1676,6 @@ app.get("/api/admin/applications", async (req, res) => {
 
     }
 
-
     if (school_id) {
 
       values.push(Number(school_id));
@@ -1663,7 +1686,6 @@ app.get("/api/admin/applications", async (req, res) => {
 
     }
 
-
     if (status) {
 
       values.push(status);
@@ -1673,7 +1695,6 @@ app.get("/api/admin/applications", async (req, res) => {
       );
 
     }
-
 
     if (payment_status) {
 
@@ -1689,12 +1710,10 @@ app.get("/api/admin/applications", async (req, res) => {
 
     }
 
-
     const whereClause =
       conditions.length
         ? `WHERE ${conditions.join(" AND ")}`
         : "";
-
 
     const result = await pool.query(`
       SELECT
@@ -1730,7 +1749,6 @@ app.get("/api/admin/applications", async (req, res) => {
 
       ORDER BY a.id DESC
     `, values);
-
 
     res.json({
       success: true,
@@ -1814,7 +1832,6 @@ app.get("/api/admin/dashboard-stats", async (req, res) => {
         ) AS total_revenue
     `);
 
-
     res.json({
       success: true,
       stats: result.rows[0]
@@ -1856,7 +1873,6 @@ app.put(
         "completed"
       ];
 
-
       if (!allowedStatuses.includes(status)) {
 
         return res.status(400).json({
@@ -1866,7 +1882,6 @@ app.put(
         });
 
       }
-
 
       const result = await pool.query(`
         UPDATE applications
@@ -1880,7 +1895,6 @@ app.put(
         RETURNING *
       `, [status, id]);
 
-
       if (!result.rows.length) {
 
         return res.status(404).json({
@@ -1890,7 +1904,6 @@ app.put(
         });
 
       }
-
 
       res.json({
         success: true,
@@ -1938,7 +1951,6 @@ app.put(
         "cancelled"
       ];
 
-
       if (!allowedStatuses.includes(payment_status)) {
 
         return res.status(400).json({
@@ -1949,9 +1961,7 @@ app.put(
 
       }
 
-
       await client.query("BEGIN");
-
 
       const applicationResult = await client.query(`
         UPDATE applications
@@ -1965,7 +1975,6 @@ app.put(
         RETURNING *
       `, [payment_status, id]);
 
-
       if (!applicationResult.rows.length) {
 
         await client.query("ROLLBACK");
@@ -1978,12 +1987,10 @@ app.put(
 
       }
 
-
       const paidAt =
         payment_status === "paid"
           ? new Date()
           : null;
-
 
       const paymentResult = await client.query(`
         UPDATE payments
@@ -2008,9 +2015,7 @@ app.put(
         id
       ]);
 
-
       await client.query("COMMIT");
-
 
       res.json({
         success: true,
@@ -2036,6 +2041,870 @@ app.put(
     } finally {
 
       client.release();
+
+    }
+
+  }
+);
+
+
+// =====================================================
+// ADMIN — SCHOOL ADMINS
+// =====================================================
+
+
+// -----------------------------------------------------
+// PASSWORD HASHING
+// -----------------------------------------------------
+
+function hashPassword(password) {
+
+  return new Promise((resolve, reject) => {
+
+    const salt =
+      crypto.randomBytes(16).toString("hex");
+
+    crypto.scrypt(
+      password,
+      salt,
+      64,
+      (error, derivedKey) => {
+
+        if (error) {
+          return reject(error);
+        }
+
+        resolve(
+          `${salt}:${derivedKey.toString("hex")}`
+        );
+
+      }
+    );
+
+  });
+
+}
+
+
+// -----------------------------------------------------
+// GET ALL SCHOOL ADMINS
+// -----------------------------------------------------
+
+app.get(
+  "/api/admin/school-admins",
+  async (req, res) => {
+
+    try {
+
+      const {
+        search = "",
+        school_id = "",
+        status = ""
+      } = req.query;
+
+      const values = [];
+      const conditions = [];
+
+      if (search.trim()) {
+
+        values.push(`%${search.trim()}%`);
+
+        conditions.push(`
+          (
+            sa.full_name ILIKE $${values.length}
+            OR sa.phone ILIKE $${values.length}
+            OR sa.email ILIKE $${values.length}
+            OR s.name ILIKE $${values.length}
+          )
+        `);
+
+      }
+
+      if (school_id) {
+
+        const schoolId = Number(school_id);
+
+        if (!Number.isInteger(schoolId)) {
+
+          return res.status(400).json({
+            success: false,
+            message: "School ID si sahihi."
+          });
+
+        }
+
+        values.push(schoolId);
+
+        conditions.push(
+          `sa.school_id = $${values.length}`
+        );
+
+      }
+
+      if (
+        status &&
+        ["active", "inactive"].includes(status)
+      ) {
+
+        values.push(status);
+
+        conditions.push(
+          `sa.status = $${values.length}`
+        );
+
+      }
+
+      const whereClause =
+        conditions.length
+          ? `WHERE ${conditions.join(" AND ")}`
+          : "";
+
+      const result = await pool.query(`
+        SELECT
+          sa.id,
+          sa.school_id,
+          sa.full_name,
+          sa.phone,
+          sa.email,
+          sa.status,
+          sa.last_login,
+          sa.created_at,
+          sa.updated_at,
+
+          s.name AS school_name,
+          s.region AS school_region,
+          s.district AS school_district
+
+        FROM school_admins sa
+
+        LEFT JOIN schools s
+          ON s.id = sa.school_id
+
+        ${whereClause}
+
+        ORDER BY sa.id DESC
+      `, values);
+
+      const statsResult = await pool.query(`
+        SELECT
+          COUNT(*)::INTEGER AS total_admins,
+
+          COUNT(*) FILTER (
+            WHERE status = 'active'
+          )::INTEGER AS active_admins,
+
+          COUNT(*) FILTER (
+            WHERE status = 'inactive'
+          )::INTEGER AS inactive_admins
+
+        FROM school_admins
+      `);
+
+      const stats = statsResult.rows[0];
+
+      res.json({
+        success: true,
+
+        admins: result.rows,
+
+        count: result.rows.length,
+
+        total_admins:
+          Number(stats.total_admins || 0),
+
+        active_admins:
+          Number(stats.active_admins || 0),
+
+        inactive_admins:
+          Number(stats.inactive_admins || 0)
+      });
+
+    } catch (error) {
+
+      console.error(
+        "GET /api/admin/school-admins error:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kupata School Admins.",
+        error: error.message
+      });
+
+    }
+
+  }
+);
+
+
+// -----------------------------------------------------
+// GET ONE SCHOOL ADMIN
+// -----------------------------------------------------
+
+app.get(
+  "/api/admin/school-admins/:id",
+  async (req, res) => {
+
+    try {
+
+      const id = Number(req.params.id);
+
+      if (!Number.isInteger(id)) {
+
+        return res.status(400).json({
+          success: false,
+          message: "Admin ID si sahihi."
+        });
+
+      }
+
+      const result = await pool.query(`
+        SELECT
+          sa.id,
+          sa.school_id,
+          sa.full_name,
+          sa.phone,
+          sa.email,
+          sa.status,
+          sa.last_login,
+          sa.created_at,
+          sa.updated_at,
+
+          s.name AS school_name,
+          s.region AS school_region,
+          s.district AS school_district
+
+        FROM school_admins sa
+
+        LEFT JOIN schools s
+          ON s.id = sa.school_id
+
+        WHERE sa.id = $1
+      `, [id]);
+
+      if (!result.rows.length) {
+
+        return res.status(404).json({
+          success: false,
+          message: "School Admin hajapatikana."
+        });
+
+      }
+
+      res.json({
+        success: true,
+        admin: result.rows[0]
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kupata School Admin.",
+        error: error.message
+      });
+
+    }
+
+  }
+);
+
+
+// -----------------------------------------------------
+// ADD SCHOOL ADMIN
+// -----------------------------------------------------
+
+app.post(
+  "/api/admin/school-admins",
+  async (req, res) => {
+
+    try {
+
+      const {
+        school_id,
+        full_name,
+        phone,
+        email,
+        password,
+        status
+      } = req.body;
+
+      const schoolId = Number(school_id);
+
+      if (!Number.isInteger(schoolId)) {
+
+        return res.status(400).json({
+          success: false,
+          message: "Shule lazima ichaguliwe."
+        });
+
+      }
+
+      if (!full_name || !full_name.trim()) {
+
+        return res.status(400).json({
+          success: false,
+          message:
+            "Jina kamili la admin linahitajika."
+        });
+
+      }
+
+      if (!password || password.length < 6) {
+
+        return res.status(400).json({
+          success: false,
+          message:
+            "Password lazima iwe na angalau characters 6."
+        });
+
+      }
+
+      const schoolResult = await pool.query(`
+        SELECT
+          id,
+          name,
+          status
+        FROM schools
+        WHERE id = $1
+      `, [schoolId]);
+
+      if (!schoolResult.rows.length) {
+
+        return res.status(404).json({
+          success: false,
+          message: "Shule haijapatikana."
+        });
+
+      }
+
+      if (email && email.trim()) {
+
+        const emailCheck = await pool.query(`
+          SELECT id
+          FROM school_admins
+          WHERE LOWER(email) = LOWER($1)
+        `, [email.trim()]);
+
+        if (emailCheck.rows.length) {
+
+          return res.status(409).json({
+            success: false,
+            message:
+              "Email hii tayari inatumika na School Admin mwingine."
+          });
+
+        }
+
+      }
+
+      const passwordHash =
+        await hashPassword(password);
+
+      const finalStatus =
+        ["active", "inactive"].includes(status)
+          ? status
+          : "active";
+
+      const result = await pool.query(`
+        INSERT INTO school_admins (
+          school_id,
+          full_name,
+          phone,
+          email,
+          password_hash,
+          status,
+          created_at,
+          updated_at
+        )
+
+        VALUES (
+          $1, $2, $3, $4, $5,
+          $6, NOW(), NOW()
+        )
+
+        RETURNING
+          id,
+          school_id,
+          full_name,
+          phone,
+          email,
+          status,
+          last_login,
+          created_at,
+          updated_at
+      `, [
+        schoolId,
+        full_name.trim(),
+        phone ? phone.trim() : null,
+        email ? email.trim() : null,
+        passwordHash,
+        finalStatus
+      ]);
+
+      res.status(201).json({
+        success: true,
+        message:
+          "School Admin ameongezwa kikamilifu.",
+        admin: result.rows[0]
+      });
+
+    } catch (error) {
+
+      console.error(
+        "POST /api/admin/school-admins error:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kuongeza School Admin.",
+        error: error.message
+      });
+
+    }
+
+  }
+);
+
+
+// -----------------------------------------------------
+// UPDATE SCHOOL ADMIN
+// -----------------------------------------------------
+
+app.put(
+  "/api/admin/school-admins/:id",
+  async (req, res) => {
+
+    try {
+
+      const id = Number(req.params.id);
+
+      if (!Number.isInteger(id)) {
+
+        return res.status(400).json({
+          success: false,
+          message: "Admin ID si sahihi."
+        });
+
+      }
+
+      const {
+        school_id,
+        full_name,
+        phone,
+        email,
+        status
+      } = req.body;
+
+      const schoolId = Number(school_id);
+
+      if (!Number.isInteger(schoolId)) {
+
+        return res.status(400).json({
+          success: false,
+          message: "Shule lazima ichaguliwe."
+        });
+
+      }
+
+      if (!full_name || !full_name.trim()) {
+
+        return res.status(400).json({
+          success: false,
+          message:
+            "Jina kamili la admin linahitajika."
+        });
+
+      }
+
+      if (
+        status &&
+        !["active", "inactive"].includes(status)
+      ) {
+
+        return res.status(400).json({
+          success: false,
+          message:
+            "Status lazima iwe active au inactive."
+        });
+
+      }
+
+      const schoolResult = await pool.query(`
+        SELECT id
+        FROM schools
+        WHERE id = $1
+      `, [schoolId]);
+
+      if (!schoolResult.rows.length) {
+
+        return res.status(404).json({
+          success: false,
+          message: "Shule haijapatikana."
+        });
+
+      }
+
+      if (email && email.trim()) {
+
+        const emailCheck = await pool.query(`
+          SELECT id
+          FROM school_admins
+          WHERE LOWER(email) = LOWER($1)
+            AND id <> $2
+        `, [
+          email.trim(),
+          id
+        ]);
+
+        if (emailCheck.rows.length) {
+
+          return res.status(409).json({
+            success: false,
+            message:
+              "Email hii tayari inatumika na School Admin mwingine."
+          });
+
+        }
+
+      }
+
+      const finalStatus =
+        ["active", "inactive"].includes(status)
+          ? status
+          : "active";
+
+      const result = await pool.query(`
+        UPDATE school_admins
+
+        SET
+          school_id = $1,
+          full_name = $2,
+          phone = $3,
+          email = $4,
+          status = $5,
+          updated_at = NOW()
+
+        WHERE id = $6
+
+        RETURNING
+          id,
+          school_id,
+          full_name,
+          phone,
+          email,
+          status,
+          last_login,
+          created_at,
+          updated_at
+      `, [
+        schoolId,
+        full_name.trim(),
+        phone ? phone.trim() : null,
+        email ? email.trim() : null,
+        finalStatus,
+        id
+      ]);
+
+      if (!result.rows.length) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "School Admin hajapatikana."
+        });
+
+      }
+
+      res.json({
+        success: true,
+        message:
+          "School Admin amehaririwa kikamilifu.",
+        admin: result.rows[0]
+      });
+
+    } catch (error) {
+
+      console.error(
+        "PUT /api/admin/school-admins/:id error:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kuhariri School Admin.",
+        error: error.message
+      });
+
+    }
+
+  }
+);
+
+
+// -----------------------------------------------------
+// CHANGE SCHOOL ADMIN STATUS
+// -----------------------------------------------------
+
+app.put(
+  "/api/admin/school-admins/:id/status",
+  async (req, res) => {
+
+    try {
+
+      const id = Number(req.params.id);
+
+      const { status } = req.body;
+
+      if (!Number.isInteger(id)) {
+
+        return res.status(400).json({
+          success: false,
+          message: "Admin ID si sahihi."
+        });
+
+      }
+
+      if (!["active", "inactive"].includes(status)) {
+
+        return res.status(400).json({
+          success: false,
+          message:
+            "Status lazima iwe active au inactive."
+        });
+
+      }
+
+      const result = await pool.query(`
+        UPDATE school_admins
+
+        SET
+          status = $1,
+          updated_at = NOW()
+
+        WHERE id = $2
+
+        RETURNING
+          id,
+          school_id,
+          full_name,
+          phone,
+          email,
+          status,
+          last_login,
+          created_at,
+          updated_at
+      `, [
+        status,
+        id
+      ]);
+
+      if (!result.rows.length) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "School Admin hajapatikana."
+        });
+
+      }
+
+      res.json({
+        success: true,
+        message:
+          status === "active"
+            ? "School Admin amewashwa."
+            : "School Admin amezimwa.",
+        admin: result.rows[0]
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kubadilisha status ya School Admin.",
+        error: error.message
+      });
+
+    }
+
+  }
+);
+
+
+// -----------------------------------------------------
+// RESET SCHOOL ADMIN PASSWORD
+// -----------------------------------------------------
+
+app.put(
+  "/api/admin/school-admins/:id/reset-password",
+  async (req, res) => {
+
+    try {
+
+      const id = Number(req.params.id);
+
+      const { password } = req.body;
+
+      if (!Number.isInteger(id)) {
+
+        return res.status(400).json({
+          success: false,
+          message: "Admin ID si sahihi."
+        });
+
+      }
+
+      if (!password || password.length < 6) {
+
+        return res.status(400).json({
+          success: false,
+          message:
+            "Password mpya lazima iwe na angalau characters 6."
+        });
+
+      }
+
+      const passwordHash =
+        await hashPassword(password);
+
+      const result = await pool.query(`
+        UPDATE school_admins
+
+        SET
+          password_hash = $1,
+          updated_at = NOW()
+
+        WHERE id = $2
+
+        RETURNING
+          id,
+          school_id,
+          full_name,
+          phone,
+          email,
+          status,
+          last_login,
+          created_at,
+          updated_at
+      `, [
+        passwordHash,
+        id
+      ]);
+
+      if (!result.rows.length) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "School Admin hajapatikana."
+        });
+
+      }
+
+      res.json({
+        success: true,
+        message:
+          "Password ya School Admin imebadilishwa.",
+        admin: result.rows[0]
+      });
+
+    } catch (error) {
+
+      console.error(
+        "RESET SCHOOL ADMIN PASSWORD ERROR:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kubadilisha password.",
+        error: error.message
+      });
+
+    }
+
+  }
+);
+
+
+// -----------------------------------------------------
+// DELETE SCHOOL ADMIN
+// -----------------------------------------------------
+
+app.delete(
+  "/api/admin/school-admins/:id",
+  async (req, res) => {
+
+    try {
+
+      const id = Number(req.params.id);
+
+      if (!Number.isInteger(id)) {
+
+        return res.status(400).json({
+          success: false,
+          message: "Admin ID si sahihi."
+        });
+
+      }
+
+      const result = await pool.query(`
+        DELETE FROM school_admins
+
+        WHERE id = $1
+
+        RETURNING
+          id,
+          school_id,
+          full_name,
+          phone,
+          email,
+          status
+      `, [id]);
+
+      if (!result.rows.length) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "School Admin hajapatikana."
+        });
+
+      }
+
+      res.json({
+        success: true,
+        message:
+          "School Admin amefutwa kikamilifu.",
+        admin: result.rows[0]
+      });
+
+    } catch (error) {
+
+      console.error(
+        "DELETE /api/admin/school-admins/:id error:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kufuta School Admin.",
+        error: error.message
+      });
 
     }
 
