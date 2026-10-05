@@ -27,7 +27,7 @@
     }
 
     .header-inner {
-      max-width: 1200px;
+      max-width: 1250px;
       margin: auto;
       display: flex;
       justify-content: space-between;
@@ -51,17 +51,22 @@
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1250px;
       margin: 25px auto;
       padding: 0 15px;
     }
 
-    .welcome {
+    .welcome,
+    .section,
+    .live-box {
       background: white;
       border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .welcome {
       padding: 22px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .welcome h1 {
@@ -80,7 +85,7 @@
       background: white;
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
     }
 
     .summary-card .label {
@@ -98,10 +103,7 @@
 
     .live-box {
       margin-top: 20px;
-      background: white;
-      border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .live-status {
@@ -109,16 +111,12 @@
       padding: 8px 14px;
       border-radius: 20px;
       font-weight: bold;
-      background: #e8f5e9;
-      color: #2e7d32;
+      margin-left: 8px;
     }
 
     .section {
-      background: white;
       margin-top: 20px;
       padding: 22px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .section h2 {
@@ -126,35 +124,10 @@
       color: #1565c0;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-    }
-
-    .stat {
-      border: 1px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 18px;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 28px;
-      font-weight: bold;
-      color: #1565c0;
-    }
-
-    .stat-title {
-      margin-top: 5px;
-      color: #666;
-    }
-
     .actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 15px;
     }
 
     .btn {
@@ -165,6 +138,7 @@
       font-weight: bold;
       text-decoration: none;
       display: inline-block;
+      font-size: 14px;
     }
 
     .btn-primary {
@@ -182,11 +156,27 @@
       color: white;
     }
 
+    .btn-danger {
+      background: #c62828;
+      color: white;
+    }
+
+    .btn-info {
+      background: #0288d1;
+      color: white;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .message {
       display: none;
       margin-bottom: 15px;
       padding: 12px;
       border-radius: 8px;
+      font-weight: bold;
     }
 
     .message.error {
@@ -207,10 +197,68 @@
       color: #666;
     }
 
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+    }
+
+    .stat {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 18px;
+      text-align: center;
+      background: #fafafa;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1565c0;
+    }
+
+    .stat-title {
+      margin-top: 5px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .applications-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .search-input,
+    .filter-select {
+      padding: 11px 12px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .filter-select {
+      min-width: 160px;
+      background: white;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
+      min-width: 900px;
     }
 
     th,
@@ -218,30 +266,170 @@
       padding: 12px;
       border-bottom: 1px solid #eee;
       text-align: left;
+      vertical-align: middle;
     }
 
     th {
       background: #f5f7fa;
       color: #555;
+      white-space: nowrap;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .status-pending {
+      background: #fff8e1;
+      color: #f57f17;
+    }
+
+    .status-approved {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .status-rejected {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .status-paid {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      border: none;
+      border-radius: 6px;
+      padding: 7px 9px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .small-info {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .small-success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .small-danger {
+      background: #ffebee;
+      color: #c62828;
     }
 
     .empty {
-      padding: 20px;
+      padding: 25px;
       text-align: center;
       color: #777;
     }
 
-    @media (max-width: 850px) {
+    /* MODAL */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 9999;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 700px;
+      margin: 40px auto;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      color: #1565c0;
+      font-size: 20px;
+    }
+
+    .close-btn {
+      border: none;
+      background: #eee;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .detail-box {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    .detail-label {
+      color: #777;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .detail-value {
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 950px) {
+
       .school-summary {
         grid-template-columns: repeat(2, 1fr);
       }
 
       .stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
+
     }
 
-    @media (max-width: 550px) {
+    @media (max-width: 650px) {
+
       .header-inner {
         flex-direction: column;
         align-items: flex-start;
@@ -252,17 +440,38 @@
       }
 
       .stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .welcome h1 {
         font-size: 20px;
       }
 
-      table {
-        display: block;
-        overflow-x: auto;
+      .details-grid {
+        grid-template-columns: 1fr;
       }
+
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-content {
+        margin: 15px auto;
+        padding: 16px;
+      }
+
+    }
+
+    @media (max-width: 420px) {
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 16px;
+      }
+
     }
   </style>
 </head>
@@ -271,19 +480,28 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo">🏫 Shule Portal Tanzania</div>
+
+    <div class="logo">
+      🏫 Shule Portal Tanzania
+    </div>
 
     <button class="logout-btn" onclick="logout()">
       Toka
     </button>
+
   </div>
 </header>
+
 
 <div class="container">
 
   <div id="message" class="message"></div>
 
+
+  <!-- WELCOME -->
+
   <div class="welcome">
+
     <h1>
       Karibu, <span id="adminName">...</span> 👋
     </h1>
@@ -291,6 +509,7 @@
     <p>
       Hii ni dashboard yako ya kusimamia shule.
     </p>
+
 
     <div class="school-summary">
 
@@ -316,15 +535,12 @@
 
     </div>
 
+
     <div class="live-box">
 
       <strong>Hali ya Shule:</strong>
 
-      <span
-        id="schoolStatus"
-        class="live-status"
-        style="margin-left:8px;"
-      >
+      <span id="schoolStatus" class="live-status">
         Inapakia...
       </span>
 
@@ -333,7 +549,7 @@
   </div>
 
 
-  <!-- ACTIONS -->
+  <!-- SCHOOL MANAGEMENT -->
 
   <div class="section">
 
@@ -360,7 +576,7 @@
   </div>
 
 
-  <!-- APPLICATION STATS -->
+  <!-- STATS -->
 
   <div class="section">
 
@@ -380,9 +596,7 @@
         <div
           class="stat-number"
           id="totalApplications"
-        >
-          0
-        </div>
+        >0</div>
 
         <div class="stat-title">
           Maombi Yote
@@ -394,9 +608,7 @@
         <div
           class="stat-number"
           id="pendingApplications"
-        >
-          0
-        </div>
+        >0</div>
 
         <div class="stat-title">
           Yanayosubiri
@@ -408,9 +620,7 @@
         <div
           class="stat-number"
           id="approvedApplications"
-        >
-          0
-        </div>
+        >0</div>
 
         <div class="stat-title">
           Yaliyoidhinishwa
@@ -422,12 +632,22 @@
         <div
           class="stat-number"
           id="rejectedApplications"
-        >
-          0
-        </div>
+        >0</div>
 
         <div class="stat-title">
           Yaliyokataliwa
+        </div>
+      </div>
+
+
+      <div class="stat">
+        <div
+          class="stat-number"
+          id="paidApplications"
+        >0</div>
+
+        <div class="stat-title">
+          Yaliyolipiwa
         </div>
       </div>
 
@@ -442,34 +662,135 @@
 
     <h2>📋 Maombi ya Wanafunzi</h2>
 
+
+    <div class="applications-toolbar">
+
+      <input
+        type="text"
+        id="searchApplications"
+        class="search-input"
+        placeholder="🔎 Tafuta kwa jina, namba ya maombi au mzazi..."
+        oninput="filterApplications()"
+      >
+
+
+      <select
+        id="statusFilter"
+        class="filter-select"
+        onchange="filterApplications()"
+      >
+
+        <option value="all">
+          Hali zote
+        </option>
+
+        <option value="pending">
+          Yanayosubiri
+        </option>
+
+        <option value="approved">
+          Yaliyoidhinishwa
+        </option>
+
+        <option value="rejected">
+          Yaliyokataliwa
+        </option>
+
+      </select>
+
+    </div>
+
+
     <div id="applicationsLoading" class="loading">
       Inapakia maombi...
     </div>
+
 
     <div
       id="applicationsContainer"
       style="display:none;"
     >
 
-      <table>
+      <div class="table-wrapper">
 
-        <thead>
+        <table>
 
-          <tr>
-            <th>Namba ya Maombi</th>
-            <th>Jina</th>
-            <th>Darasa</th>
-            <th>Mzazi</th>
-            <th>Hali</th>
-          </tr>
+          <thead>
 
-        </thead>
+            <tr>
 
-        <tbody id="applicationsBody">
-        </tbody>
+              <th>Namba ya Maombi</th>
 
-      </table>
+              <th>Jina la Mwanafunzi</th>
 
+              <th>Darasa</th>
+
+              <th>Mzazi</th>
+
+              <th>Malipo</th>
+
+              <th>Hali</th>
+
+              <th>Vitendo</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="applicationsBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- APPLICATION DETAILS MODAL -->
+
+<div
+  id="applicationModal"
+  class="modal"
+  onclick="closeModalOutside(event)"
+>
+
+  <div
+    class="modal-content"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modal-header">
+
+      <h2>
+        📄 Taarifa za Maombi
+      </h2>
+
+      <button
+        class="close-btn"
+        onclick="closeApplicationModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      id="applicationDetails"
+      class="details-grid"
+    >
+    </div>
+
+
+    <div
+      id="modalActions"
+      class="modal-actions"
+    >
     </div>
 
   </div>
@@ -479,9 +800,14 @@
 
 <script>
 
-  /*
-   * SHOW MESSAGE
-   */
+  let allApplications = [];
+
+  let selectedApplication = null;
+
+
+  /* =========================
+     MESSAGE
+  ========================= */
 
   function showMessage(message, type = "error") {
 
@@ -493,17 +819,20 @@
     box.className =
       "message " + type;
 
+    box.style.display = "block";
+
     setTimeout(() => {
 
       box.style.display = "none";
 
     }, 5000);
+
   }
 
 
-  /*
-   * FORMAT MONEY
-   */
+  /* =========================
+     MONEY
+  ========================= */
 
   function formatMoney(value) {
 
@@ -511,12 +840,109 @@
       Number(value || 0);
 
     return number.toLocaleString("en-US") + " TSh";
+
   }
 
 
-  /*
-   * LOAD SCHOOL ADMIN INFORMATION
-   */
+  /* =========================
+     HTML ESCAPE
+  ========================= */
+
+  function escapeHtml(value) {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /* =========================
+     STATUS TEXT
+  ========================= */
+
+  function statusText(status) {
+
+    const value =
+      String(status || "pending").toLowerCase();
+
+    if (value === "approved") {
+      return "Imeidhinishwa";
+    }
+
+    if (value === "rejected") {
+      return "Imekataliwa";
+    }
+
+    if (value === "paid") {
+      return "Imelipwa";
+    }
+
+    return "Inasubiri";
+
+  }
+
+
+  function paymentText(status) {
+
+    const value =
+      String(status || "").toLowerCase();
+
+    if (
+      value === "paid" ||
+      value === "confirmed" ||
+      value === "success"
+    ) {
+      return "Imelipwa";
+    }
+
+    return "Haijalipwa";
+
+  }
+
+
+  function statusClass(status) {
+
+    const value =
+      String(status || "pending").toLowerCase();
+
+    if (value === "approved") {
+      return "status-badge status-approved";
+    }
+
+    if (value === "rejected") {
+      return "status-badge status-rejected";
+    }
+
+    return "status-badge status-pending";
+
+  }
+
+
+  function paymentClass(status) {
+
+    const value =
+      String(status || "").toLowerCase();
+
+    if (
+      value === "paid" ||
+      value === "confirmed" ||
+      value === "success"
+    ) {
+      return "status-badge status-paid";
+    }
+
+    return "status-badge status-pending";
+
+  }
+
+
+  /* =========================
+     LOAD ADMIN INFO
+  ========================= */
 
   async function loadAdminInfo() {
 
@@ -532,37 +958,42 @@
           }
         );
 
+
       const data =
         await response.json();
 
-      console.log(
-        "SCHOOL ADMIN ME:",
-        data
-      );
 
-      if (!response.ok || !data.success) {
+      if (
+        response.status === 401
+      ) {
 
-        if (response.status === 401) {
+        window.location.href =
+          "/school-admin-login.html";
 
-          window.location.href =
-            "/school-admin-login.html";
+        return;
 
-          return;
-        }
+      }
+
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
 
         throw new Error(
           data.message ||
           "Imeshindikana kupata taarifa za School Admin."
         );
+
       }
 
 
-      /*
-       * ADMIN NAME
-       */
-
       const admin =
-        data.admin || data.schoolAdmin || data.user || {};
+        data.admin ||
+        data.schoolAdmin ||
+        data.user ||
+        {};
+
 
       document.getElementById(
         "adminName"
@@ -571,13 +1002,6 @@
         admin.name ||
         "School Admin";
 
-
-      /*
-       * SCHOOL INFORMATION
-       *
-       * Tunajaribu majina yote yanayoweza
-       * kurudishwa na API.
-       */
 
       const school =
         data.school ||
@@ -637,15 +1061,13 @@
         formatMoney(price);
 
 
-      /*
-       * SCHOOL STATUS
-       */
-
       const status =
-        school.school_status ||
-        school.status ||
-        admin.school_status ||
-        "draft";
+        String(
+          school.school_status ||
+          school.status ||
+          admin.school_status ||
+          "draft"
+        ).toLowerCase();
 
 
       const statusElement =
@@ -691,8 +1113,8 @@
 
         statusElement.style.color =
           "#f57f17";
-      }
 
+      }
 
     } catch (error) {
 
@@ -711,15 +1133,15 @@
   }
 
 
-  /*
-   * LOAD APPLICATION STATISTICS
-   */
+  /* =========================
+     LOAD STATS
+  ========================= */
 
   async function loadStats() {
 
     try {
 
-      const response =
+      let response =
         await fetch(
           "/api/school-admin/dashboard/stats",
           {
@@ -729,14 +1151,28 @@
         );
 
 
+      /*
+       * COMPATIBILITY:
+       * Ikiwa endpoint ya juu haipo,
+       * jaribu dashboard-stats.
+       */
+
+      if (!response.ok) {
+
+        response =
+          await fetch(
+            "/api/school-admin/dashboard-stats",
+            {
+              credentials: "include",
+              cache: "no-store"
+            }
+          );
+
+      }
+
+
       const data =
         await response.json();
-
-
-      console.log(
-        "DASHBOARD STATS:",
-        data
-      );
 
 
       if (
@@ -789,6 +1225,15 @@
 
 
       document.getElementById(
+        "paidApplications"
+      ).textContent =
+        stats.paid_applications ??
+        stats.paid ??
+        stats.confirmed_paid ??
+        0;
+
+
+      document.getElementById(
         "statsLoading"
       ).style.display =
         "none";
@@ -817,9 +1262,9 @@
   }
 
 
-  /*
-   * LOAD APPLICATIONS
-   */
+  /* =========================
+     LOAD APPLICATIONS
+  ========================= */
 
   async function loadApplications() {
 
@@ -839,10 +1284,16 @@
         await response.json();
 
 
-      console.log(
-        "APPLICATIONS:",
-        data
-      );
+      if (
+        response.status === 401
+      ) {
+
+        window.location.href =
+          "/school-admin-login.html";
+
+        return;
+
+      }
 
 
       if (
@@ -858,92 +1309,15 @@
       }
 
 
-      const applications =
+      allApplications =
         data.applications ||
         data.data ||
         [];
 
 
-      const body =
-        document.getElementById(
-          "applicationsBody"
-        );
-
-
-      body.innerHTML = "";
-
-
-      if (
-        applications.length === 0
-      ) {
-
-        body.innerHTML = `
-          <tr>
-            <td colspan="5" class="empty">
-              Hakuna maombi yaliyopatikana.
-            </td>
-          </tr>
-        `;
-
-      } else {
-
-        applications.forEach(
-          application => {
-
-            const row =
-              document.createElement("tr");
-
-
-            const status =
-              application.status ||
-              "pending";
-
-
-            row.innerHTML = `
-
-              <td>
-                ${escapeHtml(
-                  application.application_number ||
-                  "-"
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(
-                  application.student_name ||
-                  application.full_name ||
-                  "-"
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(
-                  application.class_name ||
-                  application.class_level ||
-                  "-"
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(
-                  application.parent_name ||
-                  "-"
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(status)}
-              </td>
-
-            `;
-
-
-            body.appendChild(row);
-
-          }
-        );
-
-      }
+      renderApplications(
+        allApplications
+      );
 
 
       document.getElementById(
@@ -968,6 +1342,7 @@
       document.getElementById(
         "applicationsLoading"
       ).textContent =
+        error.message ||
         "Maombi hayajapatikana kwa sasa.";
 
     }
@@ -975,25 +1350,753 @@
   }
 
 
-  /*
-   * ESCAPE HTML
-   */
+  /* =========================
+     RENDER APPLICATIONS
+  ========================= */
 
-  function escapeHtml(value) {
+  function renderApplications(applications) {
 
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+    const body =
+      document.getElementById(
+        "applicationsBody"
+      );
+
+
+    body.innerHTML = "";
+
+
+    if (
+      applications.length === 0
+    ) {
+
+      body.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty">
+            Hakuna maombi yaliyopatikana.
+          </td>
+        </tr>
+      `;
+
+      return;
+
+    }
+
+
+    applications.forEach(
+      application => {
+
+        const row =
+          document.createElement("tr");
+
+
+        const status =
+          String(
+            application.status ||
+            "pending"
+          ).toLowerCase();
+
+
+        const paymentStatus =
+          application.payment_status ||
+          application.paymentStatus ||
+          "";
+
+
+        const applicationNumber =
+          application.application_number ||
+          application.applicationNumber ||
+          "-";
+
+
+        const studentName =
+          application.student_name ||
+          application.full_name ||
+          application.student_full_name ||
+          "-";
+
+
+        const className =
+          application.class_name ||
+          application.class_level ||
+          application.class ||
+          "-";
+
+
+        const parentName =
+          application.parent_name ||
+          application.guardian_name ||
+          "-";
+
+
+        row.innerHTML = `
+
+          <td>
+            <strong>
+              ${escapeHtml(applicationNumber)}
+            </strong>
+          </td>
+
+
+          <td>
+            ${escapeHtml(studentName)}
+          </td>
+
+
+          <td>
+            ${escapeHtml(className)}
+          </td>
+
+
+          <td>
+            ${escapeHtml(parentName)}
+          </td>
+
+
+          <td>
+            <span class="${paymentClass(paymentStatus)}">
+              ${escapeHtml(paymentText(paymentStatus))}
+            </span>
+          </td>
+
+
+          <td>
+            <span class="${statusClass(status)}">
+              ${escapeHtml(statusText(status))}
+            </span>
+          </td>
+
+
+          <td>
+
+            <div class="row-actions">
+
+              <button
+                class="small-btn small-info"
+                onclick="viewApplication('${escapeJs(applicationNumber)}')"
+              >
+                👁️ Angalia
+              </button>
+
+
+              ${
+                status === "pending"
+                ? `
+                  <button
+                    class="small-btn small-success"
+                    onclick="changeApplicationStatus('${escapeJs(applicationNumber)}', 'approved')"
+                  >
+                    ✅ Kubali
+                  </button>
+
+                  <button
+                    class="small-btn small-danger"
+                    onclick="changeApplicationStatus('${escapeJs(applicationNumber)}', 'rejected')"
+                  >
+                    ❌ Kataa
+                  </button>
+                `
+                : ""
+              }
+
+            </div>
+
+          </td>
+
+        `;
+
+
+        body.appendChild(row);
+
+      }
+    );
 
   }
 
 
-  /*
-   * REFRESH
-   */
+  /* =========================
+     ESCAPE JS
+  ========================= */
+
+  function escapeJs(value) {
+
+    return String(value ?? "")
+      .replace(/\\/g, "\\\\")
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, "\\n")
+      .replace(/\r/g, "\\r");
+
+  }
+
+
+  /* =========================
+     FILTER
+  ========================= */
+
+  function filterApplications() {
+
+    const search =
+      document.getElementById(
+        "searchApplications"
+      ).value
+      .toLowerCase()
+      .trim();
+
+
+    const status =
+      document.getElementById(
+        "statusFilter"
+      ).value;
+
+
+    const filtered =
+      allApplications.filter(
+        application => {
+
+          const applicationNumber =
+            String(
+              application.application_number ||
+              ""
+            ).toLowerCase();
+
+
+          const studentName =
+            String(
+              application.student_name ||
+              application.full_name ||
+              ""
+            ).toLowerCase();
+
+
+          const parentName =
+            String(
+              application.parent_name ||
+              ""
+            ).toLowerCase();
+
+
+          const currentStatus =
+            String(
+              application.status ||
+              "pending"
+            ).toLowerCase();
+
+
+          const matchesSearch =
+            !search ||
+            applicationNumber.includes(search) ||
+            studentName.includes(search) ||
+            parentName.includes(search);
+
+
+          const matchesStatus =
+            status === "all" ||
+            currentStatus === status;
+
+
+          return (
+            matchesSearch &&
+            matchesStatus
+          );
+
+        }
+      );
+
+
+    renderApplications(
+      filtered
+    );
+
+  }
+
+
+  /* =========================
+     VIEW APPLICATION
+  ========================= */
+
+  async function viewApplication(
+    applicationNumber
+  ) {
+
+    try {
+
+      let application =
+        allApplications.find(
+          item =>
+            String(
+              item.application_number ||
+              ""
+            ) ===
+            String(applicationNumber)
+        );
+
+
+      /*
+       * Kama taarifa kamili ipo kwenye
+       * application list, tumia hizo kwanza.
+       */
+
+      if (!application) {
+
+        throw new Error(
+          "Taarifa za maombi hazijapatikana."
+        );
+
+      }
+
+
+      selectedApplication =
+        application;
+
+
+      const details =
+        document.getElementById(
+          "applicationDetails"
+        );
+
+
+      const studentName =
+        application.student_name ||
+        application.full_name ||
+        "-";
+
+
+      const parentName =
+        application.parent_name ||
+        application.guardian_name ||
+        "-";
+
+
+      const phone =
+        application.parent_phone ||
+        application.phone ||
+        application.guardian_phone ||
+        "-";
+
+
+      const email =
+        application.parent_email ||
+        application.email ||
+        "-";
+
+
+      const gender =
+        application.gender ||
+        "-";
+
+
+      const dob =
+        application.date_of_birth ||
+        application.dob ||
+        "-";
+
+
+      const address =
+        application.address ||
+        application.parent_address ||
+        "-";
+
+
+      const className =
+        application.class_name ||
+        application.class_level ||
+        "-";
+
+
+      const paymentStatus =
+        application.payment_status ||
+        application.paymentStatus ||
+        "-";
+
+
+      details.innerHTML = `
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Namba ya Maombi
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(
+              application.application_number ||
+              "-"
+            )}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Jina la Mwanafunzi
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(studentName)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Jinsia
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(gender)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Tarehe ya Kuzaliwa
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(dob)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Darasa / Kidato
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(className)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Jina la Mzazi
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(parentName)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Simu ya Mzazi
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(phone)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Email
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(email)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Anwani
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(address)}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Malipo
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(
+              paymentText(paymentStatus)
+            )}
+          </div>
+        </div>
+
+
+        <div class="detail-box">
+          <div class="detail-label">
+            Hali ya Ombi
+          </div>
+
+          <div class="detail-value">
+            ${escapeHtml(
+              statusText(
+                application.status
+              )
+            )}
+          </div>
+        </div>
+
+      `;
+
+
+      const actions =
+        document.getElementById(
+          "modalActions"
+        );
+
+
+      if (
+        String(
+          application.status ||
+          "pending"
+        ).toLowerCase() ===
+        "pending"
+      ) {
+
+        actions.innerHTML = `
+
+          <button
+            class="btn btn-success"
+            onclick="changeApplicationStatus('${escapeJs(applicationNumber)}', 'approved')"
+          >
+            ✅ Kubali Ombi
+          </button>
+
+
+          <button
+            class="btn btn-danger"
+            onclick="changeApplicationStatus('${escapeJs(applicationNumber)}', 'rejected')"
+          >
+            ❌ Kataa Ombi
+          </button>
+
+
+          <button
+            class="btn btn-secondary"
+            onclick="closeApplicationModal()"
+          >
+            Funga
+          </button>
+
+        `;
+
+      } else {
+
+        actions.innerHTML = `
+
+          <button
+            class="btn btn-secondary"
+            onclick="closeApplicationModal()"
+          >
+            Funga
+          </button>
+
+        `;
+
+      }
+
+
+      document.getElementById(
+        "applicationModal"
+      ).style.display =
+        "block";
+
+
+    } catch (error) {
+
+      console.error(
+        "VIEW APPLICATION ERROR:",
+        error
+      );
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kufungua taarifa za maombi."
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     CHANGE STATUS
+  ========================= */
+
+  async function changeApplicationStatus(
+    applicationNumber,
+    newStatus
+  ) {
+
+    const action =
+      newStatus === "approved"
+        ? "KUKUBALI"
+        : "KUKATAA";
+
+
+    const confirmed =
+      confirm(
+        `Una uhakika unataka ${action} ombi hili?\n\n${applicationNumber}`
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    try {
+
+      /*
+       * Tunatumia application number
+       * kama identifier.
+       */
+
+      let application =
+        allApplications.find(
+          item =>
+            String(
+              item.application_number ||
+              ""
+            ) ===
+            String(applicationNumber)
+        );
+
+
+      if (!application) {
+
+        throw new Error(
+          "Ombi halijapatikana."
+        );
+
+      }
+
+
+      const id =
+        application.id;
+
+
+      if (!id) {
+
+        throw new Error(
+          "ID ya ombi haijapatikana."
+        );
+
+      }
+
+
+      const response =
+        await fetch(
+          `/api/school-admin/applications/${encodeURIComponent(id)}/status`,
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            credentials: "include",
+
+            body: JSON.stringify({
+              status: newStatus
+            })
+
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+
+        throw new Error(
+          data.message ||
+          `Imeshindikana ${action.toLowerCase()} ombi.`
+        );
+
+      }
+
+
+      showMessage(
+        newStatus === "approved"
+          ? "Ombi limeidhinishwa kikamilifu."
+          : "Ombi limekataliwa kikamilifu.",
+        "success"
+      );
+
+
+      closeApplicationModal();
+
+
+      /*
+       * Pakia upya data zote.
+       */
+
+      await loadApplications();
+
+      await loadStats();
+
+    } catch (error) {
+
+      console.error(
+        "CHANGE APPLICATION STATUS ERROR:",
+        error
+      );
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kubadilisha hali ya ombi."
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     MODAL CLOSE
+  ========================= */
+
+  function closeApplicationModal() {
+
+    document.getElementById(
+      "applicationModal"
+    ).style.display =
+      "none";
+
+    selectedApplication =
+      null;
+
+  }
+
+
+  function closeModalOutside(event) {
+
+    if (
+      event.target.id ===
+      "applicationModal"
+    ) {
+
+      closeApplicationModal();
+
+    }
+
+  }
+
+
+  /* =========================
+     REFRESH
+  ========================= */
 
   async function refreshDashboard() {
 
@@ -1003,6 +2106,7 @@
 
     await loadApplications();
 
+
     showMessage(
       "Taarifa zimehuishwa.",
       "success"
@@ -1011,9 +2115,9 @@
   }
 
 
-  /*
-   * LOGOUT
-   */
+  /* =========================
+     LOGOUT
+  ========================= */
 
   async function logout() {
 
@@ -1036,15 +2140,16 @@
 
     }
 
+
     window.location.href =
       "/school-admin-login.html";
 
   }
 
 
-  /*
-   * START
-   */
+  /* =========================
+     START
+  ========================= */
 
   document.addEventListener(
     "DOMContentLoaded",
