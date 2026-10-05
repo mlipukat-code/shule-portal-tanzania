@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Application Slip - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f1f5f9;
+      color: #172033;
+    }
+
+    .topbar {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+      text-align: center;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .topbar p {
+      margin: 6px 0 0;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 850px;
+      margin: 25px auto;
+    }
+
+    .search-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .search-box h2 {
+      margin-top: 0;
+      color: #1565c0;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 13px 18px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .btn-search {
+      background: #1565c0;
+      color: white;
+    }
+
+    .btn-print {
+      background: #198754;
+      color: white;
+    }
+
+    .btn-dashboard {
+      background: #64748b;
+      color: white;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .slip {
+      display: none;
+      background: white;
+      border: 1px solid #d1d5db;
+      padding: 35px;
+      border-radius: 5px;
+    }
+
+    .slip-header {
+      text-align: center;
+      border-bottom: 2px solid #1565c0;
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+    }
+
+    .slip-header h2 {
+      margin: 0;
+      color: #1565c0;
+      font-size: 25px;
+    }
+
+    .slip-header h3 {
+      margin: 8px 0;
+      font-size: 20px;
+    }
+
+    .slip-header p {
+      margin: 4px 0;
+      color: #475569;
+    }
+
+    .application-number {
+      text-align: center;
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .application-number strong {
+      color: #1565c0;
+      font-size: 19px;
+    }
+
+    .section-title {
+      background: #1565c0;
+      color: white;
+      padding: 9px 12px;
+      margin-top: 20px;
+      margin-bottom: 0;
+      font-size: 15px;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .details {
+      border: 1px solid #dbe2ea;
+      border-top: none;
+    }
+
+    .row {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      width: 40%;
+      padding: 10px;
+      background: #f8fafc;
+      font-weight: bold;
+    }
+
+    .value {
+      width: 60%;
+      padding: 10px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: #fff3cd;
+      color: #856404;
+      font-weight: bold;
+    }
+
+    .footer-note {
+      margin-top: 25px;
+      padding: 15px;
+      background: #f8fafc;
+      border-left: 4px solid #1565c0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 15px;
+      color: #1565c0;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+
+      .search-row {
+        flex-direction: column;
+      }
+
+      .slip {
+        padding: 18px;
+      }
+
+      .row {
+        display: block;
+      }
+
+      .label,
+      .value {
+        width: 100%;
+      }
+
+      .label {
+        padding-bottom: 5px;
+      }
+
+      .value {
+        padding-top: 5px;
+      }
+    }
+
+    @media print {
+
+      body {
+        background: white;
+      }
+
+      .topbar,
+      .search-box,
+      .actions,
+      .loading,
+      .message {
+        display: none !important;
+      }
+
+      .container {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+      }
+
+      .slip {
+        display: block !important;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+
+      @page {
+        size: A4;
+        margin: 15mm;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <h1>🏫 Shule Portal Tanzania</h1>
+    <p>Application Slip</p>
+  </div>
+
+  <div class="container">
+
+    <div class="search-box">
+
+      <h2>📄 Application Slip</h2>
+
+      <p>
+        Ingiza namba yako ya maombi ili kupata Application Slip.
+      </p>
+
+      <div class="search-row">
+
+        <input
+          type="text"
+          id="applicationNumber"
+          placeholder="Mfano: SPT-2026-1791030969770-38"
+        >
+
+        <button
+          class="btn-search"
+          onclick="loadApplication()"
+        >
+          Tafuta
+        </button>
+
+      </div>
+
+      <div
+        id="message"
+        class="message"
+      ></div>
+
+    </div>
+
+    <div
+      id="loading"
+      class="loading"
+    >
+      ⏳ Inatafuta taarifa za maombi...
+    </div>
+
+    <div
+      id="slip"
+      class="slip"
+    >
+
+      <div class="slip-header">
+
+        <h2>🏫 SHULE PORTAL TANZANIA</h2>
+
+        <h3>APPLICATION SLIP</h3>
+
+        <p>
+          Fomu ya Maombi ya Kujiunga na Shule
+        </p>
+
+      </div>
+
+      <div class="application-number">
+
+        <div>
+          Namba ya Maombi
+        </div>
+
+        <strong id="slipApplicationNumber">
+          -
+        </strong>
+
+      </div>
+
+      <div class="section-title">
+        TAARIFA ZA MWANAFUNZI
+      </div>
+
+      <div class="details">
+
+        <div class="row">
+          <div class="label">Jina la Mwanafunzi</div>
+          <div class="value" id="studentName">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Jinsia</div>
+          <div class="value" id="gender">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Tarehe ya Kuzaliwa</div>
+          <div class="value" id="dateOfBirth">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Darasa / Kidato</div>
+          <div class="value" id="classLevel">-</div>
+        </div>
+
+      </div>
+
+      <div class="section-title">
+        TAARIFA ZA MZAZI / MLEZI
+      </div>
+
+      <div class="details">
+
+        <div class="row">
+          <div class="label">Jina</div>
+          <div class="value" id="parentName">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Simu</div>
+          <div class="value" id="parentPhone">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Barua pepe</div>
+          <div class="value" id="parentEmail">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Anwani</div>
+          <div class="value" id="address">-</div>
+        </div>
+
+      </div>
+
+      <div class="section-title">
+        TAARIFA ZA SHULE
+      </div>
+
+      <div class="details">
+
+        <div class="row">
+          <div class="label">Shule</div>
+          <div class="value" id="schoolName">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Mkoa</div>
+          <div class="value" id="schoolRegion">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Wilaya</div>
+          <div class="value" id="schoolDistrict">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Aina ya Shule</div>
+          <div class="value" id="schoolType">-</div>
+        </div>
+
+      </div>
+
+      <div class="section-title">
+        TAARIFA ZA MAOMBI NA MALIPO
+      </div>
+
+      <div class="details">
+
+        <div class="row">
+          <div class="label">Kiasi cha Fomu</div>
+          <div class="value" id="amount">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Payment Reference</div>
+          <div class="value" id="paymentReference">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Hali ya Malipo</div>
+          <div class="value" id="paymentStatus">-</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Hali ya Maombi</div>
+          <div class="value">
+            <span
+              class="status"
+              id="applicationStatus"
+            >
+              -
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-note">
+
+        <strong>Muhimu:</strong><br>
+
+        Hii ni Application Slip ya kielektroniki
+        kutoka Shule Portal Tanzania.
+        Hifadhi namba yako ya maombi kwa ajili ya
+        kufuatilia maombi yako baadaye.
+
+        <br><br>
+
+        Application Number:
+        <strong id="footerApplicationNumber">-</strong>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="btn-print"
+          onclick="window.print()"
+        >
+          🖨️ Chapisha / Save PDF
+        </button>
+
+        <button
+          class="btn-dashboard"
+          onclick="goToDashboard()"
+        >
+          📊 Fuatilia Maombi
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+<script>
+
+const API_BASE = window.location.origin;
+
+function formatDate(dateValue) {
+
+  if (!dateValue) {
+    return "-";
+  }
+
+  const date = new Date(dateValue);
+
+  if (isNaN(date.getTime())) {
+    return dateValue;
+  }
+
+  return date.toLocaleDateString("en-GB");
+}
+
+function formatAmount(amount) {
+
+  if (
+    amount === null ||
+    amount === undefined ||
+    amount === ""
+  ) {
+    return "-";
+  }
+
+  const number = Number(amount);
+
+  if (isNaN(number)) {
+    return amount;
+  }
+
+  return "TSh " + number.toLocaleString("en-US");
+}
+
+function translateStatus(status) {
+
+  if (!status) {
+    return "-";
+  }
+
+  const value = String(status).toLowerCase();
+
+  const statuses = {
+
+    pending: "Inasubiri",
+
+    unpaid: "Haijalipwa",
+
+    paid: "Imelipwa",
+
+    approved: "Imekubaliwa",
+
+    rejected: "Imekataliwa",
+
+    submitted: "Imewasilishwa",
+
+    processing: "Inashughulikiwa",
+
+    completed: "Imekamilika"
+
+  };
+
+  return statuses[value] || status;
+}
+
+async function loadApplication() {
+
+  const input =
+    document.getElementById(
+      "applicationNumber"
+    );
+
+  const applicationNumber =
+    input.value.trim();
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
+
+  const slip =
+    document.getElementById(
+      "slip"
+    );
+
+  message.style.display = "none";
+  slip.style.display = "none";
+
+  if (!applicationNumber) {
+
+    message.textContent =
+      "Tafadhali ingiza namba ya maombi.";
+
+    message.style.display = "block";
+
+    return;
+  }
+
+  loading.style.display = "block";
+
+  try {
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/application-by-number/" +
+        encodeURIComponent(
+          applicationNumber
+        )
+      );
+
+    const text =
+      await response.text();
+
+    let data;
+
+    try {
+
+      data = JSON.parse(text);
+
+    } catch (error) {
+
+      throw new Error(
+        "Server imerudisha taarifa isiyo sahihi."
+      );
+
+    }
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.message ||
+        "Maombi hayajapatikana."
+      );
+
+    }
+
+    const a =
+      data.application;
+
+    document.getElementById(
+      "slipApplicationNumber"
+    ).textContent =
+      a.application_number || "-";
+
+    document.getElementById(
+      "footerApplicationNumber"
+    ).textContent =
+      a.application_number || "-";
+
+    document.getElementById(
+      "studentName"
+    ).textContent =
+      a.student_name ||
+      a.applicant_name ||
+      "-";
+
+    document.getElementById(
+      "gender"
+    ).textContent =
+      a.gender ||
+      a.applicant_gender ||
+      "-";
+
+    document.getElementById(
+      "dateOfBirth"
+    ).textContent =
+      formatDate(
+        a.date_of_birth ||
+        a.applicant_date_of_birth
+      );
+
+    document.getElementById(
+      "classLevel"
+    ).textContent =
+      a.class_level || "-";
+
+    document.getElementById(
+      "parentName"
+    ).textContent =
+      a.parent_name || "-";
+
+    document.getElementById(
+      "parentPhone"
+    ).textContent =
+      a.parent_phone ||
+      a.phone ||
+      "-";
+
+    document.getElementById(
+      "parentEmail"
+    ).textContent =
+      a.parent_email ||
+      a.email ||
+      "-";
+
+    document.getElementById(
+      "address"
+    ).textContent =
+      a.address || "-";
+
+    document.getElementById(
+      "schoolName"
+    ).textContent =
+      a.school_name || "-";
+
+    document.getElementById(
+      "schoolRegion"
+    ).textContent =
+      a.school_region || "-";
+
+    document.getElementById(
+      "schoolDistrict"
+    ).textContent =
+      a.school_district || "-";
+
+    document.getElementById(
+      "schoolType"
+    ).textContent =
+      a.school_type || "-";
+
+    document.getElementById(
+      "amount"
+    ).textContent =
+      formatAmount(a.amount || a.form_price);
+
+    document.getElementById(
+      "paymentReference"
+    ).textContent =
+      a.payment_reference || "-";
+
+    document.getElementById(
+      "paymentStatus"
+    ).textContent =
+      translateStatus(
+        a.payment_status_from_payments ||
+        a.payment_status
+      );
+
+    document.getElementById(
+      "applicationStatus"
+    ).textContent =
+      translateStatus(
+        a.status
+      );
+
+    sessionStorage.setItem(
+      "application_number",
+      a.application_number || ""
+    );
+
+    sessionStorage.setItem(
+      "application_id",
+      a.id || ""
+    );
+
+    slip.style.display = "block";
+
+    window.scrollTo({
+      top: slip.offsetTop - 20,
+      behavior: "smooth"
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      error.message ||
+      "Imeshindikana kupata taarifa za maombi.";
+
+    message.style.display = "block";
+
+  } finally {
+
+    loading.style.display = "none";
+
+  }
+}
+
+function goToDashboard() {
+
+  const number =
+    sessionStorage.getItem(
+      "application_number"
+    );
+
+  if (number) {
+
+    window.location.href =
+      "/applicant-dashboard.html?application_number=" +
+      encodeURIComponent(number);
+
+  } else {
+
+    window.location.href =
+      "/applicant-dashboard.html";
+
+  }
+
+}
+
+document
+  .getElementById("applicationNumber")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        loadApplication();
+
+      }
+
+    }
+  );
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const numberFromUrl =
+  params.get(
+    "application_number"
+  );
+
+if (numberFromUrl) {
+
+  document.getElementById(
+    "applicationNumber"
+  ).value =
+    numberFromUrl;
+
+  loadApplication();
+
+}
+
+</script>
+
+</body>
+</html>
