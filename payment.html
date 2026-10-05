@@ -2,7 +2,11 @@
 <html lang="sw">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Malipo - Shule Portal Tanzania</title>
 
@@ -13,162 +17,303 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background: #f4f8fb;
       color: #222;
     }
 
     header {
-      background: #0b74b8;
+      background: #1565c0;
       color: white;
-      padding: 18px;
-      text-align: center;
+      padding: 18px 20px;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
+    .header-inner {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .back-link {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
     }
 
     .container {
       width: 94%;
-      max-width: 700px;
-      margin: 25px auto;
+      max-width: 850px;
+      margin: 25px auto 50px;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .title h1 {
+      margin: 0 0 8px;
+      color: #1565c0;
+      font-size: 28px;
+    }
+
+    .title p {
+      margin: 0;
+      color: #666;
     }
 
     .card {
       background: white;
       border-radius: 12px;
       padding: 22px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 18px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
     }
 
-    h2 {
-      color: #0b74b8;
+    .card h2 {
       margin-top: 0;
+      color: #1565c0;
+      font-size: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
     }
 
-    .info {
-      background: #eef7fd;
-      border-left: 5px solid #0b74b8;
-      padding: 15px;
-      border-radius: 8px;
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
     }
 
-    .info p {
-      margin: 9px 0;
+    .row:last-child {
+      border-bottom: none;
     }
 
-    .amount {
+    .label {
+      color: #666;
+    }
+
+    .value {
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .amount-box {
+      background: #e3f2fd;
+      border: 2px solid #1565c0;
+      border-radius: 12px;
       text-align: center;
-      background: #f1f8e9;
-      border: 1px solid #c5e1a5;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
+      padding: 22px;
+      margin-top: 15px;
     }
 
-    .amount small {
-      display: block;
-      font-size: 14px;
+    .amount-label {
+      font-size: 15px;
+      color: #555;
       margin-bottom: 8px;
     }
 
-    .amount strong {
-      font-size: 30px;
-      color: #1b5e20;
-    }
-
-    .reference {
-      background: #fff8e1;
-      border: 1px solid #ffe082;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .reference strong {
-      font-size: 18px;
-      word-break: break-word;
+    .amount {
+      font-size: 34px;
+      font-weight: bold;
+      color: #1565c0;
     }
 
     .status {
       display: inline-block;
+      padding: 6px 13px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .status.unpaid {
       background: #fff3cd;
       color: #856404;
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-weight: bold;
-      margin-top: 8px;
     }
 
-    .notice {
-      background: #e3f2fd;
-      border: 1px solid #90caf9;
-      padding: 14px;
-      border-radius: 8px;
-      margin-top: 20px;
-      line-height: 1.5;
+    .status.pending {
+      background: #fff3cd;
+      color: #856404;
     }
 
-    button {
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      padding: 14px;
-      margin-top: 20px;
-      background: #0b74b8;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
+    .status.paid {
+      background: #d4edda;
+      color: #155724;
     }
 
-    button:hover {
-      background: #095f96;
+    .status.failed {
+      background: #f8d7da;
+      color: #721c24;
     }
 
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
+    .info {
+      background: #f8f9fa;
+      border-left: 4px solid #1565c0;
+      padding: 15px;
+      line-height: 1.6;
+      color: #555;
+      border-radius: 5px;
+    }
+
+    .warning {
+      background: #fff8e1;
+      border-left: 4px solid #ffb300;
+      padding: 15px;
+      line-height: 1.6;
+      color: #6d5200;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+
+    .success {
+      background: #e8f5e9;
+      border-left: 4px solid #2e7d32;
+      padding: 15px;
+      line-height: 1.6;
+      color: #1b5e20;
+      border-radius: 5px;
+      margin-top: 15px;
     }
 
     .error {
-      display: none;
-      background: #ffe5e5;
-      color: #a00000;
-      border: 1px solid #ffb3b3;
-      padding: 13px;
-      border-radius: 8px;
+      background: #ffebee;
+      border-left: 4px solid #c62828;
+      padding: 15px;
+      line-height: 1.6;
+      color: #b71c1c;
+      border-radius: 5px;
       margin-top: 15px;
-      line-height: 1.5;
+    }
+
+    .payment-section {
+      text-align: center;
+    }
+
+    .pay-button {
+      display: inline-block;
+      width: 100%;
+      max-width: 500px;
+      border: none;
+      border-radius: 8px;
+      background: #1565c0;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 16px 20px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .pay-button:hover {
+      background: #0d47a1;
+    }
+
+    .pay-button:disabled {
+      background: #9e9e9e;
+      cursor: not-allowed;
+    }
+
+    .secondary-button {
+      display: inline-block;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid #1565c0;
+      border-radius: 8px;
+      background: white;
+      color: #1565c0;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 14px 20px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .secondary-button:hover {
+      background: #f0f7ff;
     }
 
     .loading {
       text-align: center;
-      color: #0b74b8;
-      font-weight: bold;
-      padding: 20px;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border: 4px solid #ddd;
+      border-top: 4px solid #1565c0;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #777;
+      font-size: 13px;
     }
 
     @media (max-width: 600px) {
 
+      header {
+        padding: 15px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
       .container {
-        width: 96%;
+        width: 94%;
+        margin-top: 20px;
       }
 
       .card {
-        padding: 16px;
+        padding: 17px;
       }
 
-      header h1 {
-        font-size: 20px;
+      .title h1 {
+        font-size: 24px;
       }
 
-      .amount strong {
-        font-size: 26px;
+      .row {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .value {
+        text-align: left;
+      }
+
+      .amount {
+        font-size: 29px;
       }
     }
   </style>
@@ -176,440 +321,1175 @@
 
 <body>
 
-<header>
-  <h1>💳 Malipo ya Fomu</h1>
-</header>
+  <header>
+    <div class="header-inner">
+
+      <div class="logo">
+        🏫 Shule Portal Tanzania
+      </div>
+
+      <a
+        href="javascript:history.back()"
+        class="back-link"
+      >
+        ← Rudi
+      </a>
+
+    </div>
+  </header>
 
 
-<div class="container">
+  <main class="container">
 
-  <div
-    id="loading"
-    class="loading"
-  >
-    Inapakia taarifa za malipo...
-  </div>
+    <div class="title">
+
+      <h1>💳 Malipo ya Fomu</h1>
+
+      <p>
+        Kamilisha hatua ya malipo kwa ajili ya maombi yako.
+      </p>
+
+    </div>
 
 
-  <div
-    id="content"
-    style="display:none;"
-  >
+    <!-- LOADING -->
+    <div
+      id="loadingBox"
+      class="card loading"
+    >
 
-    <div class="card">
+      <div class="spinner"></div>
 
-      <h2>🏫 Taarifa za Shule</h2>
-
-      <div class="info">
-
-        <p>
-          <strong>Shule:</strong>
-          <span id="schoolName">-</span>
-        </p>
-
-        <p>
-          <strong>Mkoa:</strong>
-          <span id="schoolRegion">-</span>
-        </p>
-
-        <p>
-          <strong>Wilaya:</strong>
-          <span id="schoolDistrict">-</span>
-        </p>
-
+      <div>
+        Inapakia taarifa za malipo...
       </div>
 
     </div>
 
 
-    <div class="card">
-
-      <h2>👨‍🎓 Taarifa za Mwombaji</h2>
-
-      <div class="info">
-
-        <p>
-          <strong>Jina:</strong>
-          <span id="studentName">-</span>
-        </p>
-
-        <p>
-          <strong>Namba ya Maombi:</strong>
-          <span id="applicationNumber">-</span>
-        </p>
-
-      </div>
+    <!-- MAIN CONTENT -->
+    <div
+      id="content"
+      class="hidden"
+    >
 
 
-      <div class="amount">
+      <!-- SCHOOL INFORMATION -->
+      <div class="card">
 
-        <small>
-          Kiasi cha Kulipa
-        </small>
+        <h2>🏫 Taarifa za Shule</h2>
 
-        <strong>
-          TSh <span id="amount">0</span>
-        </strong>
+        <div class="row">
 
-      </div>
-
-
-      <div class="reference">
-
-        <div>
-          Payment Reference
-        </div>
-
-        <strong id="paymentReference">
-          -
-        </strong>
-
-        <div>
-          <span
-            id="paymentStatus"
-            class="status"
-          >
-            PENDING
+          <span class="label">
+            Shule
           </span>
+
+          <span
+            class="value"
+            id="schoolName"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Mkoa
+          </span>
+
+          <span
+            class="value"
+            id="schoolRegion"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Wilaya
+          </span>
+
+          <span
+            class="value"
+            id="schoolDistrict"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Aina ya Shule
+          </span>
+
+          <span
+            class="value"
+            id="schoolType"
+          >
+            -
+          </span>
+
         </div>
 
       </div>
 
 
-      <div class="notice">
+      <!-- APPLICANT -->
+      <div class="card">
 
-        <strong>ℹ️ Muhimu</strong><br><br>
+        <h2>👨‍🎓 Taarifa za Mwombaji</h2>
 
-        Ombi lako limehifadhiwa kikamilifu.
-        Malipo bado hayajathibitishwa.
+
+        <div class="row">
+
+          <span class="label">
+            Jina la Mwombaji
+          </span>
+
+          <span
+            class="value"
+            id="studentName"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Namba ya Maombi
+          </span>
+
+          <span
+            class="value"
+            id="applicationNumber"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Namba ya Malipo
+          </span>
+
+          <span
+            class="value"
+            id="paymentReference"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="label">
+            Hali ya Malipo
+          </span>
+
+          <span
+            class="value"
+            id="paymentStatus"
+          >
+            -
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- AMOUNT -->
+      <div class="card">
+
+        <div class="amount-box">
+
+          <div class="amount-label">
+            Kiasi cha Kulipa
+          </div>
+
+          <div
+            class="amount"
+            id="amount"
+          >
+            TSh 0
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGE -->
+      <div
+        id="messageBox"
+        class="card"
+      >
+
+        <div class="info">
+
+          ℹ️ <strong>Muhimu</strong><br>
+
+          Ombi lako limehifadhiwa kikamilifu.
+          Malipo bado hayajathibitishwa.
+
+          <br><br>
+
+          Kiasi kinachoonyeshwa hapa ni kiasi
+          kinachotakiwa kulipwa kwa fomu ya shule.
+
+        </div>
+
+      </div>
+
+
+      <!-- PAYMENT -->
+      <div class="card payment-section">
+
+        <h2>
+          💳 Endelea na Malipo
+        </h2>
+
+        <p>
+          Bonyeza kitufe hapa chini kuendelea na hatua
+          ya malipo.
+        </p>
+
+
+        <button
+          id="payButton"
+          class="pay-button"
+          onclick="startPayment()"
+        >
+          💳 Endelea na Malipo
+        </button>
+
+
+        <button
+          class="secondary-button"
+          onclick="goToDashboard()"
+        >
+          📋 Fuatilia Maombi Yangu
+        </button>
+
+
+        <div
+          id="paymentMessage"
+          class="hidden"
+        ></div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ERROR -->
+    <div
+      id="errorBox"
+      class="card hidden"
+    >
+
+      <div class="error">
+
+        ❌ <strong>Imeshindikana kupakia taarifa.</strong>
 
         <br><br>
 
-        Hatua inayofuata ni kuanzisha malipo
-        kupitia mfumo wa malipo utakaounganishwa
-        na Shule Portal Tanzania.
+        <span id="errorText">
+          Tafadhali jaribu tena.
+        </span>
 
       </div>
 
-
-      <button
-        id="paymentButton"
-        type="button"
-      >
-        💳 Endelea na Malipo
-      </button>
-
-
-      <div
-        id="error"
-        class="error"
-      ></div>
-
     </div>
 
-  </div>
 
-</div>
+  </main>
+
+
+  <footer>
+
+    © 2026 Shule Portal Tanzania
+
+    <br>
+
+    Mfumo wa kupata na kuomba fomu za shule mtandaoni.
+
+  </footer>
+
 
 
 <script>
 
-  // ==========================================
-  // READ URL PARAMETERS
-  // ==========================================
+  /*
+   * =====================================================
+   * SHULE PORTAL TANZANIA
+   * PAYMENT PAGE
+   * =====================================================
+   */
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
 
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+
+  /*
+   * DATA KUTOKA KWENYE URL
+   */
+
+  const schoolId =
+    params.get("school_id");
 
   const applicationId =
     params.get("application_id");
 
-
   const applicationNumber =
     params.get("application_number");
 
-
   const paymentId =
     params.get("payment_id");
-
 
   const paymentReference =
     params.get("payment_reference");
 
 
-  const schoolId =
-    params.get("school_id");
+  /*
+   * MUHIMU:
+   * URL YAKO INA amount=20000
+   *
+   * HAPA TUNAISOMA MOJA KWA MOJA.
+   */
+
+  const urlAmount =
+    params.get("amount");
 
 
-  // ==========================================
-  // ELEMENTS
-  // ==========================================
+  /*
+   * DATA YA MFUMO
+   */
 
-  const loading =
-    document.getElementById("loading");
+  let paymentAmount = 0;
 
-  const content =
-    document.getElementById("content");
+  let applicationData = null;
 
-  const errorBox =
-    document.getElementById("error");
+  let paymentData = null;
 
-  const paymentButton =
-    document.getElementById("paymentButton");
+  let schoolData = null;
 
 
-  // ==========================================
-  // SHOW ERROR
-  // ==========================================
+  /*
+   * FORMAT MONEY
+   */
 
-  function showError(message) {
+  function formatMoney(value) {
 
-    errorBox.textContent =
-      message;
+    const number =
+      Number(value);
 
-    errorBox.style.display =
-      "block";
+    if (
+      !Number.isFinite(number)
+    ) {
+
+      return "TSh 0";
+
+    }
+
+    return "TSh " +
+      number.toLocaleString(
+        "en-US",
+        {
+          maximumFractionDigits: 0
+        }
+      );
 
   }
 
 
-  // ==========================================
-  // LOAD APPLICATION
-  // ==========================================
+  /*
+   * ESCAPE HTML
+   */
 
-  async function loadApplication() {
+  function escapeHTML(value) {
 
-    if (!applicationId) {
+    if (
+      value === null ||
+      value === undefined
+    ) {
 
-      loading.style.display =
-        "none";
+      return "";
 
-      showError(
-        "Application ID haijapatikana. Tafadhali rudi kwenye fomu ya maombi."
+    }
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /*
+   * FETCH JSON
+   */
+
+  async function fetchJSON(url) {
+
+    const response =
+      await fetch(
+        url,
+        {
+          cache: "no-store"
+        }
       );
 
-      errorBox.style.display =
-        "block";
 
-      return;
+    if (!response.ok) {
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    return await response.json();
+
+  }
+
+
+  /*
+   * LOAD SCHOOL
+   */
+
+  async function loadSchool() {
+
+    if (!schoolId) {
+
+      return null;
 
     }
 
 
     try {
 
-      const response =
-        await fetch(
-          `${window.location.origin}/api/applications/${encodeURIComponent(applicationId)}`,
-          {
-            method: "GET",
-            cache: "no-store"
-          }
-        );
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          "Server imeshindwa kupata application. HTTP " +
-          response.status
-        );
-
-      }
-
-
       const data =
-        await response.json();
+        await fetchJSON(
+          "/api/schools"
+        );
 
 
       if (
-        !data.success ||
-        !data.application
+        !data ||
+        !Array.isArray(data.schools)
       ) {
 
-        throw new Error(
-          data.message ||
-          "Application haijapatikana."
-        );
+        return null;
 
       }
 
 
-      const application =
-        data.application;
+      return data.schools.find(
+        school =>
+          String(school.id) ===
+          String(schoolId)
+      ) || null;
 
+    }
 
-      // ======================================
-      // APPLICATION INFORMATION
-      // ======================================
+    catch (error) {
 
-      document.getElementById(
-        "studentName"
-      ).textContent =
-        application.student_name || "-";
-
-
-      document.getElementById(
-        "applicationNumber"
-      ).textContent =
-        application.application_number ||
-        applicationNumber ||
-        "-";
-
-
-      // ======================================
-      // PAYMENT INFORMATION
-      // ======================================
-
-      const amount =
-        Number(
-          application.amount || 0
-        );
-
-
-      document.getElementById(
-        "amount"
-      ).textContent =
-        amount.toLocaleString();
-
-
-      document.getElementById(
-        "paymentReference"
-      ).textContent =
-        application.payment_reference ||
-        paymentReference ||
-        "-";
-
-
-      const paymentStatus =
-        (
-          application.payment_status ||
-          "pending"
-        ).toUpperCase();
-
-
-      document.getElementById(
-        "paymentStatus"
-      ).textContent =
-        paymentStatus;
-
-
-      // ======================================
-      // LOAD SCHOOL
-      // ======================================
-
-      const schoolResponse =
-        await fetch(
-          `${window.location.origin}/api/schools`,
-          {
-            method: "GET",
-            cache: "no-store"
-          }
-        );
-
-
-      if (!schoolResponse.ok) {
-
-        throw new Error(
-          "Imeshindikana kupata taarifa za shule."
-        );
-
-      }
-
-
-      const schoolData =
-        await schoolResponse.json();
-
-
-      const school =
-        schoolData.schools.find(
-          item =>
-            String(item.id) ===
-            String(
-              application.school_id ||
-              schoolId
-            )
-        );
-
-
-      if (school) {
-
-        document.getElementById(
-          "schoolName"
-        ).textContent =
-          school.name || "-";
-
-
-        document.getElementById(
-          "schoolRegion"
-        ).textContent =
-          school.region || "-";
-
-
-        document.getElementById(
-          "schoolDistrict"
-        ).textContent =
-          school.district || "-";
-
-      }
-
-
-      // ======================================
-      // SHOW PAGE
-      // ======================================
-
-      loading.style.display =
-        "none";
-
-      content.style.display =
-        "block";
-
-
-    } catch (error) {
-
-      console.error(
-        "Payment page error:",
+      console.warn(
+        "School loading error:",
         error
       );
 
-
-      loading.style.display =
-        "none";
-
-      showError(
-        "Imeshindikana kupakia taarifa za malipo.\n\n" +
-        error.message
-      );
+      return null;
 
     }
 
   }
 
 
-  // ==========================================
-  // PAYMENT BUTTON
-  // ==========================================
+  /*
+   * LOAD APPLICATION
+   */
 
-  paymentButton.addEventListener(
-    "click",
-    function() {
+  async function loadApplication() {
 
-      alert(
-        "Mfumo wa malipo halisi bado unaandaliwa. Payment yako bado ni PENDING."
-      );
+    if (!applicationNumber) {
+
+      return null;
 
     }
-  );
 
 
-  // ==========================================
-  // START
-  // ==========================================
+    try {
 
-  loadApplication();
+      const data =
+        await fetchJSON(
+          "/api/application-by-number/" +
+          encodeURIComponent(
+            applicationNumber
+          )
+        );
+
+
+      return data;
+
+    }
+
+    catch (error) {
+
+      console.warn(
+        "Application loading error:",
+        error
+      );
+
+      return null;
+
+    }
+
+  }
+
+
+  /*
+   * GET VALUE SAFELY
+   */
+
+  function firstValidNumber(values) {
+
+    for (
+      const value of values
+    ) {
+
+      if (
+        value !== null &&
+        value !== undefined &&
+        value !== ""
+      ) {
+
+        const number =
+          Number(value);
+
+        if (
+          Number.isFinite(number) &&
+          number > 0
+        ) {
+
+          return number;
+
+        }
+
+      }
+
+    }
+
+
+    return 0;
+
+  }
+
+
+  /*
+   * FIND APPLICATION OBJECT
+   */
+
+  function getApplicationObject(data) {
+
+    if (!data) {
+
+      return {};
+
+    }
+
+
+    if (
+      data.application &&
+      typeof data.application === "object"
+    ) {
+
+      return data.application;
+
+    }
+
+
+    if (
+      data.data &&
+      data.data.application &&
+      typeof data.data.application === "object"
+    ) {
+
+      return data.data.application;
+
+    }
+
+
+    return data;
+
+  }
+
+
+  /*
+   * FIND PAYMENT OBJECT
+   */
+
+  function getPaymentObject(data) {
+
+    if (!data) {
+
+      return {};
+
+    }
+
+
+    if (
+      data.payment &&
+      typeof data.payment === "object"
+    ) {
+
+      return data.payment;
+
+    }
+
+
+    if (
+      data.data &&
+      data.data.payment &&
+      typeof data.data.payment === "object"
+    ) {
+
+      return data.data.payment;
+
+    }
+
+
+    return {};
+
+  }
+
+
+  /*
+   * FIND SCHOOL OBJECT
+   */
+
+  function getSchoolObject(data) {
+
+    if (!data) {
+
+      return {};
+
+    }
+
+
+    if (
+      data.school &&
+      typeof data.school === "object"
+    ) {
+
+      return data.school;
+
+    }
+
+
+    if (
+      data.data &&
+      data.data.school &&
+      typeof data.data.school === "object"
+    ) {
+
+      return data.data.school;
+
+    }
+
+
+    return {};
+
+  }
+
+
+  /*
+   * DISPLAY DATA
+   */
+
+  function displayData() {
+
+    const app =
+      applicationData || {};
+
+    const payment =
+      paymentData || {};
+
+    const schoolFromApi =
+      getSchoolObject(
+        applicationData
+      );
+
+
+    /*
+     * SCHOOL
+     */
+
+    const finalSchool =
+      schoolData ||
+      schoolFromApi ||
+      {};
+
+
+    document.getElementById(
+      "schoolName"
+    ).textContent =
+      finalSchool.name ||
+      app.school_name ||
+      "Shule";
+
+
+    document.getElementById(
+      "schoolRegion"
+    ).textContent =
+      finalSchool.region ||
+      app.region ||
+      "-";
+
+
+    document.getElementById(
+      "schoolDistrict"
+    ).textContent =
+      finalSchool.district ||
+      app.district ||
+      "-";
+
+
+    document.getElementById(
+      "schoolType"
+    ).textContent =
+      finalSchool.school_type ||
+      finalSchool.type ||
+      app.school_type ||
+      "-";
+
+
+    /*
+     * APPLICANT
+     */
+
+    document.getElementById(
+      "studentName"
+    ).textContent =
+      app.student_name ||
+      app.studentName ||
+      "-";
+
+
+    document.getElementById(
+      "applicationNumber"
+    ).textContent =
+      app.application_number ||
+      applicationNumber ||
+      "-";
+
+
+    document.getElementById(
+      "paymentReference"
+    ).textContent =
+      payment.payment_reference ||
+      paymentReference ||
+      "-";
+
+
+    /*
+     * PAYMENT STATUS
+     */
+
+    const status =
+      payment.status ||
+      app.payment_status ||
+      "unpaid";
+
+
+    const statusElement =
+      document.getElementById(
+        "paymentStatus"
+      );
+
+
+    let statusText =
+      "UNPAID";
+
+    let statusClass =
+      "unpaid";
+
+
+    if (
+      String(status).toLowerCase() ===
+      "paid"
+    ) {
+
+      statusText =
+        "PAID";
+
+      statusClass =
+        "paid";
+
+    }
+
+    else if (
+      String(status).toLowerCase() ===
+      "pending"
+    ) {
+
+      statusText =
+        "PENDING";
+
+      statusClass =
+        "pending";
+
+    }
+
+    else if (
+      String(status).toLowerCase() ===
+      "failed"
+    ) {
+
+      statusText =
+        "FAILED";
+
+      statusClass =
+        "failed";
+
+    }
+
+
+    statusElement.innerHTML =
+      '<span class="status ' +
+      statusClass +
+      '">' +
+      escapeHTML(statusText) +
+      "</span>";
+
+
+    /*
+     * AMOUNT
+     *
+     * PRIORITY:
+     *
+     * 1. amount kutoka URL
+     * 2. payment.amount
+     * 3. application.form_price
+     * 4. application.price
+     * 5. school.form_price
+     * 6. school.price
+     *
+     * HII NDIO INAHITAJI KUONDOA TSh 0.
+     */
+
+    const amountFromPayment =
+      payment.amount;
+
+    const amountFromApplication =
+      app.form_price ||
+      app.price ||
+      app.amount;
+
+    const amountFromSchool =
+      finalSchool.form_price ||
+      finalSchool.price;
+
+
+    paymentAmount =
+      firstValidNumber([
+
+        urlAmount,
+
+        amountFromPayment,
+
+        amountFromApplication,
+
+        amountFromSchool
+
+      ]);
+
+
+    /*
+     * DISPLAY AMOUNT
+     */
+
+    document.getElementById(
+      "amount"
+    ).textContent =
+      formatMoney(
+        paymentAmount
+      );
+
+
+    /*
+     * BUTTON
+     */
+
+    const button =
+      document.getElementById(
+        "payButton"
+      );
+
+
+    if (
+      paymentAmount <= 0
+    ) {
+
+      button.disabled = true;
+
+      button.textContent =
+        "⚠️ Kiasi cha Malipo Hakijapatikana";
+
+    }
+
+    else {
+
+      button.disabled = false;
+
+      button.textContent =
+        "💳 Endelea na Malipo";
+
+    }
+
+
+  }
+
+
+  /*
+   * START PAYMENT
+   */
+
+  function startPayment() {
+
+    if (
+      paymentAmount <= 0
+    ) {
+
+      showPaymentMessage(
+        "error",
+        "Kiasi cha malipo hakijapatikana. Tafadhali rudi ujaribu tena."
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * HATUTAKI KUSEMA MALIPO YAMEKAMILIKA
+     * BILA PAYMENT GATEWAY.
+     */
+
+    showPaymentMessage(
+      "warning",
+      "Mfumo wa malipo ya moja kwa moja bado unaandaliwa. Ombi lako limehifadhiwa, lakini malipo hayajathibitishwa bado."
+    );
+
+  }
+
+
+  /*
+   * PAYMENT MESSAGE
+   */
+
+  function showPaymentMessage(
+    type,
+    message
+  ) {
+
+    const box =
+      document.getElementById(
+        "paymentMessage"
+      );
+
+
+    box.className =
+      type === "success"
+        ? "success"
+        : type === "error"
+          ? "error"
+          : "warning";
+
+
+    box.innerHTML =
+      message;
+
+
+    box.classList.remove(
+      "hidden"
+    );
+
+  }
+
+
+  /*
+   * DASHBOARD
+   */
+
+  function goToDashboard() {
+
+    let url =
+      "/applicant-dashboard.html";
+
+
+    if (applicationNumber) {
+
+      url +=
+        "?application_number=" +
+        encodeURIComponent(
+          applicationNumber
+        );
+
+    }
+
+
+    window.location.href =
+      url;
+
+  }
+
+
+  /*
+   * MAIN LOAD
+   */
+
+  async function loadPage() {
+
+    try {
+
+      /*
+       * KAMA URL INA AMOUNT,
+       * TUMIA MOJA KWA MOJA.
+       */
+
+      if (
+        urlAmount &&
+        Number(urlAmount) > 0
+      ) {
+
+        paymentAmount =
+          Number(urlAmount);
+
+      }
+
+
+      /*
+       * LOAD DATA
+       */
+
+      const results =
+        await Promise.all([
+
+          loadApplication(),
+
+          loadSchool()
+
+        ]);
+
+
+      applicationData =
+        getApplicationObject(
+          results[0]
+        );
+
+
+      paymentData =
+        getPaymentObject(
+          results[0]
+        );
+
+
+      schoolData =
+        results[1];
+
+
+      /*
+       * DISPLAY
+       */
+
+      displayData();
+
+
+      /*
+       * CONTENT
+       */
+
+      document.getElementById(
+        "loadingBox"
+      ).classList.add(
+        "hidden"
+      );
+
+
+      document.getElementById(
+        "content"
+      ).classList.remove(
+        "hidden"
+      );
+
+
+    }
+
+    catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      document.getElementById(
+        "loadingBox"
+      ).classList.add(
+        "hidden"
+      );
+
+
+      document.getElementById(
+        "errorBox"
+      ).classList.remove(
+        "hidden"
+      );
+
+
+      document.getElementById(
+        "errorText"
+      ).textContent =
+        error.message ||
+        "Tatizo limetokea wakati wa kupakia taarifa.";
+
+    }
+
+  }
+
+
+  /*
+   * START
+   */
+
+  loadPage();
 
 </script>
 
