@@ -15,14 +15,7 @@
       margin: 0;
       min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
-      background:
-        linear-gradient(
-          135deg,
-          #0d47a1,
-          #1565c0,
-          #42a5f5
-        );
-
+      background: linear-gradient(135deg, #e3f2fd, #ffffff);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -36,50 +29,48 @@
 
     .login-card {
       background: #ffffff;
-      border-radius: 20px;
-      padding: 32px 28px;
-      box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.20);
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.12);
     }
 
     .logo {
-      width: 76px;
-      height: 76px;
-      margin: 0 auto 15px;
-      border-radius: 50%;
-
-      background: #1565c0;
-      color: #ffffff;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 38px;
+      text-align: center;
+      margin-bottom: 25px;
     }
 
-    h1 {
-      text-align: center;
+    .logo-icon {
+      font-size: 55px;
+      margin-bottom: 8px;
+    }
+
+    .logo h1 {
       margin: 0;
       color: #1565c0;
       font-size: 25px;
     }
 
-    .subtitle {
-      text-align: center;
+    .logo p {
+      margin: 7px 0 0;
       color: #666;
-      margin: 8px 0 28px;
       font-size: 14px;
     }
 
-    .admin-label {
+    .title {
       text-align: center;
-      font-size: 13px;
-      font-weight: bold;
-      color: #555;
       margin-bottom: 25px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    }
+
+    .title h2 {
+      margin: 0;
+      color: #222;
+      font-size: 22px;
+    }
+
+    .title p {
+      margin: 8px 0 0;
+      color: #777;
+      font-size: 14px;
     }
 
     .form-group {
@@ -88,16 +79,16 @@
 
     label {
       display: block;
-      font-weight: bold;
-      color: #333;
       margin-bottom: 7px;
+      color: #333;
+      font-weight: 600;
       font-size: 14px;
     }
 
     input {
       width: 100%;
-      padding: 14px 15px;
-      border: 1px solid #d5d5d5;
+      padding: 14px;
+      border: 1px solid #d0d7de;
       border-radius: 10px;
       font-size: 16px;
       outline: none;
@@ -106,8 +97,7 @@
 
     input:focus {
       border-color: #1565c0;
-      box-shadow:
-        0 0 0 3px rgba(21, 101, 192, 0.12);
+      box-shadow: 0 0 0 3px rgba(21,101,192,0.1);
     }
 
     .password-wrapper {
@@ -120,32 +110,28 @@
 
     .show-password {
       position: absolute;
-      right: 5px;
-      top: 5px;
-      height: 42px;
-      width: 45px;
-
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
       border: none;
       background: transparent;
       cursor: pointer;
-
-      font-size: 19px;
+      font-size: 20px;
+      padding: 5px;
     }
 
     .login-button {
       width: 100%;
       border: none;
       border-radius: 10px;
-      padding: 15px;
-
+      padding: 14px;
       background: #1565c0;
       color: white;
-
       font-size: 16px;
       font-weight: bold;
-
       cursor: pointer;
       transition: 0.2s;
+      margin-top: 5px;
     }
 
     .login-button:hover {
@@ -153,93 +139,65 @@
     }
 
     .login-button:disabled {
-      background: #90a4ae;
+      opacity: 0.65;
       cursor: not-allowed;
     }
 
     .message {
       display: none;
+      margin-bottom: 18px;
       padding: 12px;
       border-radius: 9px;
-      margin-bottom: 18px;
       font-size: 14px;
-      text-align: center;
+      line-height: 1.5;
     }
 
     .message.error {
       display: block;
       background: #ffebee;
       color: #c62828;
-      border: 1px solid #ef9a9a;
+      border: 1px solid #ffcdd2;
     }
 
     .message.success {
       display: block;
       background: #e8f5e9;
       color: #2e7d32;
-      border: 1px solid #a5d6a7;
+      border: 1px solid #c8e6c9;
     }
 
     .back-link {
-      display: block;
       text-align: center;
       margin-top: 22px;
+    }
 
+    .back-link a {
       color: #1565c0;
       text-decoration: none;
-
       font-size: 14px;
     }
 
-    .back-link:hover {
+    .back-link a:hover {
       text-decoration: underline;
     }
 
-    .footer {
+    .security-note {
+      margin-top: 22px;
+      background: #f5f7fa;
+      border-radius: 10px;
+      padding: 12px;
       text-align: center;
-      color: #777;
       font-size: 12px;
-      margin-top: 25px;
-      line-height: 1.6;
+      color: #777;
+      line-height: 1.5;
     }
 
     .loading {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.5);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @media (max-width: 480px) {
-
-      body {
-        padding: 15px;
-      }
-
-      .login-card {
-        padding: 28px 20px;
-        border-radius: 17px;
-      }
-
-      h1 {
-        font-size: 22px;
-      }
-
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+      color: #666;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -251,51 +209,36 @@
     <div class="login-card">
 
       <div class="logo">
-        🏫
+        <div class="logo-icon">🏫</div>
+        <h1>Shule Portal Tanzania</h1>
+        <p>School Administration System</p>
       </div>
 
-      <h1>
-        Shule Portal Tanzania
-      </h1>
-
-      <div class="subtitle">
-        Mfumo wa Maombi ya Shule Mtandaoni
+      <div class="title">
+        <h2>🔐 School Admin Login</h2>
+        <p>Ingia kusimamia shule yako</p>
       </div>
 
-      <div class="admin-label">
-        🔐 SCHOOL ADMIN LOGIN
-      </div>
-
-      <div
-        id="message"
-        class="message">
-      </div>
+      <div id="message" class="message"></div>
 
       <form id="loginForm">
 
         <div class="form-group">
-
-          <label for="email">
-            📧 Email
-          </label>
+          <label for="email">Barua pepe</label>
 
           <input
             type="email"
             id="email"
             name="email"
-            placeholder="Ingiza email yako"
+            placeholder="mfano@gmail.com"
             autocomplete="username"
             required
           >
-
         </div>
-
 
         <div class="form-group">
 
-          <label for="password">
-            🔑 Password
-          </label>
+          <label for="password">Password</label>
 
           <div class="password-wrapper">
 
@@ -303,7 +246,7 @@
               type="password"
               id="password"
               name="password"
-              placeholder="Ingiza password yako"
+              placeholder="Ingiza password"
               autocomplete="current-password"
               required
             >
@@ -312,7 +255,8 @@
               type="button"
               class="show-password"
               id="togglePassword"
-              aria-label="Onyesha password">
+              aria-label="Onyesha password"
+            >
               👁️
             </button>
 
@@ -320,364 +264,172 @@
 
         </div>
 
-
         <button
           type="submit"
           class="login-button"
-          id="loginButton">
-
-          Ingia kwenye Dashboard
-
+          id="loginButton"
+        >
+          Ingia
         </button>
+
+        <div class="loading" id="loading">
+          Inaingia kwenye mfumo...
+        </div>
 
       </form>
 
+      <div class="back-link">
+        <a href="/">← Rudi kwenye ukurasa mkuu</a>
+      </div>
 
-      <a
-        href="/"
-        class="back-link">
-
-        ← Rudi Shule Portal Tanzania
-
-      </a>
-
-
-      <div class="footer">
-
-        Shule Portal Tanzania<br>
-
-        Mfumo wa kidigitali wa maombi ya shule
-
+      <div class="security-note">
+        🔒 Mfumo huu ni kwa School Admin pekee.
+        Usishirikishe password yako na mtu mwingine.
       </div>
 
     </div>
 
   </div>
 
+<script>
 
-  <script>
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const loginButton = document.getElementById("loginButton");
+const loading = document.getElementById("loading");
+const message = document.getElementById("message");
+const togglePassword = document.getElementById("togglePassword");
 
-    const loginForm =
-      document.getElementById(
-        "loginForm"
+
+function showMessage(text, type = "error") {
+
+  message.textContent = text;
+
+  message.className = "message " + type;
+}
+
+
+function hideMessage() {
+
+  message.textContent = "";
+  message.className = "message";
+}
+
+
+// Show / hide password
+togglePassword.addEventListener("click", () => {
+
+  if (passwordInput.type === "password") {
+
+    passwordInput.type = "text";
+    togglePassword.textContent = "🙈";
+
+  } else {
+
+    passwordInput.type = "password";
+    togglePassword.textContent = "👁️";
+
+  }
+
+});
+
+
+// Prevent automatic login.
+// Login must ALWAYS be performed through the form.
+loginForm.addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  hideMessage();
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+
+    showMessage("Tafadhali jaza email na password.");
+
+    return;
+  }
+
+
+  loginButton.disabled = true;
+  loginButton.textContent = "Inaingia...";
+  loading.style.display = "block";
+
+
+  try {
+
+    const response = await fetch("/api/school-admin/login", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      credentials: "include",
+
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+
+    });
+
+
+    const data = await response.json();
+
+
+    if (!response.ok || !data.success) {
+
+      throw new Error(
+        data.message || "Email au password si sahihi."
       );
-
-    const emailInput =
-      document.getElementById(
-        "email"
-      );
-
-    const passwordInput =
-      document.getElementById(
-        "password"
-      );
-
-    const loginButton =
-      document.getElementById(
-        "loginButton"
-      );
-
-    const message =
-      document.getElementById(
-        "message"
-      );
-
-    const togglePassword =
-      document.getElementById(
-        "togglePassword"
-      );
-
-
-    // =================================================
-    // SHOW / HIDE PASSWORD
-    // =================================================
-
-    togglePassword.addEventListener(
-      "click",
-      () => {
-
-        if (
-          passwordInput.type ===
-          "password"
-        ) {
-
-          passwordInput.type =
-            "text";
-
-          togglePassword.textContent =
-            "🙈";
-
-          togglePassword.setAttribute(
-            "aria-label",
-            "Ficha password"
-          );
-
-        } else {
-
-          passwordInput.type =
-            "password";
-
-          togglePassword.textContent =
-            "👁️";
-
-          togglePassword.setAttribute(
-            "aria-label",
-            "Onyesha password"
-          );
-
-        }
-
-      }
-    );
-
-
-    // =================================================
-    // MESSAGE
-    // =================================================
-
-    function showMessage(
-      text,
-      type = "error"
-    ) {
-
-      message.textContent =
-        text;
-
-      message.className =
-        `message ${type}`;
 
     }
 
 
-    function clearMessage() {
-
-      message.textContent =
-        "";
-
-      message.className =
-        "message";
-
-    }
-
-
-    // =================================================
-    // CHECK EXISTING LOGIN
-    // =================================================
-
-    async function checkExistingLogin() {
-
-      try {
-
-        const response =
-          await fetch(
-            "/api/school-admin/me",
-            {
-              method: "GET",
-              credentials: "same-origin"
-            }
-          );
-
-        if (
-          response.ok
-        ) {
-
-          const data =
-            await response.json();
-
-          if (
-            data.success
-          ) {
-
-            window.location.href =
-              "/school-admin-dashboard.html";
-
-          }
-
-        }
-
-      } catch (error) {
-
-        console.log(
-          "No existing session."
-        );
-
-      }
-
-    }
-
-
-    // =================================================
-    // LOGIN
-    // =================================================
-
-    loginForm.addEventListener(
-      "submit",
-      async (event) => {
-
-        event.preventDefault();
-
-        clearMessage();
-
-        const email =
-          emailInput.value.trim();
-
-        const password =
-          passwordInput.value;
-
-
-        if (!email) {
-
-          showMessage(
-            "Tafadhali ingiza email yako."
-          );
-
-          emailInput.focus();
-
-          return;
-
-        }
-
-
-        if (!password) {
-
-          showMessage(
-            "Tafadhali ingiza password yako."
-          );
-
-          passwordInput.focus();
-
-          return;
-
-        }
-
-
-        loginButton.disabled =
-          true;
-
-        loginButton.innerHTML = `
-          <span class="loading">
-            <span class="spinner"></span>
-            Inaingia...
-          </span>
-        `;
-
-
-        try {
-
-          const response =
-            await fetch(
-              "/api/school-admin/login",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                credentials:
-                  "same-origin",
-
-                body: JSON.stringify({
-                  email,
-                  password
-                })
-              }
-            );
-
-
-          const data =
-            await response.json();
-
-
-          if (
-            !response.ok ||
-            !data.success
-          ) {
-
-            showMessage(
-              data.message ||
-              "Email au password si sahihi."
-            );
-
-            loginButton.disabled =
-              false;
-
-            loginButton.textContent =
-              "Ingia kwenye Dashboard";
-
-            return;
-
-          }
-
-
-          showMessage(
-            "Umefanikiwa kuingia. Inafungua dashboard...",
-            "success"
-          );
-
-
-          setTimeout(
-            () => {
-
-              window.location.href =
-                "/school-admin-dashboard.html";
-
-            },
-            700
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            "LOGIN ERROR:",
-            error
-          );
-
-          showMessage(
-            "Kuna tatizo la kuunganisha na server. Tafadhali jaribu tena."
-          );
-
-          loginButton.disabled =
-            false;
-
-          loginButton.textContent =
-            "Ingia kwenye Dashboard";
-
-        }
-
-      }
+    showMessage(
+      "Umeingia kikamilifu. Inafungua dashboard...",
+      "success"
     );
 
 
-    // =================================================
-    // ENTER KEY
-    // =================================================
+    /*
+      Muhimu:
+      Hapa ndipo tunampeleka admin dashboard.
+      Hatupeleki dashboard kabla ya server kuthibitisha login.
+    */
 
-    passwordInput.addEventListener(
-      "keydown",
-      event => {
+    setTimeout(() => {
 
-        if (
-          event.key === "Enter"
-        ) {
+      window.location.replace(
+        "/school-admin-dashboard.html"
+      );
 
-          loginForm.requestSubmit();
+    }, 500);
 
-        }
 
-      }
+  } catch (error) {
+
+    console.error("Login error:", error);
+
+    showMessage(
+      error.message ||
+      "Imeshindikana kuingia kwenye mfumo."
     );
 
+    loginButton.disabled = false;
+    loginButton.textContent = "Ingia";
+    loading.style.display = "none";
 
-    // =================================================
-    // START
-    // =================================================
+  }
 
-    checkExistingLogin();
+});
 
-  </script>
+</script>
 
 </body>
 </html>
