@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Maombi na Malipo - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      color: #1e293b;
+    }
+
+    header {
+      background: #1565c0;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      font-size: 29px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .brand small {
+      opacity: .9;
+    }
+
+    .back-btn {
+      background: white;
+      color: #1565c0;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .container {
+      width: min(1250px, 94%);
+      margin: 25px auto;
+    }
+
+    .page-title {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+      margin-bottom: 20px;
+    }
+
+    .page-title h2 {
+      margin: 0 0 7px;
+      color: #1565c0;
+    }
+
+    .page-title p {
+      margin: 0;
+      color: #64748b;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+      border-top: 4px solid #1565c0;
+    }
+
+    .stat-icon {
+      font-size: 25px;
+    }
+
+    .stat-number {
+      font-size: 25px;
+      font-weight: bold;
+      color: #1565c0;
+      margin: 5px 0;
+    }
+
+    .stat-label {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .main-card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    input,
+    select {
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #1565c0;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .btn-view {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .btn-approve {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .btn-reject {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .btn-paid {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .btn-unpaid {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .btn-refresh {
+      background: #1565c0;
+      color: white;
+    }
+
+    .btn:hover {
+      opacity: .85;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1150px;
+    }
+
+    th {
+      background: #f1f5f9;
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 13px;
+    }
+
+    tr:hover td {
+      background: #fafcff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .badge-paid {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .badge-unpaid {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .badge-pending {
+      background: #fff7ed;
+      color: #c2410c;
+    }
+
+    .badge-approved {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .badge-rejected {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .actions {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .loading,
+    .empty,
+    .error {
+      text-align: center;
+      padding: 35px;
+      color: #64748b;
+    }
+
+    .error {
+      color: #b91c1c;
+    }
+
+    /* MODAL */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(15,23,42,.65);
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .modal.show {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .modal-content {
+      width: min(900px, 100%);
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 20px auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+
+    .modal-header {
+      background: #1565c0;
+      color: white;
+      padding: 17px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .close {
+      border: none;
+      background: transparent;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .application-number {
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 13px;
+      border-radius: 9px;
+      margin-bottom: 18px;
+      font-weight: bold;
+    }
+
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section h3 {
+      margin: 0 0 10px;
+      color: #1565c0;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .detail {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 9px;
+      padding: 11px;
+    }
+
+    .detail.full {
+      grid-column: 1 / -1;
+    }
+
+    .label {
+      color: #64748b;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .modal-footer {
+      padding: 15px 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .large-btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .green {
+      background: #16a34a;
+      color: white;
+    }
+
+    .red {
+      background: #dc2626;
+      color: white;
+    }
+
+    .blue {
+      background: #1565c0;
+      color: white;
+    }
+
+    .gray {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .payment-highlight {
+      border: 1px solid #bfdbfe;
+      background: #f8fbff;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .payment-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 3000;
+      padding: 13px 17px;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      max-width: 90%;
+      box-shadow: 0 5px 20px rgba(0,0,0,.2);
+    }
+
+    .toast.success {
+      background: #16a34a;
+    }
+
+    .toast.error {
+      background: #dc2626;
+    }
+
+    @media(max-width:1000px) {
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media(max-width:650px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 9px;
+      }
+
+      .stat {
+        padding: 13px 10px;
+      }
+
+      .details {
+        grid-template-columns: 1fr;
+      }
+
+      .detail.full {
+        grid-column: auto;
+      }
+
+      .modal {
+        padding: 7px;
+      }
+
+      .modal-content {
+        margin: 5px auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="brand">
+    <div class="brand-icon">🏫</div>
+
+    <div>
+      <h1>Shule Portal Tanzania</h1>
+      <small>Main Admin — Maombi & Malipo</small>
+    </div>
+  </div>
+
+  <a href="/admin.html" class="back-btn">
+    ← Admin Dashboard
+  </a>
+
+</header>
+
+<main class="container">
+
+  <section class="page-title">
+
+    <h2>💳 Maombi na Malipo</h2>
+
+    <p>
+      Simamia maombi ya wanafunzi na kufuatilia hali ya malipo
+      kutoka shule zote zilizosajiliwa.
+    </p>
+
+  </section>
+
+  <section class="stats">
+
+    <div class="stat">
+      <div class="stat-icon">📋</div>
+      <div class="stat-number" id="total">0</div>
+      <div class="stat-label">Maombi Yote</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-number" id="pending">0</div>
+      <div class="stat-label">Yanasubiri</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">✅</div>
+      <div class="stat-number" id="approved">0</div>
+      <div class="stat-label">Yamekubaliwa</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">💰</div>
+      <div class="stat-number" id="paid">0</div>
+      <div class="stat-label">Yamelipwa</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">💳</div>
+      <div class="stat-number" id="unpaid">0</div>
+      <div class="stat-label">Hayajalipwa</div>
+    </div>
+
+  </section>
+
+  <section class="main-card">
+
+    <div class="toolbar">
+
+      <div class="toolbar-left">
+
+        <input
+          type="search"
+          id="search"
+          placeholder="🔎 Tafuta mwanafunzi, shule au namba..."
+          oninput="render()"
+        >
+
+        <select id="schoolFilter" onchange="render()">
+          <option value="">🏫 Shule zote</option>
+        </select>
+
+        <select id="statusFilter" onchange="render()">
+          <option value="">📝 Hali zote</option>
+          <option value="pending">Inasubiri</option>
+          <option value="approved">Imekubaliwa</option>
+          <option value="rejected">Imekataliwa</option>
+        </select>
+
+        <select id="paymentFilter" onchange="render()">
+          <option value="">💳 Malipo yote</option>
+          <option value="paid">Yamelipwa</option>
+          <option value="unpaid">Hayajalipwa</option>
+          <option value="pending">Malipo yanasubiri</option>
+        </select>
+
+      </div>
+
+      <div class="toolbar-right">
+
+        <button
+          class="btn btn-refresh"
+          onclick="loadAll()"
+        >
+          🔄 Refresh
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>#</th>
+            <th>Namba ya Maombi</th>
+            <th>Mwanafunzi</th>
+            <th>Shule</th>
+            <th>Kiasi</th>
+            <th>Payment Reference</th>
+            <th>Malipo</th>
+            <th>Maombi</th>
+            <th>Tarehe</th>
+            <th>Vitendo</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="tableBody">
+
+          <tr>
+            <td colspan="10" class="loading">
+              Inapakia...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- DETAILS MODAL -->
+
+<div class="modal" id="modal">
+
+  <div class="modal-content">
+
+    <div class="modal-header">
+
+      <h2>📄 Maelezo Kamili ya Maombi</h2>
+
+      <button class="close" onclick="closeModal()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="application-number">
+        🆔 Namba ya Maombi:
+        <span id="mNumber">-</span>
+      </div>
+
+      <div class="section">
+
+        <h3>👤 Taarifa za Mwanafunzi</h3>
+
+        <div class="details">
+
+          <div class="detail">
+            <div class="label">Jina</div>
+            <div class="value" id="mStudent">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Jinsia</div>
+            <div class="value" id="mGender">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Tarehe ya Kuzaliwa</div>
+            <div class="value" id="mDob">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Darasa</div>
+            <div class="value" id="mClass">-</div>
+          </div>
+
+          <div class="detail full">
+            <div class="label">Anwani</div>
+            <div class="value" id="mAddress">-</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <h3>🏫 Taarifa za Shule</h3>
+
+        <div class="details">
+
+          <div class="detail">
+            <div class="label">Shule</div>
+            <div class="value" id="mSchool">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Mkoa</div>
+            <div class="value" id="mRegion">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Wilaya</div>
+            <div class="value" id="mDistrict">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Bei ya Fomu</div>
+            <div class="value" id="mFormPrice">-</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <h3>👨‍👩‍👦 Mzazi / Mlezi</h3>
+
+        <div class="details">
+
+          <div class="detail">
+            <div class="label">Jina</div>
+            <div class="value" id="mParent">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Simu</div>
+            <div class="value" id="mPhone">-</div>
+          </div>
+
+          <div class="detail full">
+            <div class="label">Email</div>
+            <div class="value" id="mEmail">-</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <h3>💳 Taarifa za Malipo</h3>
+
+        <div class="payment-highlight">
+
+          <div
+            class="payment-title"
+            id="mPaymentStatus"
+          >
+            💳 Haijalipwa
+          </div>
+
+          <div class="details">
+
+            <div class="detail">
+              <div class="label">Kiasi</div>
+              <div class="value" id="mAmount">TSh 0</div>
+            </div>
+
+            <div class="detail">
+              <div class="label">Payment Reference</div>
+              <div class="value" id="mPaymentReference">-</div>
+            </div>
+
+            <div class="detail">
+              <div class="label">Provider</div>
+              <div class="value" id="mProvider">-</div>
+            </div>
+
+            <div class="detail">
+              <div class="label">Provider Reference</div>
+              <div class="value" id="mProviderReference">-</div>
+            </div>
+
+            <div class="detail full">
+              <div class="label">Tarehe ya Malipo</div>
+              <div class="value" id="mPaidAt">-</div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <h3>📝 Hali ya Maombi</h3>
+
+        <div class="details">
+
+          <div class="detail">
+            <div class="label">Hali</div>
+            <div class="value" id="mApplicationStatus">-</div>
+          </div>
+
+          <div class="detail">
+            <div class="label">Tarehe ya Kutuma</div>
+            <div class="value" id="mCreated">-</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <div class="footer-buttons">
+
+        <button
+          class="large-btn green"
+          id="approveBtn"
+          onclick="changeApplicationStatus('approved')"
+        >
+          ✓ Kubali
+        </button>
+
+        <button
+          class="large-btn red"
+          id="rejectBtn"
+          onclick="changeApplicationStatus('rejected')"
+        >
+          ✕ Kataa
+        </button>
+
+      </div>
+
+      <div class="footer-buttons">
+
+        <button
+          class="large-btn green"
+          id="paidBtn"
+          onclick="changePaymentStatus('paid')"
+        >
+          💰 Thibitisha Malipo
+        </button>
+
+        <button
+          class="large-btn red"
+          id="unpaidBtn"
+          onclick="changePaymentStatus('unpaid')"
+        >
+          💳 Weka Haijalipwa
+        </button>
+
+        <button
+          class="large-btn gray"
+          onclick="closeModal()"
+        >
+          Funga
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+  let applications = [];
+  let currentApplication = null;
+
+  function escapeHtml(value) {
+
+    if (value === null || value === undefined) {
+      return "";
+    }
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function money(value) {
+
+    return "TSh " +
+      Number(value || 0).toLocaleString("en-US", {
+        maximumFractionDigits: 2
+      });
+  }
+
+  function date(value) {
+
+    if (!value) {
+      return "-";
+    }
+
+    const d = new Date(value);
+
+    if (isNaN(d.getTime())) {
+      return value;
+    }
+
+    return d.toLocaleDateString("en-GB");
+  }
+
+  function dateTime(value) {
+
+    if (!value) {
+      return "-";
+    }
+
+    const d = new Date(value);
+
+    if (isNaN(d.getTime())) {
+      return value;
+    }
+
+    return d.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function appStatus(status) {
+
+    switch (
+      String(status || "").toLowerCase()
+    ) {
+
+      case "approved":
+        return "Imekubaliwa";
+
+      case "rejected":
+        return "Imekataliwa";
+
+      default:
+        return "Inasubiri";
+    }
+  }
+
+  function paymentStatus(status) {
+
+    const s =
+      String(status || "").toLowerCase();
+
+    if (
+      s === "paid" ||
+      s === "success" ||
+      s === "completed"
+    ) {
+      return "Yamelipwa";
+    }
+
+    if (s === "pending") {
+      return "Malipo yanasubiri";
+    }
+
+    return "Haijalipwa";
+  }
+
+  function paymentClass(status) {
+
+    const s =
+      String(status || "").toLowerCase();
+
+    if (
+      s === "paid" ||
+      s === "success" ||
+      s === "completed"
+    ) {
+      return "badge-paid";
+    }
+
+    if (s === "pending") {
+      return "badge-pending";
+    }
+
+    return "badge-unpaid";
+  }
+
+  function applicationClass(status) {
+
+    const s =
+      String(status || "").toLowerCase();
+
+    if (s === "approved") {
+      return "badge-approved";
+    }
+
+    if (s === "rejected") {
+      return "badge-rejected";
+    }
+
+    return "badge-pending";
+  }
+
+  function toast(message, type = "success") {
+
+    const el =
+      document.getElementById("toast");
+
+    el.textContent = message;
+
+    el.className =
+      "toast " + type;
+
+    el.style.display = "block";
+
+    setTimeout(() => {
+      el.style.display = "none";
+    }, 3500);
+  }
+
+  async function loadApplications() {
+
+    try {
+
+      const response =
+        await fetch("/api/admin/applications");
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          data.message ||
+          "Failed to load applications"
+        );
+      }
+
+      applications =
+        data.applications || [];
+
+      buildSchoolFilter();
+      render();
+
+    } catch (error) {
+
+      console.error(error);
+
+      document.getElementById(
+        "tableBody"
+      ).innerHTML = `
+        <tr>
+          <td colspan="10" class="error">
+            Imeshindikana kupakia maombi.
+          </td>
+        </tr>
+      `;
+    }
+  }
+
+  async function loadStats() {
+
+    try {
+
+      const response =
+        await fetch("/api/admin/dashboard-stats");
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.success) {
+        return;
+      }
+
+      const s =
+        data.stats || data;
+
+      document.getElementById("total").textContent =
+        s.total_applications ?? 0;
+
+      document.getElementById("pending").textContent =
+        s.pending_applications ?? 0;
+
+      document.getElementById("approved").textContent =
+        s.approved_applications ?? 0;
+
+      document.getElementById("paid").textContent =
+        s.paid_applications ?? 0;
+
+      document.getElementById("unpaid").textContent =
+        s.unpaid_applications ?? 0;
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+  }
+
+  function buildSchoolFilter() {
+
+    const select =
+      document.getElementById("schoolFilter");
+
+    const current =
+      select.value;
+
+    const schools =
+      [...new Set(
+        applications
+          .map(a =>
+            a.school_name ||
+            a.school ||
+            ""
+          )
+          .filter(Boolean)
+      )]
+      .sort();
+
+    select.innerHTML =
+      `<option value="">🏫 Shule zote</option>` +
+      schools.map(s => `
+        <option value="${escapeHtml(s)}">
+          ${escapeHtml(s)}
+        </option>
+      `).join("");
+
+    select.value = current;
+  }
+
+  function render() {
+
+    const search =
+      document.getElementById("search")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const school =
+      document.getElementById("schoolFilter")
+        .value;
+
+    const status =
+      document.getElementById("statusFilter")
+        .value;
+
+    const payment =
+      document.getElementById("paymentFilter")
+        .value;
+
+    const filtered =
+      applications.filter(a => {
+
+        const text = [
+          a.application_number,
+          a.student_name,
+          a.applicant_name,
+          a.school_name,
+          a.parent_name,
+          a.parent_phone,
+          a.phone,
+          a.email,
+          a.payment_reference
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        if (
+          search &&
+          !text.includes(search)
+        ) {
+          return false;
+        }
+
+        if (
+          school &&
+          (a.school_name || a.school) !== school
+        ) {
+          return false;
+        }
+
+        if (
+          status &&
+          String(a.status || "")
+            .toLowerCase() !== status
+        ) {
+          return false;
+        }
+
+        if (payment) {
+
+          const ps =
+            String(
+              a.payment_status ||
+              a.payment_record_status ||
+              "unpaid"
+            ).toLowerCase();
+
+          if (ps !== payment) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+    const body =
+      document.getElementById("tableBody");
+
+    if (!filtered.length) {
+
+      body.innerHTML = `
+        <tr>
+          <td colspan="10" class="empty">
+            Hakuna maombi yanayolingana na vigezo.
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+    body.innerHTML =
+      filtered.map((a, index) => {
+
+        const student =
+          a.student_name ||
+          a.applicant_name ||
+          "-";
+
+        const schoolName =
+          a.school_name ||
+          a.school ||
+          "-";
+
+        const pay =
+          a.payment_status ||
+          a.payment_record_status ||
+          "unpaid";
+
+        return `
+          <tr>
+
+            <td>${index + 1}</td>
+
+            <td>
+              <strong>
+                ${escapeHtml(
+                  a.application_number || "-"
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${escapeHtml(student)}
+            </td>
+
+            <td>
+              ${escapeHtml(schoolName)}
+            </td>
+
+            <td>
+              <strong>
+                ${money(
+                  a.payment_amount ||
+                  a.amount ||
+                  a.form_price ||
+                  0
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${escapeHtml(
+                a.payment_reference || "-"
+              )}
+            </td>
+
+            <td>
+              <span class="badge ${paymentClass(pay)}">
+                ${paymentStatus(pay)}
+              </span>
+            </td>
+
+            <td>
+              <span class="badge ${applicationClass(a.status)}">
+                ${appStatus(a.status)}
+              </span>
+            </td>
+
+            <td>
+              ${date(a.created_at)}
+            </td>
+
+            <td>
+
+              <div class="actions">
+
+                <button
+                  class="btn btn-view"
+                  onclick="viewApplication(${Number(a.id)})"
+                >
+                  👁 Tazama
+                </button>
+
+                ${
+                  String(a.status || "")
+                    .toLowerCase() !== "approved"
+                  ? `
+                    <button
+                      class="btn btn-approve"
+                      onclick="quickStatus(${Number(a.id)}, 'approved')"
+                    >
+                      ✓ Kubali
+                    </button>
+                  `
+                  : ""
+                }
+
+                ${
+                  String(a.status || "")
+                    .toLowerCase() !== "rejected"
+                  ? `
+                    <button
+                      class="btn btn-reject"
+                      onclick="quickStatus(${Number(a.id)}, 'rejected')"
+                    >
+                      ✕ Kataa
+                    </button>
+                  `
+                  : ""
+                }
+
+              </div>
+
+            </td>
+
+          </tr>
+        `;
+
+      }).join("");
+  }
+
+  async function viewApplication(id) {
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/applications/" + id
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          data.message ||
+          "Application not found"
+        );
+      }
+
+      currentApplication =
+        data.application || data;
+
+      fillModal(
+        currentApplication
+      );
+
+      document
+        .getElementById("modal")
+        .classList.add("show");
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast(
+        "Imeshindikana kupata taarifa za maombi.",
+        "error"
+      );
+    }
+  }
+
+  function fillModal(a) {
+
+    const student =
+      a.student_name ||
+      a.applicant_name ||
+      "-";
+
+    const gender =
+      a.gender ||
+      a.applicant_gender ||
+      "-";
+
+    const dob =
+      a.date_of_birth ||
+      a.applicant_date_of_birth;
+
+    const school =
+      a.school_name ||
+      a.school ||
+      "-";
+
+    const pay =
+      a.payment_status ||
+      a.payment_record_status ||
+      "unpaid";
+
+    document.getElementById("mNumber").textContent =
+      a.application_number || "-";
+
+    document.getElementById("mStudent").textContent =
+      student;
+
+    document.getElementById("mGender").textContent =
+      gender;
+
+    document.getElementById("mDob").textContent =
+      date(dob);
+
+    document.getElementById("mClass").textContent =
+      a.class_level || "-";
+
+    document.getElementById("mAddress").textContent =
+      a.address || "-";
+
+    document.getElementById("mSchool").textContent =
+      school;
+
+    document.getElementById("mRegion").textContent =
+      a.region || "-";
+
+    document.getElementById("mDistrict").textContent =
+      a.district || "-";
+
+    document.getElementById("mFormPrice").textContent =
+      money(
+        a.form_price ||
+        a.payment_amount ||
+        a.amount ||
+        0
+      );
+
+    document.getElementById("mParent").textContent =
+      a.parent_name || "-";
+
+    document.getElementById("mPhone").textContent =
+      a.parent_phone ||
+      a.phone ||
+      "-";
+
+    document.getElementById("mEmail").textContent =
+      a.parent_email ||
+      a.email ||
+      "-";
+
+    document.getElementById("mAmount").textContent =
+      money(
+        a.payment_amount ||
+        a.amount ||
+        a.form_price ||
+        0
+      );
+
+    document.getElementById(
+      "mPaymentReference"
+    ).textContent =
+      a.payment_reference || "-";
+
+    document.getElementById(
+      "mProvider"
+    ).textContent =
+      a.provider || "-";
+
+    document.getElementById(
+      "mProviderReference"
+    ).textContent =
+      a.provider_reference || "-";
+
+    document.getElementById(
+      "mPaidAt"
+    ).textContent =
+      dateTime(a.paid_at);
+
+    document.getElementById(
+      "mPaymentStatus"
+    ).textContent =
+      "💳 " + paymentStatus(pay);
+
+    document.getElementById(
+      "mApplicationStatus"
+    ).textContent =
+      appStatus(a.status);
+
+    document.getElementById(
+      "mCreated"
+    ).textContent =
+      dateTime(a.created_at);
+
+    document.getElementById(
+      "approveBtn"
+    ).style.display =
+      String(a.status || "")
+        .toLowerCase() === "approved"
+        ? "none"
+        : "inline-block";
+
+    document.getElementById(
+      "rejectBtn"
+    ).style.display =
+      String(a.status || "")
+        .toLowerCase() === "rejected"
+        ? "none"
+        : "inline-block";
+
+    document.getElementById(
+      "paidBtn"
+    ).style.display =
+      ["paid", "success", "completed"]
+        .includes(
+          String(pay).toLowerCase()
+        )
+        ? "none"
+        : "inline-block";
+
+    document.getElementById(
+      "unpaidBtn"
+    ).style.display =
+      String(pay).toLowerCase() === "unpaid"
+        ? "none"
+        : "inline-block";
+  }
+
+  function closeModal() {
+
+    document
+      .getElementById("modal")
+      .classList.remove("show");
+
+    currentApplication = null;
+  }
+
+  async function quickStatus(id, status) {
+
+    const message =
+      status === "approved"
+        ? "Unataka kukubali maombi haya?"
+        : "Unataka kukataa maombi haya?";
+
+    if (!confirm(message)) {
+      return;
+    }
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/admin/applications/" +
+          id +
+          "/status",
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              status
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          data.message ||
+          "Status update failed"
+        );
+      }
+
+      toast(
+        status === "approved"
+          ? "Maombi yamekubaliwa."
+          : "Maombi yamekataliwa."
+      );
+
+      await loadAll();
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast(
+        "Imeshindikana kubadilisha hali ya maombi.",
+        "error"
+      );
+    }
+  }
+
+  async function changeApplicationStatus(status) {
+
+    if (!currentApplication) {
+      return;
+    }
+
+    await quickStatus(
+      currentApplication.id,
+      status
+    );
+
+    closeModal();
+  }
+
+  async function changePaymentStatus(status) {
+
+    if (!currentApplication) {
+      return;
+    }
+
+    const action =
+      status === "paid"
+        ? "kuthibitisha malipo haya"
+        : "kuweka malipo kuwa hayajalipwa";
+
+    if (!confirm(
+      "Una uhakika unataka " + action + "?"
+    )) {
+      return;
+    }
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/admin/applications/" +
+          currentApplication.id +
+          "/payment-status",
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              payment_status: status
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          data.message ||
+          "Payment update failed"
+        );
+      }
+
+      toast(
+        status === "paid"
+          ? "Malipo yamethibitishwa."
+          : "Malipo yamewekwa kuwa hayajalipwa."
+      );
+
+      closeModal();
+
+      await loadAll();
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast(
+        "Imeshindikana kubadilisha hali ya malipo.",
+        "error"
+      );
+    }
+  }
+
+  async function loadAll() {
+
+    await Promise.all([
+      loadStats(),
+      loadApplications()
+    ]);
+  }
+
+  document
+    .getElementById("modal")
+    .addEventListener(
+      "click",
+      function(event) {
+
+        if (event.target === this) {
+          closeModal();
+        }
+
+      }
+    );
+
+  document.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Escape") {
+        closeModal();
+      }
+
+    }
+  );
+
+  loadAll();
+
+</script>
+
+</body>
+</html>
