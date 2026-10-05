@@ -1,0 +1,2493 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Applications - Shule Portal Tanzania</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f1f5f9;
+      color: #172033;
+    }
+
+    /* ==============================
+       HEADER
+    ============================== */
+
+    .header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .header-inner {
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      font-size: 13px;
+      opacity: .9;
+    }
+
+    .admin-badge {
+      background: rgba(255,255,255,.15);
+      padding: 9px 13px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    /* ==============================
+       MAIN
+    ============================== */
+
+    .container {
+      width: 95%;
+      max-width: 1250px;
+      margin: 25px auto;
+    }
+
+    .page-title {
+      margin-bottom: 20px;
+    }
+
+    .page-title h2 {
+      margin: 0;
+      color: #1565c0;
+    }
+
+    .page-title p {
+      margin: 7px 0 0;
+      color: #64748b;
+    }
+
+    /* ==============================
+       STAT CARDS
+    ============================== */
+
+    .stats {
+      display: grid;
+      grid-template-columns:
+        repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow:
+        0 2px 10px rgba(0,0,0,.07);
+    }
+
+    .stat-icon {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .stat-title {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: bold;
+      margin-top: 5px;
+      color: #1565c0;
+    }
+
+    /* ==============================
+       FILTER BOX
+    ============================== */
+
+    .filter-box {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow:
+        0 2px 10px rgba(0,0,0,.07);
+
+      margin-bottom: 20px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns:
+        2fr 1fr 1fr 1fr auto;
+
+      gap: 10px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #475569;
+    }
+
+    input,
+    select {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border:
+        1px solid #cbd5e1;
+
+      border-radius: 8px;
+
+      font-size: 14px;
+
+      background: white;
+    }
+
+    button {
+
+      border: none;
+
+      border-radius: 8px;
+
+      padding: 12px 15px;
+
+      cursor: pointer;
+
+      font-weight: bold;
+
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background: #1565c0;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #64748b;
+      color: white;
+    }
+
+    /* ==============================
+       TABLE
+    ============================== */
+
+    .table-card {
+
+      background: white;
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 2px 10px rgba(0,0,0,.07);
+
+      overflow: hidden;
+    }
+
+    .table-header {
+
+      padding: 16px 18px;
+
+      border-bottom:
+        1px solid #e2e8f0;
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    .table-header h3 {
+      margin: 0;
+      color: #1565c0;
+    }
+
+    .count {
+      background: #e3f2fd;
+      color: #1565c0;
+      padding: 6px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+
+      width: 100%;
+
+      border-collapse:
+        collapse;
+
+      min-width: 1100px;
+    }
+
+    th {
+
+      background: #f8fafc;
+
+      color: #475569;
+
+      font-size: 12px;
+
+      text-align: left;
+
+      padding: 12px;
+
+      border-bottom:
+        1px solid #e2e8f0;
+    }
+
+    td {
+
+      padding: 12px;
+
+      font-size: 13px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
+      vertical-align: top;
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+
+    .application-number {
+
+      color: #1565c0;
+
+      font-weight: bold;
+
+      font-size: 12px;
+    }
+
+    .student-name {
+      font-weight: bold;
+    }
+
+    .school-name {
+      font-weight: bold;
+    }
+
+    .small {
+      color: #64748b;
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    /* ==============================
+       STATUS
+    ============================== */
+
+    .badge {
+
+      display: inline-block;
+
+      padding: 6px 9px;
+
+      border-radius: 15px;
+
+      font-size: 11px;
+
+      font-weight: bold;
+
+      white-space: nowrap;
+    }
+
+    .status-pending {
+
+      background: #fff3cd;
+
+      color: #856404;
+    }
+
+    .status-approved {
+
+      background: #d1e7dd;
+
+      color: #0f5132;
+    }
+
+    .status-rejected {
+
+      background: #f8d7da;
+
+      color: #842029;
+    }
+
+    .status-processing {
+
+      background: #cff4fc;
+
+      color: #055160;
+    }
+
+    .status-completed {
+
+      background: #d1e7dd;
+
+      color: #0f5132;
+    }
+
+    .payment-paid {
+
+      background: #d1e7dd;
+
+      color: #0f5132;
+    }
+
+    .payment-unpaid {
+
+      background: #f8d7da;
+
+      color: #842029;
+    }
+
+    .payment-pending {
+
+      background: #fff3cd;
+
+      color: #856404;
+    }
+
+    .payment-failed,
+    .payment-cancelled {
+
+      background: #f8d7da;
+
+      color: #842029;
+    }
+
+    /* ==============================
+       ACTIONS
+    ============================== */
+
+    .actions {
+
+      display: flex;
+
+      gap: 6px;
+
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+
+      padding: 7px 9px;
+
+      font-size: 11px;
+
+      border-radius: 6px;
+    }
+
+    .btn-view {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .btn-approve {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .btn-reject {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .btn-payment {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    /* ==============================
+       LOADING / EMPTY
+    ============================== */
+
+    .loading {
+
+      text-align: center;
+
+      padding: 40px;
+
+      color: #1565c0;
+
+      font-weight: bold;
+    }
+
+    .empty {
+
+      text-align: center;
+
+      padding: 40px;
+
+      color: #64748b;
+    }
+
+    .error {
+
+      background: #fee2e2;
+
+      color: #991b1b;
+
+      padding: 14px;
+
+      margin: 15px;
+
+      border-radius: 8px;
+    }
+
+    /* ==============================
+       MODAL
+    ============================== */
+
+    .modal {
+
+      display: none;
+
+      position: fixed;
+
+      z-index: 1000;
+
+      inset: 0;
+
+      background:
+        rgba(0,0,0,.55);
+
+      padding: 20px;
+
+      overflow-y: auto;
+    }
+
+    .modal-content {
+
+      background: white;
+
+      max-width: 700px;
+
+      margin: 30px auto;
+
+      border-radius: 12px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 5px 25px rgba(0,0,0,.25);
+    }
+
+    .modal-header {
+
+      background: #1565c0;
+
+      color: white;
+
+      padding: 17px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+    }
+
+    .close {
+
+      background: transparent;
+
+      color: white;
+
+      font-size: 24px;
+
+      padding: 0;
+
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .detail-section {
+      margin-bottom: 18px;
+    }
+
+    .detail-section h4 {
+
+      color: #1565c0;
+
+      border-bottom:
+        1px solid #e2e8f0;
+
+      padding-bottom: 8px;
+
+      margin-bottom: 0;
+    }
+
+    .detail-row {
+
+      display: flex;
+
+      border-bottom:
+        1px solid #f1f5f9;
+    }
+
+    .detail-label {
+
+      width: 40%;
+
+      background: #f8fafc;
+
+      padding: 9px;
+
+      font-weight: bold;
+
+      font-size: 12px;
+    }
+
+    .detail-value {
+
+      width: 60%;
+
+      padding: 9px;
+
+      font-size: 13px;
+    }
+
+    /* ==============================
+       MOBILE
+    ============================== */
+
+    @media (max-width: 900px) {
+
+      .stats {
+
+        grid-template-columns:
+          repeat(2, 1fr);
+
+      }
+
+      .filter-grid {
+
+        grid-template-columns:
+          1fr 1fr;
+
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .header-inner {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+      }
+
+      .stats {
+
+        grid-template-columns:
+          1fr 1fr;
+
+      }
+
+      .filter-grid {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+      .container {
+        width: 94%;
+      }
+
+      .page-title h2 {
+        font-size: 20px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <div class="brand">
+
+      <h1>
+        🏫 Shule Portal Tanzania
+      </h1>
+
+      <p>
+        Admin Mkuu — Applications
+      </p>
+
+    </div>
+
+    <div class="admin-badge">
+
+      👤 ADMIN MKUU
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main class="container">
+
+
+  <div class="page-title">
+
+    <h2>
+      📋 Maombi ya Shule
+    </h2>
+
+    <p>
+      Dhibiti na fuatilia maombi yote ya wanafunzi.
+    </p>
+
+  </div>
+
+
+  <!-- ==================================================
+       STATISTICS
+  ================================================== -->
+
+  <section class="stats">
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        📋
+      </div>
+
+      <div class="stat-title">
+        Maombi Yote
+      </div>
+
+      <div
+        class="stat-value"
+        id="totalApplications"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        ⏳
+      </div>
+
+      <div class="stat-title">
+        Yanasubiri
+      </div>
+
+      <div
+        class="stat-value"
+        id="pendingApplications"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        ✅
+      </div>
+
+      <div class="stat-title">
+        Yamekubaliwa
+      </div>
+
+      <div
+        class="stat-value"
+        id="approvedApplications"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        💰
+      </div>
+
+      <div class="stat-title">
+        Malipo Yaliyothibitishwa
+      </div>
+
+      <div
+        class="stat-value"
+        id="paidApplications"
+      >
+        0
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+  <!-- ==================================================
+       FILTERS
+  ================================================== -->
+
+  <section class="filter-box">
+
+    <div class="filter-grid">
+
+
+      <div class="field">
+
+        <label>
+          Tafuta
+        </label>
+
+        <input
+          type="text"
+          id="search"
+          placeholder="Jina, Application Number, simu..."
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Shule
+        </label>
+
+        <select id="schoolFilter">
+
+          <option value="">
+            Shule zote
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Hali ya Maombi
+        </label>
+
+        <select id="statusFilter">
+
+          <option value="">
+            Zote
+          </option>
+
+          <option value="pending">
+            Inasubiri
+          </option>
+
+          <option value="approved">
+            Imekubaliwa
+          </option>
+
+          <option value="rejected">
+            Imekataliwa
+          </option>
+
+          <option value="processing">
+            Inashughulikiwa
+          </option>
+
+          <option value="completed">
+            Imekamilika
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Hali ya Malipo
+        </label>
+
+        <select id="paymentFilter">
+
+          <option value="">
+            Zote
+          </option>
+
+          <option value="paid">
+            Imelipwa
+          </option>
+
+          <option value="unpaid">
+            Haijalipwa
+          </option>
+
+          <option value="pending">
+            Inasubiri
+          </option>
+
+          <option value="failed">
+            Imeshindikana
+          </option>
+
+          <option value="cancelled">
+            Imeghairiwa
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button
+        class="btn-primary"
+        onclick="loadApplications()"
+      >
+        🔍 Tafuta
+      </button>
+
+
+    </div>
+
+
+    <div style="margin-top:10px;">
+
+      <button
+        class="btn-secondary"
+        onclick="resetFilters()"
+      >
+        ↻ Ondoa Filters
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================================================
+       APPLICATIONS TABLE
+  ================================================== -->
+
+  <section class="table-card">
+
+
+    <div class="table-header">
+
+      <h3>
+        Applications
+      </h3>
+
+      <span
+        class="count"
+        id="resultCount"
+      >
+        0
+      </span>
+
+    </div>
+
+
+    <div
+      id="tableArea"
+      class="table-wrapper"
+    >
+
+      <div class="loading">
+        ⏳ Inapakia maombi...
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+</main>
+
+
+<!-- ==================================================
+     MODAL
+================================================== -->
+
+<div
+  id="applicationModal"
+  class="modal"
+>
+
+  <div class="modal-content">
+
+
+    <div class="modal-header">
+
+      <h3>
+        Taarifa za Maombi
+      </h3>
+
+      <button
+        class="close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      id="modalBody"
+      class="modal-body"
+    ></div>
+
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+const API_BASE =
+  window.location.origin;
+
+
+let applications = [];
+
+
+// ======================================================
+// FORMAT
+// ======================================================
+
+function formatDate(value) {
+
+  if (!value) {
+    return "-";
+  }
+
+  const date =
+    new Date(value);
+
+  if (isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString(
+    "en-GB"
+  );
+
+}
+
+
+function formatAmount(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return "-";
+  }
+
+  const number =
+    Number(value);
+
+  if (isNaN(number)) {
+    return value;
+  }
+
+  return (
+    "TSh " +
+    number.toLocaleString("en-US")
+  );
+
+}
+
+
+// ======================================================
+// STATUS TRANSLATION
+// ======================================================
+
+function statusText(status) {
+
+  const map = {
+
+    pending:
+      "Inasubiri",
+
+    approved:
+      "Imekubaliwa",
+
+    rejected:
+      "Imekataliwa",
+
+    processing:
+      "Inashughulikiwa",
+
+    completed:
+      "Imekamilika"
+
+  };
+
+  return (
+    map[status] ||
+    status ||
+    "-"
+  );
+
+}
+
+
+function paymentText(status) {
+
+  const map = {
+
+    paid:
+      "Imelipwa",
+
+    unpaid:
+      "Haijalipwa",
+
+    pending:
+      "Inasubiri",
+
+    failed:
+      "Imeshindikana",
+
+    cancelled:
+      "Imeghairiwa"
+
+  };
+
+  return (
+    map[status] ||
+    status ||
+    "-"
+  );
+
+}
+
+
+// ======================================================
+// BADGE CLASS
+// ======================================================
+
+function statusClass(status) {
+
+  return (
+    "badge status-" +
+    String(status || "pending")
+      .toLowerCase()
+  );
+
+}
+
+
+function paymentClass(status) {
+
+  return (
+    "badge payment-" +
+    String(status || "unpaid")
+      .toLowerCase()
+  );
+
+}
+
+
+// ======================================================
+// LOAD SCHOOLS
+// ======================================================
+
+async function loadSchools() {
+
+  try {
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/schools"
+      );
+
+    const data =
+      await response.json();
+
+    if (!data.success) {
+      return;
+    }
+
+    const select =
+      document.getElementById(
+        "schoolFilter"
+      );
+
+    data.schools.forEach(
+      school => {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          school.id;
+
+        option.textContent =
+          school.name;
+
+        select.appendChild(
+          option
+        );
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(
+      "SCHOOLS ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// LOAD STATISTICS
+// ======================================================
+
+async function loadStats() {
+
+  try {
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/admin/dashboard-stats"
+      );
+
+    const data =
+      await response.json();
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      return;
+
+    }
+
+    const stats =
+      data.statistics;
+
+
+    document.getElementById(
+      "totalApplications"
+    ).textContent =
+      stats.total_applications || 0;
+
+
+    document.getElementById(
+      "pendingApplications"
+    ).textContent =
+      stats.pending_applications || 0;
+
+
+    document.getElementById(
+      "approvedApplications"
+    ).textContent =
+      stats.approved_applications || 0;
+
+
+    document.getElementById(
+      "paidApplications"
+    ).textContent =
+      stats.paid_applications || 0;
+
+
+  } catch (error) {
+
+    console.error(
+      "STATS ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// LOAD APPLICATIONS
+// ======================================================
+
+async function loadApplications() {
+
+  const tableArea =
+    document.getElementById(
+      "tableArea"
+    );
+
+  tableArea.innerHTML = `
+
+    <div class="loading">
+
+      ⏳ Inapakia maombi...
+
+    </div>
+
+  `;
+
+
+  const search =
+    document.getElementById(
+      "search"
+    ).value.trim();
+
+
+  const schoolId =
+    document.getElementById(
+      "schoolFilter"
+    ).value;
+
+
+  const status =
+    document.getElementById(
+      "statusFilter"
+    ).value;
+
+
+  const paymentStatus =
+    document.getElementById(
+      "paymentFilter"
+    ).value;
+
+
+  const params =
+    new URLSearchParams();
+
+
+  if (search) {
+
+    params.set(
+      "search",
+      search
+    );
+
+  }
+
+
+  if (schoolId) {
+
+    params.set(
+      "school_id",
+      schoolId
+    );
+
+  }
+
+
+  if (status) {
+
+    params.set(
+      "status",
+      status
+    );
+
+  }
+
+
+  if (paymentStatus) {
+
+    params.set(
+      "payment_status",
+      paymentStatus
+    );
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        API_BASE +
+        "/api/admin/applications?" +
+        params.toString()
+
+      );
+
+
+    const text =
+      await response.text();
+
+
+    let data;
+
+
+    try {
+
+      data =
+        JSON.parse(text);
+
+    } catch (error) {
+
+      throw new Error(
+        "Server imerudisha taarifa isiyo sahihi."
+      );
+
+    }
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kupata maombi."
+      );
+
+    }
+
+
+    applications =
+      data.applications || [];
+
+
+    document.getElementById(
+      "resultCount"
+    ).textContent =
+      applications.length;
+
+
+    renderApplications();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    tableArea.innerHTML = `
+
+      <div class="error">
+
+        ❌ ${escapeHtml(
+          error.message
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+// ======================================================
+// RENDER APPLICATIONS
+// ======================================================
+
+function renderApplications() {
+
+  const tableArea =
+    document.getElementById(
+      "tableArea"
+    );
+
+
+  if (
+    applications.length === 0
+  ) {
+
+    tableArea.innerHTML = `
+
+      <div class="empty">
+
+        📭 Hakuna maombi yaliyopatikana.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  let html = `
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>#</th>
+
+          <th>MWOMBAJI</th>
+
+          <th>SHULE</th>
+
+          <th>DARASA</th>
+
+          <th>MAOMBI</th>
+
+          <th>MALIPO</th>
+
+          <th>TAREHE</th>
+
+          <th>ACTIONS</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+  `;
+
+
+  applications.forEach(
+    (application, index) => {
+
+
+      const studentName =
+        application.student_name ||
+        application.applicant_name ||
+        "-";
+
+
+      const phone =
+        application.phone ||
+        application.parent_phone ||
+        "-";
+
+
+      const paymentStatus =
+        application.current_payment_status ||
+        application.payment_status_from_payments ||
+        application.payment_status ||
+        "unpaid";
+
+
+      html += `
+
+        <tr>
+
+          <td>
+            ${index + 1}
+          </td>
+
+
+          <td>
+
+            <div class="application-number">
+
+              ${escapeHtml(
+                application.application_number
+              )}
+
+            </div>
+
+            <div class="student-name">
+
+              ${escapeHtml(
+                studentName
+              )}
+
+            </div>
+
+            <div class="small">
+
+              📞 ${escapeHtml(
+                phone
+              )}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <div class="school-name">
+
+              ${escapeHtml(
+                application.school_name ||
+                "-"
+              )}
+
+            </div>
+
+            <div class="small">
+
+              ${escapeHtml(
+                application.school_region ||
+                ""
+              )}
+
+              ${application.school_district
+                ? " • " +
+                  escapeHtml(
+                    application.school_district
+                  )
+                : ""}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            ${escapeHtml(
+              application.class_level ||
+              "-"
+            )}
+
+          </td>
+
+
+          <td>
+
+            <span
+              class="${statusClass(
+                application.status
+              )}"
+            >
+
+              ${statusText(
+                application.status
+              )}
+
+            </span>
+
+          </td>
+
+
+          <td>
+
+            <span
+              class="${paymentClass(
+                paymentStatus
+              )}"
+            >
+
+              ${paymentText(
+                paymentStatus
+              )}
+
+            </span>
+
+            <div class="small">
+
+              ${formatAmount(
+                application.amount ||
+                application.form_price
+              )}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            ${formatDate(
+              application.created_at
+            )}
+
+          </td>
+
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                class="action-btn btn-view"
+                onclick="viewApplication(
+                  ${application.id}
+                )"
+              >
+                👁 Tazama
+              </button>
+
+
+              <button
+                class="action-btn btn-approve"
+                onclick="updateApplicationStatus(
+                  ${application.id},
+                  'approved'
+                )"
+              >
+                ✓ Kubali
+              </button>
+
+
+              <button
+                class="action-btn btn-reject"
+                onclick="updateApplicationStatus(
+                  ${application.id},
+                  'rejected'
+                )"
+              >
+                ✕ Kataa
+              </button>
+
+
+              <button
+                class="action-btn btn-payment"
+                onclick="markPaymentPaid(
+                  ${application.id}
+                )"
+              >
+                💰 Imelipwa
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  html += `
+
+      </tbody>
+
+    </table>
+
+  `;
+
+
+  tableArea.innerHTML =
+    html;
+
+}
+
+
+// ======================================================
+// VIEW APPLICATION
+// ======================================================
+
+function viewApplication(id) {
+
+  const application =
+    applications.find(
+      item =>
+        Number(item.id) ===
+        Number(id)
+    );
+
+
+  if (!application) {
+
+    alert(
+      "Application haijapatikana."
+    );
+
+    return;
+
+  }
+
+
+  const studentName =
+    application.student_name ||
+    application.applicant_name ||
+    "-";
+
+
+  const gender =
+    application.gender ||
+    application.applicant_gender ||
+    "-";
+
+
+  const dateOfBirth =
+    application.date_of_birth ||
+    application.applicant_date_of_birth;
+
+
+  const phone =
+    application.phone ||
+    application.parent_phone ||
+    "-";
+
+
+  const email =
+    application.email ||
+    application.parent_email ||
+    "-";
+
+
+  const paymentStatus =
+    application.current_payment_status ||
+    application.payment_status ||
+    "unpaid";
+
+
+  const body =
+    document.getElementById(
+      "modalBody"
+    );
+
+
+  body.innerHTML = `
+
+    <div class="detail-section">
+
+      <h4>
+        📄 Taarifa za Maombi
+      </h4>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Application Number
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.application_number
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Hali
+        </div>
+
+        <div class="detail-value">
+
+          <span
+            class="${statusClass(
+              application.status
+            )}"
+          >
+
+            ${statusText(
+              application.status
+            )}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Tarehe
+        </div>
+
+        <div class="detail-value">
+          ${formatDate(
+            application.created_at
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-section">
+
+      <h4>
+        👨‍🎓 Taarifa za Mwanafunzi
+      </h4>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Jina
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            studentName
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Jinsia
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            gender
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Tarehe ya Kuzaliwa
+        </div>
+
+        <div class="detail-value">
+          ${formatDate(
+            dateOfBirth
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Darasa / Kidato
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.class_level ||
+            "-"
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-section">
+
+      <h4>
+        👨‍👩‍👦 Mzazi / Mlezi
+      </h4>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Jina
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.parent_name ||
+            "-"
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Simu
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            phone
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Email
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            email
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Anwani
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.address ||
+            "-"
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-section">
+
+      <h4>
+        🏫 Shule
+      </h4>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Shule
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.school_name ||
+            "-"
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Mkoa
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.school_region ||
+            "-"
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Wilaya
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.school_district ||
+            "-"
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-section">
+
+      <h4>
+        💰 Malipo
+      </h4>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Kiasi
+        </div>
+
+        <div class="detail-value">
+          ${formatAmount(
+            application.amount ||
+            application.form_price
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Payment Reference
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            application.payment_reference ||
+            "-"
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Hali ya Malipo
+        </div>
+
+        <div class="detail-value">
+
+          <span
+            class="${paymentClass(
+              paymentStatus
+            )}"
+          >
+
+            ${paymentText(
+              paymentStatus
+            )}
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.getElementById(
+    "applicationModal"
+  ).style.display =
+    "block";
+
+}
+
+
+// ======================================================
+// CLOSE MODAL
+// ======================================================
+
+function closeModal() {
+
+  document.getElementById(
+    "applicationModal"
+  ).style.display =
+    "none";
+
+}
+
+
+window.onclick =
+  function(event) {
+
+    const modal =
+      document.getElementById(
+        "applicationModal"
+      );
+
+    if (
+      event.target === modal
+    ) {
+
+      closeModal();
+
+    }
+
+  };
+
+
+// ======================================================
+// UPDATE APPLICATION STATUS
+// ======================================================
+
+async function updateApplicationStatus(
+  id,
+  status
+) {
+
+  const confirmation =
+    confirm(
+
+      "Unataka kubadilisha hali ya maombi kuwa \"" +
+      statusText(status) +
+      "\"?"
+
+    );
+
+
+  if (!confirmation) {
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        API_BASE +
+        "/api/admin/applications/" +
+        id +
+        "/status",
+
+        {
+
+          method: "PUT",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+              status: status
+            })
+
+        }
+
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kubadilisha status."
+      );
+
+    }
+
+
+    alert(
+      "✓ Status imebadilishwa."
+    );
+
+
+    await loadApplications();
+
+    await loadStats();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "❌ " +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// MARK PAYMENT PAID
+// ======================================================
+
+async function markPaymentPaid(id) {
+
+  const confirmation =
+    confirm(
+
+      "Unathibitisha kuwa malipo haya yamelipwa?"
+
+    );
+
+
+  if (!confirmation) {
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+
+        API_BASE +
+        "/api/admin/applications/" +
+        id +
+        "/payment-status",
+
+        {
+
+          method: "PUT",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              payment_status:
+                "paid"
+
+            })
+
+        }
+
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kubadilisha payment status."
+      );
+
+    }
+
+
+    alert(
+      "✓ Malipo yamewekwa kuwa IMELIPWA."
+    );
+
+
+    await loadApplications();
+
+    await loadStats();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "❌ " +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// RESET FILTERS
+// ======================================================
+
+function resetFilters() {
+
+  document.getElementById(
+    "search"
+  ).value = "";
+
+  document.getElementById(
+    "schoolFilter"
+  ).value = "";
+
+  document.getElementById(
+    "statusFilter"
+  ).value = "";
+
+  document.getElementById(
+    "paymentFilter"
+  ).value = "";
+
+
+  loadApplications();
+
+}
+
+
+// ======================================================
+// ESCAPE HTML
+// ======================================================
+
+function escapeHtml(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+// ======================================================
+// ENTER KEY SEARCH
+// ======================================================
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        loadApplications();
+
+      }
+
+    }
+  );
+
+
+// ======================================================
+// INITIAL LOAD
+// ======================================================
+
+async function initialize() {
+
+  await loadSchools();
+
+  await loadStats();
+
+  await loadApplications();
+
+}
+
+
+initialize();
+
+</script>
+
+</body>
+</html>
