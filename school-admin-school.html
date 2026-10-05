@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Hariri Taarifa za Shule - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 850px;
+      margin: 25px auto;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: #1565c0;
+      font-weight: bold;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #1565c0;
+    }
+
+    .school-status {
+      background: #f0f7ff;
+      border-left: 4px solid #1565c0;
+      padding: 12px;
+      margin-bottom: 22px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 7px;
+      color: #333;
+      font-size: 14px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccd5df;
+      border-radius: 7px;
+      font-size: 15px;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #1565c0;
+      box-shadow: 0 0 0 2px rgba(21,101,192,0.12);
+    }
+
+    .actions {
+      margin-top: 25px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 7px;
+      padding: 13px 22px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      background: #1565c0;
+      color: white;
+    }
+
+    .save-btn:hover {
+      background: #0d47a1;
+    }
+
+    .cancel-btn {
+      background: #e9eef5;
+      color: #333;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 20px;
+      padding: 13px;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    .success {
+      display: block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+
+    .error {
+      display: block;
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    @media (max-width: 650px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      header h1 {
+        font-size: 19px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏫 Shule Portal Tanzania</h1>
+  <p>School Admin — Hariri Taarifa za Shule</p>
+</header>
+
+<div class="container">
+
+  <div class="top-actions">
+    <a class="back-btn" href="/school-admin-dashboard.html">
+      ← Rudi Dashboard
+    </a>
+  </div>
+
+  <div id="message" class="message"></div>
+
+  <div id="loading" class="loading">
+    Inapakia taarifa za shule...
+  </div>
+
+  <div id="formCard" class="card" style="display:none;">
+
+    <h2>✏️ Hariri Taarifa za Shule</h2>
+
+    <div class="school-status">
+      <strong>Shule:</strong>
+      <span id="schoolNameDisplay">---</span>
+      <br>
+      <strong>Status:</strong>
+      <span id="schoolStatusDisplay">---</span>
+    </div>
+
+    <form id="schoolForm">
+
+      <div class="form-grid">
+
+        <div class="form-group full">
+          <label for="name">Jina la Shule *</label>
+          <input
+            type="text"
+            id="name"
+            required
+            placeholder="Mfano: St Augustino School"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="region">Mkoa *</label>
+          <input
+            type="text"
+            id="region"
+            required
+            placeholder="Mfano: Dar es Salaam"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="district">Wilaya *</label>
+          <input
+            type="text"
+            id="district"
+            required
+            placeholder="Mfano: Ubungo"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="school_type">Aina / Kiwango cha Shule *</label>
+
+          <select id="school_type" required>
+            <option value="">-- Chagua --</option>
+            <option value="Primary">Primary</option>
+            <option value="Secondary">Secondary</option>
+            <option value="Primary & Secondary">
+              Primary & Secondary
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="form_price">Bei ya Fomu (TSh) *</label>
+          <input
+            type="number"
+            id="form_price"
+            min="0"
+            step="1"
+            required
+            placeholder="Mfano: 25000"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Namba ya Simu *</label>
+          <input
+            type="tel"
+            id="phone"
+            required
+            placeholder="Mfano: 0617670962"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="school@example.com"
+          >
+        </div>
+
+        <div class="form-group full">
+          <label for="address">Anuani ya Shule</label>
+          <input
+            type="text"
+            id="address"
+            placeholder="Mfano: Msumi, Ubungo, Dar es Salaam"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="application_start">
+            Tarehe ya Kuanza Maombi
+          </label>
+
+          <input
+            type="date"
+            id="application_start"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="application_end">
+            Tarehe ya Kumaliza Maombi
+          </label>
+
+          <input
+            type="date"
+            id="application_end"
+          >
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          type="submit"
+          class="save-btn"
+          id="saveBtn"
+        >
+          💾 Hifadhi Mabadiliko
+        </button>
+
+        <button
+          type="button"
+          class="cancel-btn"
+          onclick="window.location.href='/school-admin-dashboard.html'"
+        >
+          Ghairi
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Shule Portal Tanzania
+</footer>
+
+<script>
+
+  const API = "";
+
+  const loading = document.getElementById("loading");
+  const formCard = document.getElementById("formCard");
+  const form = document.getElementById("schoolForm");
+  const message = document.getElementById("message");
+
+  function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message " + type;
+  }
+
+  function hideMessage() {
+    message.textContent = "";
+    message.className = "message";
+  }
+
+  function formatDateForInput(value) {
+
+    if (!value) {
+      return "";
+    }
+
+    const date = new Date(value);
+
+    if (isNaN(date.getTime())) {
+      return "";
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function setValue(id, value) {
+
+    const element = document.getElementById(id);
+
+    if (!element) {
+      return;
+    }
+
+    element.value =
+      value === null || value === undefined
+        ? ""
+        : value;
+  }
+
+  async function loadSchool() {
+
+    try {
+
+      hideMessage();
+
+      loading.style.display = "block";
+      formCard.style.display = "none";
+
+      const response = await fetch(
+        `${API}/api/school-admin/school`,
+        {
+          method: "GET",
+          credentials: "include"
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || data.success === false) {
+
+        throw new Error(
+          data.message ||
+          "Imeshindikana kupata taarifa za shule."
+        );
+      }
+
+      /*
+       * Endpoint inaweza kurudisha school moja kwa moja
+       * au ndani ya data.school.
+       */
+
+      const school =
+        data.school ||
+        data.data ||
+        data;
+
+      if (!school || !school.id) {
+        throw new Error(
+          "Taarifa za shule hazijapatikana."
+        );
+      }
+
+      setValue("name", school.name);
+      setValue("region", school.region);
+      setValue("district", school.district);
+
+      setValue(
+        "school_type",
+        school.school_type || school.type
+      );
+
+      setValue(
+        "form_price",
+        school.form_price || school.price
+      );
+
+      setValue("phone", school.phone);
+      setValue("email", school.email);
+      setValue("address", school.address);
+
+      setValue(
+        "application_start",
+        formatDateForInput(
+          school.application_start
+        )
+      );
+
+      setValue(
+        "application_end",
+        formatDateForInput(
+          school.application_end
+        )
+      );
+
+      document.getElementById(
+        "schoolNameDisplay"
+      ).textContent =
+        school.name || "---";
+
+      document.getElementById(
+        "schoolStatusDisplay"
+      ).textContent =
+        school.status || "draft";
+
+      formCard.style.display = "block";
+      loading.style.display = "none";
+
+    } catch (error) {
+
+      console.error("LOAD SCHOOL ERROR:", error);
+
+      loading.style.display = "none";
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kupakia taarifa za shule.",
+        "error"
+      );
+
+    }
+  }
+
+  form.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+      hideMessage();
+
+      const saveBtn =
+        document.getElementById("saveBtn");
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = "⏳ Inahifadhi...";
+
+      try {
+
+        const payload = {
+
+          name:
+            document.getElementById("name").value.trim(),
+
+          region:
+            document.getElementById("region").value.trim(),
+
+          district:
+            document.getElementById("district").value.trim(),
+
+          school_type:
+            document.getElementById("school_type").value,
+
+          form_price:
+            Number(
+              document.getElementById("form_price").value
+            ),
+
+          phone:
+            document.getElementById("phone").value.trim(),
+
+          email:
+            document.getElementById("email").value.trim(),
+
+          address:
+            document.getElementById("address").value.trim(),
+
+          application_start:
+            document.getElementById(
+              "application_start"
+            ).value || null,
+
+          application_end:
+            document.getElementById(
+              "application_end"
+            ).value || null
+        };
+
+        if (!payload.name) {
+          throw new Error("Weka jina la shule.");
+        }
+
+        if (!payload.region) {
+          throw new Error("Weka mkoa wa shule.");
+        }
+
+        if (!payload.district) {
+          throw new Error("Weka wilaya ya shule.");
+        }
+
+        if (!payload.school_type) {
+          throw new Error("Chagua aina ya shule.");
+        }
+
+        if (
+          Number.isNaN(payload.form_price) ||
+          payload.form_price < 0
+        ) {
+          throw new Error(
+            "Weka bei sahihi ya fomu."
+          );
+        }
+
+        if (!payload.phone) {
+          throw new Error(
+            "Weka namba ya simu ya shule."
+          );
+        }
+
+        if (
+          payload.application_start &&
+          payload.application_end &&
+          payload.application_start >
+            payload.application_end
+        ) {
+          throw new Error(
+            "Tarehe ya kuanza maombi haiwezi kuwa baada ya tarehe ya mwisho."
+          );
+        }
+
+        const response = await fetch(
+          `${API}/api/school-admin/school`,
+          {
+            method: "PUT",
+
+            credentials: "include",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(payload)
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || data.success === false) {
+
+          throw new Error(
+            data.message ||
+            "Imeshindikana kuhifadhi mabadiliko."
+          );
+        }
+
+        showMessage(
+          "✅ Taarifa za shule zimehifadhiwa kikamilifu.",
+          "success"
+        );
+
+        document.getElementById(
+          "schoolNameDisplay"
+        ).textContent = payload.name;
+
+        /*
+         * Tunampa mtumiaji muda mfupi kuona
+         * ujumbe wa mafanikio kabla ya kurudi dashboard.
+         */
+
+        setTimeout(function() {
+
+          window.location.href =
+            "/school-admin-dashboard.html";
+
+        }, 1200);
+
+      } catch (error) {
+
+        console.error(
+          "UPDATE SCHOOL ERROR:",
+          error
+        );
+
+        showMessage(
+          error.message ||
+          "Kuna tatizo wakati wa kuhifadhi.",
+          "error"
+        );
+
+      } finally {
+
+        saveBtn.disabled = false;
+
+        saveBtn.textContent =
+          "💾 Hifadhi Mabadiliko";
+      }
+
+    }
+  );
+
+  loadSchool();
+
+</script>
+
+</body>
+</html>
