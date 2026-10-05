@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Fuatilia Maombi - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #1565c0;
+      color: white;
+      padding: 18px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 700px;
+      margin: 25px auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #1565c0;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 7px;
+      background: #1565c0;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0d47a1;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .value {
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .unpaid {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .paid {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 12px;
+      border-radius: 7px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      padding: 12px;
+      border-radius: 7px;
+      margin-top: 10px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 15px;
+      display: none;
+    }
+
+    .payment-box {
+      background: #f1f8ff;
+      border-left: 5px solid #1565c0;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .value {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏫 Shule Portal Tanzania</h1>
+  <p>Fuatilia Maombi ya Shule</p>
+</header>
+
+
+<div class="container">
+
+  <!-- SEARCH -->
+  <div class="card">
+
+    <h2>🔎 Fuatilia Maombi</h2>
+
+    <p>
+      Ingiza <strong>Namba ya Maombi</strong> uliyopewa baada ya kujaza fomu.
+    </p>
+
+    <label for="applicationNumber">
+      Namba ya Maombi
+    </label>
+
+    <input
+      type="text"
+      id="applicationNumber"
+      placeholder="Mfano: SPT-2026-1791030969770-38"
+    >
+
+    <button onclick="trackApplication()">
+      🔍 Tafuta Maombi
+    </button>
+
+    <div id="loading" class="loading">
+      ⏳ Inatafuta taarifa za maombi...
+    </div>
+
+    <div id="error" class="error"></div>
+
+  </div>
+
+
+  <!-- APPLICATION DETAILS -->
+
+  <div
+    id="applicationSection"
+    class="hidden"
+  >
+
+    <div class="card">
+
+      <h2>👨‍🎓 Taarifa za Mwombaji</h2>
+
+      <div class="row">
+        <div class="label">Jina</div>
+        <div class="value" id="studentName">-</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Jinsia</div>
+        <div class="value" id="gender">-</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Tarehe ya Kuzaliwa</div>
+        <div class="value" id="dateOfBirth">-</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Darasa/Kidato</div>
+        <div class="value" id="classLevel">-</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Simu</div>
+        <div class="value" id="phone">-</div>
+      </div>
+
+    </div>
+
+
+    <!-- SCHOOL -->
+
+    <div class="card">
+
+      <h2>🏫 Taarifa za Shule</h2>
+
+      <div class="row">
+        <div class="label">Shule</div>
+        <div class="value" id="schoolName">-</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Mkoa</div>
+        <div class="value" id="schoolRegion">-</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Wilaya</div>
+        <div class="value" id="schoolDistrict">-</div>
+      </div>
+
+    </div>
+
+
+    <!-- APPLICATION STATUS -->
+
+    <div class="card">
+
+      <h2>📋 Hali ya Maombi</h2>
+
+      <div class="row">
+        <div class="label">
+          Namba ya Maombi
+        </div>
+
+        <div
+          class="value"
+          id="applicationNumberDisplay"
+        >
+          -
+        </div>
+      </div>
+
+
+      <div class="row">
+
+        <div class="label">
+          Hali ya Maombi
+        </div>
+
+        <div class="value">
+
+          <span
+            id="applicationStatus"
+            class="status pending"
+          >
+            PENDING
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="label">
+          Hali ya Malipo
+        </div>
+
+        <div class="value">
+
+          <span
+            id="paymentStatus"
+            class="status unpaid"
+          >
+            UNPAID
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="payment-box">
+
+        <strong>💳 Taarifa za Malipo</strong>
+
+        <div class="row">
+
+          <div class="label">
+            Kiasi
+          </div>
+
+          <div class="value">
+            <span id="paymentAmount">
+              TSh 0
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="label">
+            Payment Reference
+          </div>
+
+          <div
+            class="value"
+            id="paymentReference"
+          >
+            -
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- NEXT STEP -->
+
+    <div class="card">
+
+      <h2>➡️ Hatua Inayofuata</h2>
+
+      <div id="nextStep">
+        <p>
+          Ombi lako limehifadhiwa.
+          Malipo bado hayajathibitishwa.
+        </p>
+
+        <button
+          onclick="continuePayment()"
+        >
+          💳 Endelea na Malipo
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<footer>
+  © 2026 Shule Portal Tanzania
+</footer>
+
+
+<script>
+
+async function trackApplication() {
+
+  const input =
+    document.getElementById(
+      "applicationNumber"
+    );
+
+  const applicationNumber =
+    input.value.trim();
+
+
+  const error =
+    document.getElementById(
+      "error"
+    );
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
+
+  const section =
+    document.getElementById(
+      "applicationSection"
+    );
+
+
+  error.style.display =
+    "none";
+
+  section.classList.add(
+    "hidden"
+  );
+
+
+  if (!applicationNumber) {
+
+    error.textContent =
+      "Tafadhali ingiza Namba ya Maombi.";
+
+    error.style.display =
+      "block";
+
+    return;
+  }
+
+
+  loading.style.display =
+    "block";
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/application-by-number/" +
+        encodeURIComponent(
+          applicationNumber
+        )
+      );
+
+
+    const data =
+      await response.json();
+
+
+    loading.style.display =
+      "none";
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.message ||
+        "Maombi hayajapatikana."
+      );
+
+    }
+
+
+    const application =
+      data.application;
+
+
+    // ==============================
+    // APPLICANT
+    // ==============================
+
+    document.getElementById(
+      "studentName"
+    ).textContent =
+      application.student_name ||
+      application.applicant_name ||
+      "-";
+
+
+    document.getElementById(
+      "gender"
+    ).textContent =
+      application.gender ||
+      application.applicant_gender ||
+      "-";
+
+
+    document.getElementById(
+      "dateOfBirth"
+    ).textContent =
+      formatDate(
+        application.date_of_birth ||
+        application.applicant_date_of_birth
+      );
+
+
+    document.getElementById(
+      "classLevel"
+    ).textContent =
+      application.class_level ||
+      "-";
+
+
+    document.getElementById(
+      "phone"
+    ).textContent =
+      application.phone ||
+      application.parent_phone ||
+      "-";
+
+
+    // ==============================
+    // SCHOOL
+    // ==============================
+
+    document.getElementById(
+      "schoolName"
+    ).textContent =
+      application.school_name ||
+      "-";
+
+
+    document.getElementById(
+      "schoolRegion"
+    ).textContent =
+      application.school_region ||
+      "-";
+
+
+    document.getElementById(
+      "schoolDistrict"
+    ).textContent =
+      application.school_district ||
+      "-";
+
+
+    // ==============================
+    // APPLICATION
+    // ==============================
+
+    document.getElementById(
+      "applicationNumberDisplay"
+    ).textContent =
+      application.application_number ||
+      "-";
+
+
+    setStatus(
+      "applicationStatus",
+      application.status ||
+      "pending"
+    );
+
+
+    setStatus(
+      "paymentStatus",
+      application.payment_status ||
+      application.payment_status_from_payments ||
+      "unpaid"
+    );
+
+
+    // ==============================
+    // PAYMENT
+    // ==============================
+
+    document.getElementById(
+      "paymentAmount"
+    ).textContent =
+      formatMoney(
+        application.amount
+      );
+
+
+    document.getElementById(
+      "paymentReference"
+    ).textContent =
+      application.payment_reference ||
+      "-";
+
+
+    section.classList.remove(
+      "hidden"
+    );
+
+
+    // Save application number
+    // for later use
+
+    sessionStorage.setItem(
+      "application_number",
+      application.application_number
+    );
+
+
+    sessionStorage.setItem(
+      "application_id",
+      application.id
+    );
+
+
+  } catch (err) {
+
+    loading.style.display =
+      "none";
+
+
+    error.textContent =
+      err.message ||
+      "Imeshindikana kupata taarifa za maombi.";
+
+
+    error.style.display =
+      "block";
+
+  }
+
+}
+
+
+// ==================================
+// STATUS
+// ==================================
+
+function setStatus(
+  elementId,
+  status
+) {
+
+  const element =
+    document.getElementById(
+      elementId
+    );
+
+
+  const value =
+    String(status)
+      .toLowerCase();
+
+
+  element.className =
+    "status";
+
+
+  if (
+    value === "paid" ||
+    value === "approved" ||
+    value === "confirmed"
+  ) {
+
+    element.classList.add(
+      "paid"
+    );
+
+    element.textContent =
+      value.toUpperCase();
+
+  }
+
+  else if (
+    value === "pending"
+  ) {
+
+    element.classList.add(
+      "pending"
+    );
+
+    element.textContent =
+      "PENDING";
+
+  }
+
+  else {
+
+    element.classList.add(
+      "unpaid"
+    );
+
+    element.textContent =
+      value.toUpperCase();
+
+  }
+
+}
+
+
+// ==================================
+// MONEY
+// ==================================
+
+function formatMoney(
+  amount
+) {
+
+  if (
+    amount === null ||
+    amount === undefined ||
+    amount === ""
+  ) {
+
+    return "TSh 0";
+
+  }
+
+
+  const number =
+    Number(amount);
+
+
+  if (
+    Number.isNaN(number)
+  ) {
+
+    return "TSh " + amount;
+
+  }
+
+
+  return (
+    "TSh " +
+    number.toLocaleString(
+      "en-TZ"
+    )
+  );
+
+}
+
+
+// ==================================
+// DATE
+// ==================================
+
+function formatDate(
+  date
+) {
+
+  if (!date) {
+
+    return "-";
+
+  }
+
+
+  try {
+
+    return new Date(
+      date
+    ).toLocaleDateString(
+      "en-GB"
+    );
+
+  } catch {
+
+    return date;
+
+  }
+
+}
+
+
+// ==================================
+// CONTINUE PAYMENT
+// ==================================
+
+function continuePayment() {
+
+  const applicationId =
+    sessionStorage.getItem(
+      "application_id"
+    );
+
+
+  const applicationNumber =
+    sessionStorage.getItem(
+      "application_number"
+    );
+
+
+  if (!applicationId) {
+
+    alert(
+      "Tafadhali tafuta maombi yako kwanza."
+    );
+
+    return;
+
+  }
+
+
+  window.location.href =
+    "/payment.html?application_id=" +
+    encodeURIComponent(
+      applicationId
+    ) +
+    "&application_number=" +
+    encodeURIComponent(
+      applicationNumber
+    );
+
+}
+
+
+// ==================================
+// AUTO LOAD FROM URL
+// ==================================
+
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const number =
+      params.get(
+        "application_number"
+      );
+
+
+    if (number) {
+
+      document.getElementById(
+        "applicationNumber"
+      ).value =
+        number;
+
+      trackApplication();
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
