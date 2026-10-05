@@ -1772,4 +1772,1286 @@ app.post(
             gender,
             date_of_birth,
             class_level,
-            phone
+            phone,
+            email,
+
+            created_at
+
+          `,
+
+          [
+
+            applicationNumber,
+
+            Number(school_id),
+
+            student_name,
+
+            gender,
+
+            date_of_birth,
+
+            parent_name,
+
+            phone,
+
+            email || null,
+
+            address || null,
+
+            class_level
+
+          ]
+
+        );
+
+
+      const application =
+        applicationResult.rows[0];
+
+
+      // PAYMENT REFERENCE
+
+      const paymentReference =
+
+        "PAY-" +
+
+        new Date().getFullYear() +
+
+        "-" +
+
+        Date.now() +
+
+        "-" +
+
+        Math.floor(
+          Math.random() * 1000
+        );
+
+
+      // CREATE PAYMENT
+
+      const paymentResult =
+
+        await client.query(
+
+          `
+
+          INSERT INTO payments (
+
+            application_id,
+            application_number,
+            amount,
+            payment_reference,
+            status
+
+          )
+
+          VALUES (
+
+            $1,
+            $2,
+            $3,
+            $4,
+            'pending'
+
+          )
+
+          RETURNING
+
+            id,
+            application_id,
+            application_number,
+            amount,
+            payment_reference,
+            status,
+            created_at
+
+          `,
+
+          [
+
+            application.id,
+
+            application.application_number,
+
+            school.form_price,
+
+            paymentReference
+
+          ]
+
+        );
+
+
+      const payment =
+        paymentResult.rows[0];
+
+
+      await client.query(
+        "COMMIT"
+      );
+
+
+      return res.status(201).json({
+
+        success: true,
+
+        message:
+          "Maombi yamehifadhiwa. Payment order iko PENDING.",
+
+        application: {
+
+          id:
+            application.id,
+
+          application_number:
+            application.application_number,
+
+          student_name:
+            application.student_name,
+
+          school_id:
+            application.school_id,
+
+          form_id:
+            application.form_id,
+
+          status:
+            application.status,
+
+          payment_status:
+            application.payment_status
+
+        },
+
+        payment: {
+
+          id:
+            payment.id,
+
+          application_number:
+            payment.application_number,
+
+          amount:
+            payment.amount,
+
+          payment_reference:
+            payment.payment_reference,
+
+          status:
+            payment.status
+
+        },
+
+        school: {
+
+          id:
+            school.id,
+
+          name:
+            school.name,
+
+          form_price:
+            school.form_price
+
+        }
+
+      });
+
+    } catch (error) {
+
+      try {
+
+        await client.query(
+          "ROLLBACK"
+        );
+
+      } catch (rollbackError) {
+
+        console.error(
+          "ROLLBACK ERROR:",
+          rollbackError
+        );
+
+      }
+
+      console.error(
+        "CREATE APPLICATION ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kuhifadhi maombi.",
+
+        error:
+          error.message,
+
+        code:
+          error.code || null,
+
+        detail:
+          error.detail || null,
+
+        hint:
+          error.hint || null
+
+      });
+
+    } finally {
+
+      client.release();
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// GET APPLICATION BY ID
+// ======================================================
+
+app.get(
+  "/api/applications/:id",
+  async (req, res) => {
+
+    try {
+
+      const result =
+        await pool.query(
+
+          `
+
+          SELECT
+
+            a.*,
+
+            p.id AS payment_id,
+
+            p.application_number
+              AS payment_application_number,
+
+            p.amount,
+
+            p.payment_reference,
+
+            p.provider_reference,
+
+            p.status
+              AS payment_status_from_payments,
+
+            p.paid_at,
+
+            p.created_at
+              AS payment_created_at
+
+          FROM applications a
+
+          LEFT JOIN payments p
+            ON p.application_id = a.id
+
+          WHERE a.id = $1
+
+          ORDER BY p.id DESC
+
+          LIMIT 1
+
+          `,
+
+          [
+            req.params.id
+          ]
+
+        );
+
+
+      if (
+        result.rows.length === 0
+      ) {
+
+        return res.status(404).json({
+
+          success: false,
+
+          message:
+            "Application haijapatikana."
+
+        });
+
+      }
+
+
+      return res.json({
+
+        success: true,
+
+        application:
+          result.rows[0]
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "GET APPLICATION ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kupata application.",
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// GET APPLICATION BY NUMBER
+// ======================================================
+
+app.get(
+  "/api/application-by-number/:applicationNumber",
+  async (req, res) => {
+
+    try {
+
+      const applicationNumber =
+        req.params.applicationNumber;
+
+
+      if (!applicationNumber) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          message:
+            "Namba ya maombi haijatumwa."
+
+        });
+
+      }
+
+
+      const result =
+        await pool.query(
+
+          `
+
+          SELECT
+
+            a.id,
+            a.application_number,
+            a.school_id,
+            a.form_id,
+
+            a.applicant_name,
+            a.applicant_gender,
+            a.applicant_date_of_birth,
+
+            a.parent_name,
+            a.parent_phone,
+            a.parent_email,
+
+            a.address,
+
+            a.status,
+            a.payment_status,
+
+            a.student_name,
+            a.gender,
+            a.date_of_birth,
+            a.class_level,
+            a.phone,
+            a.email,
+
+            a.created_at,
+            a.updated_at,
+
+            s.name AS school_name,
+            s.region AS school_region,
+            s.district AS school_district,
+            s.school_type,
+            s.form_price,
+
+            p.id AS payment_id,
+
+            p.application_number
+              AS payment_application_number,
+
+            p.amount,
+            p.payment_reference,
+            p.provider_reference,
+
+            p.status
+              AS payment_status_from_payments,
+
+            p.paid_at,
+
+            p.created_at
+              AS payment_created_at
+
+          FROM applications a
+
+          LEFT JOIN schools s
+            ON s.id = a.school_id
+
+          LEFT JOIN payments p
+            ON p.application_id = a.id
+
+          WHERE a.application_number = $1
+
+          ORDER BY p.id DESC
+
+          LIMIT 1
+
+          `,
+
+          [
+            applicationNumber
+          ]
+
+        );
+
+
+      if (
+        result.rows.length === 0
+      ) {
+
+        return res.status(404).json({
+
+          success: false,
+
+          message:
+            "Namba ya maombi haijapatikana."
+
+        });
+
+      }
+
+
+      return res.json({
+
+        success: true,
+
+        application:
+          result.rows[0]
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "GET APPLICATION BY NUMBER ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kupata taarifa za maombi.",
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// ADMIN - GET APPLICATIONS
+// ======================================================
+
+app.get(
+  "/api/admin/applications",
+  async (req, res) => {
+
+    try {
+
+      const {
+        search,
+        school_id,
+        status,
+        payment_status
+      } = req.query;
+
+
+      const conditions = [];
+      const values = [];
+
+
+      if (search) {
+
+        values.push(
+          `%${search.trim()}%`
+        );
+
+        conditions.push(`
+          (
+            a.application_number ILIKE $${values.length}
+            OR a.student_name ILIKE $${values.length}
+            OR a.applicant_name ILIKE $${values.length}
+            OR a.parent_name ILIKE $${values.length}
+            OR a.phone ILIKE $${values.length}
+            OR a.parent_phone ILIKE $${values.length}
+          )
+        `);
+
+      }
+
+
+      if (school_id) {
+
+        values.push(
+          Number(school_id)
+        );
+
+        conditions.push(
+          `a.school_id = $${values.length}`
+        );
+
+      }
+
+
+      if (status) {
+
+        values.push(status);
+
+        conditions.push(
+          `a.status = $${values.length}`
+        );
+
+      }
+
+
+      if (payment_status) {
+
+        values.push(payment_status);
+
+        conditions.push(`
+          (
+            a.payment_status = $${values.length}
+            OR p.status = $${values.length}
+          )
+        `);
+
+      }
+
+
+      const whereClause =
+        conditions.length > 0
+          ? "WHERE " + conditions.join(" AND ")
+          : "";
+
+
+      const result =
+        await pool.query(
+
+          `
+
+          SELECT
+
+            a.id,
+            a.application_number,
+            a.school_id,
+            a.form_id,
+
+            a.student_name,
+            a.applicant_name,
+
+            a.gender,
+            a.applicant_gender,
+
+            a.date_of_birth,
+            a.applicant_date_of_birth,
+
+            a.class_level,
+
+            a.parent_name,
+
+            a.phone,
+            a.parent_phone,
+
+            a.email,
+            a.parent_email,
+
+            a.address,
+
+            a.status,
+            a.payment_status,
+
+            a.created_at,
+            a.updated_at,
+
+            s.name AS school_name,
+            s.region AS school_region,
+            s.district AS school_district,
+            s.school_type,
+            s.form_price,
+
+            p.id AS payment_id,
+            p.amount,
+            p.payment_reference,
+            p.provider_reference,
+
+            p.status
+              AS payment_status_from_payments,
+
+            p.paid_at,
+
+            p.created_at
+              AS payment_created_at,
+
+            COALESCE(
+              p.status,
+              a.payment_status,
+              'unpaid'
+            ) AS current_payment_status
+
+          FROM applications a
+
+          LEFT JOIN schools s
+            ON s.id = a.school_id
+
+          LEFT JOIN LATERAL (
+
+            SELECT *
+
+            FROM payments px
+
+            WHERE px.application_id = a.id
+
+            ORDER BY px.id DESC
+
+            LIMIT 1
+
+          ) p ON TRUE
+
+          ${whereClause}
+
+          ORDER BY a.id DESC
+
+          `,
+
+          values
+
+        );
+
+
+      return res.json({
+
+        success: true,
+
+        count:
+          result.rows.length,
+
+        applications:
+          result.rows
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "ADMIN GET APPLICATIONS ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kupata maombi ya admin.",
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// ADMIN - DASHBOARD STATISTICS
+// ======================================================
+
+app.get(
+  "/api/admin/dashboard-stats",
+  async (req, res) => {
+
+    try {
+
+      const result =
+        await pool.query(`
+
+          SELECT
+
+            COUNT(*)::INTEGER
+              AS total_applications,
+
+            COUNT(*) FILTER (
+              WHERE status = 'pending'
+            )::INTEGER
+              AS pending_applications,
+
+            COUNT(*) FILTER (
+              WHERE status = 'approved'
+            )::INTEGER
+              AS approved_applications,
+
+            COUNT(*) FILTER (
+              WHERE status = 'rejected'
+            )::INTEGER
+              AS rejected_applications,
+
+            COUNT(*) FILTER (
+              WHERE payment_status = 'paid'
+            )::INTEGER
+              AS paid_applications,
+
+            COUNT(*) FILTER (
+              WHERE payment_status = 'unpaid'
+            )::INTEGER
+              AS unpaid_applications
+
+          FROM applications
+
+        `);
+
+
+      const schoolsResult =
+        await pool.query(`
+
+          SELECT
+            COUNT(*)::INTEGER
+              AS total_schools
+
+          FROM schools
+
+          WHERE status = 'active'
+
+        `);
+
+
+      const revenueResult =
+        await pool.query(`
+
+          SELECT
+
+            COALESCE(
+              SUM(amount),
+              0
+            ) AS total_revenue
+
+          FROM payments
+
+          WHERE status = 'paid'
+
+        `);
+
+
+      return res.json({
+
+        success: true,
+
+        statistics: {
+
+          total_applications:
+            result.rows[0].total_applications,
+
+          pending_applications:
+            result.rows[0].pending_applications,
+
+          approved_applications:
+            result.rows[0].approved_applications,
+
+          rejected_applications:
+            result.rows[0].rejected_applications,
+
+          paid_applications:
+            result.rows[0].paid_applications,
+
+          unpaid_applications:
+            result.rows[0].unpaid_applications,
+
+          total_schools:
+            schoolsResult.rows[0].total_schools,
+
+          total_revenue:
+            revenueResult.rows[0].total_revenue
+
+        }
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "ADMIN DASHBOARD STATS ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kupata takwimu za dashboard.",
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// ADMIN - UPDATE APPLICATION STATUS
+// ======================================================
+
+app.put(
+  "/api/admin/applications/:id/status",
+  async (req, res) => {
+
+    try {
+
+      const applicationId =
+        Number(req.params.id);
+
+      const {
+        status
+      } = req.body;
+
+
+      const allowedStatuses = [
+        "pending",
+        "approved",
+        "rejected",
+        "processing",
+        "completed"
+      ];
+
+
+      if (
+        !applicationId ||
+        !allowedStatuses.includes(status)
+      ) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          message:
+            "Application ID au status si sahihi."
+
+        });
+
+      }
+
+
+      const result =
+        await pool.query(
+
+          `
+
+          UPDATE applications
+
+          SET
+
+            status = $1,
+
+            updated_at =
+              CURRENT_TIMESTAMP
+
+          WHERE id = $2
+
+          RETURNING
+
+            id,
+            application_number,
+            student_name,
+            status,
+            payment_status,
+            updated_at
+
+          `,
+
+          [
+            status,
+            applicationId
+          ]
+
+        );
+
+
+      if (
+        result.rows.length === 0
+      ) {
+
+        return res.status(404).json({
+
+          success: false,
+
+          message:
+            "Application haijapatikana."
+
+        });
+
+      }
+
+
+      return res.json({
+
+        success: true,
+
+        message:
+          "Status ya maombi imebadilishwa.",
+
+        application:
+          result.rows[0]
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "ADMIN UPDATE APPLICATION STATUS ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kubadilisha status ya maombi.",
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// ADMIN - UPDATE PAYMENT STATUS
+// ======================================================
+
+app.put(
+  "/api/admin/applications/:id/payment-status",
+  async (req, res) => {
+
+    const client =
+      await pool.connect();
+
+
+    try {
+
+      const applicationId =
+        Number(req.params.id);
+
+      const {
+        payment_status
+      } = req.body;
+
+
+      const allowedPaymentStatuses = [
+        "unpaid",
+        "pending",
+        "paid",
+        "failed",
+        "cancelled"
+      ];
+
+
+      if (
+        !applicationId ||
+        !allowedPaymentStatuses.includes(
+          payment_status
+        )
+      ) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          message:
+            "Application ID au payment status si sahihi."
+
+        });
+
+      }
+
+
+      await client.query(
+        "BEGIN"
+      );
+
+
+      const applicationResult =
+        await client.query(
+
+          `
+
+          SELECT
+
+            id,
+            application_number
+
+          FROM applications
+
+          WHERE id = $1
+
+          FOR UPDATE
+
+          `,
+
+          [
+            applicationId
+          ]
+
+        );
+
+
+      if (
+        applicationResult.rows.length === 0
+      ) {
+
+        await client.query(
+          "ROLLBACK"
+        );
+
+        return res.status(404).json({
+
+          success: false,
+
+          message:
+            "Application haijapatikana."
+
+        });
+
+      }
+
+
+      const applicationUpdate =
+        await client.query(
+
+          `
+
+          UPDATE applications
+
+          SET
+
+            payment_status = $1,
+
+            updated_at =
+              CURRENT_TIMESTAMP
+
+          WHERE id = $2
+
+          RETURNING
+
+            id,
+            application_number,
+            student_name,
+            status,
+            payment_status,
+            updated_at
+
+          `,
+
+          [
+            payment_status,
+            applicationId
+          ]
+
+        );
+
+
+      const paymentUpdate =
+        await client.query(
+
+          `
+
+          UPDATE payments
+
+          SET
+
+            status = $1,
+
+            paid_at =
+
+              CASE
+
+                WHEN $1 = 'paid'
+
+                THEN COALESCE(
+                  paid_at,
+                  CURRENT_TIMESTAMP
+                )
+
+                ELSE NULL
+
+              END,
+
+            updated_at =
+              CURRENT_TIMESTAMP
+
+          WHERE id = (
+
+            SELECT id
+
+            FROM payments
+
+            WHERE application_id = $2
+
+            ORDER BY id DESC
+
+            LIMIT 1
+
+          )
+
+          RETURNING
+
+            id,
+            application_id,
+            application_number,
+            amount,
+            payment_reference,
+            provider_reference,
+            status,
+            paid_at,
+            updated_at
+
+          `,
+
+          [
+            payment_status,
+            applicationId
+          ]
+
+        );
+
+
+      await client.query(
+        "COMMIT"
+      );
+
+
+      return res.json({
+
+        success: true,
+
+        message:
+          "Payment status imebadilishwa.",
+
+        application:
+          applicationUpdate.rows[0],
+
+        payment:
+          paymentUpdate.rows[0] || null
+
+      });
+
+    } catch (error) {
+
+      try {
+
+        await client.query(
+          "ROLLBACK"
+        );
+
+      } catch (rollbackError) {
+
+        console.error(
+          "ROLLBACK ERROR:",
+          rollbackError
+        );
+
+      }
+
+
+      console.error(
+        "ADMIN UPDATE PAYMENT STATUS ERROR:",
+        error
+      );
+
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kubadilisha payment status.",
+
+        error:
+          error.message
+
+      });
+
+    } finally {
+
+      client.release();
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// START SERVER
+// ======================================================
+
+async function startServer() {
+
+  await setupDatabase();
+
+  app.listen(
+    PORT,
+    () => {
+
+      console.log(
+        `Shule Portal Tanzania running on port ${PORT}`
+      );
+
+    }
+  );
+
+}
+
+
+startServer();
