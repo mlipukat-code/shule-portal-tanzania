@@ -24,14 +24,19 @@
     }
 
     header {
-      background: #1565c0;
+      background: linear-gradient(
+        135deg,
+        #1565c0,
+        #0d47a1
+      );
+
       color: white;
-      padding: 18px;
+      padding: 18px 0;
     }
 
     .header-inner {
       width: 94%;
-      max-width: 1200px;
+      max-width: 1250px;
       margin: auto;
 
       display: flex;
@@ -47,25 +52,78 @@
     }
 
     .admin-label {
+      margin-top: 5px;
       font-size: 13px;
       opacity: 0.9;
     }
 
+    .back-btn {
+      display: inline-block;
+      text-decoration: none;
+
+      color: white;
+      border: 1px solid rgba(255,255,255,0.6);
+
+      padding: 9px 13px;
+      border-radius: 7px;
+
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .back-btn:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
     .container {
       width: 94%;
-      max-width: 1200px;
+      max-width: 1250px;
       margin: 25px auto 50px;
     }
 
     h1 {
       color: #1565c0;
-      margin-bottom: 5px;
+      margin: 0 0 5px;
+      font-size: 28px;
     }
 
     .subtitle {
       color: #666;
       margin-top: 0;
     }
+
+    /* =========================
+       MESSAGE
+    ========================= */
+
+    .message {
+      display: none;
+
+      padding: 14px 16px;
+      border-radius: 9px;
+
+      margin: 15px 0;
+
+      font-weight: bold;
+    }
+
+    .message.success {
+      display: block;
+      background: #e8f5e9;
+      color: #1b5e20;
+      border-left: 4px solid #2e7d32;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffebee;
+      color: #b71c1c;
+      border-left: 4px solid #c62828;
+    }
+
+    /* =========================
+       STATS
+    ========================= */
 
     .stats {
       display: grid;
@@ -80,9 +138,10 @@
 
     .stat {
       background: white;
+
       padding: 20px;
 
-      border-radius: 10px;
+      border-radius: 12px;
 
       box-shadow:
         0 3px 12px rgba(0,0,0,0.08);
@@ -90,8 +149,13 @@
       text-align: center;
     }
 
+    .stat-icon {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
     .stat-number {
-      font-size: 28px;
+      font-size: 27px;
       font-weight: bold;
       color: #1565c0;
     }
@@ -102,8 +166,13 @@
       font-size: 14px;
     }
 
+    /* =========================
+       CARD
+    ========================= */
+
     .card {
       background: white;
+
       border-radius: 12px;
 
       padding: 20px;
@@ -114,135 +183,44 @@
       margin-bottom: 20px;
     }
 
-    .table-wrapper {
-      width: 100%;
-      overflow-x: auto;
+    /* =========================
+       TOOLBAR
+    ========================= */
+
+    .toolbar {
+      display: grid;
+
+      grid-template-columns:
+        2fr 1fr 1fr auto;
+
+      gap: 10px;
+
+      margin-bottom: 18px;
     }
 
-    table {
+    .input,
+    .select {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 850px;
-    }
 
-    th {
-      background: #1565c0;
-      color: white;
+      padding: 11px 12px;
 
-      padding: 12px;
-      text-align: left;
+      border: 1px solid #d5dce3;
+
+      border-radius: 7px;
 
       font-size: 14px;
-    }
-
-    td {
-      padding: 12px;
-
-      border-bottom:
-        1px solid #eee;
-
-      font-size: 14px;
-    }
-
-    tr:hover {
-      background: #f8fbff;
-    }
-
-    .status {
-      display: inline-block;
-
-      padding: 6px 10px;
-
-      border-radius: 20px;
-
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .pending {
-      background: #fff3cd;
-      color: #856404;
-    }
-
-    .paid {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    .failed {
-      background: #f8d7da;
-      color: #721c24;
-    }
-
-    .confirm-btn {
-      border: none;
-
-      background: #2e7d32;
-      color: white;
-
-      padding: 9px 13px;
-
-      border-radius: 6px;
-
-      cursor: pointer;
-
-      font-weight: bold;
-    }
-
-    .confirm-btn:hover {
-      background: #1b5e20;
-    }
-
-    .confirm-btn:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-
-    .view-btn {
-      border: 1px solid #1565c0;
 
       background: white;
-      color: #1565c0;
 
-      padding: 8px 12px;
-
-      border-radius: 6px;
-
-      cursor: pointer;
-
-      font-weight: bold;
-
-      margin-left: 5px;
+      outline: none;
     }
 
-    .message {
-      padding: 15px;
+    .input:focus,
+    .select:focus {
+      border-color: #1565c0;
 
-      border-radius: 8px;
-
-      margin-bottom: 15px;
-    }
-
-    .success {
-      background: #e8f5e9;
-      color: #1b5e20;
-
-      border-left:
-        4px solid #2e7d32;
-    }
-
-    .error {
-      background: #ffebee;
-      color: #b71c1c;
-
-      border-left:
-        4px solid #c62828;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 35px;
-      color: #666;
+      box-shadow:
+        0 0 0 2px rgba(21,101,192,0.1);
     }
 
     .refresh-btn {
@@ -264,12 +242,337 @@
       background: #0d47a1;
     }
 
-    .empty {
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 1050px;
+    }
+
+    th {
+      background: #1565c0;
+
+      color: white;
+
+      padding: 12px;
+
+      text-align: left;
+
+      font-size: 13px;
+
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px;
+
+      border-bottom:
+        1px solid #eee;
+
+      font-size: 13px;
+
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    .application-number {
+      font-weight: bold;
+      color: #1565c0;
+      white-space: nowrap;
+    }
+
+    .payment-reference {
+      font-family: monospace;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .amount {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status {
+      display: inline-block;
+
+      padding: 6px 10px;
+
+      border-radius: 20px;
+
+      font-size: 11px;
+
+      font-weight: bold;
+
+      white-space: nowrap;
+    }
+
+    .status.pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status.paid {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.failed {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status.cancelled {
+      background: #eeeeee;
+      color: #555;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .actions {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 6px;
+    }
+
+    .btn {
+      border: none;
+
+      padding: 8px 10px;
+
+      border-radius: 6px;
+
+      cursor: pointer;
+
+      font-size: 12px;
+
+      font-weight: bold;
+
+      text-decoration: none;
+
+      display: inline-block;
+
+      white-space: nowrap;
+    }
+
+    .btn-slip {
+      background: #e3f2fd;
+      color: #1565c0;
+      border: 1px solid #90caf9;
+    }
+
+    .btn-slip:hover {
+      background: #bbdefb;
+    }
+
+    .btn-confirm {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-confirm:hover {
+      background: #1b5e20;
+    }
+
+    .btn-confirm:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .btn-view {
+      background: #f5f5f5;
+      color: #444;
+      border: 1px solid #ddd;
+    }
+
+    .btn-view:hover {
+      background: #eeeeee;
+    }
+
+    /* =========================
+       EMPTY / LOADING
+    ========================= */
+
+    .loading {
       text-align: center;
 
       padding: 40px;
 
+      color: #666;
+    }
+
+    .empty {
+      text-align: center;
+
+      padding: 45px 20px;
+
       color: #777;
+    }
+
+    .empty-icon {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    /* =========================
+       RESULT INFO
+    ========================= */
+
+    .result-info {
+      color: #666;
+
+      font-size: 13px;
+
+      margin-bottom: 10px;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal {
+      display: none;
+
+      position: fixed;
+
+      z-index: 1000;
+
+      left: 0;
+      top: 0;
+
+      width: 100%;
+      height: 100%;
+
+      background:
+        rgba(0,0,0,0.55);
+
+      padding: 20px;
+
+      overflow-y: auto;
+    }
+
+    .modal.show {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      background: white;
+
+      width: 100%;
+      max-width: 600px;
+
+      border-radius: 14px;
+
+      box-shadow:
+        0 10px 35px rgba(0,0,0,0.25);
+
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: #1565c0;
+
+      color: white;
+
+      padding: 16px 18px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .close-btn {
+      border: none;
+
+      background: transparent;
+
+      color: white;
+
+      font-size: 24px;
+
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .detail-grid {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 12px;
+    }
+
+    .detail {
+      background: #f7f9fb;
+
+      border-radius: 8px;
+
+      padding: 12px;
+    }
+
+    .detail.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-label {
+      color: #777;
+
+      font-size: 12px;
+
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-weight: bold;
+
+      word-break: break-word;
+    }
+
+    .modal-footer {
+      padding: 15px 20px;
+
+      border-top:
+        1px solid #eee;
+
+      display: flex;
+
+      justify-content: flex-end;
+
+      gap: 8px;
     }
 
     footer {
@@ -282,28 +585,170 @@
       font-size: 13px;
     }
 
-    @media (max-width: 800px) {
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 900px) {
 
       .stats {
         grid-template-columns:
           repeat(2, 1fr);
       }
 
-      .header-inner {
-        flex-direction: column;
-        align-items: flex-start;
+      .toolbar {
+        grid-template-columns:
+          1fr 1fr;
+      }
+
+      .toolbar .search-box {
+        grid-column:
+          1 / -1;
       }
 
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
 
-      .stats {
-        grid-template-columns: 1fr;
+      .container {
+        width: 92%;
+        margin-top: 18px;
+      }
+
+      .header-inner {
+        width: 92%;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+      }
+
+      .back-btn {
+        width: 100%;
+        text-align: center;
       }
 
       h1 {
-        font-size: 24px;
+        font-size: 23px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+      }
+
+      .stat {
+        padding: 15px 8px;
+      }
+
+      .stat-number {
+        font-size: 21px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar .search-box {
+        grid-column: auto;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail.full {
+        grid-column: auto;
+      }
+
+      /*
+        Mobile payment cards
+      */
+
+      .table-wrapper {
+        overflow: visible;
+      }
+
+      table {
+        min-width: 0;
+      }
+
+      table thead {
+        display: none;
+      }
+
+      table,
+      table tbody,
+      table tr,
+      table td {
+        display: block;
+        width: 100%;
+      }
+
+      table tr {
+        background: white;
+
+        border:
+          1px solid #e2e7eb;
+
+        border-radius: 10px;
+
+        margin-bottom: 14px;
+
+        padding: 8px;
+      }
+
+      table tr:hover {
+        background: white;
+      }
+
+      table td {
+        border: none;
+
+        border-bottom:
+          1px solid #f0f0f0;
+
+        padding: 9px 8px;
+
+        display: flex;
+
+        justify-content:
+          space-between;
+
+        gap: 12px;
+
+        text-align: right;
+      }
+
+      table td:last-child {
+        border-bottom: none;
+      }
+
+      table td::before {
+        content: attr(data-label);
+
+        font-weight: bold;
+
+        color: #666;
+
+        text-align: left;
+      }
+
+      table td:first-child {
+        display: none;
+      }
+
+      .actions {
+        justify-content: flex-end;
       }
 
     }
@@ -326,10 +771,18 @@
       </div>
 
       <div class="admin-label">
-        Admin Mkuu — Usimamizi wa Malipo
+        👑 Admin Mkuu — Usimamizi wa Malipo
       </div>
 
     </div>
+
+
+    <a
+      href="admin-schools.html"
+      class="back-btn"
+    >
+      ← Admin Dashboard
+    </a>
 
   </div>
 
@@ -345,25 +798,29 @@
   </h1>
 
   <p class="subtitle">
-    Angalia na thibitisha malipo ya fomu za shule.
+    Angalia, tafuta na thibitisha malipo ya fomu za shule.
   </p>
 
 
-  <!-- MESSAGE -->
-
   <div
     id="message"
-    class="message hidden"
+    class="message"
   ></div>
 
 
 
-  <!-- STATISTICS -->
+  <!-- =========================
+       STATISTICS
+  ========================== -->
 
   <div class="stats">
 
 
     <div class="stat">
+
+      <div class="stat-icon">
+        📋
+      </div>
 
       <div
         id="totalPayments"
@@ -381,6 +838,10 @@
 
     <div class="stat">
 
+      <div class="stat-icon">
+        ⏳
+      </div>
+
       <div
         id="pendingPayments"
         class="stat-number"
@@ -397,6 +858,10 @@
 
     <div class="stat">
 
+      <div class="stat-icon">
+        ✅
+      </div>
+
       <div
         id="paidPayments"
         class="stat-number"
@@ -412,6 +877,10 @@
 
 
     <div class="stat">
+
+      <div class="stat-icon">
+        💰
+      </div>
 
       <div
         id="totalPaidAmount"
@@ -431,7 +900,9 @@
 
 
 
-  <!-- PAYMENT LIST -->
+  <!-- =========================
+       PAYMENT CARD
+  ========================== -->
 
   <div class="card">
 
@@ -443,12 +914,24 @@
         align-items:center;
         gap:15px;
         margin-bottom:15px;
+        flex-wrap:wrap;
       "
     >
 
-      <h2 style="margin:0;">
-        📋 Orodha ya Malipo
-      </h2>
+      <div>
+
+        <h2 style="margin:0 0 4px;">
+          📋 Orodha ya Malipo
+        </h2>
+
+        <div
+          id="resultInfo"
+          class="result-info"
+        >
+          Inapakia...
+        </div>
+
+      </div>
 
 
       <button
@@ -462,18 +945,110 @@
 
 
 
-    <div
-      id="loading"
-      class="loading"
-    >
-      Inapakia malipo...
+    <!-- =========================
+         FILTERS
+    ========================== -->
+
+    <div class="toolbar">
+
+
+      <div class="search-box">
+
+        <input
+          id="searchInput"
+          class="input"
+          type="search"
+          placeholder="🔎 Tafuta jina, Application Number, Reference au simu..."
+          oninput="applyFilters()"
+        >
+
+      </div>
+
+
+      <div>
+
+        <select
+          id="schoolFilter"
+          class="select"
+          onchange="applyFilters()"
+        >
+
+          <option value="">
+            🏫 Shule Zote
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div>
+
+        <select
+          id="statusFilter"
+          class="select"
+          onchange="applyFilters()"
+        >
+
+          <option value="">
+            💳 Status Zote
+          </option>
+
+          <option value="pending">
+            ⏳ Yanayosubiri
+          </option>
+
+          <option value="paid">
+            ✅ Yaliyolipwa
+          </option>
+
+          <option value="failed">
+            ❌ Failed
+          </option>
+
+          <option value="cancelled">
+            🚫 Cancelled
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button
+        class="btn btn-view"
+        onclick="clearFilters()"
+        style="padding:11px 14px;"
+      >
+        ✖ Safisha
+      </button>
+
+
     </div>
 
 
 
+    <!-- =========================
+         LOADING
+    ========================== -->
+
+    <div
+      id="loading"
+      class="loading"
+    >
+      ⏳ Inapakia malipo...
+    </div>
+
+
+
+    <!-- =========================
+         TABLE
+    ========================== -->
+
     <div
       id="tableContainer"
-      class="table-wrapper hidden"
+      class="table-wrapper"
+      style="display:none;"
     >
 
       <table>
@@ -482,9 +1057,7 @@
 
           <tr>
 
-            <th>
-              #
-            </th>
+            <th>#</th>
 
             <th>
               Mwombaji
@@ -532,11 +1105,29 @@
     </div>
 
 
+
+    <!-- =========================
+         EMPTY
+    ========================== -->
+
     <div
       id="empty"
-      class="empty hidden"
+      class="empty"
+      style="display:none;"
     >
-      Hakuna malipo yaliyopatikana.
+
+      <div class="empty-icon">
+        📭
+      </div>
+
+      <strong>
+        Hakuna malipo yaliyopatikana
+      </strong>
+
+      <p>
+        Badilisha search au filters zako.
+      </p>
+
     </div>
 
 
@@ -555,13 +1146,73 @@
 
 
 
+<!-- =========================
+     PAYMENT DETAIL MODAL
+========================== -->
+
+<div
+  id="paymentModal"
+  class="modal"
+  onclick="closeModalOutside(event)"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+
+      <h3>
+        💳 Maelezo ya Malipo
+      </h3>
+
+      <button
+        class="close-btn"
+        onclick="closePaymentModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      id="modalBody"
+      class="modal-body"
+    ></div>
+
+
+    <div class="modal-footer">
+
+      <button
+        class="btn btn-view"
+        onclick="closePaymentModal()"
+      >
+        Funga
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
 <script>
+
+
+  // ==========================================================
+  // GLOBAL DATA
+  // ==========================================================
+
+  let allPayments = [];
+
+  let filteredPayments = [];
+
 
 
   // ==========================================================
   // HELPERS
   // ==========================================================
-
 
   function formatMoney(value) {
 
@@ -579,6 +1230,7 @@
     );
 
   }
+
 
 
   function formatDate(value) {
@@ -599,10 +1251,15 @@
     }
 
     return date.toLocaleString(
-      "sw-TZ"
+      "sw-TZ",
+      {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }
     );
 
   }
+
 
 
   function escapeHTML(value) {
@@ -611,9 +1268,7 @@
       value === null ||
       value === undefined
     ) {
-
       return "";
-
     }
 
     return String(value)
@@ -641,9 +1296,80 @@
   }
 
 
+
+  function normalize(value) {
+
+    return String(
+      value || ""
+    )
+      .toLowerCase()
+      .trim();
+
+  }
+
+
+
+  function getStatusLabel(status) {
+
+    const value =
+      normalize(status);
+
+    if (value === "paid") {
+      return "IMELIPWA";
+    }
+
+    if (value === "pending") {
+      return "INASUBIRI";
+    }
+
+    if (value === "failed") {
+      return "FAILED";
+    }
+
+    if (value === "cancelled") {
+      return "CANCELLED";
+    }
+
+    return value
+      ? value.toUpperCase()
+      : "PENDING";
+
+  }
+
+
+
+  function getStatusClass(status) {
+
+    const value =
+      normalize(status);
+
+    if (
+      value === "paid"
+    ) {
+      return "paid";
+    }
+
+    if (
+      value === "failed"
+    ) {
+      return "failed";
+    }
+
+    if (
+      value === "cancelled"
+    ) {
+      return "cancelled";
+    }
+
+    return "pending";
+
+  }
+
+
+
   function showMessage(
     type,
-    text
+    message
   ) {
 
     const box =
@@ -651,26 +1377,27 @@
         "message"
       );
 
-
     box.className =
       "message " +
       type;
 
-
     box.textContent =
-      text;
+      message;
 
-
-    box.classList.remove(
-      "hidden"
-    );
-
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
     setTimeout(
       () => {
-        box.classList.add(
-          "hidden"
-        );
+
+        box.className =
+          "message";
+
+        box.textContent =
+          "";
+
       },
       5000
     );
@@ -682,7 +1409,6 @@
   // ==========================================================
   // LOAD PAYMENTS
   // ==========================================================
-
 
   async function loadPayments() {
 
@@ -701,22 +1427,27 @@
         "empty"
       );
 
+    const resultInfo =
+      document.getElementById(
+        "resultInfo"
+      );
 
-    loading.classList.remove(
-      "hidden"
-    );
 
-    table.classList.add(
-      "hidden"
-    );
+    loading.style.display =
+      "block";
 
-    empty.classList.add(
-      "hidden"
-    );
+    table.style.display =
+      "none";
+
+    empty.style.display =
+      "none";
+
+
+    resultInfo.textContent =
+      "Inapakia...";
 
 
     try {
-
 
       const response =
         await fetch(
@@ -741,7 +1472,7 @@
       }
 
 
-      const payments =
+      allPayments =
         Array.isArray(
           data.payments
         )
@@ -749,14 +1480,43 @@
           : [];
 
 
+      /*
+        Newest payments first
+      */
+
+      allPayments.sort(
+        (
+          a,
+          b
+        ) => {
+
+          const dateA =
+            new Date(
+              a.created_at || 0
+            ).getTime();
+
+          const dateB =
+            new Date(
+              b.created_at || 0
+            ).getTime();
+
+          return dateB - dateA;
+
+        }
+      );
+
+
       updateStats(
-        payments
+        allPayments
       );
 
 
-      renderPayments(
-        payments
+      populateSchoolFilter(
+        allPayments
       );
+
+
+      applyFilters();
 
 
     }
@@ -769,19 +1529,21 @@
       );
 
 
+      resultInfo.textContent =
+        "Imeshindikana kupakia.";
+
       showMessage(
         "error",
-        error.message
+        error.message ||
+        "Imeshindikana kupata malipo."
       );
-
 
     }
 
     finally {
 
-      loading.classList.add(
-        "hidden"
-      );
+      loading.style.display =
+        "none";
 
     }
 
@@ -790,14 +1552,12 @@
 
 
   // ==========================================================
-  // STATS
+  // STATISTICS
   // ==========================================================
-
 
   function updateStats(
     payments
   ) {
-
 
     const total =
       payments.length;
@@ -806,20 +1566,18 @@
     const paid =
       payments.filter(
         payment =>
-          String(
-            payment.status || ""
-          ).toLowerCase() ===
-          "paid"
+          normalize(
+            payment.status
+          ) === "paid"
       );
 
 
     const pending =
       payments.filter(
         payment =>
-          String(
-            payment.status || ""
-          ).toLowerCase() !==
-          "paid"
+          normalize(
+            payment.status
+          ) === "pending"
       );
 
 
@@ -872,30 +1630,233 @@
 
 
   // ==========================================================
-  // RENDER
+  // SCHOOL FILTER
   // ==========================================================
 
+  function populateSchoolFilter(
+    payments
+  ) {
+
+    const select =
+      document.getElementById(
+        "schoolFilter"
+      );
+
+
+    const currentValue =
+      select.value;
+
+
+    const schools =
+      [
+        ...new Set(
+          payments
+            .map(
+              payment =>
+                payment.school_name
+            )
+            .filter(Boolean)
+        )
+      ]
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          String(a).localeCompare(
+            String(b)
+          )
+      );
+
+
+    select.innerHTML = `
+      <option value="">
+        🏫 Shule Zote
+      </option>
+    `;
+
+
+    schools.forEach(
+      school => {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          school;
+
+        option.textContent =
+          school;
+
+        select.appendChild(
+          option
+        );
+
+      }
+    );
+
+
+    if (
+      schools.includes(
+        currentValue
+      )
+    ) {
+
+      select.value =
+        currentValue;
+
+    }
+
+  }
+
+
+
+  // ==========================================================
+  // FILTER
+  // ==========================================================
+
+  function applyFilters() {
+
+    const search =
+      normalize(
+        document.getElementById(
+          "searchInput"
+        ).value
+      );
+
+
+    const school =
+      document.getElementById(
+        "schoolFilter"
+      ).value;
+
+
+    const status =
+      normalize(
+        document.getElementById(
+          "statusFilter"
+        ).value
+      );
+
+
+    filteredPayments =
+      allPayments.filter(
+        payment => {
+
+
+          const searchableText =
+            [
+              payment.student_name,
+              payment.parent_name,
+              payment.phone,
+              payment.email,
+              payment.application_number,
+              payment.payment_reference,
+              payment.school_name
+            ]
+            .map(
+              value =>
+                normalize(value)
+            )
+            .join(" ");
+
+
+          const matchesSearch =
+            !search ||
+            searchableText.includes(
+              search
+            );
+
+
+          const matchesSchool =
+            !school ||
+            String(
+              payment.school_name || ""
+            ) ===
+            String(school);
+
+
+          const paymentStatus =
+            normalize(
+              payment.status
+            );
+
+
+          const matchesStatus =
+            !status ||
+            paymentStatus ===
+            status;
+
+
+          return (
+            matchesSearch &&
+            matchesSchool &&
+            matchesStatus
+          );
+
+        }
+      );
+
+
+    renderPayments(
+      filteredPayments
+    );
+
+  }
+
+
+
+  function clearFilters() {
+
+    document.getElementById(
+      "searchInput"
+    ).value =
+      "";
+
+    document.getElementById(
+      "schoolFilter"
+    ).value =
+      "";
+
+    document.getElementById(
+      "statusFilter"
+    ).value =
+      "";
+
+    applyFilters();
+
+  }
+
+
+
+  // ==========================================================
+  // RENDER PAYMENTS
+  // ==========================================================
 
   function renderPayments(
     payments
   ) {
-
 
     const body =
       document.getElementById(
         "paymentsBody"
       );
 
-
     const table =
       document.getElementById(
         "tableContainer"
       );
 
-
     const empty =
       document.getElementById(
         "empty"
+      );
+
+    const resultInfo =
+      document.getElementById(
+        "resultInfo"
       );
 
 
@@ -903,17 +1864,19 @@
       "";
 
 
+    resultInfo.textContent =
+      `${payments.length} malipo yanaonekana kati ya ${allPayments.length}.`;
+
+
     if (
       payments.length === 0
     ) {
 
-      table.classList.add(
-        "hidden"
-      );
+      table.style.display =
+        "none";
 
-      empty.classList.remove(
-        "hidden"
-      );
+      empty.style.display =
+        "block";
 
       return;
 
@@ -926,12 +1889,11 @@
         index
       ) => {
 
-
         const status =
-          String(
+          normalize(
             payment.status ||
             "pending"
-          ).toLowerCase();
+          );
 
 
         const isPaid =
@@ -946,12 +1908,12 @@
 
         tr.innerHTML = `
 
-          <td>
+          <td data-label="#">
             ${index + 1}
           </td>
 
 
-          <td>
+          <td data-label="Mwombaji">
 
             <strong>
               ${escapeHTML(
@@ -960,111 +1922,179 @@
               )}
             </strong>
 
-            <br>
+            ${
+              payment.parent_name
+                ? `
+                  <br>
+                  <small>
+                    Mzazi:
+                    ${escapeHTML(
+                      payment.parent_name
+                    )}
+                  </small>
+                `
+                : ""
+            }
 
-            <small>
-              ${escapeHTML(
-                payment.parent_name ||
-                ""
-              )}
-            </small>
+            ${
+              payment.phone
+                ? `
+                  <br>
+                  <small>
+                    📞
+                    ${escapeHTML(
+                      payment.phone
+                    )}
+                  </small>
+                `
+                : ""
+            }
 
           </td>
 
 
-          <td>
-            ${escapeHTML(
-              payment.school_name ||
-              "-"
-            )}
-          </td>
-
-
-          <td>
-            ${escapeHTML(
-              payment.application_number ||
-              "-"
-            )}
-          </td>
-
-
-          <td>
-            ${escapeHTML(
-              payment.payment_reference ||
-              "-"
-            )}
-          </td>
-
-
-          <td>
+          <td data-label="Shule">
 
             <strong>
-              ${formatMoney(
-                payment.amount
+              ${escapeHTML(
+                payment.school_name ||
+                "-"
               )}
             </strong>
 
           </td>
 
 
-          <td>
+          <td data-label="Application Number">
 
             <span
-              class="status ${
-                isPaid
-                  ? "paid"
-                  : "pending"
-              }"
+              class="application-number"
             >
-
-              ${
-                isPaid
-                  ? "PAID"
-                  : "PENDING"
-              }
-
+              ${escapeHTML(
+                payment.application_number ||
+                "-"
+              )}
             </span>
 
           </td>
 
 
-          <td>
-            ${formatDate(
-              payment.created_at
-            )}
+          <td data-label="Payment Reference">
+
+            <span
+              class="payment-reference"
+            >
+              ${escapeHTML(
+                payment.payment_reference ||
+                "-"
+              )}
+            </span>
+
           </td>
 
 
-          <td>
+          <td data-label="Kiasi">
 
-            ${
-              isPaid
+            <span
+              class="amount"
+            >
+              ${formatMoney(
+                payment.amount
+              )}
+            </span>
 
-              ?
+          </td>
 
-              `
+
+          <td data-label="Status">
+
+            <span
+              class="status ${getStatusClass(
+                status
+              )}"
+            >
+              ${getStatusLabel(
+                status
+              )}
+            </span>
+
+          </td>
+
+
+          <td data-label="Tarehe">
+
+            ${formatDate(
+              payment.created_at
+            )}
+
+          </td>
+
+
+          <td data-label="Hatua">
+
+            <div class="actions">
+
+              ${
+                payment.application_number
+                  ?
+
+                  `
+                    <a
+                      class="btn btn-slip"
+                      href="application-slip.html?application_number=${encodeURIComponent(
+                        payment.application_number
+                      )}"
+                    >
+                      👁️ Slip
+                    </a>
+                  `
+
+                  :
+
+                  ""
+              }
+
+
               <button
-                class="confirm-btn"
-                disabled
-              >
-                ✅ Imethibitishwa
-              </button>
-              `
-
-              :
-
-              `
-              <button
-                class="confirm-btn"
-                onclick="confirmPayment(
+                class="btn btn-view"
+                onclick="viewPayment(
                   ${Number(payment.id)}
                 )"
               >
-                ✅ Thibitisha
+                📋 Taarifa
               </button>
-              `
 
-            }
+
+              ${
+                isPaid
+
+                  ?
+
+                  `
+                    <button
+                      class="btn btn-confirm"
+                      disabled
+                    >
+                      ✅ Imethibitishwa
+                    </button>
+                  `
+
+                  :
+
+                  `
+                    <button
+                      class="btn btn-confirm"
+                      onclick="confirmPayment(
+                        ${Number(payment.id)}
+                      )"
+                    >
+                      ✅ Thibitisha
+                    </button>
+                  `
+
+              }
+
+            </div>
 
           </td>
 
@@ -1079,9 +2109,379 @@
     );
 
 
-    table.classList.remove(
-      "hidden"
+    empty.style.display =
+      "none";
+
+    table.style.display =
+      "block";
+
+  }
+
+
+
+  // ==========================================================
+  // VIEW PAYMENT
+  // ==========================================================
+
+  function viewPayment(
+    paymentId
+  ) {
+
+    const payment =
+      allPayments.find(
+        item =>
+          Number(item.id) ===
+          Number(paymentId)
+      );
+
+
+    if (!payment) {
+
+      showMessage(
+        "error",
+        "Taarifa za malipo hazikupatikana."
+      );
+
+      return;
+
+    }
+
+
+    const status =
+      normalize(
+        payment.status ||
+        "pending"
+      );
+
+
+    const modalBody =
+      document.getElementById(
+        "modalBody"
+      );
+
+
+    modalBody.innerHTML = `
+
+      <div class="detail-grid">
+
+
+        <div class="detail full">
+
+          <div class="detail-label">
+            Application Number
+          </div>
+
+          <div class="detail-value">
+            ${escapeHTML(
+              payment.application_number ||
+              "-"
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Mwanafunzi
+          </div>
+
+          <div class="detail-value">
+            ${escapeHTML(
+              payment.student_name ||
+              "-"
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Mzazi / Mlezi
+          </div>
+
+          <div class="detail-value">
+            ${escapeHTML(
+              payment.parent_name ||
+              "-"
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Simu
+          </div>
+
+          <div class="detail-value">
+            ${escapeHTML(
+              payment.phone ||
+              "-"
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Email
+          </div>
+
+          <div class="detail-value">
+            ${escapeHTML(
+              payment.email ||
+              "-"
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail full">
+
+          <div class="detail-label">
+            Shule
+          </div>
+
+          <div class="detail-value">
+            ${escapeHTML(
+              payment.school_name ||
+              "-"
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Payment Reference
+          </div>
+
+          <div class="detail-value">
+            ${escapeHTML(
+              payment.payment_reference ||
+              "-"
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Kiasi
+          </div>
+
+          <div class="detail-value">
+            ${formatMoney(
+              payment.amount
+            )}
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Hali ya Malipo
+          </div>
+
+          <div class="detail-value">
+
+            <span
+              class="status ${getStatusClass(
+                status
+              )}"
+            >
+              ${getStatusLabel(
+                status
+              )}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Tarehe
+          </div>
+
+          <div class="detail-value">
+            ${formatDate(
+              payment.created_at
+            )}
+          </div>
+
+        </div>
+
+
+        ${
+          payment.provider_reference
+
+            ?
+
+            `
+              <div class="detail full">
+
+                <div class="detail-label">
+                  Provider Reference
+                </div>
+
+                <div class="detail-value">
+                  ${escapeHTML(
+                    payment.provider_reference
+                  )}
+                </div>
+
+              </div>
+            `
+
+            :
+
+            ""
+        }
+
+
+        ${
+          payment.paid_at
+
+            ?
+
+            `
+              <div class="detail full">
+
+                <div class="detail-label">
+                  Tarehe ya Malipo
+                </div>
+
+                <div class="detail-value">
+                  ${formatDate(
+                    payment.paid_at
+                  )}
+                </div>
+
+              </div>
+            `
+
+            :
+
+            ""
+        }
+
+
+      </div>
+
+
+      <div
+        style="
+          margin-top:18px;
+          display:flex;
+          gap:8px;
+          flex-wrap:wrap;
+        "
+      >
+
+        ${
+          payment.application_number
+
+            ?
+
+            `
+              <a
+                class="btn btn-slip"
+                href="application-slip.html?application_number=${encodeURIComponent(
+                  payment.application_number
+                )}"
+              >
+                📄 Fungua Application Slip
+              </a>
+            `
+
+            :
+
+            ""
+        }
+
+
+        ${
+          status !== "paid"
+
+            ?
+
+            `
+              <button
+                class="btn btn-confirm"
+                onclick="confirmPaymentFromModal(
+                  ${Number(payment.id)}
+                )"
+              >
+                ✅ Thibitisha Malipo
+              </button>
+            `
+
+            :
+
+            ""
+        }
+
+      </div>
+
+    `;
+
+
+    document.getElementById(
+      "paymentModal"
+    ).classList.add(
+      "show"
     );
+
+  }
+
+
+
+  // ==========================================================
+  // CLOSE MODAL
+  // ==========================================================
+
+  function closePaymentModal() {
+
+    document.getElementById(
+      "paymentModal"
+    ).classList.remove(
+      "show"
+    );
+
+  }
+
+
+
+  function closeModalOutside(
+    event
+  ) {
+
+    if (
+      event.target.id ===
+      "paymentModal"
+    ) {
+
+      closePaymentModal();
+
+    }
 
   }
 
@@ -1091,27 +2491,58 @@
   // CONFIRM PAYMENT
   // ==========================================================
 
-
   async function confirmPayment(
     paymentId
   ) {
 
-
-    const confirmed =
-      window.confirm(
-        "Una uhakika unataka kuthibitisha malipo haya?"
+    const payment =
+      allPayments.find(
+        item =>
+          Number(item.id) ===
+          Number(paymentId)
       );
 
 
-    if (!confirmed) {
+    if (!payment) {
+
+      showMessage(
+        "error",
+        "Malipo hayakupatikana."
+      );
 
       return;
 
     }
 
 
-    try {
+    const confirmed =
+      window.confirm(
+        "Una uhakika unataka kuthibitisha malipo haya?\n\n" +
+        "Mwombaji: " +
+        (
+          payment.student_name ||
+          "-"
+        ) +
+        "\n" +
+        "Kiasi: " +
+        formatMoney(
+          payment.amount
+        ) +
+        "\n" +
+        "Payment Reference: " +
+        (
+          payment.payment_reference ||
+          "-"
+        )
+      );
 
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    try {
 
       const response =
         await fetch(
@@ -1127,7 +2558,8 @@
                 "application/json"
             },
 
-            body: JSON.stringify({})
+            body:
+              JSON.stringify({})
 
           }
         );
@@ -1149,8 +2581,11 @@
 
       showMessage(
         "success",
-        "Malipo yamethibitishwa kikamilifu."
+        "✅ Malipo yamethibitishwa kikamilifu."
       );
+
+
+      closePaymentModal();
 
 
       await loadPayments();
@@ -1168,7 +2603,8 @@
 
       showMessage(
         "error",
-        error.message
+        error.message ||
+        "Imeshindikana kuthibitisha malipo."
       );
 
     }
@@ -1178,9 +2614,45 @@
 
 
   // ==========================================================
-  // START
+  // CONFIRM FROM MODAL
   // ==========================================================
 
+  function confirmPaymentFromModal(
+    paymentId
+  ) {
+
+    confirmPayment(
+      paymentId
+    );
+
+  }
+
+
+
+  // ==========================================================
+  // ESC KEY
+  // ==========================================================
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Escape"
+      ) {
+
+        closePaymentModal();
+
+      }
+
+    }
+  );
+
+
+
+  // ==========================================================
+  // START
+  // ==========================================================
 
   loadPayments();
 
