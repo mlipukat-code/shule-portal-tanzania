@@ -177,6 +177,16 @@
       margin-top: 20px;
     }
 
+    .price-warning {
+      background: #fff3cd;
+      color: #664d03;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 14px;
+      display: none;
+    }
+
     .hidden {
       display: none;
     }
@@ -227,11 +237,19 @@
   const API_URL = "/api/schools";
 
   let selectedSchool = null;
+  let selectedPrice = 0;
 
+
+  // ================================
+  // ESCAPE HTML
+  // ================================
 
   function escapeHtml(value) {
 
-    if (value === null || value === undefined) {
+    if (
+      value === null ||
+      value === undefined
+    ) {
       return "";
     }
 
@@ -244,6 +262,10 @@
   }
 
 
+  // ================================
+  // FORMAT MONEY
+  // ================================
+
   function formatMoney(amount) {
 
     if (
@@ -251,18 +273,66 @@
       amount === undefined ||
       amount === ""
     ) {
-      return "Haijawekwa";
+      return "TSh 0";
     }
 
     const number = Number(amount);
 
-    if (isNaN(number)) {
-      return amount;
+    if (
+      isNaN(number) ||
+      number < 0
+    ) {
+      return "TSh 0";
     }
 
-    return "TSh " + number.toLocaleString("en-TZ");
+    return "TSh " +
+      number.toLocaleString("en-TZ");
   }
 
+
+  // ================================
+  // GET REAL SCHOOL PRICE
+  // ================================
+
+  function getSchoolPrice(school) {
+
+    if (!school) {
+      return 0;
+    }
+
+    /*
+      API inaweza kurudisha:
+      form_price
+      au
+      price
+    */
+
+    let rawPrice = school.form_price;
+
+    if (
+      rawPrice === null ||
+      rawPrice === undefined ||
+      rawPrice === ""
+    ) {
+      rawPrice = school.price;
+    }
+
+    const price = Number(rawPrice);
+
+    if (
+      isNaN(price) ||
+      price < 0
+    ) {
+      return 0;
+    }
+
+    return price;
+  }
+
+
+  // ================================
+  // FORMAT DATE
+  // ================================
 
   function formatDate(dateString) {
 
@@ -276,13 +346,20 @@
       return dateString;
     }
 
-    return date.toLocaleDateString("sw-TZ", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    });
+    return date.toLocaleDateString(
+      "sw-TZ",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      }
+    );
   }
 
+
+  // ================================
+  // LOAD SCHOOL
+  // ================================
 
   async function loadSchool() {
 
@@ -300,9 +377,14 @@
         params.get("school_id");
 
 
+      // ================================
+      // SCHOOL ID CHECK
+      // ================================
+
       if (!schoolId) {
 
         content.innerHTML = `
+
           <div class="card">
 
             <div class="error">
@@ -324,20 +406,32 @@
             </a>
 
           </div>
+
         `;
 
         return;
       }
 
 
+      // ================================
+      // FETCH SCHOOLS
+      // ================================
+
       const response =
-        await fetch(API_URL);
+        await fetch(
+          API_URL,
+          {
+            cache: "no-store"
+          }
+        );
 
 
       if (!response.ok) {
+
         throw new Error(
           "Imeshindikana kupata taarifa za shule."
         );
+
       }
 
 
@@ -349,11 +443,17 @@
         !data.success ||
         !Array.isArray(data.schools)
       ) {
+
         throw new Error(
           "Taarifa za shule hazijapatikana."
         );
+
       }
 
+
+      // ================================
+      // FIND SCHOOL
+      // ================================
 
       selectedSchool =
         data.schools.find(
@@ -366,6 +466,7 @@
       if (!selectedSchool) {
 
         content.innerHTML = `
+
           <div class="card">
 
             <div class="error">
@@ -387,23 +488,69 @@
             </a>
 
           </div>
+
         `;
 
         return;
       }
 
 
-      const price =
-        selectedSchool.form_price ||
-        selectedSchool.price;
+      // ================================
+      // GET REAL PRICE
+      // ================================
 
+      selectedPrice =
+        getSchoolPrice(selectedSchool);
+
+
+      console.log(
+        "School:",
+        selectedSchool.name
+      );
+
+      console.log(
+        "Form price:",
+        selectedPrice
+      );
+
+
+      // ================================
+      // PRICE WARNING
+      // ================================
+
+      let priceWarning = "";
+
+      if (selectedPrice <= 0) {
+
+        priceWarning = `
+
+          <div
+            class="price-warning"
+            style="display:block;"
+          >
+            ⚠️ Bei ya fomu haijawekwa
+            vizuri kwenye mfumo.
+            Tafadhali usiendelee mpaka
+            bei iwe imewekwa.
+          </div>
+
+        `;
+
+      }
+
+
+      // ================================
+      // DISPLAY PAGE
+      // ================================
 
       content.innerHTML = `
 
         <div class="card">
 
           <h2 class="school-name">
-            ${escapeHtml(selectedSchool.name)}
+            ${escapeHtml(
+              selectedSchool.name
+            )}
           </h2>
 
           <p class="subtitle">
@@ -414,17 +561,22 @@
           <div class="info">
 
             <div class="info-row">
+
               <span class="label">
                 🏫 Shule
               </span>
 
               <span class="value">
-                ${escapeHtml(selectedSchool.name)}
+                ${escapeHtml(
+                  selectedSchool.name
+                )}
               </span>
+
             </div>
 
 
             <div class="info-row">
+
               <span class="label">
                 📍 Mkoa
               </span>
@@ -435,10 +587,12 @@
                   "Haijawekwa"
                 )}
               </span>
+
             </div>
 
 
             <div class="info-row">
+
               <span class="label">
                 📍 Wilaya
               </span>
@@ -449,10 +603,12 @@
                   "Haijawekwa"
                 )}
               </span>
+
             </div>
 
 
             <div class="info-row">
+
               <span class="label">
                 🏫 Aina ya Shule
               </span>
@@ -464,21 +620,27 @@
                   "Haijawekwa"
                 )}
               </span>
+
             </div>
 
 
             <div class="info-row">
+
               <span class="label">
                 💰 Bei ya Fomu
               </span>
 
               <span class="value price">
-                ${formatMoney(price)}
+                ${formatMoney(
+                  selectedPrice
+                )}
               </span>
+
             </div>
 
 
             <div class="info-row">
+
               <span class="label">
                 📅 Maombi yanaanza
               </span>
@@ -488,10 +650,12 @@
                   selectedSchool.application_start
                 )}
               </span>
+
             </div>
 
 
             <div class="info-row">
+
               <span class="label">
                 📅 Maombi yanafunga
               </span>
@@ -501,9 +665,13 @@
                   selectedSchool.application_end
                 )}
               </span>
+
             </div>
 
           </div>
+
+
+          ${priceWarning}
 
 
           <h3 class="section-title">
@@ -515,6 +683,7 @@
             id="applicationForm"
             onsubmit="continueApplication(event)"
           >
+
 
             <label for="studentName">
               Jina kamili la mwanafunzi
@@ -625,11 +794,23 @@
 
             <div class="notice">
 
-              <strong>Hatua inayofuata:</strong><br>
+              <strong>
+                Hatua inayofuata:
+              </strong>
 
-              Baada ya kuendelea, taarifa za shule
-              uliyochagua zitaendelea kutumika
-              kwenye mchakato wa maombi.
+              <br>
+
+              Taarifa zako zitatumwa
+              pamoja na taarifa za shule
+              uliyochagua.
+
+              <br><br>
+
+              💰
+              <strong>
+                Kiasi cha fomu:
+                ${formatMoney(selectedPrice)}
+              </strong>
 
             </div>
 
@@ -637,6 +818,7 @@
             <button
               type="submit"
               class="btn btn-primary"
+              ${selectedPrice <= 0 ? "disabled" : ""}
             >
               ➜ Endelea na Maombi
             </button>
@@ -657,14 +839,21 @@
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        "LOAD SCHOOL ERROR:",
+        error
+      );
+
 
       content.innerHTML = `
+
         <div class="card">
 
           <div class="error">
 
-            <h3>Hitilafu imetokea</h3>
+            <h3>
+              Hitilafu imetokea
+            </h3>
 
             <p>
               Imeshindikana kupata taarifa
@@ -681,12 +870,17 @@
           </a>
 
         </div>
+
       `;
 
     }
 
   }
 
+
+  // ================================
+  // CONTINUE APPLICATION
+  // ================================
 
   function continueApplication(event) {
 
@@ -703,29 +897,99 @@
     }
 
 
+    // ================================
+    // CHECK PRICE
+    // ================================
+
+    if (
+      !selectedPrice ||
+      Number(selectedPrice) <= 0
+    ) {
+
+      alert(
+        "Bei ya fomu haijawekwa vizuri. Tafadhali wasiliana na admin wa shule."
+      );
+
+      return;
+    }
+
+
+    // ================================
+    // GET FORM DATA
+    // ================================
+
     const studentName =
-      document.getElementById(
-        "studentName"
-      ).value.trim();
+      document
+        .getElementById(
+          "studentName"
+        )
+        .value
+        .trim();
 
 
     const phone =
-      document.getElementById(
-        "phone"
-      ).value.trim();
+      document
+        .getElementById(
+          "phone"
+        )
+        .value
+        .trim();
 
 
     const email =
-      document.getElementById(
-        "email"
-      ).value.trim();
+      document
+        .getElementById(
+          "email"
+        )
+        .value
+        .trim();
 
 
     const classLevel =
-      document.getElementById(
-        "classLevel"
-      ).value;
+      document
+        .getElementById(
+          "classLevel"
+        )
+        .value;
 
+
+    // ================================
+    // VALIDATION
+    // ================================
+
+    if (!studentName) {
+
+      alert(
+        "Tafadhali andika jina la mwanafunzi."
+      );
+
+      return;
+    }
+
+
+    if (!phone) {
+
+      alert(
+        "Tafadhali weka namba ya simu ya mzazi/mlezi."
+      );
+
+      return;
+    }
+
+
+    if (!classLevel) {
+
+      alert(
+        "Tafadhali chagua darasa/kidato."
+      );
+
+      return;
+    }
+
+
+    // ================================
+    // BUILD URL
+    // ================================
 
     const params =
       new URLSearchParams();
@@ -761,12 +1025,46 @@
     );
 
 
+    /*
+      MUHIMU:
+
+      Tunapitisha bei halisi ya shule
+      kwenda application-form.html.
+
+      Hii inasaidia frontend kuonyesha
+      kiasi sahihi cha malipo.
+
+      Backend bado inapaswa kuthibitisha
+      bei kutoka database kabla ya kuhifadhi
+      payment.
+    */
+
+    params.set(
+      "form_price",
+      String(selectedPrice)
+    );
+
+
+    params.set(
+      "school_name",
+      selectedSchool.name || ""
+    );
+
+
+    // ================================
+    // GO TO APPLICATION FORM
+    // ================================
+
     window.location.href =
       "/application-form.html?" +
       params.toString();
 
   }
 
+
+  // ================================
+  // START
+  // ================================
 
   loadSchool();
 
