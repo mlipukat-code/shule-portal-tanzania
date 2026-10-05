@@ -128,9 +128,7 @@ function verifySchoolAdminToken(token) {
     }
 
     const adminId = Number(parts[0]);
-
     const timestamp = Number(parts[1]);
-
     const signature = parts[2];
 
     if (
@@ -144,14 +142,10 @@ function verifySchoolAdminToken(token) {
     const age =
       Date.now() - timestamp;
 
-    // Token expires after 12 hours
-    if (
-      age > 12 * 60 * 60 * 1000
-    ) {
+    if (age > 12 * 60 * 60 * 1000) {
       return null;
     }
 
-    // Future timestamps are invalid
     if (age < 0) {
       return null;
     }
@@ -325,8 +319,6 @@ async function initializeDatabase() {
     // --------------------------------------------------------
     // OLD SCHOOL ADMIN SESSIONS TABLE
     // --------------------------------------------------------
-    // Table inaweza kubaki database.
-    // Mfumo mpya wa login hauitegemei.
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS school_admin_sessions (
@@ -483,10 +475,6 @@ async function initializeDatabase() {
 
     console.log(
       "DATABASE INITIALIZATION COMPLETE"
-    );
-
-    console.log(
-      "===================================="
     );
 
   } catch (error) {
@@ -932,30 +920,15 @@ app.put(
             name = COALESCE($1,name),
             region = COALESCE($2,region),
             district = COALESCE($3,district),
-            school_type =
-              COALESCE($4,school_type),
-            type =
-              COALESCE($5,type),
-            form_price =
-              COALESCE($6,form_price),
-            phone =
-              COALESCE($7,phone),
-            address =
-              COALESCE($8,address),
-            email =
-              COALESCE($9,email),
-            application_start =
-              COALESCE(
-                $10,
-                application_start
-              ),
-            application_end =
-              COALESCE(
-                $11,
-                application_end
-              ),
-            status =
-              COALESCE($12,status),
+            school_type = COALESCE($4,school_type),
+            type = COALESCE($5,type),
+            form_price = COALESCE($6,form_price),
+            phone = COALESCE($7,phone),
+            address = COALESCE($8,address),
+            email = COALESCE($9,email),
+            application_start = COALESCE($10,application_start),
+            application_end = COALESCE($11,application_end),
+            status = COALESCE($12,status),
             updated_at = NOW()
           WHERE id = $13
           RETURNING *
@@ -1294,8 +1267,7 @@ app.put(
         status
       } = req.body;
 
-      let normalizedEmail =
-        null;
+      let normalizedEmail = null;
 
       if (email) {
 
@@ -1335,31 +1307,11 @@ app.put(
           `
           UPDATE school_admins
           SET
-            school_id =
-              COALESCE(
-                $1,
-                school_id
-              ),
-            full_name =
-              COALESCE(
-                $2,
-                full_name
-              ),
-            email =
-              COALESCE(
-                $3,
-                email
-              ),
-            phone =
-              COALESCE(
-                $4,
-                phone
-              ),
-            status =
-              COALESCE(
-                $5,
-                status
-              ),
+            school_id = COALESCE($1,school_id),
+            full_name = COALESCE($2,full_name),
+            email = COALESCE($3,email),
+            phone = COALESCE($4,phone),
+            status = COALESCE($5,status),
             updated_at = NOW()
           WHERE id = $6
           RETURNING
@@ -1560,9 +1512,6 @@ app.put(
             "School Admin hakupatikana."
         });
       }
-
-      // Hakuna tena DELETE FROM school_admin_sessions.
-      // Login mpya haitumii sessions table.
 
       res.json({
         success: true,
@@ -1773,10 +1722,6 @@ app.post(
           .trim()
           .toLowerCase();
 
-      // ------------------------------------------------------
-      // SEARCH ADMIN
-      // ------------------------------------------------------
-
       const adminResult =
         await pool.query(
           `
@@ -1814,10 +1759,6 @@ app.post(
       const admin =
         adminResult.rows[0];
 
-      // ------------------------------------------------------
-      // PASSWORD
-      // ------------------------------------------------------
-
       const suppliedHash =
         hashPassword(password);
 
@@ -1842,10 +1783,6 @@ app.post(
         "PASSWORD CORRECT"
       );
 
-      // ------------------------------------------------------
-      // ADMIN STATUS
-      // ------------------------------------------------------
-
       if (
         admin.status !==
         "active"
@@ -1857,10 +1794,6 @@ app.post(
             "Akaunti yako ya School Admin haijawezeshwa."
         });
       }
-
-      // ------------------------------------------------------
-      // SCHOOL
-      // ------------------------------------------------------
 
       const schoolResult =
         await pool.query(
@@ -1900,14 +1833,9 @@ app.post(
       const school =
         schoolResult.rows[0];
 
-      // Draft inaruhusiwa kuingia.
-      // Inactive/suspended haziruhusiwi.
-
       if (
-        school.status ===
-          "inactive" ||
-        school.status ===
-          "suspended"
+        school.status === "inactive" ||
+        school.status === "suspended"
       ) {
 
         return res.status(403).json({
@@ -1917,22 +1845,10 @@ app.post(
         });
       }
 
-      // ------------------------------------------------------
-      // CREATE SIGNED TOKEN
-      // ------------------------------------------------------
-
       const token =
         createSchoolAdminToken(
           admin.id
         );
-
-      console.log(
-        "TOKEN CREATED"
-      );
-
-      // ------------------------------------------------------
-      // LAST LOGIN
-      // ------------------------------------------------------
 
       await pool.query(
         `
@@ -1944,26 +1860,10 @@ app.post(
         [admin.id]
       );
 
-      console.log(
-        "LAST LOGIN UPDATED"
-      );
-
-      // ------------------------------------------------------
-      // COOKIE
-      // ------------------------------------------------------
-
       setSchoolAdminCookie(
         res,
         token
       );
-
-      console.log(
-        "COOKIE SET"
-      );
-
-      // ------------------------------------------------------
-      // SUCCESS
-      // ------------------------------------------------------
 
       return res.json({
         success: true,
@@ -1996,19 +1896,8 @@ app.post(
     } catch (error) {
 
       console.error(
-        "===================================="
-      );
-
-      console.error(
-        "SCHOOL ADMIN LOGIN ERROR"
-      );
-
-      console.error(
+        "SCHOOL ADMIN LOGIN ERROR:",
         error
-      );
-
-      console.error(
-        "===================================="
       );
 
       return res.status(500).json({
@@ -2049,10 +1938,6 @@ async function requireSchoolAdmin(
       });
     }
 
-    // --------------------------------------------------------
-    // VERIFY SIGNED TOKEN
-    // --------------------------------------------------------
-
     const adminId =
       verifySchoolAdminToken(
         token
@@ -2070,10 +1955,6 @@ async function requireSchoolAdmin(
           "Session imekwisha. Ingia tena."
       });
     }
-
-    // --------------------------------------------------------
-    // LOAD ADMIN + SCHOOL
-    // --------------------------------------------------------
 
     const result =
       await pool.query(
@@ -2129,10 +2010,6 @@ async function requireSchoolAdmin(
     const admin =
       result.rows[0];
 
-    // --------------------------------------------------------
-    // ADMIN STATUS
-    // --------------------------------------------------------
-
     if (
       admin.admin_status !==
       "active"
@@ -2149,10 +2026,6 @@ async function requireSchoolAdmin(
       });
     }
 
-    // --------------------------------------------------------
-    // SCHOOL STATUS
-    // --------------------------------------------------------
-
     if (
       admin.school_status ===
         "inactive" ||
@@ -2166,10 +2039,6 @@ async function requireSchoolAdmin(
           "Shule haijawezeshwa."
       });
     }
-
-    // --------------------------------------------------------
-    // ATTACH ADMIN TO REQUEST
-    // --------------------------------------------------------
 
     req.schoolAdmin =
       admin;
@@ -2221,9 +2090,6 @@ app.post(
 
     try {
 
-      // Token mpya haitumii database.
-      // Kwa logout tunafuta cookie ya browser.
-
       clearSchoolAdminCookie(
         res
       );
@@ -2251,7 +2117,175 @@ app.post(
 );
 
 // ============================================================
-// DASHBOARD STATS
+// DASHBOARD STATS - MAIN ROUTE
+// ============================================================
+
+app.get(
+  "/api/school-admin/dashboard/stats",
+  requireSchoolAdmin,
+  async (req, res) => {
+
+    try {
+
+      const schoolId =
+        req.schoolAdmin.school_id;
+
+      console.log(
+        "LOADING DASHBOARD STATS FOR SCHOOL:",
+        schoolId
+      );
+
+      const total =
+        await pool.query(
+          `
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE school_id = $1
+          `,
+          [schoolId]
+        );
+
+      const pending =
+        await pool.query(
+          `
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE school_id = $1
+          AND status = 'pending'
+          `,
+          [schoolId]
+        );
+
+      const approved =
+        await pool.query(
+          `
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE school_id = $1
+          AND status = 'approved'
+          `,
+          [schoolId]
+        );
+
+      const rejected =
+        await pool.query(
+          `
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE school_id = $1
+          AND status = 'rejected'
+          `,
+          [schoolId]
+        );
+
+      const paid =
+        await pool.query(
+          `
+          SELECT COUNT(*)::INTEGER AS total
+          FROM payments p
+
+          INNER JOIN applications a
+            ON a.id = p.application_id
+
+          WHERE a.school_id = $1
+
+          AND p.status IN (
+            'paid',
+            'confirmed',
+            'completed'
+          )
+          `,
+          [schoolId]
+        );
+
+      const unpaid =
+        await pool.query(
+          `
+          SELECT COUNT(*)::INTEGER AS total
+          FROM payments p
+
+          INNER JOIN applications a
+            ON a.id = p.application_id
+
+          WHERE a.school_id = $1
+
+          AND (
+            p.status IS NULL
+            OR p.status NOT IN (
+              'paid',
+              'confirmed',
+              'completed'
+            )
+          )
+          `,
+          [schoolId]
+        );
+
+      const today =
+        await pool.query(
+          `
+          SELECT COUNT(*)::INTEGER AS total
+          FROM applications
+          WHERE school_id = $1
+          AND created_at::date = CURRENT_DATE
+          `,
+          [schoolId]
+        );
+
+      const stats = {
+
+        total_applications:
+          total.rows[0].total,
+
+        pending:
+          pending.rows[0].total,
+
+        approved:
+          approved.rows[0].total,
+
+        rejected:
+          rejected.rows[0].total,
+
+        paid:
+          paid.rows[0].total,
+
+        unpaid:
+          unpaid.rows[0].total,
+
+        today:
+          today.rows[0].total
+      };
+
+      console.log(
+        "DASHBOARD STATS:",
+        stats
+      );
+
+      return res.json({
+        success: true,
+        stats
+      });
+
+    } catch (error) {
+
+      console.error(
+        "DASHBOARD STATS ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Imeshindikana kupata takwimu za dashboard.",
+        error:
+          error.message
+      });
+    }
+  }
+);
+
+// ============================================================
+// OLD DASHBOARD STATS ROUTE - COMPATIBILITY
 // ============================================================
 
 app.get(
@@ -2312,11 +2346,13 @@ app.get(
           `
           SELECT COUNT(*)::INTEGER AS total
           FROM payments p
-          JOIN applications a
+
+          INNER JOIN applications a
             ON a.id = p.application_id
+
           WHERE a.school_id = $1
-          AND p.status IN
-          (
+
+          AND p.status IN (
             'paid',
             'confirmed',
             'completed'
@@ -2327,7 +2363,9 @@ app.get(
 
       res.json({
         success: true,
+
         stats: {
+
           total_applications:
             total.rows[0].total,
 
@@ -2348,7 +2386,7 @@ app.get(
     } catch (error) {
 
       console.error(
-        "DASHBOARD ERROR:",
+        "OLD DASHBOARD STATS ERROR:",
         error
       );
 
@@ -2405,6 +2443,11 @@ app.get(
       });
 
     } catch (error) {
+
+      console.error(
+        "SCHOOL ADMIN APPLICATIONS ERROR:",
+        error
+      );
 
       res.status(500).json({
         success: false,
@@ -2577,70 +2620,37 @@ app.put(
           UPDATE schools
           SET
             name =
-              COALESCE(
-                $1,
-                name
-              ),
+              COALESCE($1,name),
 
             region =
-              COALESCE(
-                $2,
-                region
-              ),
+              COALESCE($2,region),
 
             district =
-              COALESCE(
-                $3,
-                district
-              ),
+              COALESCE($3,district),
 
             school_type =
-              COALESCE(
-                $4,
-                school_type
-              ),
+              COALESCE($4,school_type),
 
             type =
-              COALESCE(
-                $5,
-                type
-              ),
+              COALESCE($5,type),
 
             form_price =
-              COALESCE(
-                $6,
-                form_price
-              ),
+              COALESCE($6,form_price),
 
             phone =
-              COALESCE(
-                $7,
-                phone
-              ),
+              COALESCE($7,phone),
 
             address =
-              COALESCE(
-                $8,
-                address
-              ),
+              COALESCE($8,address),
 
             email =
-              COALESCE(
-                $9,
-                email
-              ),
+              COALESCE($9,email),
 
             application_start =
-              COALESCE(
-                $10,
-                application_start
-              ),
+              COALESCE($10,application_start),
 
             application_end =
-              COALESCE(
-                $11,
-                application_end
-              ),
+              COALESCE($11,application_end),
 
             updated_at = NOW()
 
@@ -3349,6 +3359,10 @@ async function startServer() {
 
       console.log(
         "SCHOOL ADMIN AUTH: SIGNED COOKIE"
+      );
+
+      console.log(
+        "DASHBOARD STATS: ENABLED"
       );
 
       console.log(
