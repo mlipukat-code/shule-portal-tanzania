@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>School Admin Login - Shule Portal Tanzania</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        linear-gradient(
+          135deg,
+          #0d47a1,
+          #1565c0,
+          #42a5f5
+        );
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .login-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 32px 28px;
+      box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.20);
+    }
+
+    .logo {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+
+      background: #1565c0;
+      color: #ffffff;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 38px;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+      color: #1565c0;
+      font-size: 25px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin: 8px 0 28px;
+      font-size: 14px;
+    }
+
+    .admin-label {
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid #d5d5d5;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #1565c0;
+      box-shadow:
+        0 0 0 3px rgba(21, 101, 192, 0.12);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input {
+      padding-right: 55px;
+    }
+
+    .show-password {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      height: 42px;
+      width: 45px;
+
+      border: none;
+      background: transparent;
+      cursor: pointer;
+
+      font-size: 19px;
+    }
+
+    .login-button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+
+      background: #1565c0;
+      color: white;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .login-button:hover {
+      background: #0d47a1;
+    }
+
+    .login-button:disabled {
+      background: #90a4ae;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 9px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+    }
+
+    .message.success {
+      display: block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+
+      color: #1565c0;
+      text-decoration: none;
+
+      font-size: 14px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      margin-top: 25px;
+      line-height: 1.6;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      body {
+        padding: 15px;
+      }
+
+      .login-card {
+        padding: 28px 20px;
+        border-radius: 17px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-container">
+
+    <div class="login-card">
+
+      <div class="logo">
+        🏫
+      </div>
+
+      <h1>
+        Shule Portal Tanzania
+      </h1>
+
+      <div class="subtitle">
+        Mfumo wa Maombi ya Shule Mtandaoni
+      </div>
+
+      <div class="admin-label">
+        🔐 SCHOOL ADMIN LOGIN
+      </div>
+
+      <div
+        id="message"
+        class="message">
+      </div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label for="email">
+            📧 Email
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Ingiza email yako"
+            autocomplete="username"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="password">
+            🔑 Password
+          </label>
+
+          <div class="password-wrapper">
+
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Ingiza password yako"
+              autocomplete="current-password"
+              required
+            >
+
+            <button
+              type="button"
+              class="show-password"
+              id="togglePassword"
+              aria-label="Onyesha password">
+              👁️
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="login-button"
+          id="loginButton">
+
+          Ingia kwenye Dashboard
+
+        </button>
+
+      </form>
+
+
+      <a
+        href="/"
+        class="back-link">
+
+        ← Rudi Shule Portal Tanzania
+
+      </a>
+
+
+      <div class="footer">
+
+        Shule Portal Tanzania<br>
+
+        Mfumo wa kidigitali wa maombi ya shule
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const loginForm =
+      document.getElementById(
+        "loginForm"
+      );
+
+    const emailInput =
+      document.getElementById(
+        "email"
+      );
+
+    const passwordInput =
+      document.getElementById(
+        "password"
+      );
+
+    const loginButton =
+      document.getElementById(
+        "loginButton"
+      );
+
+    const message =
+      document.getElementById(
+        "message"
+      );
+
+    const togglePassword =
+      document.getElementById(
+        "togglePassword"
+      );
+
+
+    // =================================================
+    // SHOW / HIDE PASSWORD
+    // =================================================
+
+    togglePassword.addEventListener(
+      "click",
+      () => {
+
+        if (
+          passwordInput.type ===
+          "password"
+        ) {
+
+          passwordInput.type =
+            "text";
+
+          togglePassword.textContent =
+            "🙈";
+
+          togglePassword.setAttribute(
+            "aria-label",
+            "Ficha password"
+          );
+
+        } else {
+
+          passwordInput.type =
+            "password";
+
+          togglePassword.textContent =
+            "👁️";
+
+          togglePassword.setAttribute(
+            "aria-label",
+            "Onyesha password"
+          );
+
+        }
+
+      }
+    );
+
+
+    // =================================================
+    // MESSAGE
+    // =================================================
+
+    function showMessage(
+      text,
+      type = "error"
+    ) {
+
+      message.textContent =
+        text;
+
+      message.className =
+        `message ${type}`;
+
+    }
+
+
+    function clearMessage() {
+
+      message.textContent =
+        "";
+
+      message.className =
+        "message";
+
+    }
+
+
+    // =================================================
+    // CHECK EXISTING LOGIN
+    // =================================================
+
+    async function checkExistingLogin() {
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/school-admin/me",
+            {
+              method: "GET",
+              credentials: "same-origin"
+            }
+          );
+
+        if (
+          response.ok
+        ) {
+
+          const data =
+            await response.json();
+
+          if (
+            data.success
+          ) {
+
+            window.location.href =
+              "/school-admin-dashboard.html";
+
+          }
+
+        }
+
+      } catch (error) {
+
+        console.log(
+          "No existing session."
+        );
+
+      }
+
+    }
+
+
+    // =================================================
+    // LOGIN
+    // =================================================
+
+    loginForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+        clearMessage();
+
+        const email =
+          emailInput.value.trim();
+
+        const password =
+          passwordInput.value;
+
+
+        if (!email) {
+
+          showMessage(
+            "Tafadhali ingiza email yako."
+          );
+
+          emailInput.focus();
+
+          return;
+
+        }
+
+
+        if (!password) {
+
+          showMessage(
+            "Tafadhali ingiza password yako."
+          );
+
+          passwordInput.focus();
+
+          return;
+
+        }
+
+
+        loginButton.disabled =
+          true;
+
+        loginButton.innerHTML = `
+          <span class="loading">
+            <span class="spinner"></span>
+            Inaingia...
+          </span>
+        `;
+
+
+        try {
+
+          const response =
+            await fetch(
+              "/api/school-admin/login",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                credentials:
+                  "same-origin",
+
+                body: JSON.stringify({
+                  email,
+                  password
+                })
+              }
+            );
+
+
+          const data =
+            await response.json();
+
+
+          if (
+            !response.ok ||
+            !data.success
+          ) {
+
+            showMessage(
+              data.message ||
+              "Email au password si sahihi."
+            );
+
+            loginButton.disabled =
+              false;
+
+            loginButton.textContent =
+              "Ingia kwenye Dashboard";
+
+            return;
+
+          }
+
+
+          showMessage(
+            "Umefanikiwa kuingia. Inafungua dashboard...",
+            "success"
+          );
+
+
+          setTimeout(
+            () => {
+
+              window.location.href =
+                "/school-admin-dashboard.html";
+
+            },
+            700
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "LOGIN ERROR:",
+            error
+          );
+
+          showMessage(
+            "Kuna tatizo la kuunganisha na server. Tafadhali jaribu tena."
+          );
+
+          loginButton.disabled =
+            false;
+
+          loginButton.textContent =
+            "Ingia kwenye Dashboard";
+
+        }
+
+      }
+    );
+
+
+    // =================================================
+    // ENTER KEY
+    // =================================================
+
+    passwordInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          loginForm.requestSubmit();
+
+        }
+
+      }
+    );
+
+
+    // =================================================
+    // START
+    // =================================================
+
+    checkExistingLogin();
+
+  </script>
+
+</body>
+</html>
