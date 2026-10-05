@@ -1222,7 +1222,7 @@ app.post(
 
 
 // ======================================================
-// GET APPLICATION
+// GET APPLICATION BY ID
 // ======================================================
 
 app.get(
@@ -1248,9 +1248,13 @@ app.get(
 
             p.payment_reference,
 
+            p.provider_reference,
+
             p.status AS payment_status_from_payments,
 
-            p.paid_at
+            p.paid_at,
+
+            p.created_at AS payment_created_at
 
           FROM applications a
 
@@ -1259,6 +1263,10 @@ app.get(
             ON p.application_id = a.id
 
           WHERE a.id = $1
+
+          ORDER BY p.id DESC
+
+          LIMIT 1
 
           `,
 
@@ -1308,6 +1316,221 @@ app.get(
 
         message:
           "Imeshindikana kupata application.",
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+);
+
+
+// ======================================================
+// GET APPLICATION BY APPLICATION NUMBER
+// ======================================================
+
+app.get(
+  "/api/application-by-number/:applicationNumber",
+  async (req, res) => {
+
+    try {
+
+      const applicationNumber =
+        req.params.applicationNumber;
+
+
+      // ==================================================
+      // VALIDATION
+      // ==================================================
+
+      if (!applicationNumber) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          message:
+            "Namba ya maombi haijatumwa."
+
+        });
+
+      }
+
+
+      // ==================================================
+      // FIND APPLICATION
+      // ==================================================
+
+      const result =
+        await pool.query(
+
+          `
+
+          SELECT
+
+            a.id,
+
+            a.application_number,
+
+            a.school_id,
+
+            a.form_id,
+
+            a.applicant_name,
+
+            a.applicant_gender,
+
+            a.applicant_date_of_birth,
+
+            a.parent_name,
+
+            a.parent_phone,
+
+            a.parent_email,
+
+            a.address,
+
+            a.status,
+
+            a.payment_status,
+
+            a.student_name,
+
+            a.gender,
+
+            a.date_of_birth,
+
+            a.class_level,
+
+            a.phone,
+
+            a.email,
+
+            a.created_at,
+
+            a.updated_at,
+
+
+            s.name AS school_name,
+
+            s.region AS school_region,
+
+            s.district AS school_district,
+
+            s.school_type,
+
+            s.form_price,
+
+
+            p.id AS payment_id,
+
+            p.application_number
+              AS payment_application_number,
+
+            p.amount,
+
+            p.payment_reference,
+
+            p.provider_reference,
+
+            p.status
+              AS payment_status_from_payments,
+
+            p.paid_at,
+
+            p.created_at
+              AS payment_created_at
+
+
+          FROM applications a
+
+
+          LEFT JOIN schools s
+
+            ON s.id = a.school_id
+
+
+          LEFT JOIN payments p
+
+            ON p.application_id = a.id
+
+
+          WHERE a.application_number = $1
+
+
+          ORDER BY p.id DESC
+
+
+          LIMIT 1
+
+          `,
+
+          [
+            applicationNumber
+          ]
+
+        );
+
+
+      // ==================================================
+      // APPLICATION NOT FOUND
+      // ==================================================
+
+      if (
+        result.rows.length === 0
+      ) {
+
+        return res.status(404).json({
+
+          success: false,
+
+          message:
+            "Namba ya maombi haijapatikana."
+
+        });
+
+      }
+
+
+      // ==================================================
+      // APPLICATION DATA
+      // ==================================================
+
+      const application =
+        result.rows[0];
+
+
+      // ==================================================
+      // RESPONSE
+      // ==================================================
+
+      return res.json({
+
+        success: true,
+
+        application:
+          application
+
+      });
+
+
+    } catch (error) {
+
+      console.error(
+        "GET APPLICATION BY NUMBER ERROR:",
+        error
+      );
+
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Imeshindikana kupata taarifa za maombi.",
 
         error:
           error.message
