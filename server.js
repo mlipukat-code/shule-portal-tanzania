@@ -186,6 +186,76 @@ function clearSchoolAdminCookie(res) {
 }
 
 // ============================================================
+// CUSTOM FIELD HELPERS
+// ============================================================
+
+const ALLOWED_CUSTOM_FIELD_TYPES = [
+  "text",
+  "textarea",
+  "number",
+  "email",
+  "phone",
+  "date",
+  "dropdown",
+  "radio",
+  "checkbox",
+  "file"
+];
+
+function normalizeFieldKey(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "")
+    .replace(/^_+|_+$/g, "");
+}
+
+function normalizeOptions(options) {
+  if (!Array.isArray(options)) {
+    return [];
+  }
+
+  return options
+    .map((option) => {
+      if (
+        typeof option === "string" ||
+        typeof option === "number"
+      ) {
+        return String(option).trim();
+      }
+
+      if (
+        option &&
+        typeof option === "object"
+      ) {
+        return {
+          label: String(
+            option.label || option.value || ""
+          ).trim(),
+
+          value: String(
+            option.value || option.label || ""
+          ).trim()
+        };
+      }
+
+      return null;
+    })
+    .filter((option) => {
+      if (!option) {
+        return false;
+      }
+
+      if (typeof option === "string") {
+        return option.length > 0;
+      }
+
+      return option.label && option.value;
+    });
+}
+
+// ============================================================
 // DATABASE INITIALIZATION
 // ============================================================
 
@@ -295,7 +365,7 @@ async function initializeDatabase() {
     `);
 
     // --------------------------------------------------------
-    // MIGRATIONS
+    // MIGRATIONS - SCHOOLS
     // --------------------------------------------------------
 
     await pool.query(`
@@ -353,6 +423,19 @@ async function initializeDatabase() {
       ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW()
     `);
 
+    // --------------------------------------------------------
+    // NEW: CUSTOM DATA FOR EACH SCHOOL
+    // --------------------------------------------------------
+
+    await pool.query(`
+      ALTER TABLE schools
+      ADD COLUMN IF NOT EXISTS custom_data JSONB DEFAULT '{}'::jsonb
+    `);
+
+    // --------------------------------------------------------
+    // MIGRATIONS - APPLICATIONS
+    // --------------------------------------------------------
+
     await pool.query(`
       ALTER TABLE applications
       ADD COLUMN IF NOT EXISTS application_number VARCHAR(255)
@@ -368,6 +451,10 @@ async function initializeDatabase() {
       ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW()
     `);
 
+    // --------------------------------------------------------
+    // MIGRATIONS - PAYMENTS
+    // --------------------------------------------------------
+
     await pool.query(`
       ALTER TABLE payments
       ADD COLUMN IF NOT EXISTS application_number VARCHAR(255)
@@ -382,6 +469,10 @@ async function initializeDatabase() {
       ALTER TABLE payments
       ADD COLUMN IF NOT EXISTS payment_method VARCHAR(100)
     `);
+
+    // --------------------------------------------------------
+    // MIGRATIONS - SCHOOL ADMINS
+    // --------------------------------------------------------
 
     await pool.query(`
       ALTER TABLE school_admins
@@ -406,6 +497,45 @@ async function initializeDatabase() {
     await pool.query(`
       ALTER TABLE school_admins
       ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW()
+    `);
+
+    // --------------------------------------------------------
+    // NEW: SCHOOL CUSTOM FIELDS
+    // --------------------------------------------------------
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS school_custom_fields (
+        id SERIAL PRIMARY KEY,
+
+        school_id INTEGER NOT NULL
+          REFERENCES schools(id)
+          ON DELETE CASCADE,
+
+        field_key VARCHAR(100) NOT NULL,
+
+        field_label VARCHAR(255) NOT NULL,
+
+        field_type VARCHAR(50) NOT NULL DEFAULT 'text',
+
+        placeholder TEXT,
+
+        options JSONB DEFAULT '[]'::jsonb,
+
+        is_required BOOLEAN NOT NULL DEFAULT FALSE,
+
+        is_visible BOOLEAN NOT NULL DEFAULT TRUE,
+
+        show_on_public BOOLEAN NOT NULL DEFAULT TRUE,
+
+        sort_order INTEGER NOT NULL DEFAULT 0,
+
+        created_at TIMESTAMP DEFAULT NOW(),
+
+        updated_at TIMESTAMP DEFAULT NOW(),
+
+        CONSTRAINT unique_school_custom_field_key
+          UNIQUE (school_id, field_key)
+      )
     `);
 
     // --------------------------------------------------------
@@ -437,7 +567,18 @@ async function initializeDatabase() {
       ON school_admin_sessions(token)
     `);
 
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_school_custom_fields_school
+      ON school_custom_fields(school_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_school_custom_fields_order
+      ON school_custom_fields(school_id, sort_order)
+    `);
+
     console.log("DATABASE INITIALIZATION COMPLETE");
+    console.log("CUSTOM FIELDS: ENABLED");
   } catch (error) {
     console.error("DATABASE INITIALIZATION ERROR:");
     console.error(error);
@@ -567,6 +708,7 @@ app.get("/api/schools", async (req, res) => {
         application_start,
         application_end,
         status,
+        custom_data,
         created_at,
         updated_at
       FROM schools
@@ -679,7 +821,8 @@ app.post("/api/admin/schools", async (req, res) => {
       email,
       application_start,
       application_end,
-      status
+      status,
+      custom_data
     } = req.body;
 
     if (!name) {
@@ -688,6 +831,12 @@ app.post("/api/admin/schools", async (req, res) => {
         message: "Jina la shule linahitajika."
       });
     }
+
+    const cleanCustomData =
+      custom_data &&
+      typeof custom_data === "object"
+        ? JSON.stringify(custom_data)
+        : "{}";
 
     const result = await pool.query(
       `
@@ -704,10 +853,11 @@ app.post("/api/admin/schools", async (req, res) => {
         email,
         application_start,
         application_end,
-        status
+        status,
+        custom_data
       )
       VALUES
-      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb)
       RETURNING *
       `,
       [
@@ -722,7 +872,8 @@ app.post("/api/admin/schools", async (req, res) => {
         email || null,
         application_start || null,
         application_end || null,
-        status || "draft"
+        status || "draft",
+        cleanCustomData
       ]
     );
 
@@ -764,8 +915,15 @@ app.put(
         email,
         application_start,
         application_end,
-        status
+        status,
+        custom_data
       } = req.body;
+
+      const cleanCustomData =
+        custom_data &&
+        typeof custom_data === "object"
+          ? JSON.stringify(custom_data)
+          : null;
 
       const result = await pool.query(
         `
@@ -783,8 +941,9 @@ app.put(
           application_start = COALESCE($10,application_start),
           application_end = COALESCE($11,application_end),
           status = COALESCE($12,status),
+          custom_data = COALESCE($13::jsonb,custom_data),
           updated_at = NOW()
-        WHERE id = $13
+        WHERE id = $14
         RETURNING *
         `,
         [
@@ -802,6 +961,7 @@ app.put(
           application_start || null,
           application_end || null,
           status || null,
+          cleanCustomData,
           req.params.id
         ]
       );
@@ -822,6 +982,440 @@ app.put(
     } catch (error) {
       console.error(
         "UPDATE SCHOOL ERROR:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);
+
+// ============================================================
+// SCHOOL CUSTOM FIELDS - LIST
+// ============================================================
+
+app.get(
+  "/api/admin/schools/:schoolId/custom-fields",
+  async (req, res) => {
+    try {
+      const result = await pool.query(
+        `
+        SELECT
+          id,
+          school_id,
+          field_key,
+          field_label,
+          field_type,
+          placeholder,
+          options,
+          is_required,
+          is_visible,
+          show_on_public,
+          sort_order,
+          created_at,
+          updated_at
+        FROM school_custom_fields
+        WHERE school_id = $1
+        ORDER BY sort_order ASC, id ASC
+        `,
+        [req.params.schoolId]
+      );
+
+      res.json({
+        success: true,
+        fields: result.rows
+      });
+    } catch (error) {
+      console.error(
+        "CUSTOM FIELDS LIST ERROR:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);
+
+// ============================================================
+// CREATE CUSTOM FIELD
+// ============================================================
+
+app.post(
+  "/api/admin/schools/:schoolId/custom-fields",
+  async (req, res) => {
+    try {
+      const schoolId = req.params.schoolId;
+
+      const {
+        field_key,
+        field_label,
+        field_type,
+        placeholder,
+        options,
+        is_required,
+        is_visible,
+        show_on_public,
+        sort_order
+      } = req.body;
+
+      if (!field_key || !field_label) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Field key na field label vinahitajika."
+        });
+      }
+
+      const normalizedKey =
+        normalizeFieldKey(field_key);
+
+      if (!normalizedKey) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Field key si sahihi."
+        });
+      }
+
+      const finalType =
+        field_type || "text";
+
+      if (
+        !ALLOWED_CUSTOM_FIELD_TYPES.includes(
+          finalType
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Aina ya field si sahihi."
+        });
+      }
+
+      const school = await pool.query(
+        `
+        SELECT id
+        FROM schools
+        WHERE id = $1
+        `,
+        [schoolId]
+      );
+
+      if (school.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Shule haipatikani."
+        });
+      }
+
+      const existing =
+        await pool.query(
+          `
+          SELECT id
+          FROM school_custom_fields
+          WHERE school_id = $1
+          AND field_key = $2
+          `,
+          [
+            schoolId,
+            normalizedKey
+          ]
+        );
+
+      if (existing.rows.length > 0) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Field key hiyo tayari ipo kwenye shule hii."
+        });
+      }
+
+      const cleanOptions =
+        normalizeOptions(options);
+
+      const result =
+        await pool.query(
+          `
+          INSERT INTO school_custom_fields
+          (
+            school_id,
+            field_key,
+            field_label,
+            field_type,
+            placeholder,
+            options,
+            is_required,
+            is_visible,
+            show_on_public,
+            sort_order
+          )
+          VALUES
+          (
+            $1,$2,$3,$4,$5,$6::jsonb,$7,$8,$9,$10
+          )
+          RETURNING *
+          `,
+          [
+            schoolId,
+            normalizedKey,
+            String(field_label).trim(),
+            finalType,
+            placeholder || null,
+            JSON.stringify(cleanOptions),
+            Boolean(is_required),
+            is_visible !== false,
+            show_on_public !== false,
+            Number(sort_order || 0)
+          ]
+        );
+
+      res.json({
+        success: true,
+        message:
+          "Kipengele kimeongezwa.",
+        field: result.rows[0]
+      });
+    } catch (error) {
+      console.error(
+        "CREATE CUSTOM FIELD ERROR:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);
+
+// ============================================================
+// UPDATE CUSTOM FIELD
+// ============================================================
+
+app.put(
+  "/api/admin/schools/:schoolId/custom-fields/:fieldId",
+  async (req, res) => {
+    try {
+      const {
+        field_key,
+        field_label,
+        field_type,
+        placeholder,
+        options,
+        is_required,
+        is_visible,
+        show_on_public,
+        sort_order
+      } = req.body;
+
+      const finalType =
+        field_type || "text";
+
+      if (
+        !ALLOWED_CUSTOM_FIELD_TYPES.includes(
+          finalType
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Aina ya field si sahihi."
+        });
+      }
+
+      const normalizedKey =
+        normalizeFieldKey(field_key);
+
+      if (!normalizedKey || !field_label) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Field key na field label vinahitajika."
+        });
+      }
+
+      const duplicate =
+        await pool.query(
+          `
+          SELECT id
+          FROM school_custom_fields
+          WHERE school_id = $1
+          AND field_key = $2
+          AND id <> $3
+          `,
+          [
+            req.params.schoolId,
+            normalizedKey,
+            req.params.fieldId
+          ]
+        );
+
+      if (duplicate.rows.length > 0) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Field key hiyo tayari ipo."
+        });
+      }
+
+      const cleanOptions =
+        normalizeOptions(options);
+
+      const result =
+        await pool.query(
+          `
+          UPDATE school_custom_fields
+          SET
+            field_key = $1,
+            field_label = $2,
+            field_type = $3,
+            placeholder = $4,
+            options = $5::jsonb,
+            is_required = $6,
+            is_visible = $7,
+            show_on_public = $8,
+            sort_order = $9,
+            updated_at = NOW()
+          WHERE id = $10
+          AND school_id = $11
+          RETURNING *
+          `,
+          [
+            normalizedKey,
+            String(field_label).trim(),
+            finalType,
+            placeholder || null,
+            JSON.stringify(cleanOptions),
+            Boolean(is_required),
+            is_visible !== false,
+            show_on_public !== false,
+            Number(sort_order || 0),
+            req.params.fieldId,
+            req.params.schoolId
+          ]
+        );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Kipengele hakipatikani."
+        });
+      }
+
+      res.json({
+        success: true,
+        message:
+          "Kipengele kimesasishwa.",
+        field: result.rows[0]
+      });
+    } catch (error) {
+      console.error(
+        "UPDATE CUSTOM FIELD ERROR:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);
+
+// ============================================================
+// DELETE CUSTOM FIELD
+// ============================================================
+
+app.delete(
+  "/api/admin/schools/:schoolId/custom-fields/:fieldId",
+  async (req, res) => {
+    try {
+      const result =
+        await pool.query(
+          `
+          DELETE FROM school_custom_fields
+          WHERE id = $1
+          AND school_id = $2
+          RETURNING *
+          `,
+          [
+            req.params.fieldId,
+            req.params.schoolId
+          ]
+        );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Kipengele hakipatikani."
+        });
+      }
+
+      res.json({
+        success: true,
+        message:
+          "Kipengele kimefutwa."
+      });
+    } catch (error) {
+      console.error(
+        "DELETE CUSTOM FIELD ERROR:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);
+
+// ============================================================
+// PUBLIC SCHOOL CUSTOM FIELDS
+// ============================================================
+
+app.get(
+  "/api/schools/:id/custom-fields",
+  async (req, res) => {
+    try {
+      const result = await pool.query(
+        `
+        SELECT
+          id,
+          school_id,
+          field_key,
+          field_label,
+          field_type,
+          placeholder,
+          options,
+          is_required,
+          sort_order
+        FROM school_custom_fields
+        WHERE school_id = $1
+        AND is_visible = TRUE
+        AND show_on_public = TRUE
+        ORDER BY sort_order ASC, id ASC
+        `,
+        [req.params.id]
+      );
+
+      res.json({
+        success: true,
+        fields: result.rows
+      });
+    } catch (error) {
+      console.error(
+        "PUBLIC CUSTOM FIELDS ERROR:",
         error
       );
 
@@ -1541,7 +2135,8 @@ app.post(
             email,
             application_start,
             application_end,
-            status
+            status,
+            custom_data
           FROM schools
           WHERE id = $1
           LIMIT 1
@@ -1684,7 +2279,8 @@ async function requireSchoolAdmin(
           s.email AS school_email,
           s.application_start,
           s.application_end,
-          s.status AS school_status
+          s.status AS school_status,
+          s.custom_data
 
         FROM school_admins sa
 
@@ -2278,6 +2874,7 @@ app.get(
             application_start,
             application_end,
             status,
+            custom_data,
             created_at,
             updated_at
           FROM schools
@@ -2318,6 +2915,58 @@ app.get(
 );
 
 // ============================================================
+// SCHOOL ADMIN CUSTOM FIELDS
+// ============================================================
+
+app.get(
+  "/api/school-admin/custom-fields",
+  requireSchoolAdmin,
+  async (req, res) => {
+    try {
+      const result =
+        await pool.query(
+          `
+          SELECT
+            id,
+            school_id,
+            field_key,
+            field_label,
+            field_type,
+            placeholder,
+            options,
+            is_required,
+            is_visible,
+            show_on_public,
+            sort_order
+          FROM school_custom_fields
+          WHERE school_id = $1
+          AND is_visible = TRUE
+          ORDER BY sort_order ASC, id ASC
+          `,
+          [
+            req.schoolAdmin.school_id
+          ]
+        );
+
+      return res.json({
+        success: true,
+        fields: result.rows
+      });
+    } catch (error) {
+      console.error(
+        "SCHOOL ADMIN CUSTOM FIELDS ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);
+
+// ============================================================
 // UPDATE SCHOOL BY SCHOOL ADMIN
 // ============================================================
 
@@ -2337,7 +2986,8 @@ app.put(
         address,
         email,
         application_start,
-        application_end
+        application_end,
+        custom_data
       } = req.body;
 
       if (!name || !String(name).trim()) {
@@ -2404,6 +3054,12 @@ app.put(
           school_type || type
         ).trim();
 
+      const cleanCustomData =
+        custom_data &&
+        typeof custom_data === "object"
+          ? JSON.stringify(custom_data)
+          : "{}";
+
       const result =
         await pool.query(
           `
@@ -2420,8 +3076,9 @@ app.put(
             email = $9,
             application_start = $10,
             application_end = $11,
+            custom_data = $12::jsonb,
             updated_at = NOW()
-          WHERE id = $12
+          WHERE id = $13
           RETURNING *
           `,
           [
@@ -2442,6 +3099,7 @@ app.put(
               : null,
             application_start || null,
             application_end || null,
+            cleanCustomData,
             req.schoolAdmin.school_id
           ]
         );
@@ -2594,7 +3252,8 @@ app.post(
         parent_name,
         parent_phone,
         parent_email,
-        address
+        address,
+        custom_data
       } = req.body;
 
       if (
@@ -2725,7 +3384,13 @@ app.post(
             ),
 
           school_name:
-            school.name
+            school.name,
+
+          custom_data:
+            custom_data &&
+            typeof custom_data === "object"
+              ? custom_data
+              : {}
         }
       });
     } catch (error) {
@@ -2766,6 +3431,7 @@ app.get(
             s.school_type,
             s.type,
             s.form_price,
+            s.custom_data AS school_custom_data,
 
             p.payment_reference,
             p.amount AS payment_amount,
@@ -3039,6 +3705,10 @@ async function startServer() {
 
       console.log(
         "SCHOOL EDIT ROUTES: ENABLED"
+      );
+
+      console.log(
+        "CUSTOM FIELD BUILDER: ENABLED"
       );
 
       console.log(
