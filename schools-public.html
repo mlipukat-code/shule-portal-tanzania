@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Tafuta Shule - Shule Portal Tanzania</title>
+  <title>Shule Portal Tanzania</title>
 
   <style>
     * {
@@ -18,29 +18,158 @@
       color: #222;
     }
 
+    /* HEADER */
     header {
       background: #0b5ed7;
       color: white;
-      padding: 22px 15px;
+      padding: 25px 15px 20px;
       text-align: center;
     }
 
     header h1 {
       margin: 0;
-      font-size: 25px;
+      font-size: 27px;
     }
 
     header p {
-      margin: 7px 0 0;
+      margin: 8px 0 0;
       font-size: 14px;
     }
 
+    /* TABS */
+    .tabs-container {
+      width: 94%;
+      max-width: 1000px;
+      margin: 20px auto 0;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .tab-button {
+      border: none;
+      background: white;
+      color: #333;
+      padding: 16px 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      border-right: 1px solid #eee;
+      transition: 0.2s;
+    }
+
+    .tab-button:last-child {
+      border-right: none;
+    }
+
+    .tab-button:hover {
+      background: #eef5ff;
+    }
+
+    .tab-button.active {
+      background: #0b5ed7;
+      color: white;
+    }
+
+    /* MAIN */
     .container {
       width: 94%;
       max-width: 1000px;
-      margin: 25px auto;
+      margin: 20px auto 35px;
     }
 
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* LOGIN BOX */
+    .login-box {
+      background: white;
+      padding: 30px 22px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .login-box h2 {
+      margin-top: 0;
+      color: #0b5ed7;
+      text-align: center;
+    }
+
+    .login-box p {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .login-icon {
+      text-align: center;
+      font-size: 45px;
+      margin-bottom: 5px;
+    }
+
+    .form-group {
+      margin-top: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #0b5ed7;
+    }
+
+    .login-button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #0b5ed7;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-button:hover {
+      background: #084298;
+    }
+
+    .login-message {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* SEARCH */
     .search-box {
       background: white;
       padding: 20px;
@@ -180,7 +309,26 @@
       color: #555;
     }
 
+    /* MOBILE */
     @media (max-width: 650px) {
+
+      header h1 {
+        font-size: 23px;
+      }
+
+      .tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .tab-button {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding: 14px 8px;
+      }
+
+      .tab-button:last-child {
+        border-bottom: none;
+      }
 
       .search-row {
         flex-direction: column;
@@ -213,57 +361,258 @@
 
 <header>
   <h1>🏫 Shule Portal Tanzania</h1>
-  <p>Tafuta shule na uombe fomu mtandaoni</p>
+  <p>Jukwaa la shule na maombi ya fomu mtandaoni</p>
 </header>
 
-<div class="container">
 
-  <div class="search-box">
+<!-- =========================
+     TABS
+========================= -->
 
-    <h2>🔎 Tafuta Shule</h2>
+<div class="tabs-container">
 
-    <div class="search-row">
+  <div class="tabs">
 
-      <input
-        type="text"
-        id="searchInput"
-        class="search-input"
-        placeholder="Andika jina la shule..."
-      >
+    <button
+      class="tab-button"
+      onclick="openTab('adminMkuu', this)"
+    >
+      👨‍💼 Admin Mkuu
+    </button>
 
-      <button
-        type="button"
-        class="search-button"
-        onclick="searchSchools()"
-      >
-        🔎 Tafuta
-      </button>
+    <button
+      class="tab-button"
+      onclick="openTab('adminShule', this)"
+    >
+      🏫 Admin wa Shule
+    </button>
 
-    </div>
+    <button
+      class="tab-button active"
+      onclick="openTab('tafutaShule', this)"
+    >
+      🔎 Tafuta Shule
+    </button>
 
-    <div class="filters">
-
-      <select id="regionFilter" onchange="searchSchools()">
-        <option value="">Mikoa yote</option>
-      </select>
-
-      <select id="districtFilter" onchange="searchSchools()">
-        <option value="">Wilaya zote</option>
-      </select>
-
-    </div>
-
-  </div>
-
-  <div id="resultInfo" class="result-info"></div>
-
-  <div id="schoolsContainer">
-    <div class="loading">
-      Inapakia shule...
-    </div>
   </div>
 
 </div>
+
+
+<div class="container">
+
+
+  <!-- =========================
+       ADMIN MKUU
+  ========================== -->
+
+  <div
+    id="adminMkuu"
+    class="tab-content"
+  >
+
+    <div class="login-box">
+
+      <div class="login-icon">
+        👨‍💼
+      </div>
+
+      <h2>Admin Mkuu</h2>
+
+      <p>
+        Ingia kwenye mfumo mkuu wa
+        usimamizi wa Shule Portal Tanzania.
+      </p>
+
+      <div class="form-group">
+
+        <label for="adminEmail">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="adminEmail"
+          placeholder="Weka email ya Admin Mkuu"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="adminPassword">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Weka password"
+        >
+
+      </div>
+
+      <button
+        class="login-button"
+        onclick="loginAdminMkuu()"
+      >
+        🔐 Ingia kama Admin Mkuu
+      </button>
+
+      <div
+        id="adminLoginMessage"
+        class="login-message"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================
+       ADMIN WA SHULE
+  ========================== -->
+
+  <div
+    id="adminShule"
+    class="tab-content"
+  >
+
+    <div class="login-box">
+
+      <div class="login-icon">
+        🏫
+      </div>
+
+      <h2>Admin wa Shule</h2>
+
+      <p>
+        Ingia kwenye mfumo wa shule yako
+        kusimamia taarifa na maombi ya wanafunzi.
+      </p>
+
+      <div class="form-group">
+
+        <label for="schoolAdminEmail">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="schoolAdminEmail"
+          placeholder="Weka email ya Admin wa Shule"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="schoolAdminPassword">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="schoolAdminPassword"
+          placeholder="Weka password"
+        >
+
+      </div>
+
+      <button
+        class="login-button"
+        onclick="loginSchoolAdmin()"
+      >
+        🔐 Ingia kama Admin wa Shule
+      </button>
+
+      <div
+        id="schoolAdminLoginMessage"
+        class="login-message"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================
+       TAFUTA SHULE
+  ========================== -->
+
+  <div
+    id="tafutaShule"
+    class="tab-content active"
+  >
+
+    <div class="search-box">
+
+      <h2>🔎 Tafuta Shule</h2>
+
+      <div class="search-row">
+
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Andika jina la shule..."
+        >
+
+        <button
+          type="button"
+          class="search-button"
+          onclick="searchSchools()"
+        >
+          🔎 Tafuta
+        </button>
+
+      </div>
+
+      <div class="filters">
+
+        <select
+          id="regionFilter"
+          onchange="searchSchools()"
+        >
+          <option value="">
+            Mikoa yote
+          </option>
+        </select>
+
+        <select
+          id="districtFilter"
+          onchange="searchSchools()"
+        >
+          <option value="">
+            Wilaya zote
+          </option>
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="resultInfo"
+      class="result-info"
+    ></div>
+
+
+    <div id="schoolsContainer">
+
+      <div class="loading">
+        Inapakia shule...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
 
 <script>
 
@@ -271,94 +620,373 @@
 
   let allSchools = [];
 
-  async function loadSchools() {
 
-    const container = document.getElementById("schoolsContainer");
+  /* =========================
+     TAB SYSTEM
+  ========================== */
+
+  function openTab(tabId, button) {
+
+    document
+      .querySelectorAll(".tab-content")
+      .forEach(function(tab) {
+
+        tab.classList.remove("active");
+
+      });
+
+
+    document
+      .querySelectorAll(".tab-button")
+      .forEach(function(btn) {
+
+        btn.classList.remove("active");
+
+      });
+
+
+    document
+      .getElementById(tabId)
+      .classList.add("active");
+
+
+    button.classList.add("active");
+
+  }
+
+
+
+  /* =========================
+     ADMIN MKUU LOGIN
+  ========================== */
+
+  function loginAdminMkuu() {
+
+    const email =
+      document
+        .getElementById("adminEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("adminPassword")
+        .value;
+
+
+    const message =
+      document
+        .getElementById("adminLoginMessage");
+
+
+    if (!email || !password) {
+
+      message.style.color = "#dc3545";
+
+      message.textContent =
+        "Tafadhali weka email na password.";
+
+      return;
+
+    }
+
+
+    /*
+      Kwa sasa tunaelekeza Admin Mkuu
+      kwenye ukurasa wake wa mfumo.
+
+      Authentication halisi itaendelea
+      kutumia mfumo wako wa Admin Mkuu.
+    */
+
+    window.location.href =
+      "/admin-schools.html";
+
+  }
+
+
+
+  /* =========================
+     SCHOOL ADMIN LOGIN
+  ========================== */
+
+  async function loginSchoolAdmin() {
+
+    const email =
+      document
+        .getElementById("schoolAdminEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("schoolAdminPassword")
+        .value;
+
+
+    const message =
+      document
+        .getElementById("schoolAdminLoginMessage");
+
+
+    if (!email || !password) {
+
+      message.style.color = "#dc3545";
+
+      message.textContent =
+        "Tafadhali weka email na password.";
+
+      return;
+
+    }
+
+
+    message.style.color = "#555";
+
+    message.textContent =
+      "Inaingia...";
+
 
     try {
 
-      const response = await fetch(API_URL);
+      const response =
+        await fetch(
+          "/api/school-admin/login",
+          {
+            method: "POST",
 
-      if (!response.ok) {
-        throw new Error("Imeshindikana kupata shule.");
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          data.message ||
+          "Email au password si sahihi."
+        );
+
       }
 
-      const data = await response.json();
 
-      if (!data.success || !Array.isArray(data.schools)) {
-        throw new Error("Taarifa za shule hazipo.");
-      }
+      window.location.href =
+        "/school-admin-dashboard.html";
 
-      allSchools = data.schools;
-
-      createRegionList();
-      createDistrictList();
-
-      searchSchools();
 
     } catch (error) {
 
       console.error(error);
 
-      container.innerHTML = `
-        <div class="message">
-          <h3>Imeshindikana kupata shule</h3>
-          <p>Tafadhali jaribu tena baadae.</p>
-        </div>
-      `;
+      message.style.color =
+        "#dc3545";
+
+      message.textContent =
+        error.message ||
+        "Imeshindikana kuingia.";
+
     }
+
   }
 
+
+
+  /* =========================
+     LOAD SCHOOLS
+  ========================== */
+
+  async function loadSchools() {
+
+    const container =
+      document.getElementById(
+        "schoolsContainer"
+      );
+
+
+    try {
+
+      const response =
+        await fetch(API_URL);
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Imeshindikana kupata shule."
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !data.success ||
+        !Array.isArray(data.schools)
+      ) {
+
+        throw new Error(
+          "Taarifa za shule hazipo."
+        );
+
+      }
+
+
+      allSchools =
+        data.schools;
+
+
+      createRegionList();
+
+      createDistrictList();
+
+      searchSchools();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      container.innerHTML = `
+
+        <div class="message">
+
+          <h3>
+            Imeshindikana kupata shule
+          </h3>
+
+          <p>
+            Tafadhali jaribu tena baadae.
+          </p>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+
+  /* =========================
+     REGION LIST
+  ========================== */
 
   function createRegionList() {
 
-    const select = document.getElementById("regionFilter");
+    const select =
+      document.getElementById(
+        "regionFilter"
+      );
+
 
     const regions = [
+
       ...new Set(
+
         allSchools
-          .map(school => school.region)
+          .map(
+            school => school.region
+          )
           .filter(Boolean)
+
       )
+
     ].sort();
 
-    regions.forEach(region => {
 
-      const option = document.createElement("option");
+    regions.forEach(function(region) {
 
-      option.value = region;
-      option.textContent = region;
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        region;
+
+      option.textContent =
+        region;
+
 
       select.appendChild(option);
 
     });
+
   }
 
+
+
+  /* =========================
+     DISTRICT LIST
+  ========================== */
 
   function createDistrictList() {
 
-    const select = document.getElementById("districtFilter");
+    const select =
+      document.getElementById(
+        "districtFilter"
+      );
+
 
     const districts = [
+
       ...new Set(
+
         allSchools
-          .map(school => school.district)
+          .map(
+            school => school.district
+          )
           .filter(Boolean)
+
       )
+
     ].sort();
 
-    districts.forEach(district => {
 
-      const option = document.createElement("option");
+    districts.forEach(function(district) {
 
-      option.value = district;
-      option.textContent = district;
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        district;
+
+      option.textContent =
+        district;
+
 
       select.appendChild(option);
 
     });
+
   }
 
+
+
+  /* =========================
+     SEARCH
+  ========================== */
 
   function searchSchools() {
 
@@ -369,46 +997,75 @@
         .trim()
         .toLowerCase();
 
+
     const region =
-      document.getElementById("regionFilter").value;
+      document
+        .getElementById("regionFilter")
+        .value;
+
 
     const district =
-      document.getElementById("districtFilter").value;
+      document
+        .getElementById("districtFilter")
+        .value;
 
-    const filtered = allSchools.filter(school => {
 
-      const name =
-        String(school.name || "").toLowerCase();
+    const filtered =
+      allSchools.filter(
+        function(school) {
 
-      const schoolRegion =
-        String(school.region || "");
+          const name =
+            String(
+              school.name || ""
+            ).toLowerCase();
 
-      const schoolDistrict =
-        String(school.district || "");
 
-      const matchesName =
-        searchText === "" ||
-        name.includes(searchText);
+          const schoolRegion =
+            String(
+              school.region || ""
+            );
 
-      const matchesRegion =
-        region === "" ||
-        schoolRegion === region;
 
-      const matchesDistrict =
-        district === "" ||
-        schoolDistrict === district;
+          const schoolDistrict =
+            String(
+              school.district || ""
+            );
 
-      return (
-        matchesName &&
-        matchesRegion &&
-        matchesDistrict
+
+          const matchesName =
+            searchText === "" ||
+            name.includes(searchText);
+
+
+          const matchesRegion =
+            region === "" ||
+            schoolRegion === region;
+
+
+          const matchesDistrict =
+            district === "" ||
+            schoolDistrict === district;
+
+
+          return (
+            matchesName &&
+            matchesRegion &&
+            matchesDistrict
+          );
+
+        }
       );
 
-    });
 
     displaySchools(filtered);
+
   }
 
+
+
+  /* =========================
+     MONEY
+  ========================== */
 
   function formatMoney(amount) {
 
@@ -417,41 +1074,96 @@
       amount === undefined ||
       amount === ""
     ) {
+
       return "Haijawekwa";
+
     }
 
-    const number = Number(amount);
+
+    const number =
+      Number(amount);
+
 
     if (isNaN(number)) {
+
       return amount;
+
     }
 
-    return "TSh " + number.toLocaleString("en-TZ");
+
+    return (
+      "TSh " +
+      number.toLocaleString("en-TZ")
+    );
+
   }
 
+
+
+  /* =========================
+     SECURITY
+  ========================== */
 
   function escapeHtml(value) {
 
-    if (value === null || value === undefined) {
+    if (
+      value === null ||
+      value === undefined
+    ) {
+
       return "";
+
     }
 
+
     return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
   }
 
+
+
+  /* =========================
+     DISPLAY SCHOOLS
+  ========================== */
 
   function displaySchools(schools) {
 
     const container =
-      document.getElementById("schoolsContainer");
+      document.getElementById(
+        "schoolsContainer"
+      );
+
 
     const resultInfo =
-      document.getElementById("resultInfo");
+      document.getElementById(
+        "resultInfo"
+      );
+
 
     resultInfo.textContent =
       `Shule zilizopatikana: ${schools.length}`;
@@ -460,18 +1172,24 @@
     if (schools.length === 0) {
 
       container.innerHTML = `
+
         <div class="message">
 
-          <h3>Hakuna shule iliyopatikana</h3>
+          <h3>
+            Hakuna shule iliyopatikana
+          </h3>
 
           <p>
-            Hakikisha umeandika jina sahihi la shule.
+            Hakikisha umeandika jina
+            sahihi la shule.
           </p>
 
         </div>
+
       `;
 
       return;
+
     }
 
 
@@ -479,90 +1197,165 @@
 
       <div class="schools">
 
-        ${schools.map(school => `
+        ${schools.map(function(school) {
 
-          <div class="school-card">
+          return `
 
-            <h3>
-              ${escapeHtml(school.name)}
-            </h3>
+            <div class="school-card">
 
-            <div class="school-info">
+              <h3>
+                ${escapeHtml(school.name)}
+              </h3>
 
-              <div>
-                📍 <strong>Mkoa:</strong>
-                ${escapeHtml(school.region || "Haijawekwa")}
-              </div>
 
-              <div>
-                📍 <strong>Wilaya:</strong>
-                ${escapeHtml(school.district || "Haijawekwa")}
-              </div>
+              <div class="school-info">
 
-              <div>
-                🏫 <strong>Aina:</strong>
-                ${escapeHtml(
-                  school.school_type ||
-                  school.type ||
-                  "Haijawekwa"
-                )}
-              </div>
-
-              <div>
-                📞 <strong>Simu:</strong>
-                ${escapeHtml(school.phone || "Haijawekwa")}
-              </div>
-
-              <div>
-                💰 <strong>Bei ya Fomu:</strong>
-                <span class="price">
-                  ${formatMoney(
-                    school.form_price ||
-                    school.price
+                <div>
+                  📍 <strong>Mkoa:</strong>
+                  ${escapeHtml(
+                    school.region ||
+                    "Haijawekwa"
                   )}
-                </span>
+                </div>
+
+
+                <div>
+                  📍 <strong>Wilaya:</strong>
+                  ${escapeHtml(
+                    school.district ||
+                    "Haijawekwa"
+                  )}
+                </div>
+
+
+                <div>
+                  🏫 <strong>Aina:</strong>
+                  ${escapeHtml(
+                    school.school_type ||
+                    school.type ||
+                    "Haijawekwa"
+                  )}
+                </div>
+
+
+                <div>
+                  📞 <strong>Simu:</strong>
+                  ${escapeHtml(
+                    school.phone ||
+                    "Haijawekwa"
+                  )}
+                </div>
+
+
+                <div>
+                  💰 <strong>Bei ya Fomu:</strong>
+
+                  <span class="price">
+
+                    ${formatMoney(
+                      school.form_price ||
+                      school.price
+                    )}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <div class="buttons">
+
+                <a
+                  class="btn btn-info"
+                  href="/school-details.html?id=${encodeURIComponent(school.id)}"
+                >
+                  ℹ️ Taarifa zaidi
+                </a>
+
+
+                <a
+                  class="btn btn-buy"
+                  href="/buy-form.html?school_id=${encodeURIComponent(school.id)}"
+                >
+                  📝 Nunua Fomu
+                </a>
+
               </div>
 
             </div>
 
-            <div class="buttons">
+          `;
 
-              <a
-                class="btn btn-info"
-                href="/school-details.html?id=${encodeURIComponent(school.id)}"
-              >
-                ℹ️ Taarifa zaidi
-              </a>
-
-              <a
-                class="btn btn-buy"
-                href="/buy-form.html?school_id=${encodeURIComponent(school.id)}"
-              >
-                📝 Nunua Fomu
-              </a>
-
-            </div>
-
-          </div>
-
-        `).join("")}
+        }).join("")}
 
       </div>
 
     `;
+
   }
 
 
+
+  /* =========================
+     ENTER KEY
+  ========================== */
+
   document
     .getElementById("searchInput")
-    .addEventListener("keydown", function(event) {
+    .addEventListener(
+      "keydown",
+      function(event) {
 
-      if (event.key === "Enter") {
-        searchSchools();
+        if (event.key === "Enter") {
+
+          searchSchools();
+
+        }
+
       }
+    );
 
-    });
 
+  /* =========================
+     PASSWORD ENTER
+  ========================== */
+
+  document
+    .getElementById("adminPassword")
+    .addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Enter") {
+
+          loginAdminMkuu();
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById("schoolAdminPassword")
+    .addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Enter") {
+
+          loginSchoolAdmin();
+
+        }
+
+      }
+    );
+
+
+  /* =========================
+     START
+  ========================== */
 
   loadSchools();
 
