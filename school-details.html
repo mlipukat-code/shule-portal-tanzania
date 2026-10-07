@@ -255,16 +255,21 @@
         const schoolId = params.get("id");
 
         if (!schoolId) {
+
           content.innerHTML = `
             <div class="card">
+
               <div class="error">
                 <h3>Shule haijachaguliwa</h3>
-                <p>Tafadhali rudi kwenye ukurasa wa kutafuta shule.</p>
+                <p>
+                  Tafadhali rudi kwenye ukurasa wa kutafuta shule.
+                </p>
               </div>
 
               <a class="back" href="/schools-public.html">
                 ← Rudi Kutafuta Shule
               </a>
+
             </div>
           `;
 
@@ -291,14 +296,19 @@
 
           content.innerHTML = `
             <div class="card">
+
               <div class="error">
                 <h3>Shule haijapatikana</h3>
-                <p>Shule uliyochagua haipo kwenye mfumo au haijawezeshwa.</p>
+                <p>
+                  Shule uliyochagua haipo kwenye mfumo
+                  au haijawezeshwa.
+                </p>
               </div>
 
               <a class="back" href="/schools-public.html">
                 ← Rudi Kutafuta Shule
               </a>
+
             </div>
           `;
 
@@ -353,21 +363,32 @@
               <div class="info-box">
                 <span class="label">Aina ya Shule</span>
                 <span class="value">
-                  ${escapeHtml(school.school_type || school.type || "Haijawekwa")}
+                  ${escapeHtml(
+                    school.school_type ||
+                    school.type ||
+                    "Haijawekwa"
+                  )}
                 </span>
               </div>
 
               <div class="info-box">
                 <span class="label">Bei ya Fomu</span>
                 <span class="value price">
-                  ${formatMoney(school.form_price || school.price)}
+                  ${formatMoney(
+                    school.form_price ||
+                    school.price
+                  )}
                 </span>
               </div>
 
               <div class="info-box">
                 <span class="label">Hali ya Maombi</span>
                 <span class="value">
-                  ${school.status === "active" ? "Maombi Yapo Wazi" : "Maombi Yamefungwa"}
+                  ${
+                    school.status === "active"
+                    ? "Maombi Yapo Wazi"
+                    : "Maombi Yamefungwa"
+                  }
                 </span>
               </div>
 
@@ -388,24 +409,28 @@
             </div>
 
             <div class="success-note">
+
               <strong>Maelekezo:</strong><br>
-              Kama unataka kuomba nafasi katika shule hii,
-              bonyeza kitufe cha <strong>Nunua Fomu</strong> hapa chini
-              ili kuendelea na hatua inayofuata.
+
+              Kama unataka kuomba nafasi katika
+              <strong>${escapeHtml(school.name)}</strong>,
+              bonyeza <strong>Nunua Fomu</strong> ili
+              kuanza kujaza taarifa za mwanafunzi.
+
             </div>
 
             <div class="buttons">
 
               <a
                 class="btn btn-primary"
-                href="/buy-form.html?school_id=${encodeURIComponent(school.id)}"
+                href="/application-form.html?school_id=${encodeURIComponent(school.id)}"
               >
                 📝 Nunua Fomu
               </a>
 
               <a
                 class="btn btn-secondary"
-                href="/buy-form.html?school_id=${encodeURIComponent(school.id)}"
+                href="/application-form.html?school_id=${encodeURIComponent(school.id)}"
               >
                 ➜ Endelea na Maombi
               </a>
@@ -428,9 +453,11 @@
         console.error(error);
 
         content.innerHTML = `
+
           <div class="card">
 
             <div class="error">
+
               <h3>Imeshindikana kupata taarifa</h3>
 
               <p>
@@ -440,6 +467,7 @@
               <p>
                 Tafadhali jaribu tena.
               </p>
+
             </div>
 
             <a
@@ -450,6 +478,7 @@
             </a>
 
           </div>
+
         `;
       }
     }
