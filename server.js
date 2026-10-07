@@ -23,61 +23,29 @@ const pool = new Pool({
    BODY PARSERS
 ========================================================= */
 
-app.use(express.json({ limit: '5mb' }));
-app.use(express.urlencoded({ extended: true, limit: '5mb' }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 /* =========================================================
-   STATIC WEBSITE FILES
+   STATIC FILES
 ========================================================= */
 
-/*
-  Kwanza tunaserve files zilizo ndani ya /public
-*/
-app.use(
-  express.static(
-    path.join(__dirname, 'public')
-  )
-);
+// Files ndani ya /public
+app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-  MUHIMU:
-  HTML files ambazo ziko ROOT ya project pia zitaonekana.
-
-  Mfano:
-    /application-form.html
-    /schools-public.html
-    /school-details.html
-    /admin-schools.html
-
-  Hii ndiyo sehemu inayorekebisha tatizo la
-  "Page haipo" kwa application-form.html.
-*/
-
+// Files zilizo root ya project
 app.get('/:file.html', (req, res, next) => {
+  const fileName = String(req.params.file || '').trim();
 
-  const fileName =
-    String(req.params.file || '').trim();
-
-  /*
-    Ruhusu majina salama ya HTML tu.
-  */
   if (!/^[a-zA-Z0-9_-]+$/.test(fileName)) {
     return next();
   }
 
-  const rootFile = path.join(
-    __dirname,
-    `${fileName}.html`
-  );
+  const rootFile = path.join(__dirname, `${fileName}.html`);
 
-  res.sendFile(
-    rootFile,
-    err => {
-      if (err) {
-        return next();
-      }
-    }
-  );
+  res.sendFile(rootFile, err => {
+    if (err) return next();
+  });
 });
 
 /* =========================================================
@@ -105,24 +73,29 @@ function randomHex(bytes = 4) {
 }
 
 function generateApplicationNumber() {
-  return `SPT-${new Date().getFullYear()}-${Date.now()}-${randomHex(2)}`;
+  return `SPT-${new Date().getFullYear()}-${Date.now()}-${randomHex(3)}`;
 }
 
 function generatePaymentReference() {
-  return `PAY-${new Date().getFullYear()}-${Date.now()}-${randomHex(2)}`;
+  return `PAY-${new Date().getFullYear()}-${Date.now()}-${randomHex(3)}`;
 }
 
 function generateToken() {
-  return crypto
-    .randomBytes(32)
-    .toString('hex');
+  return crypto.randomBytes(32).toString('hex');
 }
 
-function toBoolean(
-  value,
-  defaultValue = false
-) {
+function getBearerToken(req) {
+  return String(req.headers.authorization || '')
+    .replace(/^Bearer\s+/i, '')
+    .trim();
+}
 
+async function q(sql, params = []) {
+  const result = await pool.query(sql, params);
+  return result.rows;
+}
+
+function toBoolean(value, defaultValue = false) {
   if (
     value === undefined ||
     value === null ||
@@ -135,24 +108,14 @@ function toBoolean(
     return value;
   }
 
-  if (typeof value === 'string') {
+  const v = String(value).trim().toLowerCase();
 
-    const v =
-      value.trim().toLowerCase();
+  if (['true', '1', 'yes', 'on'].includes(v)) {
+    return true;
+  }
 
-    if (
-      ['true', '1', 'yes', 'on']
-        .includes(v)
-    ) {
-      return true;
-    }
-
-    if (
-      ['false', '0', 'no', 'off']
-        .includes(v)
-    ) {
-      return false;
-    }
+  if (['false', '0', 'no', 'off'].includes(v)) {
+    return false;
   }
 
   return Boolean(value);
@@ -172,7 +135,6 @@ const ALLOWED_CUSTOM_FIELD_TYPES = [
 ];
 
 function normalizeFieldKey(value) {
-
   return String(value || '')
     .trim()
     .toLowerCase()
@@ -183,135 +145,99 @@ function normalizeFieldKey(value) {
 }
 
 function normalizeOptions(options) {
-
   if (!Array.isArray(options)) {
     return [];
   }
 
   return options
     .map(item => {
-
-      if (
-        item &&
-        typeof item === 'object'
-      ) {
-
+      if (item && typeof item === 'object') {
         return {
-          value:
-            String(
-              item.value ?? ''
-            ).trim(),
-
-          label:
-            String(
-              item.label ??
-              item.value ??
-              ''
-            ).trim()
+          value: String(item.value ?? '').trim(),
+          label: String(
+            item.label ?? item.value ?? ''
+          ).trim()
         };
       }
 
       return {
-        value:
-          String(item ?? '').trim(),
-
-        label:
-          String(item ?? '').trim()
+        value: String(item ?? '').trim(),
+        label: String(item ?? '').trim()
       };
     })
-    .filter(
-      item =>
-        item.value &&
-        item.label
-    )
+    .filter(x => x.value && x.label)
     .slice(0, 100);
 }
 
-async function q(
-  text,
-  params = []
-) {
+function cleanCustomData(raw) {
+  if (
+    !raw ||
+    typeof raw !== 'object' ||
+    Array.isArray(raw)
+  ) {
+    return {};
+  }
 
-  const result =
-    await pool.query(
-      text,
-      params
-    );
+  const result = {};
 
-  return result.rows;
-}
+  for (const [key, value] of Object.entries(raw)) {
+    const safeKey = normalizeFieldKey(key);
 
-function getBearerToken(req) {
+    if (!safeKey) continue;
 
-  return String(
-    req.headers.authorization || ''
-  )
-    .replace(
-      /^Bearer\s+/i,
-      ''
-    )
-    .trim();
+    if (typeof value === 'string') {
+      result[safeKey] = value.trim();
+    } else if (Array.isArray(value)) {
+      result[safeKey] = value.map(v => String(v));
+    } else if (
+      typeof value === 'number' ||
+      typeof value === 'boolean' ||
+      value === null
+    ) {
+      result[safeKey] = value;
+    }
+  }
+
+  return result;
 }
 
 /* =========================================================
-   AUTH MIDDLEWARE
+   AUTH
 ========================================================= */
 
-function schoolAdmin(
-  req,
-  res,
-  next
-) {
-
-  const token =
-    getBearerToken(req);
-
-  const session =
-    sessions.get(token);
-
-  if (
-    !session ||
-    session.role !== 'school_admin'
-  ) {
-
-    return res.status(401).json({
-      success: false,
-      message:
-        'Login ya Admin wa Shule inahitajika'
-    });
-  }
-
-  req.auth = session;
-
-  next();
-}
-
-function mainAdmin(
-  req,
-  res,
-  next
-) {
-
-  const token =
-    getBearerToken(req);
-
-  const session =
-    sessions.get(token);
+function mainAdmin(req, res, next) {
+  const token = getBearerToken(req);
+  const session = sessions.get(token);
 
   if (
     !session ||
     session.role !== 'main_admin'
   ) {
-
     return res.status(401).json({
       success: false,
-      message:
-        'Login ya Admin Mkuu inahitajika'
+      message: 'Login ya Admin Mkuu inahitajika'
     });
   }
 
   req.auth = session;
+  next();
+}
 
+function schoolAdmin(req, res, next) {
+  const token = getBearerToken(req);
+  const session = sessions.get(token);
+
+  if (
+    !session ||
+    session.role !== 'school_admin'
+  ) {
+    return res.status(401).json({
+      success: false,
+      message: 'Login ya Admin wa Shule inahitajika'
+    });
+  }
+
+  req.auth = session;
   next();
 }
 
@@ -353,29 +279,23 @@ async function initializeDatabase() {
       application_number TEXT UNIQUE NOT NULL,
       school_id INT REFERENCES schools(id),
       form_id INT,
-
       applicant_name TEXT,
       applicant_gender TEXT,
       applicant_date_of_birth DATE,
-
       parent_name TEXT,
       parent_phone TEXT,
       parent_email TEXT,
       address TEXT,
-
       status TEXT DEFAULT 'Inasubiri',
       payment_status TEXT DEFAULT 'pending',
-
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW(),
-
       student_name TEXT,
       gender TEXT,
       date_of_birth DATE,
       class_level TEXT,
       phone TEXT,
       email TEXT,
-
       custom_data JSONB NOT NULL DEFAULT '{}'::jsonb
     )
   `);
@@ -424,364 +344,123 @@ async function initializeDatabase() {
     )
   `);
 
-  /* =======================================================
-     SCHOOL MIGRATIONS
-  ======================================================= */
-
-  const schoolMigrations = [
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS custom_data
-     JSONB NOT NULL DEFAULT '{}'::jsonb`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS payment_provider TEXT`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS payment_account_id TEXT`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS payment_account_status
-     TEXT DEFAULT 'pending'`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS commission_type
-     TEXT DEFAULT 'percent'`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS commission_value
-     NUMERIC(12,2) DEFAULT 0`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS application_start DATE`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS application_end DATE`,
-
-    `ALTER TABLE schools
-     ADD COLUMN IF NOT EXISTS updated_at
-     TIMESTAMPTZ DEFAULT NOW()`
-  ];
-
-  for (
-    const sql of schoolMigrations
-  ) {
-    await q(sql);
-  }
-
-  /* =======================================================
-     APPLICATION MIGRATIONS
-  ======================================================= */
-
-  const applicationMigrations = [
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS form_id INT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS applicant_name TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS applicant_gender TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS applicant_date_of_birth DATE`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS parent_name TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS parent_phone TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS parent_email TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS address TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS status
-     TEXT DEFAULT 'Inasubiri'`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS payment_status
-     TEXT DEFAULT 'pending'`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS created_at
-     TIMESTAMPTZ DEFAULT NOW()`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS updated_at
-     TIMESTAMPTZ DEFAULT NOW()`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS student_name TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS gender TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS date_of_birth DATE`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS class_level TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS phone TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS email TEXT`,
-
-    `ALTER TABLE applications
-     ADD COLUMN IF NOT EXISTS custom_data
-     JSONB NOT NULL DEFAULT '{}'::jsonb`
-  ];
-
-  for (
-    const sql of applicationMigrations
-  ) {
-    await q(sql);
-  }
-
-  /* =======================================================
-     PAYMENT MIGRATIONS
-  ======================================================= */
-
-  const paymentMigrations = [
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS application_number TEXT`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS amount
-     NUMERIC(12,2) DEFAULT 0`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS status
-     TEXT DEFAULT 'pending'`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS payment_method TEXT`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS transaction_reference TEXT`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS provider TEXT`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS school_id INT`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS provider_account_id TEXT`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS commission_amount
-     NUMERIC(12,2) DEFAULT 0`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS school_amount
-     NUMERIC(12,2) DEFAULT 0`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS webhook_event_id TEXT`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS created_at
-     TIMESTAMPTZ DEFAULT NOW()`,
-
-    `ALTER TABLE payments
-     ADD COLUMN IF NOT EXISTS updated_at
-     TIMESTAMPTZ DEFAULT NOW()`
-  ];
-
-  for (
-    const sql of paymentMigrations
-  ) {
-    await q(sql);
-  }
-
-  /* =======================================================
-     CUSTOM FIELD BUILDER
-  ======================================================= */
-
   await q(`
     CREATE TABLE IF NOT EXISTS school_custom_fields (
       id BIGSERIAL PRIMARY KEY,
-
       school_id INTEGER NOT NULL
         REFERENCES schools(id)
         ON DELETE CASCADE,
-
       field_key VARCHAR(100) NOT NULL,
       field_label VARCHAR(255) NOT NULL,
-
-      field_type VARCHAR(50)
-        NOT NULL DEFAULT 'text',
-
+      field_type VARCHAR(50) NOT NULL DEFAULT 'text',
       placeholder TEXT,
-
-      options JSONB
-        NOT NULL DEFAULT '[]'::jsonb,
-
-      is_required BOOLEAN
-        NOT NULL DEFAULT FALSE,
-
-      is_visible BOOLEAN
-        NOT NULL DEFAULT TRUE,
-
-      show_on_public BOOLEAN
-        NOT NULL DEFAULT TRUE,
-
-      sort_order INTEGER
-        NOT NULL DEFAULT 0,
-
-      created_at TIMESTAMP
-        NOT NULL DEFAULT NOW(),
-
-      updated_at TIMESTAMP
-        NOT NULL DEFAULT NOW(),
-
+      options JSONB NOT NULL DEFAULT '[]'::jsonb,
+      is_required BOOLEAN NOT NULL DEFAULT FALSE,
+      is_visible BOOLEAN NOT NULL DEFAULT TRUE,
+      show_on_public BOOLEAN NOT NULL DEFAULT TRUE,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
       CONSTRAINT unique_school_custom_field_key
         UNIQUE (school_id, field_key)
     )
   `);
 
-  await q(`
-    CREATE INDEX IF NOT EXISTS
-    idx_school_custom_fields_school
-    ON school_custom_fields(school_id)
-  `);
+  /* =======================================================
+     SAFE MIGRATIONS
+  ======================================================= */
+
+  const migrations = [
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS custom_data JSONB NOT NULL DEFAULT '{}'::jsonb`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS payment_provider TEXT`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS payment_account_id TEXT`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS payment_account_status TEXT DEFAULT 'pending'`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS commission_type TEXT DEFAULT 'percent'`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS commission_value NUMERIC(12,2) DEFAULT 0`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS application_start DATE`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS application_end DATE`,
+    `ALTER TABLE schools ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()`,
+
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS form_id INT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS applicant_name TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS applicant_gender TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS applicant_date_of_birth DATE`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS parent_name TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS parent_phone TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS parent_email TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS address TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'Inasubiri'`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS payment_status TEXT DEFAULT 'pending'`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW()`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS student_name TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS gender TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS date_of_birth DATE`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS class_level TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS phone TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS email TEXT`,
+    `ALTER TABLE applications ADD COLUMN IF NOT EXISTS custom_data JSONB NOT NULL DEFAULT '{}'::jsonb`,
+
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS application_number TEXT`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS amount NUMERIC(12,2) DEFAULT 0`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending'`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS payment_method TEXT`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS transaction_reference TEXT`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS provider TEXT`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS school_id INT`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS provider_account_id TEXT`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS commission_amount NUMERIC(12,2) DEFAULT 0`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS school_amount NUMERIC(12,2) DEFAULT 0`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS webhook_event_id TEXT`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW()`,
+    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()`
+  ];
+
+  for (const sql of migrations) {
+    await q(sql);
+  }
+
+  /* =======================================================
+     INDEXES
+  ======================================================= */
 
   await q(`
-    CREATE INDEX IF NOT EXISTS
-    idx_school_custom_fields_order
-    ON school_custom_fields(
-      school_id,
-      sort_order
-    )
-  `);
-
-  await q(`
-    CREATE INDEX IF NOT EXISTS
-    idx_school_custom_fields_options
-    ON school_custom_fields
-    USING GIN(options)
-  `);
-
-  await q(`
-    CREATE INDEX IF NOT EXISTS
-    idx_applications_school
+    CREATE INDEX IF NOT EXISTS idx_applications_school
     ON applications(school_id)
   `);
 
   await q(`
-    CREATE INDEX IF NOT EXISTS
-    idx_applications_number
+    CREATE INDEX IF NOT EXISTS idx_applications_number
     ON applications(application_number)
   `);
 
   await q(`
-    CREATE INDEX IF NOT EXISTS
-    idx_payments_school
+    CREATE INDEX IF NOT EXISTS idx_payments_school
     ON payments(school_id)
   `);
 
   await q(`
-    CREATE INDEX IF NOT EXISTS
-    idx_payments_application
+    CREATE INDEX IF NOT EXISTS idx_payments_application
     ON payments(application_id)
   `);
 
-  /* =======================================================
-     BACKFILL
-  ======================================================= */
-
   await q(`
-    UPDATE applications
-    SET
-      student_name =
-        COALESCE(
-          student_name,
-          applicant_name
-        ),
-
-      applicant_name =
-        COALESCE(
-          applicant_name,
-          student_name
-        ),
-
-      gender =
-        COALESCE(
-          gender,
-          applicant_gender
-        ),
-
-      applicant_gender =
-        COALESCE(
-          applicant_gender,
-          gender
-        ),
-
-      date_of_birth =
-        COALESCE(
-          date_of_birth,
-          applicant_date_of_birth
-        ),
-
-      applicant_date_of_birth =
-        COALESCE(
-          applicant_date_of_birth,
-          date_of_birth
-        ),
-
-      status =
-        COALESCE(
-          status,
-          'Inasubiri'
-        ),
-
-      payment_status =
-        COALESCE(
-          payment_status,
-          'pending'
-        ),
-
-      updated_at =
-        COALESCE(
-          updated_at,
-          NOW()
-        )
-
-    WHERE
-      student_name IS NULL
-      OR applicant_name IS NULL
-      OR gender IS NULL
-      OR applicant_gender IS NULL
-      OR date_of_birth IS NULL
-      OR applicant_date_of_birth IS NULL
-      OR status IS NULL
-      OR payment_status IS NULL
+    CREATE INDEX IF NOT EXISTS idx_custom_fields_school
+    ON school_custom_fields(school_id)
   `);
 
   /* =======================================================
-     DEMO SCHOOLS ONLY IF EMPTY
+     DEMO SCHOOLS
   ======================================================= */
 
-  const schoolCount =
-    Number(
-      (
-        await q(`
-          SELECT COUNT(*)::int AS count
-          FROM schools
-        `)
-      )[0].count
-    );
+  const schoolCount = Number(
+    (await q(`
+      SELECT COUNT(*)::int AS count
+      FROM schools
+    `))[0].count
+  );
 
   if (schoolCount === 0) {
-
     await q(`
       INSERT INTO schools
       (
@@ -836,30 +515,24 @@ async function initializeDatabase() {
     `);
   }
 
-  const adminCount =
-    Number(
-      (
-        await q(`
-          SELECT COUNT(*)::int AS count
-          FROM school_admins
-        `)
-      )[0].count
-    );
+  const adminCount = Number(
+    (await q(`
+      SELECT COUNT(*)::int AS count
+      FROM school_admins
+    `))[0].count
+  );
 
   if (adminCount === 0) {
-
-    const school =
-      (
-        await q(`
-          SELECT id
-          FROM schools
-          ORDER BY id
-          LIMIT 1
-        `)
-      )[0];
+    const school = (
+      await q(`
+        SELECT id
+        FROM schools
+        ORDER BY id
+        LIMIT 1
+      `)
+    )[0];
 
     if (school) {
-
       await q(`
         INSERT INTO school_admins
         (
@@ -869,8 +542,7 @@ async function initializeDatabase() {
           password_hash,
           active
         )
-        VALUES
-        ($1,$2,$3,$4,true)
+        VALUES ($1,$2,$3,$4,true)
       `, [
         school.id,
         'Imanuel',
@@ -882,25 +554,23 @@ async function initializeDatabase() {
 }
 
 /* =========================================================
-   CUSTOM FIELD HELPERS
+   CUSTOM FIELD FUNCTIONS
 ========================================================= */
 
 async function getSchoolCustomFields(
   schoolId,
   publicOnly = false
 ) {
-
-  const where =
-    publicOnly
-      ? `
-        WHERE
-          school_id=$1
-          AND is_visible=true
-          AND show_on_public=true
-      `
-      : `
-        WHERE school_id=$1
-      `;
+  const where = publicOnly
+    ? `
+      WHERE
+        school_id=$1
+        AND is_visible=true
+        AND show_on_public=true
+    `
+    : `
+      WHERE school_id=$1
+    `;
 
   return q(`
     SELECT
@@ -917,92 +587,18 @@ async function getSchoolCustomFields(
       sort_order,
       created_at,
       updated_at
-
     FROM school_custom_fields
-
     ${where}
-
-    ORDER BY
-      sort_order ASC,
-      id ASC
-  `, [
-    schoolId
-  ]);
+    ORDER BY sort_order ASC, id ASC
+  `, [schoolId]);
 }
 
-function cleanCustomData(raw) {
-
-  if (
-    !raw ||
-    typeof raw !== 'object' ||
-    Array.isArray(raw)
-  ) {
-    return {};
-  }
-
-  const result = {};
-
-  for (
-    const [key, value]
-    of Object.entries(raw)
-  ) {
-
-    const safeKey =
-      normalizeFieldKey(key);
-
-    if (!safeKey) {
-      continue;
-    }
-
-    if (
-      typeof value === 'string'
-    ) {
-
-      result[safeKey] =
-        value.trim();
-
-    } else if (
-      Array.isArray(value)
-    ) {
-
-      result[safeKey] =
-        value.map(v =>
-          String(v)
-        );
-
-    } else if (
-      typeof value === 'number' ||
-      typeof value === 'boolean' ||
-      value === null
-    ) {
-
-      result[safeKey] =
-        value;
-    }
-  }
-
-  return result;
-}
-
-function validateCustomData(
-  fields,
-  rawData
-) {
-
-  const data =
-    cleanCustomData(rawData);
-
+function validateCustomData(fields, rawData) {
+  const data = cleanCustomData(rawData);
   const errors = [];
 
-  for (
-    const field of fields
-  ) {
-
-    const key =
-      field.field_key;
-
-    const value =
-      data[key];
+  for (const field of fields) {
+    const value = data[field.field_key];
 
     const empty =
       value === undefined ||
@@ -1013,190 +609,115 @@ function validateCustomData(
         value.length === 0
       );
 
-    if (
-      field.is_required &&
-      empty
-    ) {
+    if (field.is_required && empty) {
+      errors.push(`Jaza: ${field.field_label}`);
+      continue;
+    }
 
-      errors.push(
-        `Jaza: ${field.field_label}`
+    if (empty) continue;
+
+    if (
+      ['dropdown', 'radio'].includes(field.field_type)
+    ) {
+      const allowed = new Set(
+        (Array.isArray(field.options)
+          ? field.options
+          : []
+        ).map(o => String(o.value ?? o))
       );
 
-      continue;
-    }
-
-    if (empty) {
-      continue;
-    }
-
-    if (
-      ['dropdown', 'radio']
-        .includes(
-          field.field_type
-        )
-    ) {
-
-      const allowed =
-        new Set(
-          (
-            Array.isArray(
-              field.options
-            )
-              ? field.options
-              : []
-          ).map(
-            o =>
-              String(
-                o.value ?? o
-              )
-          )
-        );
-
-      if (
-        !allowed.has(
-          String(value)
-        )
-      ) {
-
+      if (!allowed.has(String(value))) {
         errors.push(
           `Chaguo si sahihi kwa: ${field.field_label}`
         );
       }
     }
-
-    if (
-      field.field_type === 'checkbox' &&
-      !Array.isArray(value) &&
-      typeof value !== 'boolean'
-    ) {
-
-      errors.push(
-        `Taarifa si sahihi kwa: ${field.field_label}`
-      );
-    }
   }
 
-  return {
-    data,
-    errors
-  };
+  return { data, errors };
 }
 
 /* =========================================================
-   BASIC API
+   BASIC
 ========================================================= */
 
-app.get(
-  '/api/status',
-  (req, res) => {
+app.get('/api/status', (req, res) => {
+  res.json({
+    success: true,
+    app: 'Shule Portal Tanzania',
+    status: 'online',
+    time: new Date().toISOString()
+  });
+});
+
+app.get('/api/database-check', async (req, res) => {
+  try {
+    await q('SELECT 1');
 
     res.json({
       success: true,
-      app: 'Shule Portal Tanzania',
-      status: 'online',
-      time:
-        new Date().toISOString()
+      database: 'connected'
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      database: 'error',
+      message: e.message
     });
   }
-);
-
-app.get(
-  '/api/database-check',
-  async (req, res) => {
-
-    try {
-
-      await q(
-        'SELECT 1'
-      );
-
-      res.json({
-        success: true,
-        database: 'connected'
-      });
-
-    } catch (e) {
-
-      res.status(500).json({
-        success: false,
-        database: 'error',
-        message: e.message
-      });
-    }
-  }
-);
+});
 
 /* =========================================================
    PUBLIC SCHOOLS
 ========================================================= */
 
-app.get(
-  '/api/schools',
-  async (req, res) => {
+app.get('/api/schools', async (req, res) => {
+  try {
+    const schools = await q(`
+      SELECT *
+      FROM schools
+      WHERE status='active'
+      ORDER BY id DESC
+    `);
 
-    try {
+    res.json({
+      success: true,
+      schools
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: e.message
+    });
+  }
+});
 
-      const rows =
-        await q(`
-          SELECT *
-          FROM schools
-          WHERE status='active'
-          ORDER BY id DESC
-        `);
+app.get('/api/schools/:id', async (req, res) => {
+  try {
+    const schools = await q(`
+      SELECT *
+      FROM schools
+      WHERE id=$1
+    `, [req.params.id]);
 
-      res.json({
-        success: true,
-        schools: rows
-      });
-
-    } catch (e) {
-
-      res.status(500).json({
+    if (!schools[0]) {
+      return res.status(404).json({
         success: false,
-        message: e.message
+        message: 'Shule haipo'
       });
     }
+
+    res.json({
+      success: true,
+      school: schools[0]
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: e.message
+    });
   }
-);
-
-app.get(
-  '/api/schools/:id',
-  async (req, res) => {
-
-    try {
-
-      const rows =
-        await q(`
-          SELECT *
-          FROM schools
-          WHERE id=$1
-        `, [
-          req.params.id
-        ]);
-
-      if (!rows[0]) {
-
-        return res.status(404).json({
-          success: false,
-          message:
-            'Shule haipo'
-        });
-      }
-
-      res.json({
-        success: true,
-        school: rows[0]
-      });
-
-    } catch (e) {
-
-      res.status(500).json({
-        success: false,
-        message: e.message
-      });
-    }
-  }
-);
+});
 
 /* =========================================================
    PUBLIC CUSTOM FIELDS
@@ -1205,26 +726,19 @@ app.get(
 app.get(
   '/api/schools/:id/custom-fields',
   async (req, res) => {
-
     try {
-
-      const school =
-        (
-          await q(`
-            SELECT id,status
-            FROM schools
-            WHERE id=$1
-          `, [
-            req.params.id
-          ])
-        )[0];
+      const school = (
+        await q(`
+          SELECT id,status
+          FROM schools
+          WHERE id=$1
+        `, [req.params.id])
+      )[0];
 
       if (!school) {
-
         return res.status(404).json({
           success: false,
-          message:
-            'Shule haipo'
+          message: 'Shule haipo'
         });
       }
 
@@ -1238,9 +752,7 @@ app.get(
         success: true,
         fields
       });
-
     } catch (e) {
-
       res.status(500).json({
         success: false,
         message: e.message
@@ -1253,110 +765,1962 @@ app.get(
    CREATE APPLICATION
 ========================================================= */
 
-app.post(
-  '/api/applications',
-  async (req, res) => {
+app.post('/api/applications', async (req, res) => {
+  const client = await pool.connect();
 
-    const client =
-      await pool.connect();
+  try {
+    const b = req.body || {};
 
+    const schoolId = Number(b.school_id);
+
+    const studentName =
+      String(b.student_name || '').trim();
+
+    const gender =
+      String(b.gender || '').trim() || null;
+
+    const dateOfBirth =
+      b.date_of_birth || null;
+
+    const classApplied =
+      String(b.class_applied || '').trim() || null;
+
+    const parentName =
+      String(b.parent_name || '').trim();
+
+    const parentPhone =
+      String(b.parent_phone || '').trim();
+
+    const parentEmail =
+      String(b.parent_email || '').trim() || null;
+
+    const address =
+      String(b.address || '').trim() || null;
+
+    const formId =
+      b.form_id ? Number(b.form_id) : null;
+
+    if (
+      !schoolId ||
+      !studentName ||
+      !parentName ||
+      !parentPhone
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'Jaza taarifa muhimu: shule, jina la mwanafunzi, jina la mzazi na simu ya mzazi.'
+      });
+    }
+
+    await client.query('BEGIN');
+
+    const schoolResult =
+      await client.query(`
+        SELECT *
+        FROM schools
+        WHERE id=$1
+        AND status='active'
+        FOR SHARE
+      `, [schoolId]);
+
+    const school = schoolResult.rows[0];
+
+    if (!school) {
+      await client.query('ROLLBACK');
+
+      return res.status(404).json({
+        success: false,
+        message:
+          'Shule haipatikani au haijawa live.'
+      });
+    }
+
+    const fields =
+      await getSchoolCustomFields(
+        schoolId,
+        true
+      );
+
+    const validation =
+      validateCustomData(
+        fields,
+        b.custom_data
+      );
+
+    if (validation.errors.length) {
+      await client.query('ROLLBACK');
+
+      return res.status(400).json({
+        success: false,
+        message:
+          validation.errors.join(', '),
+        errors:
+          validation.errors
+      });
+    }
+
+    let applicationNumber =
+      generateApplicationNumber();
+
+    let exists = await client.query(`
+      SELECT id
+      FROM applications
+      WHERE application_number=$1
+    `, [applicationNumber]);
+
+    while (exists.rows[0]) {
+      applicationNumber =
+        generateApplicationNumber();
+
+      exists = await client.query(`
+        SELECT id
+        FROM applications
+        WHERE application_number=$1
+      `, [applicationNumber]);
+    }
+
+    const insert =
+      await client.query(`
+        INSERT INTO applications
+        (
+          application_number,
+          school_id,
+          form_id,
+
+          applicant_name,
+          applicant_gender,
+          applicant_date_of_birth,
+
+          parent_name,
+          parent_phone,
+          parent_email,
+          address,
+
+          status,
+          payment_status,
+
+          student_name,
+          gender,
+          date_of_birth,
+          class_level,
+          phone,
+          email,
+
+          custom_data
+        )
+        VALUES
+        (
+          $1,$2,$3,
+          $4,$5,$6,
+          $7,$8,$9,$10,
+          'Inasubiri',
+          'pending',
+          $4,$5,$6,$11,$8,$9,
+          $12
+        )
+        RETURNING *
+      `, [
+        applicationNumber,
+        schoolId,
+        formId,
+
+        studentName,
+        gender,
+        dateOfBirth,
+
+        parentName,
+        parentPhone,
+        parentEmail,
+        address,
+
+        classApplied,
+        validation.data
+      ]);
+
+    const application =
+      insert.rows[0];
+
+    const amount =
+      Number(school.form_price || 0);
+
+    const paymentReference =
+      generatePaymentReference();
+
+    const commissionType =
+      school.commission_type || 'percent';
+
+    const commissionValue =
+      Number(school.commission_value || 0);
+
+    let commission = 0;
+
+    if (commissionType === 'fixed') {
+      commission = commissionValue;
+    } else {
+      commission =
+        amount * commissionValue / 100;
+    }
+
+    const schoolAmount =
+      Math.max(
+        0,
+        amount - commission
+      );
+
+    await client.query(`
+      INSERT INTO payments
+      (
+        application_id,
+        application_number,
+        payment_reference,
+        amount,
+        status,
+        provider,
+        school_id,
+        provider_account_id,
+        commission_amount,
+        school_amount
+      )
+      VALUES
+      (
+        $1,$2,$3,$4,
+        'pending',
+        $5,$6,$7,$8,$9
+      )
+    `, [
+      application.id,
+      applicationNumber,
+      paymentReference,
+      amount,
+      school.payment_provider || null,
+      schoolId,
+      school.payment_account_id || null,
+      commission,
+      schoolAmount
+    ]);
+
+    await client.query('COMMIT');
+
+    res.status(201).json({
+      success: true,
+      message:
+        'Maombi yamepokelewa kikamilifu.',
+      application,
+      application_number:
+        applicationNumber,
+      payment_reference:
+        paymentReference,
+      amount
+    });
+
+  } catch (e) {
     try {
+      await client.query('ROLLBACK');
+    } catch (_) {}
 
-      const b =
-        req.body || {};
+    console.error(
+      'CREATE APPLICATION ERROR:',
+      e
+    );
 
-      const schoolId =
-        Number(
-          b.school_id
-        );
+    res.status(500).json({
+      success: false,
+      message:
+        'Imeshindikana kutengeneza maombi.',
+      error: e.message
+    });
 
-      const studentName =
-        String(
-          b.student_name || ''
-        ).trim();
+  } finally {
+    client.release();
+  }
+});
 
-      const gender =
-        String(
-          b.gender || ''
-        ).trim() || null;
+/* =========================================================
+   APPLICATION LOOKUP
+========================================================= */
 
-      const dateOfBirth =
-        b.date_of_birth || null;
+app.get(
+  '/api/application-by-number/:applicationNumber',
+  async (req, res) => {
+    try {
+      const application =
+        (
+          await q(`
+            SELECT
+              a.*,
+              s.name AS school_name,
+              s.region,
+              s.district,
+              s.form_price
+            FROM applications a
+            LEFT JOIN schools s
+              ON s.id=a.school_id
+            WHERE
+              a.application_number=$1
+          `, [
+            req.params.applicationNumber
+          ])
+        )[0];
 
-      const classApplied =
-        String(
-          b.class_applied || ''
-        ).trim() || null;
-
-      const parentName =
-        String(
-          b.parent_name || ''
-        ).trim();
-
-      const parentPhone =
-        String(
-          b.parent_phone || ''
-        ).trim();
-
-      const parentEmail =
-        String(
-          b.parent_email || ''
-        ).trim() || null;
-
-      const address =
-        String(
-          b.address || ''
-        ).trim() || null;
-
-      const formId =
-        b.form_id
-          ? Number(b.form_id)
-          : null;
-
-      if (
-        !schoolId ||
-        !studentName ||
-        !parentName ||
-        !parentPhone
-      ) {
-
-        return res.status(400).json({
+      if (!application) {
+        return res.status(404).json({
           success: false,
           message:
-            'Jaza taarifa muhimu: shule, jina la mwanafunzi, jina la mzazi na simu ya mzazi.'
+            'Application haijapatikana.'
         });
       }
 
-      await client.query(
-        'BEGIN'
-      );
-
-      const schoolResult =
-        await client.query(`
+      const payments =
+        await q(`
           SELECT *
-          FROM schools
-          WHERE id=$1
-          AND status='active'
-          FOR SHARE
+          FROM payments
+          WHERE application_number=$1
+          ORDER BY id DESC
         `, [
-          schoolId
+          req.params.applicationNumber
         ]);
 
-      const school =
-        schoolResult.rows[0];
+      res.json({
+        success: true,
+        application,
+        payments
+      });
 
-      if (!school) {
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
 
-        await client.query(
-          'ROLLBACK'
-        );
+/* =========================================================
+   PAYMENT LOOKUP
+========================================================= */
+
+app.get(
+  '/api/payments/:reference',
+  async (req, res) => {
+    try {
+      const payment =
+        (
+          await q(`
+            SELECT
+              p.*,
+              s.name AS school_name
+            FROM payments p
+            LEFT JOIN schools s
+              ON s.id=p.school_id
+            WHERE p.payment_reference=$1
+          `, [
+            req.params.reference
+          ])
+        )[0];
+
+      if (!payment) {
+        return res.status(404).json({
+          success: false,
+          message:
+            'Payment haijapatikana.'
+        });
+      }
+
+      res.json({
+        success: true,
+        payment
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   TEST PAYMENT CONFIRMATION
+========================================================= */
+
+app.put(
+  '/api/payments/:reference/confirm',
+  async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      const payment =
+        (
+          await client.query(`
+            SELECT *
+            FROM payments
+            WHERE payment_reference=$1
+            FOR UPDATE
+          `, [
+            req.params.reference
+          ])
+        ).rows[0];
+
+      if (!payment) {
+        await client.query('ROLLBACK');
 
         return res.status(404).json({
           success: false,
           message:
-            'Shule haipatikani au haijawa live.'
+            'Payment haijapatikana.'
         });
       }
 
-      const fieldResult =
-        await client
+      const transactionReference =
+        String(
+          req.body.transaction_reference ||
+          `TEST-${Date.now()}`
+        ).trim();
+
+      await client.query(`
+        UPDATE payments
+        SET
+          status='paid',
+          transaction_reference=$1,
+          payment_method=$2,
+          updated_at=NOW()
+        WHERE id=$3
+      `, [
+        transactionReference,
+        req.body.payment_method || 'test',
+        payment.id
+      ]);
+
+      await client.query(`
+        UPDATE applications
+        SET
+          payment_status='paid',
+          status='Imelipiwa',
+          updated_at=NOW()
+        WHERE id=$1
+      `, [
+        payment.application_id
+      ]);
+
+      await client.query('COMMIT');
+
+      res.json({
+        success: true,
+        message:
+          'Malipo yamethibitishwa.',
+        payment_reference:
+          payment.payment_reference,
+        transaction_reference:
+          transactionReference
+      });
+
+    } catch (e) {
+      try {
+        await client.query('ROLLBACK');
+      } catch (_) {}
+
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    } finally {
+      client.release();
+    }
+  }
+);
+
+/* =========================================================
+   PAYMENT WEBHOOK
+========================================================= */
+
+app.post(
+  '/api/payments/webhook',
+  async (req, res) => {
+    try {
+      const body = req.body || {};
+
+      const reference =
+        body.payment_reference ||
+        body.reference ||
+        body.order_id;
+
+      const status =
+        String(
+          body.status || ''
+        ).toLowerCase();
+
+      if (!reference) {
+        return res.status(400).json({
+          success: false,
+          message:
+            'Payment reference haipo.'
+        });
+      }
+
+      const payment =
+        (
+          await q(`
+            SELECT *
+            FROM payments
+            WHERE payment_reference=$1
+          `, [reference])
+        )[0];
+
+      if (!payment) {
+        return res.status(404).json({
+          success: false,
+          message:
+            'Payment haijapatikana.'
+        });
+      }
+
+      const paid =
+        [
+          'paid',
+          'success',
+          'successful',
+          'completed'
+        ].includes(status);
+
+      if (paid) {
+        await q(`
+          UPDATE payments
+          SET
+            status='paid',
+            transaction_reference=$1,
+            updated_at=NOW()
+          WHERE id=$2
+        `, [
+          body.transaction_reference ||
+          body.transaction_id ||
+          null,
+          payment.id
+        ]);
+
+        await q(`
+          UPDATE applications
+          SET
+            payment_status='paid',
+            status='Imelipiwa',
+            updated_at=NOW()
+          WHERE id=$1
+        `, [
+          payment.application_id
+        ]);
+      }
+
+      res.json({
+        success: true
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   SCHOOL ADMIN LOGIN
+========================================================= */
+
+app.post(
+  '/api/school-admin/login',
+  async (req, res) => {
+    try {
+      const email =
+        String(req.body.email || '')
+          .trim()
+          .toLowerCase();
+
+      const password =
+        String(req.body.password || '');
+
+      const admin =
+        (
+          await q(`
+            SELECT *
+            FROM school_admins
+            WHERE LOWER(email)=LOWER($1)
+            AND active=true
+          `, [email])
+        )[0];
+
+      if (
+        !admin ||
+        admin.password_hash !==
+          hashPassword(password)
+      ) {
+        return res.status(401).json({
+          success: false,
+          message:
+            'Email au password si sahihi.'
+        });
+      }
+
+      const token =
+        generateToken();
+
+      sessions.set(token, {
+        role: 'school_admin',
+        adminId: admin.id,
+        schoolId: admin.school_id,
+        email: admin.email,
+        createdAt: Date.now()
+      });
+
+      res.json({
+        success: true,
+        token,
+        admin: {
+          id: admin.id,
+          full_name: admin.full_name,
+          email: admin.email,
+          school_id: admin.school_id
+        }
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.get(
+  '/api/school-admin/me',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const admin =
+        (
+          await q(`
+            SELECT
+              id,
+              school_id,
+              full_name,
+              email,
+              active
+            FROM school_admins
+            WHERE id=$1
+          `, [
+            req.auth.adminId
+          ])
+        )[0];
+
+      res.json({
+        success: true,
+        admin
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/school-admin/logout',
+  schoolAdmin,
+  (req, res) => {
+    const token =
+      getBearerToken(req);
+
+    sessions.delete(token);
+
+    res.json({
+      success: true
+    });
+  }
+);
+
+/* =========================================================
+   SCHOOL ADMIN SCHOOL
+========================================================= */
+
+app.get(
+  '/api/school-admin/school',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const school =
+        (
+          await q(`
+            SELECT *
+            FROM schools
+            WHERE id=$1
+          `, [
+            req.auth.schoolId
+          ])
+        )[0];
+
+      res.json({
+        success: true,
+        school
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.put(
+  '/api/school-admin/school',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const b = req.body || {};
+
+      const school =
+        (
+          await q(`
+            UPDATE schools
+            SET
+              name=COALESCE($1,name),
+              region=COALESCE($2,region),
+              district=COALESCE($3,district),
+              school_type=COALESCE($4,school_type),
+              type=COALESCE($5,type),
+              form_price=COALESCE($6,form_price),
+              phone=COALESCE($7,phone),
+              address=COALESCE($8,address),
+              email=COALESCE($9,email),
+              application_start=COALESCE($10,application_start),
+              application_end=COALESCE($11,application_end),
+              updated_at=NOW()
+            WHERE id=$12
+            RETURNING *
+          `, [
+            b.name,
+            b.region,
+            b.district,
+            b.school_type,
+            b.type,
+            b.form_price,
+            b.phone,
+            b.address,
+            b.email,
+            b.application_start,
+            b.application_end,
+            req.auth.schoolId
+          ])
+        )[0];
+
+      res.json({
+        success: true,
+        school
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/school-admin/school/publish',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const school =
+        (
+          await q(`
+            UPDATE schools
+            SET
+              status='active',
+              updated_at=NOW()
+            WHERE id=$1
+            RETURNING *
+          `, [
+            req.auth.schoolId
+          ])
+        )[0];
+
+      res.json({
+        success: true,
+        school
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/school-admin/school/unpublish',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const school =
+        (
+          await q(`
+            UPDATE schools
+            SET
+              status='inactive',
+              updated_at=NOW()
+            WHERE id=$1
+            RETURNING *
+          `, [
+            req.auth.schoolId
+          ])
+        )[0];
+
+      res.json({
+        success: true,
+        school
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   SCHOOL ADMIN CUSTOM FIELDS
+========================================================= */
+
+app.get(
+  '/api/school-admin/custom-fields',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const fields =
+        await getSchoolCustomFields(
+          req.auth.schoolId,
+          false
+        );
+
+      res.json({
+        success: true,
+        fields
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/school-admin/custom-fields',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const b = req.body || {};
+
+      const key =
+        normalizeFieldKey(
+          b.field_key ||
+          b.field_label
+        );
+
+      const label =
+        String(
+          b.field_label || ''
+        ).trim();
+
+      const type =
+        String(
+          b.field_type || 'text'
+        ).trim();
+
+      if (!key || !label) {
+        return res.status(400).json({
+          success: false,
+          message:
+            'Field label na field key vinahitajika.'
+        });
+      }
+
+      if (
+        !ALLOWED_CUSTOM_FIELD_TYPES
+          .includes(type)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            'Field type si sahihi.'
+        });
+      }
+
+      const field =
+        (
+          await q(`
+            INSERT INTO school_custom_fields
+            (
+              school_id,
+              field_key,
+              field_label,
+              field_type,
+              placeholder,
+              options,
+              is_required,
+              is_visible,
+              show_on_public,
+              sort_order
+            )
+            VALUES
+            (
+              $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
+            )
+            RETURNING *
+          `, [
+            req.auth.schoolId,
+            key,
+            label,
+            type,
+            b.placeholder || null,
+            JSON.stringify(
+              normalizeOptions(b.options)
+            ),
+            toBoolean(b.is_required),
+            toBoolean(b.is_visible, true),
+            toBoolean(b.show_on_public, true),
+            Number(b.sort_order || 0)
+          ])
+        )[0];
+
+      res.status(201).json({
+        success: true,
+        field
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   SCHOOL ADMIN APPLICATIONS
+========================================================= */
+
+app.get(
+  '/api/school-admin/applications',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const applications =
+        await q(`
+          SELECT
+            a.*,
+            p.payment_reference,
+            p.amount,
+            p.status AS payment_record_status
+          FROM applications a
+          LEFT JOIN payments p
+            ON p.application_id=a.id
+          WHERE a.school_id=$1
+          ORDER BY a.id DESC
+        `, [
+          req.auth.schoolId
+        ]);
+
+      res.json({
+        success: true,
+        applications
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.put(
+  '/api/school-admin/applications/:id/status',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const status =
+        String(
+          req.body.status || ''
+        ).trim();
+
+      if (!status) {
+        return res.status(400).json({
+          success: false,
+          message: 'Status inahitajika.'
+        });
+      }
+
+      const application =
+        (
+          await q(`
+            UPDATE applications
+            SET
+              status=$1,
+              updated_at=NOW()
+            WHERE
+              id=$2
+              AND school_id=$3
+            RETURNING *
+          `, [
+            status,
+            req.params.id,
+            req.auth.schoolId
+          ])
+        )[0];
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message:
+            'Application haipo.'
+        });
+      }
+
+      res.json({
+        success: true,
+        application
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   SCHOOL ADMIN PAYMENTS
+========================================================= */
+
+app.get(
+  '/api/school-admin/payments',
+  schoolAdmin,
+  async (req, res) => {
+    try {
+      const payments =
+        await q(`
+          SELECT *
+          FROM payments
+          WHERE school_id=$1
+          ORDER BY id DESC
+        `, [
+          req.auth.schoolId
+        ]);
+
+      res.json({
+        success: true,
+        payments
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   MAIN ADMIN LOGIN
+========================================================= */
+
+app.post(
+  '/api/admin/login',
+  async (req, res) => {
+    try {
+      const email =
+        String(
+          req.body.email || ''
+        )
+          .trim()
+          .toLowerCase();
+
+      const password =
+        String(
+          req.body.password || ''
+        );
+
+      const adminEmail =
+        process.env.ADMIN_EMAIL ||
+        'admin@shuleportal.co.tz';
+
+      const adminPassword =
+        process.env.ADMIN_PASSWORD ||
+        'Admin@123';
+
+      if (
+        email !==
+          adminEmail.toLowerCase() ||
+        password !==
+          adminPassword
+      ) {
+        return res.status(401).json({
+          success: false,
+          message:
+            'Email au password si sahihi.'
+        });
+      }
+
+      const token =
+        generateToken();
+
+      sessions.set(token, {
+        role: 'main_admin',
+        email,
+        createdAt: Date.now()
+      });
+
+      res.json({
+        success: true,
+        token,
+        admin: {
+          email
+        }
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.get(
+  '/api/admin/me',
+  mainAdmin,
+  (req, res) => {
+    res.json({
+      success: true,
+      admin: {
+        email: req.auth.email
+      }
+    });
+  }
+);
+
+app.post(
+  '/api/admin/logout',
+  mainAdmin,
+  (req, res) => {
+    const token =
+      getBearerToken(req);
+
+    sessions.delete(token);
+
+    res.json({
+      success: true
+    });
+  }
+);
+
+/* =========================================================
+   MAIN ADMIN SCHOOLS
+========================================================= */
+
+app.get(
+  '/api/admin/schools',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const schools =
+        await q(`
+          SELECT
+            s.*,
+            (
+              SELECT COUNT(*)
+              FROM applications a
+              WHERE a.school_id=s.id
+            )::int AS applicant_count
+          FROM schools s
+          ORDER BY s.id DESC
+        `);
+
+      res.json({
+        success: true,
+        schools
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/admin/schools',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const b = req.body || {};
+
+      const school =
+        (
+          await q(`
+            INSERT INTO schools
+            (
+              name,
+              region,
+              district,
+              school_type,
+              type,
+              form_price,
+              phone,
+              address,
+              email,
+              status,
+              application_start,
+              application_end
+            )
+            VALUES
+            (
+              $1,$2,$3,$4,$5,$6,
+              $7,$8,$9,$10,$11,$12
+            )
+            RETURNING *
+          `, [
+            String(b.name || '').trim(),
+            b.region || null,
+            b.district || null,
+            b.school_type || b.type || null,
+            b.type || b.school_type || null,
+            Number(b.form_price || 0),
+            b.phone || null,
+            b.address || null,
+            b.email || null,
+            b.status || 'active',
+            b.application_start || null,
+            b.application_end || null
+          ])
+        )[0];
+
+      res.status(201).json({
+        success: true,
+        school
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.put(
+  '/api/admin/schools/:id',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const b = req.body || {};
+
+      const school =
+        (
+          await q(`
+            UPDATE schools
+            SET
+              name=COALESCE($1,name),
+              region=COALESCE($2,region),
+              district=COALESCE($3,district),
+              school_type=COALESCE($4,school_type),
+              type=COALESCE($5,type),
+              form_price=COALESCE($6,form_price),
+              phone=COALESCE($7,phone),
+              address=COALESCE($8,address),
+              email=COALESCE($9,email),
+              status=COALESCE($10,status),
+              application_start=COALESCE($11,application_start),
+              application_end=COALESCE($12,application_end),
+              updated_at=NOW()
+            WHERE id=$13
+            RETURNING *
+          `, [
+            b.name,
+            b.region,
+            b.district,
+            b.school_type,
+            b.type,
+            b.form_price !== undefined
+              ? Number(b.form_price)
+              : null,
+            b.phone,
+            b.address,
+            b.email,
+            b.status,
+            b.application_start,
+            b.application_end,
+            req.params.id
+          ])
+        )[0];
+
+      if (!school) {
+        return res.status(404).json({
+          success: false,
+          message:
+            'Shule haipo.'
+        });
+      }
+
+      res.json({
+        success: true,
+        school
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.delete(
+  '/api/admin/schools/:id',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const school =
+        (
+          await q(`
+            UPDATE schools
+            SET
+              status='inactive',
+              updated_at=NOW()
+            WHERE id=$1
+            RETURNING *
+          `, [
+            req.params.id
+          ])
+        )[0];
+
+      if (!school) {
+        return res.status(404).json({
+          success: false,
+          message:
+            'Shule haipo.'
+        });
+      }
+
+      res.json({
+        success: true,
+        school
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   MAIN ADMIN CUSTOM FIELDS
+========================================================= */
+
+app.get(
+  '/api/admin/schools/:schoolId/custom-fields',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const fields =
+        await getSchoolCustomFields(
+          req.params.schoolId,
+          false
+        );
+
+      res.json({
+        success: true,
+        fields
+      });
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/admin/schools/:schoolId/custom-fields',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const b = req.body || {};
+
+      const key =
+        normalizeFieldKey(
+          b.field_key ||
+          b.field_label
+        );
+
+      const label =
+        String(
+          b.field_label || ''
+        ).trim();
+
+      const type =
+        String(
+          b.field_type || 'text'
+        ).trim();
+
+      if (!key || !label) {
+        return res.status(400).json({
+          success: false,
+          message:
+            'Jina la kipengele na Field Key vinahitajika.'
+        });
+      }
+
+      if (
+        !ALLOWED_CUSTOM_FIELD_TYPES
+          .includes(type)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            'Aina ya field si sahihi.'
+        });
+      }
+
+      const field =
+        (
+          await q(`
+            INSERT INTO school_custom_fields
+            (
+              school_id,
+              field_key,
+              field_label,
+              field_type,
+              placeholder,
+              options,
+              is_required,
+              is_visible,
+              show_on_public,
+              sort_order
+            )
+            VALUES
+            (
+              $1,$2,$3,$4,$5,$6,
+              $7,$8,$9,$10
+            )
+            RETURNING *
+          `, [
+            req.params.schoolId,
+            key,
+            label,
+            type,
+            b.placeholder || null,
+            JSON.stringify(
+              normalizeOptions(b.options)
+            ),
+            toBoolean(b.is_required),
+            toBoolean(b.is_visible, true),
+            toBoolean(b.show_on_public, true),
+            Number(b.sort_order || 0)
+          ])
+        )[0];
+
+      res.status(201).json({
+        success: true,
+        field
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.put(
+  '/api/admin/schools/:schoolId/custom-fields/:fieldId',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const b = req.body || {};
+
+      const field =
+        (
+          await q(`
+            UPDATE school_custom_fields
+            SET
+              field_label=COALESCE($1,field_label),
+              field_key=COALESCE($2,field_key),
+              field_type=COALESCE($3,field_type),
+              placeholder=COALESCE($4,placeholder),
+              options=COALESCE($5,options),
+              is_required=COALESCE($6,is_required),
+              is_visible=COALESCE($7,is_visible),
+              show_on_public=COALESCE($8,show_on_public),
+              sort_order=COALESCE($9,sort_order),
+              updated_at=NOW()
+            WHERE
+              id=$10
+              AND school_id=$11
+            RETURNING *
+          `, [
+            b.field_label || null,
+            b.field_key
+              ? normalizeFieldKey(b.field_key)
+              : null,
+            b.field_type || null,
+            b.placeholder || null,
+            b.options
+              ? JSON.stringify(
+                  normalizeOptions(b.options)
+                )
+              : null,
+            b.is_required !== undefined
+              ? toBoolean(b.is_required)
+              : null,
+            b.is_visible !== undefined
+              ? toBoolean(b.is_visible)
+              : null,
+            b.show_on_public !== undefined
+              ? toBoolean(b.show_on_public)
+              : null,
+            b.sort_order !== undefined
+              ? Number(b.sort_order)
+              : null,
+            req.params.fieldId,
+            req.params.schoolId
+          ])
+        )[0];
+
+      if (!field) {
+        return res.status(404).json({
+          success: false,
+          message:
+            'Field haipo.'
+        });
+      }
+
+      res.json({
+        success: true,
+        field
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.delete(
+  '/api/admin/schools/:schoolId/custom-fields/:fieldId',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const result =
+        await q(`
+          DELETE FROM school_custom_fields
+          WHERE
+            id=$1
+            AND school_id=$2
+          RETURNING id
+        `, [
+          req.params.fieldId,
+          req.params.schoolId
+        ]);
+
+      if (!result[0]) {
+        return res.status(404).json({
+          success: false,
+          message:
+            'Field haipo.'
+        });
+      }
+
+      res.json({
+        success: true
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   MAIN ADMIN STATS
+========================================================= */
+
+app.get(
+  '/api/admin/dashboard-stats',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const schools =
+        Number(
+          (
+            await q(`
+              SELECT COUNT(*)::int AS count
+              FROM schools
+            `)
+          )[0].count
+        );
+
+      const activeSchools =
+        Number(
+          (
+            await q(`
+              SELECT COUNT(*)::int AS count
+              FROM schools
+              WHERE status='active'
+            `)
+          )[0].count
+        );
+
+      const applicants =
+        Number(
+          (
+            await q(`
+              SELECT COUNT(*)::int AS count
+              FROM applications
+            `)
+          )[0].count
+        );
+
+      const paid =
+        Number(
+          (
+            await q(`
+              SELECT COUNT(*)::int AS count
+              FROM applications
+              WHERE payment_status='paid'
+            `)
+          )[0].count
+        );
+
+      res.json({
+        success: true,
+        stats: {
+          schools,
+          active_schools: activeSchools,
+          applicants,
+          paid_applications: paid
+        }
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   MAIN ADMIN SCHOOL ADMINS
+========================================================= */
+
+app.get(
+  '/api/admin/school-admins',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const admins =
+        await q(`
+          SELECT
+            sa.id,
+            sa.school_id,
+            sa.full_name,
+            sa.email,
+            sa.active,
+            sa.created_at,
+            s.name AS school_name
+          FROM school_admins sa
+          LEFT JOIN schools s
+            ON s.id=sa.school_id
+          ORDER BY sa.id DESC
+        `);
+
+      res.json({
+        success: true,
+        admins
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.post(
+  '/api/admin/school-admins',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const b = req.body || {};
+
+      const fullName =
+        String(
+          b.full_name || ''
+        ).trim();
+
+      const email =
+        String(
+          b.email || ''
+        ).trim()
+        .toLowerCase();
+
+      const password =
+        String(
+          b.password || ''
+        );
+
+      const schoolId =
+        Number(b.school_id);
+
+      if (
+        !fullName ||
+        !email ||
+        !password ||
+        !schoolId
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            'Jaza taarifa zote za Admin wa Shule.'
+        });
+      }
+
+      const admin =
+        (
+          await q(`
+            INSERT INTO school_admins
+            (
+              school_id,
+              full_name,
+              email,
+              password_hash,
+              active
+            )
+            VALUES
+            ($1,$2,$3,$4,true)
+            RETURNING
+              id,
+              school_id,
+              full_name,
+              email,
+              active
+          `, [
+            schoolId,
+            fullName,
+            email,
+            hashPassword(password)
+          ])
+        )[0];
+
+      res.status(201).json({
+        success: true,
+        admin
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   MAIN ADMIN PAYMENTS
+========================================================= */
+
+app.get(
+  '/api/admin/payments',
+  mainAdmin,
+  async (req, res) => {
+    try {
+      const payments =
+        await q(`
+          SELECT
+            p.*,
+            s.name AS school_name
+          FROM payments p
+          LEFT JOIN schools s
+            ON s.id=p.school_id
+          ORDER BY p.id DESC
+        `);
+
+      res.json({
+        success: true,
+        payments
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   SCHEMA ENDPOINTS
+========================================================= */
+
+app.get(
+  '/api/application-schema',
+  async (req, res) => {
+    try {
+      const columns =
+        await q(`
+          SELECT
+            column_name,
+            data_type
+          FROM information_schema.columns
+          WHERE
+            table_schema='public'
+            AND table_name='applications'
+          ORDER BY ordinal_position
+        `);
+
+      res.json({
+        success: true,
+        columns
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+app.get(
+  '/api/payment-schema',
+  async (req, res) => {
+    try {
+      const columns =
+        await q(`
+          SELECT
+            column_name,
+            data_type
+          FROM information_schema.columns
+          WHERE
+            table_schema='public'
+            AND table_name='payments'
+          ORDER BY ordinal_position
+        `);
+
+      res.json({
+        success: true,
+        columns
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        success: false,
+        message: e.message
+      });
+    }
+  }
+);
+
+/* =========================================================
+   404 API
+========================================================= */
+
+app.use('/api', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'API route haipo.'
+  });
+});
+
+/* =========================================================
+   GENERAL ERROR
+========================================================= */
+
+app.use((err, req, res, next) => {
+  console.error('SERVER ERROR:', err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(500).json({
+    success: false,
+    message: 'Server error.',
+    error: err.message
+  });
+});
+
+/* =========================================================
+   START SERVER
+========================================================= */
+
+async function startServer() {
+  try {
+    await initializeDatabase();
+
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(
+        `Shule Portal Tanzania running on port ${PORT}`
+      );
+    });
+
+  } catch (error) {
+    console.error(
+      'DATABASE/SERVER STARTUP ERROR:',
+      error
+    );
+
+    process.exit(1);
+  }
+}
+
+startServer();
