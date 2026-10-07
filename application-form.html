@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Fomu ya Maombi - Shule Portal Tanzania</title>
 
   <style>
@@ -13,183 +12,303 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f8fb;
-      color: #222;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
     }
 
     header {
-      background: #0b74b8;
+      background: #1565c0;
       color: white;
-      padding: 18px;
-      text-align: center;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.12);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
+    .header-inner {
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .back-link {
+      color: white;
+      text-decoration: none;
+      background: rgba(255,255,255,.15);
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 14px;
     }
 
     .container {
-      width: 94%;
-      max-width: 850px;
-      margin: 25px auto;
+      max-width: 900px;
+      margin: 25px auto 50px;
+      padding: 0 15px;
     }
 
-    .card {
+    .school-card,
+    .form-card,
+    .important-card {
       background: white;
-      border-radius: 12px;
-      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 3px 14px rgba(0,0,0,.07);
       margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
     }
 
-    h2 {
-      color: #0b74b8;
-      margin-top: 0;
+    .school-card {
+      padding: 24px;
+    }
+
+    .school-card h1 {
+      margin: 0 0 10px;
+      color: #1565c0;
+      font-size: 27px;
     }
 
     .school-info {
-      background: #eef7fd;
-      border-left: 5px solid #0b74b8;
-      padding: 15px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .school-info div {
+      background: #f7f9fc;
+      padding: 11px;
       border-radius: 8px;
-      margin-bottom: 20px;
     }
 
-    .school-info p {
-      margin: 7px 0;
-    }
-
-    .price-box {
-      background: #e8f7ee;
-      border: 1px solid #b7e4c7;
-      color: #146c43;
+    .price {
+      margin-top: 18px;
+      background: #e8f1ff;
+      color: #0d47a1;
       padding: 14px;
-      border-radius: 8px;
-      margin-top: 12px;
-      font-size: 18px;
+      border-radius: 9px;
       font-weight: bold;
+      font-size: 17px;
+    }
+
+    .form-card {
+      padding: 25px;
+    }
+
+    .section-title {
+      color: #1565c0;
+      border-bottom: 2px solid #e8eef7;
+      padding-bottom: 10px;
+      margin: 0 0 20px;
+      font-size: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .full {
+      grid-column: 1 / -1;
     }
 
     label {
-      display: block;
-      font-weight: bold;
-      margin-top: 15px;
-      margin-bottom: 6px;
+      font-weight: 600;
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    .required {
+      color: #d32f2f;
     }
 
     input,
     select,
     textarea {
       width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
       padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      font-size: 16px;
+      font-size: 15px;
       background: white;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
+      outline: none;
+      transition: .2s;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
-      outline: none;
-      border-color: #0b74b8;
+      border-color: #1565c0;
+      box-shadow: 0 0 0 3px rgba(21,101,192,.10);
     }
 
-    button {
-      width: 100%;
-      border: none;
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 10px 0;
+    }
+
+    .radio-option,
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: normal;
+    }
+
+    .radio-option input,
+    .checkbox-option input {
+      width: auto;
+    }
+
+    .dynamic-section {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 2px dashed #dbe5f0;
+    }
+
+    .dynamic-info {
+      background: #f0f7ff;
+      border-left: 4px solid #1565c0;
+      padding: 12px 14px;
+      border-radius: 7px;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .empty-custom {
+      display: none;
+    }
+
+    .important-card {
+      padding: 20px;
+      background: #fffdf3;
+      border: 1px solid #f0df9c;
+    }
+
+    .important-card h3 {
+      margin-top: 0;
+      color: #8a6500;
+    }
+
+    .important-card ul {
+      margin-bottom: 0;
+      padding-left: 20px;
+      line-height: 1.8;
+    }
+
+    .payment-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 17px;
+      margin-top: 20px;
+    }
+
+    .payment-amount {
+      color: #1565c0;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .error-message {
+      display: none;
+      background: #ffebee;
+      color: #b71c1c;
+      border: 1px solid #ffcdd2;
+      padding: 13px;
       border-radius: 8px;
-      padding: 14px;
-      margin-top: 22px;
-      background: #0b74b8;
+      margin-bottom: 15px;
+    }
+
+    .success-message {
+      display: none;
+      background: #e8f5e9;
+      color: #1b5e20;
+      border: 1px solid #c8e6c9;
+      padding: 13px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      background: #1565c0;
       color: white;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    button:hover:not(:disabled) {
-      background: #095f98;
+    .submit-btn:hover {
+      background: #0d47a1;
     }
 
-    button:disabled {
-      background: #999;
+    .submit-btn:disabled {
+      background: #90a4ae;
       cursor: not-allowed;
     }
 
-    .message {
-      display: none;
-      padding: 12px;
-      margin-top: 15px;
-      border-radius: 7px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-
-    .error {
-      background: #ffe5e5;
-      color: #a00000;
-      border: 1px solid #ffb3b3;
-    }
-
-    .success {
-      background: #e7f7ed;
-      color: #146c43;
-      border: 1px solid #b7e4c7;
-    }
-
-    .loading-school {
+    .loading {
       text-align: center;
-      padding: 15px;
-      color: #0b74b8;
-      font-weight: bold;
+      padding: 30px;
+      color: #64748b;
     }
 
-    .required {
-      color: red;
-    }
-
-    .section-title {
-      margin-top: 30px;
-    }
-
-    .notice {
-      background: #e7f5ff;
-      color: #084298;
-      padding: 14px;
-      border-radius: 8px;
-      margin-top: 20px;
-      line-height: 1.6;
-    }
-
-    .back-link {
-      display: block;
+    .no-school {
+      background: white;
+      padding: 30px;
       text-align: center;
-      margin-top: 18px;
-      color: #0b74b8;
-      text-decoration: none;
-      font-weight: bold;
+      border-radius: 12px;
     }
 
-    @media (max-width: 600px) {
+    .hidden {
+      display: none !important;
+    }
 
-      .container {
-        width: 96%;
+    @media (max-width: 700px) {
+      .form-grid,
+      .school-info {
+        grid-template-columns: 1fr;
       }
 
-      .card {
-        padding: 16px;
+      .full {
+        grid-column: auto;
       }
 
-      header h1 {
-        font-size: 20px;
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .school-card h1 {
+        font-size: 23px;
+      }
+
+      .form-card {
+        padding: 18px;
       }
     }
   </style>
@@ -198,1223 +317,1953 @@
 <body>
 
 <header>
-  <h1>📝 Fomu ya Maombi ya Shule</h1>
+  <div class="header-inner">
+    <div class="logo">🏫 Shule Portal Tanzania</div>
+    <a class="back-link" href="schools-public.html">← Rudi Kutafuta Shule</a>
+  </div>
 </header>
 
-<div class="container">
+<main class="container">
 
-  <div class="card">
+  <div id="loadingBox" class="loading">
+    Inapakia taarifa za shule...
+  </div>
 
-    <!-- SCHOOL LOADING -->
-
-    <div
-      id="schoolLoading"
-      class="loading-school"
-    >
-      Inapakia taarifa za shule...
-    </div>
-
+  <div id="schoolContent" class="hidden">
 
     <!-- SCHOOL INFORMATION -->
-
-    <div
-      id="schoolInfo"
-      class="school-info"
-      style="display:none;"
-    >
+    <section class="school-card">
+      <h1>📝 Fomu ya Maombi ya Shule</h1>
 
       <h2 id="schoolName">-</h2>
 
-      <p>
-        <strong>Mkoa:</strong>
-        <span id="schoolRegion">-</span>
-      </p>
+      <div class="school-info">
+        <div>
+          <strong>Mkoa:</strong><br>
+          <span id="schoolRegion">-</span>
+        </div>
 
-      <p>
-        <strong>Wilaya:</strong>
-        <span id="schoolDistrict">-</span>
-      </p>
+        <div>
+          <strong>Wilaya:</strong><br>
+          <span id="schoolDistrict">-</span>
+        </div>
 
-      <p>
-        <strong>Aina ya Shule:</strong>
-        <span id="schoolType">-</span>
-      </p>
+        <div>
+          <strong>Aina ya Shule:</strong><br>
+          <span id="schoolType">-</span>
+        </div>
 
-      <div class="price-box">
-        💰 Gharama ya Fomu:
-        <span id="formPrice">TSh 0</span>
+        <div>
+          <strong>Hali:</strong><br>
+          <span id="schoolStatus">-</span>
+        </div>
       </div>
 
-    </div>
+      <div class="price">
+        💰 Gharama ya Fomu:
+        <span id="schoolPrice">TSh 0</span>
+      </div>
+    </section>
 
 
     <!-- APPLICATION FORM -->
-
-    <h2>Taarifa za Mwanafunzi</h2>
-
-    <form id="applicationForm">
-
-      <!-- STUDENT NAME -->
-
-      <label for="studentName">
-        Jina Kamili la Mwanafunzi
-        <span class="required">*</span>
-      </label>
-
-      <input
-        type="text"
-        id="studentName"
-        placeholder="Mfano: John Mlipuka"
-        required
-      >
-
-
-      <!-- GENDER -->
-
-      <label for="gender">
-        Jinsia
-        <span class="required">*</span>
-      </label>
-
-      <select
-        id="gender"
-        required
-      >
-
-        <option value="">
-          -- Chagua Jinsia --
-        </option>
-
-        <option value="Male">
-          Mwanaume
-        </option>
-
-        <option value="Female">
-          Mwanamke
-        </option>
-
-      </select>
-
-
-      <!-- DATE OF BIRTH -->
-
-      <label for="dateOfBirth">
-        Tarehe ya Kuzaliwa
-        <span class="required">*</span>
-      </label>
-
-      <input
-        type="date"
-        id="dateOfBirth"
-        required
-      >
-
-
-      <!-- CLASS -->
-
-      <label for="classLevel">
-        Darasa / Kidato
-        <span class="required">*</span>
-      </label>
-
-      <select
-        id="classLevel"
-        required
-      >
-
-        <option value="">
-          -- Chagua Darasa / Kidato --
-        </option>
-
-        <optgroup label="Shule ya Msingi">
-
-          <option value="Darasa la 1">
-            Darasa la 1
-          </option>
-
-          <option value="Darasa la 2">
-            Darasa la 2
-          </option>
-
-          <option value="Darasa la 3">
-            Darasa la 3
-          </option>
-
-          <option value="Darasa la 4">
-            Darasa la 4
-          </option>
-
-          <option value="Darasa la 5">
-            Darasa la 5
-          </option>
-
-          <option value="Darasa la 6">
-            Darasa la 6
-          </option>
-
-          <option value="Darasa la 7">
-            Darasa la 7
-          </option>
-
-        </optgroup>
-
-
-        <optgroup label="Sekondari">
-
-          <option value="Kidato cha 1">
-            Kidato cha 1
-          </option>
-
-          <option value="Kidato cha 2">
-            Kidato cha 2
-          </option>
-
-          <option value="Kidato cha 3">
-            Kidato cha 3
-          </option>
-
-          <option value="Kidato cha 4">
-            Kidato cha 4
-          </option>
-
-          <option value="Kidato cha 5">
-            Kidato cha 5
-          </option>
-
-          <option value="Kidato cha 6">
-            Kidato cha 6
-          </option>
-
-        </optgroup>
-
-      </select>
-
-
-      <!-- PARENT -->
-
-      <h2 class="section-title">
-        Taarifa za Mzazi / Mlezi
-      </h2>
-
-
-      <label for="parentName">
-        Jina la Mzazi / Mlezi
-        <span class="required">*</span>
-      </label>
-
-      <input
-        type="text"
-        id="parentName"
-        placeholder="Jina kamili la mzazi/mlezi"
-        required
-      >
-
-
-      <!-- PHONE -->
-
-      <label for="phone">
-        Namba ya Simu
-        <span class="required">*</span>
-      </label>
-
-      <input
-        type="tel"
-        id="phone"
-        placeholder="Mfano: 0765447073"
-        required
-      >
-
-
-      <!-- EMAIL -->
-
-      <label for="email">
-        Barua Pepe
-      </label>
-
-      <input
-        type="email"
-        id="email"
-        placeholder="example@gmail.com"
-      >
-
-
-      <!-- ADDRESS -->
-
-      <label for="address">
-        Anwani ya Makazi
-      </label>
-
-      <textarea
-        id="address"
-        placeholder="Andika anwani ya makazi..."
-      ></textarea>
-
-
-      <!-- NOTICE -->
-
-      <div class="notice">
-
-        <strong>ℹ️ Muhimu</strong>
-
-        <br><br>
-
-        Maombi yako yakihifadhiwa,
-        mfumo utakupatia:
-
-        <br>
-
-        • Namba ya Maombi
-
-        <br>
-
-        • Payment Reference
-
-        <br>
-
-        • Kiasi halisi cha fomu
-
-        <br><br>
-
-        💰
-        <strong>
-          Kiasi cha sasa:
-          <span id="noticePrice">
-            TSh 0
-          </span>
-        </strong>
+    <form id="applicationForm" class="form-card" novalidate>
+
+      <div id="errorBox" class="error-message"></div>
+      <div id="successBox" class="success-message"></div>
+
+      <!-- STUDENT -->
+      <h2 class="section-title">👨‍🎓 Taarifa za Mwanafunzi</h2>
+
+      <div class="form-grid">
+
+        <div class="form-group full">
+          <label for="student_name">
+            Jina Kamili la Mwanafunzi <span class="required">*</span>
+          </label>
+
+          <input
+            type="text"
+            id="student_name"
+            name="student_name"
+            placeholder="Andika jina kamili la mwanafunzi"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label for="gender">
+            Jinsia <span class="required">*</span>
+          </label>
+
+          <select id="gender" name="gender" required>
+            <option value="">-- Chagua Jinsia --</option>
+            <option value="Mwanaume">Mwanaume</option>
+            <option value="Mwanamke">Mwanamke</option>
+          </select>
+        </div>
+
+
+        <div class="form-group">
+          <label for="date_of_birth">
+            Tarehe ya Kuzaliwa <span class="required">*</span>
+          </label>
+
+          <input
+            type="date"
+            id="date_of_birth"
+            name="date_of_birth"
+            required
+          >
+        </div>
+
+
+        <div class="form-group full">
+          <label for="class_applied">
+            Darasa / Kidato <span class="required">*</span>
+          </label>
+
+          <select id="class_applied" name="class_applied" required>
+            <option value="">-- Chagua Darasa / Kidato --</option>
+
+            <option value="Darasa la 1">Darasa la 1</option>
+            <option value="Darasa la 2">Darasa la 2</option>
+            <option value="Darasa la 3">Darasa la 3</option>
+            <option value="Darasa la 4">Darasa la 4</option>
+            <option value="Darasa la 5">Darasa la 5</option>
+            <option value="Darasa la 6">Darasa la 6</option>
+            <option value="Darasa la 7">Darasa la 7</option>
+
+            <option value="Kidato cha 1">Kidato cha 1</option>
+            <option value="Kidato cha 2">Kidato cha 2</option>
+            <option value="Kidato cha 3">Kidato cha 3</option>
+            <option value="Kidato cha 4">Kidato cha 4</option>
+            <option value="Kidato cha 5">Kidato cha 5</option>
+            <option value="Kidato cha 6">Kidato cha 6</option>
+          </select>
+        </div>
 
       </div>
 
 
-      <!-- MESSAGE -->
-
+      <!-- DYNAMIC CUSTOM FIELDS -->
       <div
-        id="message"
-        class="message"
-      ></div>
+        id="customFieldsSection"
+        class="dynamic-section hidden"
+      >
+
+        <h2 class="section-title">
+          ⚙️ Taarifa Zaidi za Shule
+        </h2>
+
+        <div class="dynamic-info">
+          ℹ️ Tafadhali jaza taarifa hizi kulingana na mahitaji ya shule.
+        </div>
+
+        <div
+          id="customFieldsContainer"
+          class="form-grid"
+        ></div>
+
+      </div>
 
 
-      <!-- SUBMIT -->
+      <!-- PARENT -->
+      <div class="dynamic-section">
+
+        <h2 class="section-title">
+          👨‍👩‍👧 Taarifa za Mzazi / Mlezi
+        </h2>
+
+        <div class="form-grid">
+
+          <div class="form-group full">
+            <label for="parent_name">
+              Jina la Mzazi / Mlezi <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="parent_name"
+              name="parent_name"
+              placeholder="Jina kamili la mzazi au mlezi"
+              required
+            >
+          </div>
+
+
+          <div class="form-group">
+            <label for="parent_phone">
+              Namba ya Simu <span class="required">*</span>
+            </label>
+
+            <input
+              type="tel"
+              id="parent_phone"
+              name="parent_phone"
+              placeholder="Mfano: 0712345678"
+              autocomplete="tel"
+              required
+            >
+          </div>
+
+
+          <div class="form-group">
+            <label for="parent_email">
+              Barua Pepe
+            </label>
+
+            <input
+              type="email"
+              id="parent_email"
+              name="parent_email"
+              placeholder="Mfano: mzazi@gmail.com"
+              autocomplete="email"
+            >
+          </div>
+
+
+          <div class="form-group full">
+            <label for="address">
+              Anwani ya Makazi
+            </label>
+
+            <textarea
+              id="address"
+              name="address"
+              placeholder="Andika anwani ya makazi"
+            ></textarea>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PAYMENT -->
+      <div class="payment-box">
+
+        <strong>💳 Muhtasari wa Malipo</strong>
+
+        <p>
+          Kiasi cha sasa cha fomu:
+        </p>
+
+        <div class="payment-amount" id="paymentAmount">
+          TSh 0
+        </div>
+
+      </div>
+
+
+      <div class="important-card" style="margin-top:20px;">
+        <h3>ℹ️ Muhimu</h3>
+
+        <ul>
+          <li>Hakikisha taarifa zote ulizoandika ni sahihi.</li>
+          <li>Baada ya kutuma maombi utapewa <strong>Namba ya Maombi</strong>.</li>
+          <li>Utaweza kufuatilia maombi yako kwa kutumia Namba ya Maombi.</li>
+          <li>Payment Reference itahusishwa na ombi lako.</li>
+          <li>Kiasi cha malipo kitaonyeshwa kulingana na bei ya shule.</li>
+        </ul>
+      </div>
+
 
       <button
         type="submit"
-        id="submitButton"
-        disabled
+        id="submitBtn"
+        class="submit-btn"
       >
         Endelea na Malipo 💳
       </button>
 
     </form>
 
+  </div>
 
-    <a
-      class="back-link"
-      href="/schools-public.html"
-    >
+
+  <div id="noSchool" class="no-school hidden">
+
+    <h2>⚠️ Shule haijapatikana</h2>
+
+    <p>
+      Tafadhali rudi kwenye orodha ya shule na uchague shule tena.
+    </p>
+
+    <a href="schools-public.html">
       ← Rudi Kutafuta Shule
     </a>
 
   </div>
 
-</div>
+</main>
 
 
 <script>
 
-  // ==========================================
-  // URL PARAMETERS
-  // ==========================================
+  const API_BASE = "";
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
-
-  const schoolId =
-    params.get("school_id");
+  let schoolId = null;
+  let school = null;
+  let customFields = [];
 
 
-  // ==========================================
-  // VARIABLES
-  // ==========================================
+  /*
+   * GET SCHOOL ID
+   */
+  function getSchoolId() {
 
-  let selectedSchool = null;
+    const params = new URLSearchParams(window.location.search);
 
-  let schoolFormPrice = 0;
-
-
-  // ==========================================
-  // ELEMENTS
-  // ==========================================
-
-  const schoolLoading =
-    document.getElementById(
-      "schoolLoading"
-    );
-
-  const schoolInfo =
-    document.getElementById(
-      "schoolInfo"
-    );
-
-  const schoolName =
-    document.getElementById(
-      "schoolName"
-    );
-
-  const schoolRegion =
-    document.getElementById(
-      "schoolRegion"
-    );
-
-  const schoolDistrict =
-    document.getElementById(
-      "schoolDistrict"
-    );
-
-  const schoolType =
-    document.getElementById(
-      "schoolType"
-    );
-
-  const formPrice =
-    document.getElementById(
-      "formPrice"
-    );
-
-  const noticePrice =
-    document.getElementById(
-      "noticePrice"
-    );
-
-  const message =
-    document.getElementById(
-      "message"
-    );
-
-  const submitButton =
-    document.getElementById(
-      "submitButton"
-    );
-
-
-  // ==========================================
-  // SHOW ERROR
-  // ==========================================
-
-  function showError(text) {
-
-    message.textContent =
-      text;
-
-    message.className =
-      "message error";
-
-    message.style.display =
-      "block";
+    return params.get("school_id");
   }
 
 
-  // ==========================================
-  // SHOW SUCCESS
-  // ==========================================
-
-  function showSuccess(text) {
-
-    message.textContent =
-      text;
-
-    message.className =
-      "message success";
-
-    message.style.display =
-      "block";
-  }
-
-
-  // ==========================================
-  // GET PRICE
-  // ==========================================
-
-  function getFormPrice(school) {
-
-    if (!school) {
-      return 0;
-    }
-
-
-    let value =
-      school.form_price;
-
-
-    if (
-      value === null ||
-      value === undefined ||
-      value === ""
-    ) {
-
-      value =
-        school.price;
-
-    }
-
-
-    const price =
-      Number(value);
-
-
-    if (
-      isNaN(price) ||
-      price < 0
-    ) {
-
-      return 0;
-
-    }
-
-
-    return price;
-
-  }
-
-
-  // ==========================================
-  // FORMAT MONEY
-  // ==========================================
-
+  /*
+   * FORMAT MONEY
+   */
   function formatMoney(amount) {
 
-    const number =
-      Number(amount);
+    const number = Number(amount || 0);
+
+    return "TSh " + number.toLocaleString("en-US");
+  }
 
 
-    if (
-      isNaN(number) ||
-      number < 0
-    ) {
+  /*
+   * SHOW ERROR
+   */
+  function showError(message) {
 
-      return "TSh 0";
+    const box = document.getElementById("errorBox");
 
-    }
+    box.textContent = message;
+    box.style.display = "block";
+
+    document.getElementById("successBox").style.display = "none";
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
 
 
-    return "TSh " +
-      number.toLocaleString(
-        "en-TZ"
-      );
+  /*
+   * SHOW SUCCESS
+   */
+  function showSuccess(message) {
+
+    const box = document.getElementById("successBox");
+
+    box.textContent = message;
+    box.style.display = "block";
+
+    document.getElementById("errorBox").style.display = "none";
+  }
+
+
+  /*
+   * CLEAR MESSAGES
+   */
+  function clearMessages() {
+
+    document.getElementById("errorBox").style.display = "none";
+    document.getElementById("successBox").style.display = "none";
 
   }
 
 
-  // ==========================================
-  // LOAD SCHOOL
-  // ==========================================
-
+  /*
+   * LOAD SCHOOL
+   */
   async function loadSchool() {
+
+    schoolId = getSchoolId();
 
     if (!schoolId) {
 
-      schoolLoading.textContent =
-        "⚠️ Hakuna shule iliyochaguliwa.";
+      showNoSchool();
 
-      showError(
-        "Tafadhali rudi kwenye Tafuta Shule na uchague shule."
+      return;
+    }
+
+
+    try {
+
+      const response = await fetch(
+        `${API_BASE}/api/schools/${encodeURIComponent(schoolId)}`
       );
+
+
+      if (!response.ok) {
+
+        throw new Error("Shule haijapatikana");
+
+      }
+
+
+      const data = await response.json();
+
+
+      school =
+        data.school ||
+        data.data ||
+        data;
+
+
+      if (
+        !school ||
+        !school.id
+      ) {
+
+        throw new Error("Taarifa za shule hazijapatikana");
+
+      }
+
+
+      displaySchool();
+
+      await loadCustomFields();
+
+
+      document.getElementById("loadingBox").classList.add("hidden");
+
+      document
+        .getElementById("schoolContent")
+        .classList.remove("hidden");
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      /*
+       * Fallback:
+       * baadhi ya versions za backend zinaweza
+       * kurudisha shule zote kupitia /api/schools.
+       */
+
+      try {
+
+        const response = await fetch(
+          `${API_BASE}/api/schools`
+        );
+
+        const data = await response.json();
+
+        const schools =
+          data.schools ||
+          data.data ||
+          [];
+
+        school = schools.find(
+          s => String(s.id) === String(schoolId)
+        );
+
+
+        if (!school) {
+
+          throw new Error("Shule haijapatikana");
+
+        }
+
+
+        displaySchool();
+
+        await loadCustomFields();
+
+
+        document.getElementById("loadingBox").classList.add("hidden");
+
+        document
+          .getElementById("schoolContent")
+          .classList.remove("hidden");
+
+      }
+
+      catch (fallbackError) {
+
+        console.error(fallbackError);
+
+        showNoSchool();
+
+      }
+
+    }
+
+  }
+
+
+  /*
+   * DISPLAY SCHOOL
+   */
+  function displaySchool() {
+
+    document.getElementById("schoolName").textContent =
+      school.name || "-";
+
+
+    document.getElementById("schoolRegion").textContent =
+      school.region || "-";
+
+
+    document.getElementById("schoolDistrict").textContent =
+      school.district || "-";
+
+
+    document.getElementById("schoolType").textContent =
+      school.school_type ||
+      school.type ||
+      "-";
+
+
+    document.getElementById("schoolStatus").textContent =
+      school.status || "-";
+
+
+    const price =
+      Number(school.form_price || 0);
+
+
+    document.getElementById("schoolPrice").textContent =
+      formatMoney(price);
+
+
+    document.getElementById("paymentAmount").textContent =
+      formatMoney(price);
+
+  }
+
+
+  /*
+   * LOAD CUSTOM FIELDS
+   */
+  async function loadCustomFields() {
+
+    try {
+
+      const response = await fetch(
+        `${API_BASE}/api/schools/${encodeURIComponent(schoolId)}/custom-fields`
+      );
+
+
+      if (!response.ok) {
+
+        console.warn(
+          "Custom fields endpoint haipatikani."
+        );
+
+        return;
+
+      }
+
+
+      const data = await response.json();
+
+
+      customFields =
+        data.fields ||
+        data.custom_fields ||
+        [];
+
+
+      /*
+       * Public form:
+       * only visible fields that are allowed
+       * to appear publicly.
+       */
+      customFields =
+        customFields.filter(field => {
+
+          const visible =
+            field.is_visible !== false;
+
+          const publicField =
+            field.show_on_public !== false;
+
+          return visible && publicField;
+
+        });
+
+
+      renderCustomFields();
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Imeshindikana kupakia custom fields:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /*
+   * NORMALIZE FIELD TYPE
+   */
+  function normalizeType(type) {
+
+    const allowed = [
+      "text",
+      "textarea",
+      "number",
+      "email",
+      "phone",
+      "date",
+      "dropdown",
+      "radio",
+      "checkbox",
+      "file"
+    ];
+
+
+    return allowed.includes(type)
+      ? type
+      : "text";
+
+  }
+
+
+  /*
+   * PARSE OPTIONS
+   */
+  function parseOptions(options) {
+
+    if (Array.isArray(options)) {
+
+      return options;
+
+    }
+
+
+    if (typeof options === "string") {
+
+      try {
+
+        const parsed = JSON.parse(options);
+
+        if (Array.isArray(parsed)) {
+
+          return parsed;
+
+        }
+
+      }
+
+      catch (error) {
+
+        return options
+          .split(",")
+          .map(x => x.trim())
+          .filter(Boolean);
+
+      }
+
+    }
+
+
+    return [];
+
+  }
+
+
+  /*
+   * CREATE FIELD LABEL
+   */
+  function createLabel(field) {
+
+    const wrapper =
+      document.createElement("div");
+
+    wrapper.className =
+      "form-group";
+
+
+    if (
+      field.field_type === "textarea" ||
+      field.field_type === "file"
+    ) {
+
+      wrapper.classList.add("full");
+
+    }
+
+
+    const label =
+      document.createElement("label");
+
+
+    label.textContent =
+      field.field_label || field.field_key;
+
+
+    if (field.is_required) {
+
+      const required =
+        document.createElement("span");
+
+      required.className =
+        "required";
+
+      required.textContent =
+        " *";
+
+      label.appendChild(required);
+
+    }
+
+
+    wrapper.appendChild(label);
+
+
+    return wrapper;
+
+  }
+
+
+  /*
+   * CREATE INPUT
+   */
+  function createInput(field) {
+
+    const type =
+      normalizeType(field.field_type);
+
+
+    const key =
+      field.field_key;
+
+
+    const required =
+      field.is_required === true;
+
+
+    /*
+     * TEXT
+     */
+    if (
+      type === "text" ||
+      type === "email" ||
+      type === "number" ||
+      type === "phone" ||
+      type === "date"
+    ) {
+
+      const input =
+        document.createElement("input");
+
+
+      input.id =
+        "custom_" + key;
+
+      input.name =
+        "custom_" + key;
+
+      input.dataset.fieldKey =
+        key;
+
+      input.dataset.customField =
+        "true";
+
+
+      if (type === "phone") {
+
+        input.type = "tel";
+
+      }
+
+      else {
+
+        input.type = type;
+
+      }
+
+
+      if (field.placeholder) {
+
+        input.placeholder =
+          field.placeholder;
+
+      }
+
+
+      if (required) {
+
+        input.required = true;
+
+      }
+
+
+      return input;
+
+    }
+
+
+    /*
+     * TEXTAREA
+     */
+    if (type === "textarea") {
+
+      const textarea =
+        document.createElement("textarea");
+
+
+      textarea.id =
+        "custom_" + key;
+
+      textarea.name =
+        "custom_" + key;
+
+      textarea.dataset.fieldKey =
+        key;
+
+      textarea.dataset.customField =
+        "true";
+
+
+      if (field.placeholder) {
+
+        textarea.placeholder =
+          field.placeholder;
+
+      }
+
+
+      if (required) {
+
+        textarea.required = true;
+
+      }
+
+
+      return textarea;
+
+    }
+
+
+    /*
+     * DROPDOWN
+     */
+    if (type === "dropdown") {
+
+      const select =
+        document.createElement("select");
+
+
+      select.id =
+        "custom_" + key;
+
+      select.name =
+        "custom_" + key;
+
+      select.dataset.fieldKey =
+        key;
+
+      select.dataset.customField =
+        "true";
+
+
+      if (required) {
+
+        select.required = true;
+
+      }
+
+
+      const first =
+        document.createElement("option");
+
+      first.value = "";
+
+      first.textContent =
+        "-- Chagua --";
+
+
+      select.appendChild(first);
+
+
+      const options =
+        parseOptions(field.options);
+
+
+      options.forEach(option => {
+
+        const item =
+          document.createElement("option");
+
+
+        if (
+          typeof option === "object" &&
+          option !== null
+        ) {
+
+          item.value =
+            option.value ??
+            option.label ??
+            "";
+
+          item.textContent =
+            option.label ??
+            option.value ??
+            "";
+
+        }
+
+        else {
+
+          item.value =
+            option;
+
+          item.textContent =
+            option;
+
+        }
+
+
+        select.appendChild(item);
+
+      });
+
+
+      return select;
+
+    }
+
+
+    /*
+     * RADIO
+     */
+    if (type === "radio") {
+
+      const group =
+        document.createElement("div");
+
+      group.className =
+        "radio-group";
+
+
+      const options =
+        parseOptions(field.options);
+
+
+      options.forEach((option, index) => {
+
+        const label =
+          document.createElement("label");
+
+        label.className =
+          "radio-option";
+
+
+        const input =
+          document.createElement("input");
+
+        input.type =
+          "radio";
+
+        input.name =
+          "custom_" + key;
+
+        input.dataset.fieldKey =
+          key;
+
+        input.dataset.customField =
+          "true";
+
+
+        if (
+          typeof option === "object" &&
+          option !== null
+        ) {
+
+          input.value =
+            option.value ??
+            option.label ??
+            "";
+
+          label.append(
+            input,
+            document.createTextNode(
+              option.label ??
+              option.value ??
+              ""
+            )
+          );
+
+        }
+
+        else {
+
+          input.value =
+            option;
+
+          label.append(
+            input,
+            document.createTextNode(option)
+          );
+
+        }
+
+
+        if (required && index === 0) {
+
+          input.required = true;
+
+        }
+
+
+        group.appendChild(label);
+
+      });
+
+
+      return group;
+
+    }
+
+
+    /*
+     * CHECKBOX
+     */
+    if (type === "checkbox") {
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "checkbox-group";
+
+
+      const options =
+        parseOptions(field.options);
+
+
+      /*
+       * Kama hakuna options,
+       * tunatengeneza checkbox moja.
+       */
+      if (options.length === 0) {
+
+        const label =
+          document.createElement("label");
+
+        label.className =
+          "checkbox-option";
+
+
+        const input =
+          document.createElement("input");
+
+        input.type =
+          "checkbox";
+
+        input.name =
+          "custom_" + key;
+
+        input.dataset.fieldKey =
+          key;
+
+        input.dataset.customField =
+          "true";
+
+        input.value =
+          "true";
+
+
+        label.append(
+          input,
+          document.createTextNode(
+            field.placeholder ||
+            field.field_label
+          )
+        );
+
+
+        wrapper.appendChild(label);
+
+
+        return wrapper;
+
+      }
+
+
+      options.forEach(option => {
+
+        const label =
+          document.createElement("label");
+
+        label.className =
+          "checkbox-option";
+
+
+        const input =
+          document.createElement("input");
+
+        input.type =
+          "checkbox";
+
+        input.name =
+          "custom_" + key;
+
+        input.dataset.fieldKey =
+          key;
+
+        input.dataset.customField =
+          "true";
+
+
+        if (
+          typeof option === "object" &&
+          option !== null
+        ) {
+
+          input.value =
+            option.value ??
+            option.label ??
+            "";
+
+          label.append(
+            input,
+            document.createTextNode(
+              option.label ??
+              option.value ??
+              ""
+            )
+          );
+
+        }
+
+        else {
+
+          input.value =
+            option;
+
+          label.append(
+            input,
+            document.createTextNode(option)
+          );
+
+        }
+
+
+        wrapper.appendChild(label);
+
+      });
+
+
+      return wrapper;
+
+    }
+
+
+    /*
+     * FILE
+     */
+    if (type === "file") {
+
+      const input =
+        document.createElement("input");
+
+
+      input.type =
+        "file";
+
+      input.id =
+        "custom_" + key;
+
+      input.name =
+        "custom_" + key;
+
+      input.dataset.fieldKey =
+        key;
+
+      input.dataset.customField =
+        "true";
+
+
+      if (required) {
+
+        input.required = true;
+
+      }
+
+
+      return input;
+
+    }
+
+
+    return null;
+
+  }
+
+
+  /*
+   * RENDER ALL CUSTOM FIELDS
+   */
+  function renderCustomFields() {
+
+    const section =
+      document.getElementById(
+        "customFieldsSection"
+      );
+
+
+    const container =
+      document.getElementById(
+        "customFieldsContainer"
+      );
+
+
+    container.innerHTML = "";
+
+
+    if (
+      !customFields ||
+      customFields.length === 0
+    ) {
+
+      section.classList.add("hidden");
 
       return;
 
     }
 
 
-    try {
+    customFields.sort(
+      (a, b) =>
+        Number(a.sort_order || 0) -
+        Number(b.sort_order || 0)
+    );
 
-      const response =
-        await fetch(
-          "/api/schools",
-          {
-            method: "GET",
-            cache: "no-store"
-          }
+
+    customFields.forEach(field => {
+
+      const wrapper =
+        createLabel(field);
+
+
+      const input =
+        createInput(field);
+
+
+      if (!input) {
+
+        return;
+
+      }
+
+
+      wrapper.appendChild(input);
+
+
+      container.appendChild(wrapper);
+
+    });
+
+
+    section.classList.remove("hidden");
+
+  }
+
+
+  /*
+   * GET CUSTOM DATA
+   */
+  function collectCustomData() {
+
+    const customData = {};
+
+
+    customFields.forEach(field => {
+
+      const key =
+        field.field_key;
+
+
+      const type =
+        normalizeType(
+          field.field_type
         );
 
 
-      if (!response.ok) {
+      /*
+       * CHECKBOX
+       */
+      if (type === "checkbox") {
 
-        throw new Error(
-          "Server imeshindwa kutoa taarifa za shule. HTTP " +
-          response.status
+        const checked =
+          document.querySelectorAll(
+            `input[name="custom_${CSS.escape(key)}"]:checked`
+          );
+
+
+        customData[key] =
+          Array.from(checked)
+            .map(input => input.value);
+
+
+        return;
+
+      }
+
+
+      /*
+       * RADIO
+       */
+      if (type === "radio") {
+
+        const selected =
+          document.querySelector(
+            `input[name="custom_${CSS.escape(key)}"]:checked`
+          );
+
+
+        customData[key] =
+          selected
+            ? selected.value
+            : "";
+
+        return;
+
+      }
+
+
+      /*
+       * NORMAL FIELD
+       */
+      const element =
+        document.querySelector(
+          `[data-custom-field="true"][data-field-key="${CSS.escape(key)}"]`
+        );
+
+
+      if (!element) {
+
+        customData[key] = "";
+
+        return;
+
+      }
+
+
+      /*
+       * FILE
+       *
+       * Kwa sasa tunahifadhi jina la file.
+       * Upload halisi utahitaji file-upload endpoint.
+       */
+      if (type === "file") {
+
+        customData[key] =
+          element.files &&
+          element.files.length
+            ? element.files[0].name
+            : "";
+
+        return;
+
+      }
+
+
+      customData[key] =
+        element.value;
+
+    });
+
+
+    return customData;
+
+  }
+
+
+  /*
+   * VALIDATE CUSTOM FIELDS
+   */
+  function validateCustomFields() {
+
+    for (const field of customFields) {
+
+      if (!field.is_required) {
+
+        continue;
+
+      }
+
+
+      const key =
+        field.field_key;
+
+
+      const type =
+        normalizeType(
+          field.field_type
+        );
+
+
+      /*
+       * CHECKBOX
+       */
+      if (type === "checkbox") {
+
+        const checked =
+          document.querySelectorAll(
+            `input[name="custom_${CSS.escape(key)}"]:checked`
+          );
+
+
+        if (checked.length === 0) {
+
+          return (
+            `Tafadhali jaza kipengele: ${field.field_label}`
+          );
+
+        }
+
+
+        continue;
+
+      }
+
+
+      /*
+       * RADIO
+       */
+      if (type === "radio") {
+
+        const selected =
+          document.querySelector(
+            `input[name="custom_${CSS.escape(key)}"]:checked`
+          );
+
+
+        if (!selected) {
+
+          return (
+            `Tafadhali chagua: ${field.field_label}`
+          );
+
+        }
+
+
+        continue;
+
+      }
+
+
+      /*
+       * NORMAL
+       */
+      const element =
+        document.querySelector(
+          `[data-custom-field="true"][data-field-key="${CSS.escape(key)}"]`
+        );
+
+
+      if (!element) {
+
+        return (
+          `Kipengele ${field.field_label} hakijapatikana kwenye fomu.`
         );
 
       }
+
+
+      if (!element.value.trim()) {
+
+        return (
+          `Tafadhali jaza: ${field.field_label}`
+        );
+
+      }
+
+    }
+
+
+    return null;
+
+  }
+
+
+  /*
+   * VALIDATE MAIN FORM
+   */
+  function validateMainForm() {
+
+    const requiredFields = [
+
+      {
+        id: "student_name",
+        label: "Jina Kamili la Mwanafunzi"
+      },
+
+      {
+        id: "gender",
+        label: "Jinsia"
+      },
+
+      {
+        id: "date_of_birth",
+        label: "Tarehe ya Kuzaliwa"
+      },
+
+      {
+        id: "class_applied",
+        label: "Darasa / Kidato"
+      },
+
+      {
+        id: "parent_name",
+        label: "Jina la Mzazi / Mlezi"
+      },
+
+      {
+        id: "parent_phone",
+        label: "Namba ya Simu"
+      }
+
+    ];
+
+
+    for (
+      const field of requiredFields
+    ) {
+
+      const element =
+        document.getElementById(field.id);
+
+
+      if (
+        !element ||
+        !String(element.value || "").trim()
+      ) {
+
+        return (
+          `Tafadhali jaza: ${field.label}`
+        );
+
+      }
+
+    }
+
+
+    /*
+     * EMAIL ONLY IF PROVIDED
+     */
+    const email =
+      document.getElementById(
+        "parent_email"
+      );
+
+
+    if (
+      email.value.trim() &&
+      !email.checkValidity()
+    ) {
+
+      return "Tafadhali weka barua pepe sahihi.";
+
+    }
+
+
+    /*
+     * PHONE
+     */
+    const phone =
+      document.getElementById(
+        "parent_phone"
+      );
+
+
+    const phoneValue =
+      phone.value.trim();
+
+
+    if (
+      phoneValue.length < 9
+    ) {
+
+      return "Tafadhali weka namba sahihi ya simu.";
+
+    }
+
+
+    return null;
+
+  }
+
+
+  /*
+   * SUBMIT APPLICATION
+   */
+  async function submitApplication(event) {
+
+    event.preventDefault();
+
+    clearMessages();
+
+
+    /*
+     * MAIN VALIDATION
+     */
+    const mainError =
+      validateMainForm();
+
+
+    if (mainError) {
+
+      showError(mainError);
+
+      return;
+
+    }
+
+
+    /*
+     * CUSTOM FIELD VALIDATION
+     */
+    const customError =
+      validateCustomFields();
+
+
+    if (customError) {
+
+      showError(customError);
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById(
+        "submitBtn"
+      );
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Inahifadhi ombi...";
+
+
+    try {
+
+      const form =
+        document.getElementById(
+          "applicationForm"
+        );
+
+
+      const customData =
+        collectCustomData();
+
+
+      /*
+       * MAIN APPLICATION DATA
+       */
+      const payload = {
+
+        school_id:
+          Number(schoolId),
+
+        student_name:
+          document.getElementById(
+            "student_name"
+          ).value.trim(),
+
+        gender:
+          document.getElementById(
+            "gender"
+          ).value,
+
+        date_of_birth:
+          document.getElementById(
+            "date_of_birth"
+          ).value,
+
+        class_applied:
+          document.getElementById(
+            "class_applied"
+          ).value,
+
+        parent_name:
+          document.getElementById(
+            "parent_name"
+          ).value.trim(),
+
+        parent_phone:
+          document.getElementById(
+            "parent_phone"
+          ).value.trim(),
+
+        parent_email:
+          document.getElementById(
+            "parent_email"
+          ).value.trim(),
+
+        address:
+          document.getElementById(
+            "address"
+          ).value.trim(),
+
+        /*
+         * HII NDIO DATA YA FORM BUILDER
+         */
+        custom_data:
+          customData
+
+      };
+
+
+      console.log(
+        "Application payload:",
+        payload
+      );
+
+
+      /*
+       * SEND TO BACKEND
+       */
+      const response =
+        await fetch(
+          `${API_BASE}/api/applications`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(payload)
+          }
+        );
 
 
       const data =
         await response.json();
 
 
+      if (!response.ok) {
+
+        throw new Error(
+          data.message ||
+          data.error ||
+          "Imeshindikana kuhifadhi ombi."
+        );
+
+      }
+
+
       if (
-        !data.success ||
-        !Array.isArray(data.schools)
+        data.success === false
       ) {
 
         throw new Error(
-          "Taarifa za shule hazijapatikana."
+          data.message ||
+          data.error ||
+          "Imeshindikana kuhifadhi ombi."
         );
 
       }
 
 
-      selectedSchool =
-        data.schools.find(
-          item =>
-            String(item.id) ===
-            String(schoolId)
+      /*
+       * APPLICATION NUMBER
+       */
+      const applicationNumber =
+        data.application_number ||
+        data.applicationNumber ||
+        data.application?.application_number;
+
+
+      /*
+       * PAYMENT REFERENCE
+       */
+      const paymentReference =
+        data.payment_reference ||
+        data.paymentReference ||
+        data.payment?.payment_reference;
+
+
+      /*
+       * APPLICATION ID
+       */
+      const applicationId =
+        data.application_id ||
+        data.applicationId ||
+        data.application?.id;
+
+
+      /*
+       * STORE TEMPORARILY
+       */
+      if (applicationNumber) {
+
+        localStorage.setItem(
+          "last_application_number",
+          applicationNumber
         );
-
-
-      if (!selectedSchool) {
-
-        schoolLoading.textContent =
-          "⚠️ Shule haikupatikana.";
-
-        showError(
-          "Shule yenye ID " +
-          schoolId +
-          " haikupatikana kwenye mfumo."
-        );
-
-        return;
 
       }
 
 
-      // ======================================
-      // GET REAL PRICE
-      // ======================================
+      if (paymentReference) {
 
-      schoolFormPrice =
-        getFormPrice(
-          selectedSchool
+        localStorage.setItem(
+          "last_payment_reference",
+          paymentReference
         );
-
-
-      console.log(
-        "SELECTED SCHOOL:",
-        selectedSchool
-      );
-
-      console.log(
-        "REAL FORM PRICE:",
-        schoolFormPrice
-      );
-
-
-      // ======================================
-      // DISPLAY SCHOOL
-      // ======================================
-
-      schoolName.textContent =
-        selectedSchool.name || "-";
-
-      schoolRegion.textContent =
-        selectedSchool.region || "-";
-
-      schoolDistrict.textContent =
-        selectedSchool.district || "-";
-
-      schoolType.textContent =
-        selectedSchool.school_type ||
-        selectedSchool.type ||
-        "-";
-
-
-      formPrice.textContent =
-        formatMoney(
-          schoolFormPrice
-        );
-
-
-      noticePrice.textContent =
-        formatMoney(
-          schoolFormPrice
-        );
-
-
-      schoolLoading.style.display =
-        "none";
-
-      schoolInfo.style.display =
-        "block";
-
-
-      // ======================================
-      // PREFILL DATA FROM PREVIOUS PAGE
-      // ======================================
-
-      document.getElementById(
-        "studentName"
-      ).value =
-        params.get(
-          "student_name"
-        ) || "";
-
-
-      document.getElementById(
-        "phone"
-      ).value =
-        params.get(
-          "phone"
-        ) || "";
-
-
-      document.getElementById(
-        "email"
-      ).value =
-        params.get(
-          "email"
-        ) || "";
-
-
-      // ======================================
-      // PRICE VALIDATION
-      // ======================================
-
-      if (
-        schoolFormPrice <= 0
-      ) {
-
-        showError(
-          "Bei ya fomu ya shule haijawekwa vizuri. Tafadhali wasiliana na Admin wa Shule."
-        );
-
-        submitButton.disabled =
-          true;
-
-        return;
 
       }
 
 
-      submitButton.disabled =
-        false;
+      if (applicationId) {
 
-    } catch (error) {
+        localStorage.setItem(
+          "last_application_id",
+          applicationId
+        );
 
-      console.error(
-        "LOAD SCHOOL ERROR:",
-        error
+      }
+
+
+      /*
+       * SUCCESS
+       */
+      showSuccess(
+        "Ombi limehifadhiwa kikamilifu. Tunaelekeza kwenye malipo..."
       );
 
 
-      schoolLoading.textContent =
-        "⚠️ Imeshindikana kupakia taarifa za shule.";
+      /*
+       * GO TO PAYMENT
+       *
+       * Tunajaribu kutumia payment page
+       * ya mfumo.
+       */
+      setTimeout(() => {
+
+        const params =
+          new URLSearchParams();
+
+
+        if (applicationNumber) {
+
+          params.set(
+            "application_number",
+            applicationNumber
+          );
+
+        }
+
+
+        if (applicationId) {
+
+          params.set(
+            "application_id",
+            applicationId
+          );
+
+        }
+
+
+        if (paymentReference) {
+
+          params.set(
+            "payment_reference",
+            paymentReference
+          );
+
+        }
+
+
+        params.set(
+          "school_id",
+          schoolId
+        );
+
+
+        /*
+         * Kama mfumo wako una
+         * payment.html, hapa ndipo
+         * itaelekezwa.
+         *
+         * Ikiwa payment page bado haijawekwa,
+         * applicant dashboard inaweza kutumika.
+         */
+        window.location.href =
+          `payment.html?${params.toString()}`;
+
+      }, 1000);
+
+    }
+
+    catch (error) {
+
+      console.error(error);
 
       showError(
-        "Kosa: " +
-        error.message
+        error.message ||
+        "Kuna tatizo wakati wa kuhifadhi ombi."
       );
+
+      button.disabled = false;
+
+      button.textContent =
+        "Endelea na Malipo 💳";
 
     }
 
   }
 
 
-  // ==========================================
-  // SUBMIT APPLICATION
-  // ==========================================
+  /*
+   * NO SCHOOL
+   */
+  function showNoSchool() {
 
+    document
+      .getElementById("loadingBox")
+      .classList.add("hidden");
+
+
+    document
+      .getElementById("schoolContent")
+      .classList.add("hidden");
+
+
+    document
+      .getElementById("noSchool")
+      .classList.remove("hidden");
+
+  }
+
+
+  /*
+   * FORM SUBMIT
+   */
   document
-    .getElementById(
-      "applicationForm"
-    )
+    .getElementById("applicationForm")
     .addEventListener(
       "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-
-        // ======================================
-        // CHECK SCHOOL
-        // ======================================
-
-        if (!selectedSchool) {
-
-          showError(
-            "Taarifa za shule hazijapatikana."
-          );
-
-          return;
-
-        }
-
-
-        // ======================================
-        // CHECK PRICE
-        // ======================================
-
-        if (
-          !schoolFormPrice ||
-          Number(schoolFormPrice) <= 0
-        ) {
-
-          showError(
-            "Bei ya fomu haijawekwa vizuri. Huwezi kuendelea na malipo."
-          );
-
-          return;
-
-        }
-
-
-        // ======================================
-        // GET FORM VALUES
-        // ======================================
-
-        const studentName =
-          document
-            .getElementById(
-              "studentName"
-            )
-            .value
-            .trim();
-
-
-        const gender =
-          document
-            .getElementById(
-              "gender"
-            )
-            .value;
-
-
-        const dateOfBirth =
-          document
-            .getElementById(
-              "dateOfBirth"
-            )
-            .value;
-
-
-        const classLevel =
-          document
-            .getElementById(
-              "classLevel"
-            )
-            .value;
-
-
-        const parentName =
-          document
-            .getElementById(
-              "parentName"
-            )
-            .value
-            .trim();
-
-
-        const phone =
-          document
-            .getElementById(
-              "phone"
-            )
-            .value
-            .trim();
-
-
-        const email =
-          document
-            .getElementById(
-              "email"
-            )
-            .value
-            .trim();
-
-
-        const address =
-          document
-            .getElementById(
-              "address"
-            )
-            .value
-            .trim();
-
-
-        // ======================================
-        // VALIDATION
-        // ======================================
-
-        if (!studentName) {
-
-          showError(
-            "Tafadhali weka jina la mwanafunzi."
-          );
-
-          return;
-
-        }
-
-
-        if (!gender) {
-
-          showError(
-            "Tafadhali chagua jinsia."
-          );
-
-          return;
-
-        }
-
-
-        if (!dateOfBirth) {
-
-          showError(
-            "Tafadhali weka tarehe ya kuzaliwa."
-          );
-
-          return;
-
-        }
-
-
-        if (!classLevel) {
-
-          showError(
-            "Tafadhali chagua darasa/kidato."
-          );
-
-          return;
-
-        }
-
-
-        if (!parentName) {
-
-          showError(
-            "Tafadhali weka jina la mzazi/mlezi."
-          );
-
-          return;
-
-        }
-
-
-        if (!phone) {
-
-          showError(
-            "Tafadhali weka namba ya simu."
-          );
-
-          return;
-
-        }
-
-
-        // ======================================
-        // APPLICATION DATA
-        // ======================================
-
-        const applicationData = {
-
-          school_id:
-            Number(schoolId),
-
-          student_name:
-            studentName,
-
-          gender:
-            gender,
-
-          date_of_birth:
-            dateOfBirth,
-
-          class_level:
-            classLevel,
-
-          parent_name:
-            parentName,
-
-          phone:
-            phone,
-
-          email:
-            email,
-
-          address:
-            address,
-
-          /*
-            Bei hii ni kwa taarifa ya frontend.
-
-            MUHIMU:
-            Backend inapaswa kuthibitisha
-            bei halisi kutoka database.
-          */
-
-          form_price:
-            Number(schoolFormPrice)
-
-        };
-
-
-        console.log(
-          "APPLICATION DATA:",
-          applicationData
-        );
-
-
-        // ======================================
-        // BUTTON LOADING
-        // ======================================
-
-        submitButton.disabled =
-          true;
-
-        submitButton.textContent =
-          "Inahifadhi maombi...";
-
-        message.style.display =
-          "none";
-
-
-        // ======================================
-        // SEND TO SERVER
-        // ======================================
-
-        try {
-
-          const response =
-            await fetch(
-              "/api/applications",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                body:
-                  JSON.stringify(
-                    applicationData
-                  )
-              }
-            );
-
-
-          const result =
-            await response.json();
-
-
-          console.log(
-            "SERVER RESPONSE:",
-            result
-          );
-
-
-          // ====================================
-          // SERVER ERROR
-          // ====================================
-
-          if (
-            !response.ok ||
-            !result.success
-          ) {
-
-            throw new Error(
-              result.error ||
-              result.message ||
-              "Imeshindikana kuhifadhi maombi."
-            );
-
-          }
-
-
-          // ====================================
-          // CHECK APPLICATION
-          // ====================================
-
-          if (
-            !result.application ||
-            !result.application.id ||
-            !result.application.application_number
-          ) {
-
-            throw new Error(
-              "Server haikurudisha taarifa kamili za maombi."
-            );
-
-          }
-
-
-          // ====================================
-          // CHECK PAYMENT
-          // ====================================
-
-          if (
-            !result.payment ||
-            !result.payment.id ||
-            !result.payment.payment_reference
-          ) {
-
-            throw new Error(
-              "Maombi yamehifadhiwa lakini taarifa za malipo hazijakamilika."
-            );
-
-          }
-
-
-          // ====================================
-          // CHECK PAYMENT AMOUNT
-          // ====================================
-
-          const paymentAmount =
-            Number(
-              result.payment.amount
-            );
-
-
-          console.log(
-            "PAYMENT AMOUNT FROM SERVER:",
-            paymentAmount
-          );
-
-
-          /*
-            Kama backend imerudisha 0,
-            tusimpeleke mzazi kwenye
-            payment page.
-          */
-
-          if (
-            isNaN(paymentAmount) ||
-            paymentAmount <= 0
-          ) {
-
-            throw new Error(
-              "Mfumo umepokea kiasi cha malipo cha TSh 0. Hii si sahihi. Tafadhali usiendelee; bei ya shule inapaswa kuwa " +
-              formatMoney(schoolFormPrice) +
-              "."
-            );
-
-          }
-
-
-          // ====================================
-          // SAVE SESSION DATA
-          // ====================================
-
-          sessionStorage.setItem(
-            "application_id",
-            result.application.id
-          );
-
-
-          sessionStorage.setItem(
-            "application_number",
-            result.application.application_number
-          );
-
-
-          sessionStorage.setItem(
-            "payment_id",
-            result.payment.id
-          );
-
-
-          sessionStorage.setItem(
-            "payment_reference",
-            result.payment.payment_reference
-          );
-
-
-          sessionStorage.setItem(
-            "payment_amount",
-            paymentAmount
-          );
-
-
-          // ====================================
-          // PAYMENT URL
-          // ====================================
-
-          const nextParams =
-            new URLSearchParams();
-
-
-          nextParams.set(
-            "school_id",
-            schoolId
-          );
-
-
-          nextParams.set(
-            "application_id",
-            result.application.id
-          );
-
-
-          nextParams.set(
-            "application_number",
-            result.application.application_number
-          );
-
-
-          nextParams.set(
-            "payment_id",
-            result.payment.id
-          );
-
-
-          nextParams.set(
-            "payment_reference",
-            result.payment.payment_reference
-          );
-
-
-          nextParams.set(
-            "amount",
-            paymentAmount
-          );
-
-
-          // ====================================
-          // GO PAYMENT
-          // ====================================
-
-          window.location.href =
-            "/payment.html?" +
-            nextParams.toString();
-
-        } catch (error) {
-
-          console.error(
-            "APPLICATION SUBMIT ERROR:",
-            error
-          );
-
-
-          showError(
-            error.message
-          );
-
-
-          submitButton.disabled =
-            false;
-
-          submitButton.textContent =
-            "Endelea na Malipo 💳";
-
-        }
-
-      }
+      submitApplication
     );
 
 
-  // ==========================================
-  // START
-  // ==========================================
-
+  /*
+   * START
+   */
   loadSchool();
 
 </script>
