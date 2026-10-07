@@ -30,8 +30,8 @@ pool.on("error", (err) => {
 // MIDDLEWARE
 // ============================================================
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(express.static(path.join(__dirname)));
 
@@ -95,6 +95,48 @@ function getCookie(req, name) {
   }
 
   return null;
+}
+
+function isPlainObject(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value)
+  );
+}
+
+function parseBoolean(value, defaultValue = false) {
+  if (value === undefined || value === null) {
+    return defaultValue;
+  }
+
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+
+    if (
+      normalized === "true" ||
+      normalized === "1" ||
+      normalized === "yes" ||
+      normalized === "on"
+    ) {
+      return true;
+    }
+
+    if (
+      normalized === "false" ||
+      normalized === "0" ||
+      normalized === "no" ||
+      normalized === "off"
+    ) {
+      return false;
+    }
+  }
+
+  return Boolean(value);
 }
 
 // ============================================================
@@ -208,51 +250,91 @@ function normalizeFieldKey(value) {
     .toLowerCase()
     .replace(/\s+/g, "_")
     .replace(/[^a-z0-9_]/g, "")
-    .replace(/^_+|_+$/g, "");
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 100);
 }
 
 function normalizeOptions(options) {
-  if (!Array.isArray(options)) {
-    return [];
+  if (Array.isArray(options)) {
+    return options
+      .map((option) => {
+        if (
+          typeof option === "string" ||
+          typeof option === "number"
+        ) {
+          return String(option).trim();
+        }
+
+        if (
+          option &&
+          typeof option === "object"
+        ) {
+          return {
+            label: String(
+              option.label ||
+                option.value ||
+                ""
+            ).trim(),
+
+            value: String(
+              option.value ||
+                option.label ||
+                ""
+            ).trim()
+          };
+        }
+
+        return null;
+      })
+      .filter((option) => {
+        if (!option) {
+          return false;
+        }
+
+        if (typeof option === "string") {
+          return option.length > 0;
+        }
+
+        return option.label && option.value;
+      });
   }
 
-  return options
-    .map((option) => {
-      if (
-        typeof option === "string" ||
-        typeof option === "number"
-      ) {
-        return String(option).trim();
+  if (typeof options === "string") {
+    try {
+      const parsed = JSON.parse(options);
+
+      if (Array.isArray(parsed)) {
+        return normalizeOptions(parsed);
       }
+    } catch (error) {
+      // Continue and treat as comma separated values
+    }
 
-      if (
-        option &&
-        typeof option === "object"
-      ) {
-        return {
-          label: String(
-            option.label || option.value || ""
-          ).trim(),
+    return options
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
 
-          value: String(
-            option.value || option.label || ""
-          ).trim()
-        };
-      }
+  return [];
+}
 
-      return null;
-    })
-    .filter((option) => {
-      if (!option) {
-        return false;
-      }
+function validateCustomFieldOptions(
+  fieldType,
+  options
+) {
+  const selectionTypes = [
+    "dropdown",
+    "radio"
+  ];
 
-      if (typeof option === "string") {
-        return option.length > 0;
-      }
+  if (selectionTypes.includes(fieldType)) {
+    if (!Array.isArray(options) || options.length === 0) {
+      return false;
+    }
+  }
 
-      return option.label && option.value;
-    });
+  return true;
 }
 
 // ============================================================
@@ -306,6 +388,7 @@ async function initializeDatabase() {
         parent_phone VARCHAR(100),
         parent_email VARCHAR(255),
         address TEXT,
+        custom_data JSONB NOT NULL DEFAULT '{}'::jsonb,
         status VARCHAR(50) DEFAULT 'pending',
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
@@ -351,7 +434,7 @@ async function initializeDatabase() {
     `);
 
     // --------------------------------------------------------
-    // OLD SCHOOL ADMIN SESSIONS TABLE
+    // SCHOOL ADMIN SESSIONS
     // --------------------------------------------------------
 
     await pool.query(`
@@ -365,7 +448,7 @@ async function initializeDatabase() {
     `);
 
     // --------------------------------------------------------
-    // MIGRATIONS - SCHOOLS
+    // SCHOOL MIGRATIONS
     // --------------------------------------------------------
 
     await pool.query(`
@@ -423,17 +506,38 @@ async function initializeDatabase() {
       ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW()
     `);
 
-    // --------------------------------------------------------
-    // NEW: CUSTOM DATA FOR EACH SCHOOL
-    // --------------------------------------------------------
+    await pool.query(`
+      ALTER TABLE schools
+      ADD COLUMN IF NOT EXISTS description TEXT
+    `);
 
     await pool.query(`
       ALTER TABLE schools
-      ADD COLUMN IF NOT EXISTS custom_data JSONB DEFAULT '{}'::jsonb
+      ADD COLUMN IF NOT EXISTS logo_url TEXT
+    `);
+
+    await pool.query(`
+      ALTER TABLE schools
+      ADD COLUMN IF NOT EXISTS classes_offered TEXT
+    `);
+
+    await pool.query(`
+      ALTER TABLE schools
+      ADD COLUMN IF NOT EXISTS requirements TEXT
+    `);
+
+    await pool.query(`
+      ALTER TABLE schools
+      ADD COLUMN IF NOT EXISTS profile_completed BOOLEAN DEFAULT FALSE
+    `);
+
+    await pool.query(`
+      ALTER TABLE schools
+      ADD COLUMN IF NOT EXISTS custom_data JSONB NOT NULL DEFAULT '{}'::jsonb
     `);
 
     // --------------------------------------------------------
-    // MIGRATIONS - APPLICATIONS
+    // APPLICATION MIGRATIONS
     // --------------------------------------------------------
 
     await pool.query(`
@@ -443,7 +547,17 @@ async function initializeDatabase() {
 
     await pool.query(`
       ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS custom_data JSONB NOT NULL DEFAULT '{}'::jsonb
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
       ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'pending'
+    `);
+
+    await pool.query(`
+      ALTER TABLE applications
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()
     `);
 
     await pool.query(`
@@ -452,7 +566,7 @@ async function initializeDatabase() {
     `);
 
     // --------------------------------------------------------
-    // MIGRATIONS - PAYMENTS
+    // PAYMENT MIGRATIONS
     // --------------------------------------------------------
 
     await pool.query(`
@@ -470,8 +584,13 @@ async function initializeDatabase() {
       ADD COLUMN IF NOT EXISTS payment_method VARCHAR(100)
     `);
 
+    await pool.query(`
+      ALTER TABLE payments
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW()
+    `);
+
     // --------------------------------------------------------
-    // MIGRATIONS - SCHOOL ADMINS
+    // SCHOOL ADMIN MIGRATIONS
     // --------------------------------------------------------
 
     await pool.query(`
@@ -500,7 +619,7 @@ async function initializeDatabase() {
     `);
 
     // --------------------------------------------------------
-    // NEW: SCHOOL CUSTOM FIELDS
+    // SCHOOL CUSTOM FIELDS
     // --------------------------------------------------------
 
     await pool.query(`
@@ -519,7 +638,7 @@ async function initializeDatabase() {
 
         placeholder TEXT,
 
-        options JSONB DEFAULT '[]'::jsonb,
+        options JSONB NOT NULL DEFAULT '[]'::jsonb,
 
         is_required BOOLEAN NOT NULL DEFAULT FALSE,
 
@@ -529,9 +648,9 @@ async function initializeDatabase() {
 
         sort_order INTEGER NOT NULL DEFAULT 0,
 
-        created_at TIMESTAMP DEFAULT NOW(),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
-        updated_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
         CONSTRAINT unique_school_custom_field_key
           UNIQUE (school_id, field_key)
@@ -550,6 +669,11 @@ async function initializeDatabase() {
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_applications_number
       ON applications(application_number)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_applications_custom_data
+      ON applications USING GIN(custom_data)
     `);
 
     await pool.query(`
@@ -579,6 +703,7 @@ async function initializeDatabase() {
 
     console.log("DATABASE INITIALIZATION COMPLETE");
     console.log("CUSTOM FIELDS: ENABLED");
+    console.log("APPLICATION CUSTOM DATA: ENABLED");
   } catch (error) {
     console.error("DATABASE INITIALIZATION ERROR:");
     console.error(error);
@@ -708,6 +833,11 @@ app.get("/api/schools", async (req, res) => {
         application_start,
         application_end,
         status,
+        description,
+        logo_url,
+        classes_offered,
+        requirements,
+        profile_completed,
         custom_data,
         created_at,
         updated_at
@@ -770,6 +900,55 @@ app.get("/api/schools/:id", async (req, res) => {
 });
 
 // ============================================================
+// PUBLIC SCHOOL CUSTOM FIELDS
+// ============================================================
+
+app.get(
+  "/api/schools/:id/custom-fields",
+  async (req, res) => {
+    try {
+      const result = await pool.query(
+        `
+        SELECT
+          id,
+          school_id,
+          field_key,
+          field_label,
+          field_type,
+          placeholder,
+          options,
+          is_required,
+          is_visible,
+          show_on_public,
+          sort_order
+        FROM school_custom_fields
+        WHERE school_id = $1
+        AND is_visible = TRUE
+        AND show_on_public = TRUE
+        ORDER BY sort_order ASC, id ASC
+        `,
+        [req.params.id]
+      );
+
+      res.json({
+        success: true,
+        fields: result.rows
+      });
+    } catch (error) {
+      console.error(
+        "PUBLIC CUSTOM FIELDS ERROR:",
+        error
+      );
+
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);
+
+// ============================================================
 // ADMIN SCHOOLS
 // ============================================================
 
@@ -822,10 +1001,15 @@ app.post("/api/admin/schools", async (req, res) => {
       application_start,
       application_end,
       status,
+      description,
+      logo_url,
+      classes_offered,
+      requirements,
+      profile_completed,
       custom_data
     } = req.body;
 
-    if (!name) {
+    if (!name || !String(name).trim()) {
       return res.status(400).json({
         success: false,
         message: "Jina la shule linahitajika."
@@ -833,8 +1017,7 @@ app.post("/api/admin/schools", async (req, res) => {
     }
 
     const cleanCustomData =
-      custom_data &&
-      typeof custom_data === "object"
+      isPlainObject(custom_data)
         ? JSON.stringify(custom_data)
         : "{}";
 
@@ -854,14 +1037,22 @@ app.post("/api/admin/schools", async (req, res) => {
         application_start,
         application_end,
         status,
+        description,
+        logo_url,
+        classes_offered,
+        requirements,
+        profile_completed,
         custom_data
       )
       VALUES
-      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb)
+      (
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,
+        $13,$14,$15,$16,$17,$18::jsonb
+      )
       RETURNING *
       `,
       [
-        name,
+        String(name).trim(),
         region || null,
         district || null,
         school_type || type || null,
@@ -873,6 +1064,11 @@ app.post("/api/admin/schools", async (req, res) => {
         application_start || null,
         application_end || null,
         status || "draft",
+        description || null,
+        logo_url || null,
+        classes_offered || null,
+        requirements || null,
+        parseBoolean(profile_completed, false),
         cleanCustomData
       ]
     );
@@ -916,12 +1112,16 @@ app.put(
         application_start,
         application_end,
         status,
+        description,
+        logo_url,
+        classes_offered,
+        requirements,
+        profile_completed,
         custom_data
       } = req.body;
 
       const cleanCustomData =
-        custom_data &&
-        typeof custom_data === "object"
+        isPlainObject(custom_data)
           ? JSON.stringify(custom_data)
           : null;
 
@@ -941,13 +1141,18 @@ app.put(
           application_start = COALESCE($10,application_start),
           application_end = COALESCE($11,application_end),
           status = COALESCE($12,status),
-          custom_data = COALESCE($13::jsonb,custom_data),
+          description = COALESCE($13,description),
+          logo_url = COALESCE($14,logo_url),
+          classes_offered = COALESCE($15,classes_offered),
+          requirements = COALESCE($16,requirements),
+          profile_completed = COALESCE($17,profile_completed),
+          custom_data = COALESCE($18::jsonb,custom_data),
           updated_at = NOW()
-        WHERE id = $14
+        WHERE id = $19
         RETURNING *
         `,
         [
-          name || null,
+          name ? String(name).trim() : null,
           region || null,
           district || null,
           school_type || type || null,
@@ -961,6 +1166,13 @@ app.put(
           application_start || null,
           application_end || null,
           status || null,
+          description || null,
+          logo_url || null,
+          classes_offered || null,
+          requirements || null,
+          profile_completed !== undefined
+            ? parseBoolean(profile_completed)
+            : null,
           cleanCustomData,
           req.params.id
         ]
@@ -994,13 +1206,23 @@ app.put(
 );
 
 // ============================================================
-// SCHOOL CUSTOM FIELDS - LIST
+// SCHOOL CUSTOM FIELDS - ADMIN LIST
 // ============================================================
 
 app.get(
   "/api/admin/schools/:schoolId/custom-fields",
   async (req, res) => {
     try {
+      const schoolId =
+        Number(req.params.schoolId);
+
+      if (!Number.isInteger(schoolId)) {
+        return res.status(400).json({
+          success: false,
+          message: "School ID si sahihi."
+        });
+      }
+
       const result = await pool.query(
         `
         SELECT
@@ -1021,7 +1243,7 @@ app.get(
         WHERE school_id = $1
         ORDER BY sort_order ASC, id ASC
         `,
-        [req.params.schoolId]
+        [schoolId]
       );
 
       res.json({
@@ -1050,7 +1272,8 @@ app.post(
   "/api/admin/schools/:schoolId/custom-fields",
   async (req, res) => {
     try {
-      const schoolId = req.params.schoolId;
+      const schoolId =
+        Number(req.params.schoolId);
 
       const {
         field_key,
@@ -1064,7 +1287,17 @@ app.post(
         sort_order
       } = req.body;
 
-      if (!field_key || !field_label) {
+      if (!Number.isInteger(schoolId)) {
+        return res.status(400).json({
+          success: false,
+          message: "School ID si sahihi."
+        });
+      }
+
+      if (
+        !field_key ||
+        !String(field_label || "").trim()
+      ) {
         return res.status(400).json({
           success: false,
           message:
@@ -1084,7 +1317,9 @@ app.post(
       }
 
       const finalType =
-        field_type || "text";
+        String(field_type || "text")
+          .trim()
+          .toLowerCase();
 
       if (
         !ALLOWED_CUSTOM_FIELD_TYPES.includes(
@@ -1098,14 +1333,15 @@ app.post(
         });
       }
 
-      const school = await pool.query(
-        `
-        SELECT id
-        FROM schools
-        WHERE id = $1
-        `,
-        [schoolId]
-      );
+      const school =
+        await pool.query(
+          `
+          SELECT id
+          FROM schools
+          WHERE id = $1
+          `,
+          [schoolId]
+        );
 
       if (school.rows.length === 0) {
         return res.status(404).json({
@@ -1140,6 +1376,19 @@ app.post(
       const cleanOptions =
         normalizeOptions(options);
 
+      if (
+        !validateCustomFieldOptions(
+          finalType,
+          cleanOptions
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Dropdown/Radio lazima ziwe na options."
+        });
+      }
+
       const result =
         await pool.query(
           `
@@ -1167,11 +1416,13 @@ app.post(
             normalizedKey,
             String(field_label).trim(),
             finalType,
-            placeholder || null,
+            placeholder
+              ? String(placeholder).trim()
+              : null,
             JSON.stringify(cleanOptions),
-            Boolean(is_required),
-            is_visible !== false,
-            show_on_public !== false,
+            parseBoolean(is_required, false),
+            parseBoolean(is_visible, true),
+            parseBoolean(show_on_public, true),
             Number(sort_order || 0)
           ]
         );
@@ -1187,6 +1438,14 @@ app.post(
         "CREATE CUSTOM FIELD ERROR:",
         error
       );
+
+      if (error.code === "23505") {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Field key hiyo tayari ipo."
+        });
+      }
 
       res.status(500).json({
         success: false,
@@ -1204,6 +1463,12 @@ app.put(
   "/api/admin/schools/:schoolId/custom-fields/:fieldId",
   async (req, res) => {
     try {
+      const schoolId =
+        Number(req.params.schoolId);
+
+      const fieldId =
+        Number(req.params.fieldId);
+
       const {
         field_key,
         field_label,
@@ -1216,8 +1481,34 @@ app.put(
         sort_order
       } = req.body;
 
+      if (
+        !Number.isInteger(schoolId) ||
+        !Number.isInteger(fieldId)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "ID si sahihi."
+        });
+      }
+
+      const normalizedKey =
+        normalizeFieldKey(field_key);
+
+      if (
+        !normalizedKey ||
+        !String(field_label || "").trim()
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Field key na field label vinahitajika."
+        });
+      }
+
       const finalType =
-        field_type || "text";
+        String(field_type || "text")
+          .trim()
+          .toLowerCase();
 
       if (
         !ALLOWED_CUSTOM_FIELD_TYPES.includes(
@@ -1231,17 +1522,6 @@ app.put(
         });
       }
 
-      const normalizedKey =
-        normalizeFieldKey(field_key);
-
-      if (!normalizedKey || !field_label) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Field key na field label vinahitajika."
-        });
-      }
-
       const duplicate =
         await pool.query(
           `
@@ -1252,9 +1532,9 @@ app.put(
           AND id <> $3
           `,
           [
-            req.params.schoolId,
+            schoolId,
             normalizedKey,
-            req.params.fieldId
+            fieldId
           ]
         );
 
@@ -1268,6 +1548,19 @@ app.put(
 
       const cleanOptions =
         normalizeOptions(options);
+
+      if (
+        !validateCustomFieldOptions(
+          finalType,
+          cleanOptions
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Dropdown/Radio lazima ziwe na options."
+        });
+      }
 
       const result =
         await pool.query(
@@ -1292,14 +1585,16 @@ app.put(
             normalizedKey,
             String(field_label).trim(),
             finalType,
-            placeholder || null,
+            placeholder
+              ? String(placeholder).trim()
+              : null,
             JSON.stringify(cleanOptions),
-            Boolean(is_required),
-            is_visible !== false,
-            show_on_public !== false,
+            parseBoolean(is_required, false),
+            parseBoolean(is_visible, true),
+            parseBoolean(show_on_public, true),
             Number(sort_order || 0),
-            req.params.fieldId,
-            req.params.schoolId
+            fieldId,
+            schoolId
           ]
         );
 
@@ -1322,6 +1617,14 @@ app.put(
         "UPDATE CUSTOM FIELD ERROR:",
         error
       );
+
+      if (error.code === "23505") {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Field key hiyo tayari ipo."
+        });
+      }
 
       res.status(500).json({
         success: false,
@@ -1369,53 +1672,6 @@ app.delete(
     } catch (error) {
       console.error(
         "DELETE CUSTOM FIELD ERROR:",
-        error
-      );
-
-      res.status(500).json({
-        success: false,
-        message: error.message
-      });
-    }
-  }
-);
-
-// ============================================================
-// PUBLIC SCHOOL CUSTOM FIELDS
-// ============================================================
-
-app.get(
-  "/api/schools/:id/custom-fields",
-  async (req, res) => {
-    try {
-      const result = await pool.query(
-        `
-        SELECT
-          id,
-          school_id,
-          field_key,
-          field_label,
-          field_type,
-          placeholder,
-          options,
-          is_required,
-          sort_order
-        FROM school_custom_fields
-        WHERE school_id = $1
-        AND is_visible = TRUE
-        AND show_on_public = TRUE
-        ORDER BY sort_order ASC, id ASC
-        `,
-        [req.params.id]
-      );
-
-      res.json({
-        success: true,
-        fields: result.rows
-      });
-    } catch (error) {
-      console.error(
-        "PUBLIC CUSTOM FIELDS ERROR:",
         error
       );
 
@@ -1556,6 +1812,14 @@ app.post(
         });
       }
 
+      if (String(password).length < 4) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Password lazima iwe na angalau herufi 4."
+        });
+      }
+
       const normalizedEmail =
         String(email)
           .trim()
@@ -1622,7 +1886,7 @@ app.post(
           `,
           [
             school_id,
-            full_name,
+            String(full_name).trim(),
             normalizedEmail,
             phone || null,
             hashPassword(password),
@@ -1697,6 +1961,26 @@ app.put(
         }
       }
 
+      if (school_id) {
+        const school =
+          await pool.query(
+            `
+            SELECT id
+            FROM schools
+            WHERE id = $1
+            `,
+            [school_id]
+          );
+
+        if (school.rows.length === 0) {
+          return res.status(404).json({
+            success: false,
+            message:
+              "Shule haipatikani."
+          });
+        }
+      }
+
       const result =
         await pool.query(
           `
@@ -1721,7 +2005,9 @@ app.put(
           `,
           [
             school_id || null,
-            full_name || null,
+            full_name
+              ? String(full_name).trim()
+              : null,
             normalizedEmail,
             phone || null,
             status || null,
@@ -2025,23 +2311,6 @@ app.post(
         password
       } = req.body;
 
-      console.log(
-        "===================================="
-      );
-
-      console.log(
-        "SCHOOL ADMIN LOGIN"
-      );
-
-      console.log(
-        "EMAIL:",
-        email
-      );
-
-      console.log(
-        "===================================="
-      );
-
       if (!email || !password) {
         return res.status(400).json({
           success: false,
@@ -2073,11 +2342,6 @@ app.post(
           [normalizedEmail]
         );
 
-      console.log(
-        "ADMIN FOUND:",
-        adminResult.rows.length
-      );
-
       if (adminResult.rows.length === 0) {
         return res.status(401).json({
           success: false,
@@ -2096,20 +2360,12 @@ app.post(
         !admin.password_hash ||
         suppliedHash !== admin.password_hash
       ) {
-        console.log(
-          "PASSWORD DOES NOT MATCH"
-        );
-
         return res.status(401).json({
           success: false,
           message:
             "Email au password si sahihi."
         });
       }
-
-      console.log(
-        "PASSWORD CORRECT"
-      );
 
       if (admin.status !== "active") {
         return res.status(403).json({
@@ -2397,7 +2653,7 @@ app.post(
 );
 
 // ============================================================
-// DASHBOARD STATS - MAIN ROUTE
+// SCHOOL ADMIN DASHBOARD STATS
 // ============================================================
 
 app.get(
@@ -2407,11 +2663,6 @@ app.get(
     try {
       const schoolId =
         req.schoolAdmin.school_id;
-
-      console.log(
-        "LOADING DASHBOARD STATS FOR SCHOOL:",
-        schoolId
-      );
 
       const total =
         await pool.query(
@@ -2504,37 +2755,31 @@ app.get(
           [schoolId]
         );
 
-      const stats = {
-        total_applications:
-          total.rows[0].total,
-
-        pending:
-          pending.rows[0].total,
-
-        approved:
-          approved.rows[0].total,
-
-        rejected:
-          rejected.rows[0].total,
-
-        paid:
-          paid.rows[0].total,
-
-        unpaid:
-          unpaid.rows[0].total,
-
-        today:
-          today.rows[0].total
-      };
-
-      console.log(
-        "DASHBOARD STATS:",
-        stats
-      );
-
-      return res.json({
+      res.json({
         success: true,
-        stats
+
+        stats: {
+          total_applications:
+            total.rows[0].total,
+
+          pending:
+            pending.rows[0].total,
+
+          approved:
+            approved.rows[0].total,
+
+          rejected:
+            rejected.rows[0].total,
+
+          paid:
+            paid.rows[0].total,
+
+          unpaid:
+            unpaid.rows[0].total,
+
+          today:
+            today.rows[0].total
+        }
       });
     } catch (error) {
       console.error(
@@ -2542,7 +2787,7 @@ app.get(
         error
       );
 
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message:
           "Imeshindikana kupata takwimu za dashboard.",
@@ -2553,7 +2798,7 @@ app.get(
 );
 
 // ============================================================
-// OLD DASHBOARD STATS ROUTE - COMPATIBILITY
+// OLD DASHBOARD STATS ROUTE
 // ============================================================
 
 app.get(
@@ -2763,6 +3008,11 @@ app.get(
           result.rows[0]
       });
     } catch (error) {
+      console.error(
+        "SINGLE SCHOOL APPLICATION ERROR:",
+        error
+      );
+
       res.status(500).json({
         success: false,
         message: error.message
@@ -2832,6 +3082,11 @@ app.put(
           result.rows[0]
       });
     } catch (error) {
+      console.error(
+        "UPDATE APPLICATION STATUS ERROR:",
+        error
+      );
+
       res.status(500).json({
         success: false,
         message: error.message
@@ -2852,11 +3107,6 @@ app.get(
       const schoolId =
         req.schoolAdmin.school_id;
 
-      console.log(
-        "LOADING SCHOOL FOR SCHOOL ADMIN:",
-        schoolId
-      );
-
       const result =
         await pool.query(
           `
@@ -2874,6 +3124,11 @@ app.get(
             application_start,
             application_end,
             status,
+            description,
+            logo_url,
+            classes_offered,
+            requirements,
+            profile_completed,
             custom_data,
             created_at,
             updated_at
@@ -2987,6 +3242,11 @@ app.put(
         email,
         application_start,
         application_end,
+        description,
+        logo_url,
+        classes_offered,
+        requirements,
+        profile_completed,
         custom_data
       } = req.body;
 
@@ -3055,8 +3315,7 @@ app.put(
         ).trim();
 
       const cleanCustomData =
-        custom_data &&
-        typeof custom_data === "object"
+        isPlainObject(custom_data)
           ? JSON.stringify(custom_data)
           : "{}";
 
@@ -3076,9 +3335,14 @@ app.put(
             email = $9,
             application_start = $10,
             application_end = $11,
-            custom_data = $12::jsonb,
+            description = $12,
+            logo_url = $13,
+            classes_offered = $14,
+            requirements = $15,
+            profile_completed = $16,
+            custom_data = $17::jsonb,
             updated_at = NOW()
-          WHERE id = $13
+          WHERE id = $18
           RETURNING *
           `,
           [
@@ -3099,6 +3363,14 @@ app.put(
               : null,
             application_start || null,
             application_end || null,
+            description || null,
+            logo_url || null,
+            classes_offered || null,
+            requirements || null,
+            parseBoolean(
+              profile_completed,
+              false
+            ),
             cleanCustomData,
             req.schoolAdmin.school_id
           ]
@@ -3256,31 +3528,85 @@ app.post(
         custom_data
       } = req.body;
 
+      // ------------------------------------------------------
+      // BASIC VALIDATION
+      // ------------------------------------------------------
+
+      if (!school_id) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Shule haijachaguliwa."
+        });
+      }
+
       if (
-        !school_id ||
         !student_name ||
-        !parent_name ||
-        !parent_phone
+        !String(student_name).trim()
       ) {
         return res.status(400).json({
           success: false,
           message:
-            "Tafadhali jaza taarifa muhimu."
+            "Jina la mwanafunzi linahitajika."
         });
+      }
+
+      if (
+        !parent_name ||
+        !String(parent_name).trim()
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Jina la mzazi/mlezi linahitajika."
+        });
+      }
+
+      if (
+        !parent_phone ||
+        !String(parent_phone).trim()
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Namba ya simu ya mzazi/mlezi inahitajika."
+        });
+      }
+
+      // ------------------------------------------------------
+      // NORMALIZE CUSTOM DATA
+      // ------------------------------------------------------
+
+      let cleanCustomData = {};
+
+      if (isPlainObject(custom_data)) {
+        cleanCustomData = custom_data;
       }
 
       await client.query("BEGIN");
 
+      // ------------------------------------------------------
+      // GET SCHOOL
+      // ------------------------------------------------------
+
       const schoolResult =
         await client.query(
           `
-          SELECT *
+          SELECT
+            id,
+            name,
+            region,
+            district,
+            school_type,
+            type,
+            form_price,
+            status
           FROM schools
           WHERE id = $1
           AND status = 'active'
           LIMIT 1
           `,
-          [school_id]
+          [Number(school_id)]
         );
 
       if (schoolResult.rows.length === 0) {
@@ -3296,8 +3622,170 @@ app.post(
       const school =
         schoolResult.rows[0];
 
+      // ------------------------------------------------------
+      // GET PUBLIC CUSTOM FIELDS
+      // ------------------------------------------------------
+
+      const fieldsResult =
+        await client.query(
+          `
+          SELECT
+            id,
+            field_key,
+            field_label,
+            field_type,
+            options,
+            is_required,
+            is_visible,
+            show_on_public,
+            sort_order
+          FROM school_custom_fields
+          WHERE school_id = $1
+          AND is_visible = TRUE
+          AND show_on_public = TRUE
+          ORDER BY sort_order ASC, id ASC
+          `,
+          [school.id]
+        );
+
+      const customFields =
+        fieldsResult.rows;
+
+      // ------------------------------------------------------
+      // VALIDATE CUSTOM FIELD VALUES
+      // ------------------------------------------------------
+
+      for (const field of customFields) {
+        const value =
+          cleanCustomData[
+            field.field_key
+          ];
+
+        // Required field
+        if (field.is_required) {
+          let missing = false;
+
+          if (field.field_type === "checkbox") {
+            if (
+              value === undefined ||
+              value === null ||
+              value === false ||
+              value === ""
+            ) {
+              missing = true;
+            }
+          } else if (
+            value === undefined ||
+            value === null ||
+            String(value).trim() === ""
+          ) {
+            missing = true;
+          }
+
+          if (missing) {
+            await client.query(
+              "ROLLBACK"
+            );
+
+            return res.status(400).json({
+              success: false,
+              message:
+                `Tafadhali jaza kipengele: ${field.field_label}.`,
+              field_key:
+                field.field_key,
+              field_label:
+                field.field_label
+            });
+          }
+        }
+
+        // Validate dropdown/radio
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          (
+            field.field_type === "dropdown" ||
+            field.field_type === "radio"
+          )
+        ) {
+          const options =
+            normalizeOptions(
+              field.options
+            );
+
+          const allowedValues =
+            options.map((option) => {
+              if (
+                typeof option === "string"
+              ) {
+                return option;
+              }
+
+              return option.value;
+            });
+
+          if (
+            !allowedValues.includes(
+              String(value)
+            )
+          ) {
+            await client.query(
+              "ROLLBACK"
+            );
+
+            return res.status(400).json({
+              success: false,
+              message:
+                `Thamani ya ${field.field_label} si sahihi.`,
+              field_key:
+                field.field_key
+            });
+          }
+        }
+      }
+
+      // ------------------------------------------------------
+      // ONLY ACCEPT FIELDS BELONGING TO THIS SCHOOL
+      // ------------------------------------------------------
+
+      const allowedKeys =
+        new Set(
+          customFields.map(
+            (field) =>
+              field.field_key
+          )
+        );
+
+      const filteredCustomData =
+        {};
+
+      for (
+        const [
+          key,
+          value
+        ] of Object.entries(
+          cleanCustomData
+        )
+      ) {
+        if (
+          allowedKeys.has(key)
+        ) {
+          filteredCustomData[key] =
+            value;
+        }
+      }
+
+      // ------------------------------------------------------
+      // GENERATE APPLICATION NUMBER
+      // ------------------------------------------------------
+
       const applicationNumber =
         generateApplicationNumber();
+
+      // ------------------------------------------------------
+      // INSERT APPLICATION
+      // ------------------------------------------------------
 
       const applicationResult =
         await client.query(
@@ -3314,33 +3802,79 @@ app.post(
             parent_phone,
             parent_email,
             address,
+            custom_data,
             status
           )
           VALUES
           (
-            $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'pending'
+            $1,
+            $2,
+            $3,
+            $4,
+            $5,
+            $6,
+            $7,
+            $8,
+            $9,
+            $10,
+            $11::jsonb,
+            'pending'
           )
           RETURNING *
           `,
           [
             applicationNumber,
-            school_id,
-            student_name,
-            gender || null,
+            school.id,
+            String(student_name).trim(),
+            gender
+              ? String(gender).trim()
+              : null,
             date_of_birth || null,
-            class_applied || null,
-            parent_name,
-            parent_phone,
-            parent_email || null,
-            address || null
+            class_applied
+              ? String(
+                  class_applied
+                ).trim()
+              : null,
+            String(
+              parent_name
+            ).trim(),
+            String(
+              parent_phone
+            ).trim(),
+            parent_email
+              ? String(
+                  parent_email
+                ).trim()
+              : null,
+            address
+              ? String(
+                  address
+                ).trim()
+              : null,
+            JSON.stringify(
+              filteredCustomData
+            )
           ]
         );
 
       const application =
         applicationResult.rows[0];
 
+      // ------------------------------------------------------
+      // CREATE PAYMENT REFERENCE
+      // ------------------------------------------------------
+
       const paymentReference =
         generatePaymentReference();
+
+      const formPrice =
+        Number(
+          school.form_price || 0
+        );
+
+      // ------------------------------------------------------
+      // CREATE PAYMENT RECORD
+      // ------------------------------------------------------
 
       await client.query(
         `
@@ -3350,25 +3884,42 @@ app.post(
           application_number,
           payment_reference,
           amount,
-          status
+          status,
+          payment_method
         )
         VALUES
-        ($1,$2,$3,$4,'pending')
+        (
+          $1,
+          $2,
+          $3,
+          $4,
+          'pending',
+          'pending'
+        )
         `,
         [
           application.id,
           applicationNumber,
           paymentReference,
-          Number(
-            school.form_price || 0
-          )
+          formPrice
         ]
       );
 
-      await client.query("COMMIT");
+      // ------------------------------------------------------
+      // COMMIT
+      // ------------------------------------------------------
 
-      res.json({
+      await client.query(
+        "COMMIT"
+      );
+
+      // ------------------------------------------------------
+      // RESPONSE
+      // ------------------------------------------------------
+
+      return res.status(201).json({
         success: true,
+
         message:
           "Application imepokelewa.",
 
@@ -3379,31 +3930,41 @@ app.post(
             paymentReference,
 
           amount:
-            Number(
-              school.form_price || 0
-            ),
+            formPrice,
 
           school_name:
             school.name,
 
           custom_data:
-            custom_data &&
-            typeof custom_data === "object"
-              ? custom_data
-              : {}
+            filteredCustomData
         }
       });
+
     } catch (error) {
-      await client.query("ROLLBACK");
+      try {
+        await client.query(
+          "ROLLBACK"
+        );
+      } catch (
+        rollbackError
+      ) {
+        console.error(
+          "ROLLBACK ERROR:",
+          rollbackError
+        );
+      }
 
       console.error(
         "CREATE APPLICATION ERROR:",
         error
       );
 
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
-        message: error.message
+        message:
+          "Imeshindikana kutengeneza application.",
+        error:
+          error.message
       });
     } finally {
       client.release();
@@ -3471,6 +4032,11 @@ app.get(
           result.rows[0]
       });
     } catch (error) {
+      console.error(
+        "APPLICATION LOOKUP ERROR:",
+        error
+      );
+
       res.status(500).json({
         success: false,
         message: error.message
@@ -3524,6 +4090,11 @@ app.put(
           result.rows[0]
       });
     } catch (error) {
+      console.error(
+        "CONFIRM PAYMENT ERROR:",
+        error
+      );
+
       res.status(500).json({
         success: false,
         message: error.message
@@ -3551,7 +4122,8 @@ app.get(
             a.parent_phone,
             a.application_number,
 
-            s.name AS school_name
+            s.name AS school_name,
+            s.id AS school_id
 
           FROM payments p
 
@@ -3571,6 +4143,11 @@ app.get(
           result.rows
       });
     } catch (error) {
+      console.error(
+        "ADMIN PAYMENTS ERROR:",
+        error
+      );
+
       res.status(500).json({
         success: false,
         message: error.message
@@ -3624,6 +4201,11 @@ app.put(
           result.rows[0]
       });
     } catch (error) {
+      console.error(
+        "ADMIN CONFIRM PAYMENT ERROR:",
+        error
+      );
+
       res.status(500).json({
         success: false,
         message: error.message
@@ -3673,7 +4255,7 @@ app.use(
 );
 
 // ============================================================
-// START
+// START SERVER
 // ============================================================
 
 async function startServer() {
@@ -3709,6 +4291,14 @@ async function startServer() {
 
       console.log(
         "CUSTOM FIELD BUILDER: ENABLED"
+      );
+
+      console.log(
+        "APPLICATION CUSTOM DATA: ENABLED"
+      );
+
+      console.log(
+        "PAYMENT SYSTEM: ENABLED"
       );
 
       console.log(
