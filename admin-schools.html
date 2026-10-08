@@ -117,6 +117,11 @@ button{
   background:#0d47a1;
 }
 
+.login-btn:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+}
+
 .login-error{
   background:#ffebee;
   color:#c62828;
@@ -674,7 +679,8 @@ th{
     <form id="loginForm">
 
       <div class="form-group">
-        <label>Email</label>
+        <label for="loginEmail">Email</label>
+
         <input
           type="email"
           id="loginEmail"
@@ -685,7 +691,8 @@ th{
       </div>
 
       <div class="form-group">
-        <label>Password</label>
+        <label for="loginPassword">Password</label>
+
         <input
           type="password"
           id="loginPassword"
@@ -706,8 +713,8 @@ th{
     </form>
 
     <div class="security-note">
-      🔒 Ukishaingia, mfumo utahifadhi token ya session kwenye kifaa hiki
-      na kuitumia kwenye maombi yote ya Admin Mkuu.
+      🔒 Kwa usalama, Admin Mkuu lazima athibitishwe
+      kwa email na password kabla ya kufungua dashboard.
     </div>
 
   </div>
@@ -807,6 +814,7 @@ th{
           <div class="stat-title">
             SHULE ZOTE
           </div>
+
           <div class="stat-value" id="totalSchools">
             0
           </div>
@@ -816,6 +824,7 @@ th{
           <div class="stat-title">
             SHULE ACTIVE
           </div>
+
           <div class="stat-value" id="activeSchools">
             0
           </div>
@@ -825,6 +834,7 @@ th{
           <div class="stat-title">
             WAOMBAJI
           </div>
+
           <div class="stat-value" id="totalApplicants">
             0
           </div>
@@ -834,6 +844,7 @@ th{
           <div class="stat-title">
             MAPATO
           </div>
+
           <div class="stat-value" id="totalRevenue">
             TSh 0
           </div>
@@ -956,7 +967,7 @@ th{
 
               <tr>
                 <td colspan="8" class="loading">
-                  Inapakia shule...
+                  Inasubiri login...
                 </td>
               </tr>
 
@@ -1010,6 +1021,7 @@ th{
 
         <div class="form-group">
           <label>Jina la Shule *</label>
+
           <input
             id="schoolName"
             required
@@ -1018,6 +1030,7 @@ th{
 
         <div class="form-group">
           <label>Mkoa *</label>
+
           <input
             id="schoolRegion"
             required
@@ -1026,6 +1039,7 @@ th{
 
         <div class="form-group">
           <label>Wilaya *</label>
+
           <input
             id="schoolDistrict"
             required
@@ -1034,12 +1048,14 @@ th{
 
         <div class="form-group">
           <label>Mahali / Address</label>
+
           <input
             id="schoolAddress"
           >
         </div>
 
         <div class="form-group">
+
           <label>Aina ya Shule</label>
 
           <select id="schoolType">
@@ -1073,6 +1089,7 @@ th{
         </div>
 
         <div class="form-group">
+
           <label>Bei ya Fomu (TSh)</label>
 
           <input
@@ -1085,36 +1102,48 @@ th{
         </div>
 
         <div class="form-group">
+
           <label>Simu</label>
+
           <input
             id="schoolPhone"
             type="tel"
           >
+
         </div>
 
         <div class="form-group">
+
           <label>Email</label>
+
           <input
             id="schoolEmail"
             type="email"
           >
+
         </div>
 
         <div class="form-group">
+
           <label>Website</label>
+
           <input
             id="schoolWebsite"
             type="url"
           >
+
         </div>
 
         <div class="form-group">
+
           <label>Mwaka wa Maombi</label>
+
           <input
             id="schoolApplicationYear"
             type="number"
             value="2026"
           >
+
         </div>
 
       </div>
@@ -1193,13 +1222,14 @@ th{
     <div class="modal-header">
 
       <div>
+
         <h3>🧩 Form Builder</h3>
 
         <div
           id="builderSchoolName"
           style="color:#777;margin-top:4px;"
-        >
-        </div>
+        ></div>
+
       </div>
 
       <button
@@ -1218,7 +1248,10 @@ th{
     </div>
 
 
-    <div class="actions" style="margin-bottom:18px;">
+    <div
+      class="actions"
+      style="margin-bottom:18px;"
+    >
 
       <button
         class="btn btn-primary"
@@ -1280,6 +1313,7 @@ th{
         type="hidden"
         id="fieldId"
       >
+
 
       <div class="form-group">
 
@@ -1476,21 +1510,102 @@ let editingFieldId = null;
 
 
 /* =========================================================
-   AUTH HELPERS
+   AUTHENTICATION STORAGE
 ========================================================= */
 
-function getAdminToken(){
-  return localStorage.getItem(ADMIN_TOKEN_KEY) || "";
+/*
+  IMPORTANT:
+
+  Toleo la zamani lilikuwa linahifadhi token kwenye localStorage.
+  Hilo lilifanya Admin Mkuu aweze kufunguliwa moja kwa moja.
+
+  Hapa tunaondoa token yoyote ya zamani kutoka localStorage.
+  Token mpya itawekwa sessionStorage.
+*/
+
+try{
+  localStorage.removeItem(ADMIN_TOKEN_KEY);
+}catch(error){
+  console.warn("localStorage haikupatikana.");
 }
+
+
+function getAdminToken(){
+
+  return sessionStorage.getItem(
+    ADMIN_TOKEN_KEY
+  ) || "";
+
+}
+
 
 function setAdminToken(token){
+
   if(token){
-    localStorage.setItem(ADMIN_TOKEN_KEY, token);
+
+    sessionStorage.setItem(
+      ADMIN_TOKEN_KEY,
+      token
+    );
+
   }
+
 }
 
+
 function clearAdminToken(){
-  localStorage.removeItem(ADMIN_TOKEN_KEY);
+
+  sessionStorage.removeItem(
+    ADMIN_TOKEN_KEY
+  );
+
+}
+
+
+/* =========================================================
+   FORCE LOGIN SCREEN
+========================================================= */
+
+function showLogin(message = ""){
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+  document
+    .getElementById("loginScreen")
+    .classList.remove("hidden");
+
+  const error =
+    document.getElementById("loginError");
+
+  if(message){
+
+    error.textContent = message;
+
+    error.classList.remove("hidden");
+
+  }else{
+
+    error.textContent = "";
+
+    error.classList.add("hidden");
+
+  }
+
+}
+
+
+function hideLogin(){
+
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
 }
 
 
@@ -1498,31 +1613,70 @@ function clearAdminToken(){
    API FETCH
 ========================================================= */
 
-async function apiFetch(path, options = {}){
+async function apiFetch(
+  path,
+  options = {}
+){
 
-  const token = getAdminToken();
+  const token =
+    getAdminToken();
+
+  /*
+    Hakuna token = hakuna Admin API.
+  */
+
+  if(!token){
+
+    showLogin(
+      "Tafadhali ingia kama Admin Mkuu kwanza."
+    );
+
+    throw new Error(
+      "NO_ADMIN_TOKEN"
+    );
+
+  }
+
 
   const headers = {
-    "Accept":"application/json",
+
+    "Accept":
+      "application/json",
+
     ...(options.headers || {})
+
   };
 
-  if(options.body && !headers["Content-Type"]){
-    headers["Content-Type"] = "application/json";
+
+  if(
+    options.body &&
+    !headers["Content-Type"]
+  ){
+
+    headers["Content-Type"] =
+      "application/json";
+
   }
 
-  if(token){
-    headers["Authorization"] = `Bearer ${token}`;
-  }
 
-  const response = await fetch(
-    `${API_BASE}${path}`,
-    {
-      ...options,
-      headers,
-      cache:"no-store"
-    }
-  );
+  headers["Authorization"] =
+    `Bearer ${token}`;
+
+
+  const response =
+    await fetch(
+      `${API_BASE}${path}`,
+      {
+        ...options,
+        headers,
+        cache:"no-store"
+      }
+    );
+
+
+  /*
+    Token invalid / expired.
+  */
 
   if(response.status === 401){
 
@@ -1532,10 +1686,15 @@ async function apiFetch(path, options = {}){
       "Session ya Admin Mkuu imeisha. Tafadhali ingia tena."
     );
 
-    throw new Error("UNAUTHORIZED");
+    throw new Error(
+      "UNAUTHORIZED"
+    );
+
   }
 
+
   return response;
+
 }
 
 
@@ -1543,82 +1702,98 @@ async function apiFetch(path, options = {}){
    LOGIN
 ========================================================= */
 
-function showLogin(message = ""){
-
-  document.getElementById("app").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
-
-  const error = document.getElementById("loginError");
-
-  if(message){
-
-    error.textContent = message;
-    error.classList.remove("hidden");
-
-  }else{
-
-    error.textContent = "";
-    error.classList.add("hidden");
-
-  }
-}
-
-
-function hideLogin(){
-
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-
-}
-
-
 async function loginAdmin(event){
 
   event.preventDefault();
 
+
   const email =
-    document.getElementById("loginEmail").value.trim();
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim()
+      .toLowerCase();
+
 
   const password =
-    document.getElementById("loginPassword").value;
+    document
+      .getElementById("loginPassword")
+      .value;
+
 
   const button =
-    document.getElementById("loginButton");
+    document.getElementById(
+      "loginButton"
+    );
+
 
   const error =
-    document.getElementById("loginError");
+    document.getElementById(
+      "loginError"
+    );
 
-  error.classList.add("hidden");
+
+  error.classList.add(
+    "hidden"
+  );
+
 
   button.disabled = true;
-  button.textContent = "⏳ Inaingia...";
+
+  button.textContent =
+    "⏳ Inaingia...";
+
 
   try{
 
-    const response = await fetch(
-      `${API_BASE}/api/admin/login`,
-      {
-        method:"POST",
+    /*
+      Ondoa session yoyote iliyobaki kabla
+      ya kujaribu login mpya.
+    */
 
-        headers:{
-          "Content-Type":"application/json",
-          "Accept":"application/json"
-        },
+    clearAdminToken();
 
-        body:JSON.stringify({
-          email,
-          password
-        }),
 
-        cache:"no-store"
-      }
-    );
+    const response =
+      await fetch(
+        `${API_BASE}/api/admin/login`,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              email,
+              password
+            }),
+
+          cache:
+            "no-store"
+        }
+      );
+
 
     let data = {};
 
+
     try{
-      data = await response.json();
-    }catch(e){}
+
+      data =
+        await response.json();
+
+    }catch(error){
+
+      data = {};
+
+    }
+
 
     if(
       !response.ok ||
@@ -1630,30 +1805,116 @@ async function loginAdmin(event){
         data.message ||
         "Email au password si sahihi."
       );
+
     }
 
-    setAdminToken(data.token);
 
-    document.getElementById("adminEmailDisplay").textContent =
-      data.admin?.email || email;
+    /*
+      Hifadhi token mpya tu baada ya
+      backend kuthibitisha credentials.
+    */
+
+    setAdminToken(
+      data.token
+    );
+
+
+    /*
+      Verify token mpya kabla ya
+      kuonyesha dashboard.
+    */
+
+    const verifyResponse =
+      await fetch(
+        `${API_BASE}/api/admin/me`,
+        {
+          method:"GET",
+
+          headers:{
+            "Accept":
+              "application/json",
+
+            "Authorization":
+              `Bearer ${data.token}`
+          },
+
+          cache:
+            "no-store"
+        }
+      );
+
+
+    const verifyData =
+      await verifyResponse.json();
+
+
+    if(
+      !verifyResponse.ok ||
+      !verifyData.success
+    ){
+
+      clearAdminToken();
+
+      throw new Error(
+        "Login imekubaliwa lakini session haijathibitishwa."
+      );
+
+    }
+
+
+    document
+      .getElementById(
+        "adminEmailDisplay"
+      )
+      .textContent =
+        verifyData.admin?.email ||
+        data.admin?.email ||
+        email;
+
 
     hideLogin();
 
+
+    /*
+      Dashboard ifunguke baada ya
+      login na verification kufanikiwa.
+    */
+
     await initDashboard();
+
 
   }catch(error){
 
-    document.getElementById("loginError").textContent =
-      error.message || "Imeshindikana kuingia.";
+    clearAdminToken();
 
-    document.getElementById("loginError").classList.remove("hidden");
+
+    document
+      .getElementById(
+        "loginError"
+      )
+      .textContent =
+        error.message ||
+        "Imeshindikana kuingia.";
+
+
+    document
+      .getElementById(
+        "loginError"
+      )
+      .classList
+      .remove("hidden");
+
 
   }finally{
 
-    button.disabled = false;
-    button.textContent = "🔐 Ingia kama Admin Mkuu";
+    button.disabled =
+      false;
+
+    button.textContent =
+      "🔐 Ingia kama Admin Mkuu";
 
   }
+
 }
 
 
@@ -1663,41 +1924,73 @@ async function loginAdmin(event){
 
 async function checkAdminSession(){
 
-  const token = getAdminToken();
+  /*
+    Hakuna token = lazima login.
+  */
+
+  const token =
+    getAdminToken();
+
 
   if(!token){
 
     showLogin();
+
     return false;
+
   }
+
 
   try{
 
     const response =
-      await apiFetch("/api/admin/me");
+      await apiFetch(
+        "/api/admin/me"
+      );
+
 
     const data =
       await response.json();
 
-    if(!data.success){
-      throw new Error("Session si sahihi.");
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      clearAdminToken();
+
+      showLogin();
+
+      return false;
+
     }
 
-    document.getElementById("adminEmailDisplay").textContent =
-      data.admin?.email || "Admin Mkuu";
+
+    document
+      .getElementById(
+        "adminEmailDisplay"
+      )
+      .textContent =
+        data.admin?.email ||
+        "Admin Mkuu";
+
 
     hideLogin();
 
     return true;
 
+
   }catch(error){
 
-    if(error.message !== "UNAUTHORIZED"){
-      showLogin();
-    }
+    clearAdminToken();
+
+    showLogin();
 
     return false;
+
   }
+
 }
 
 
@@ -1707,19 +2000,29 @@ async function checkAdminSession(){
 
 async function logoutAdmin(){
 
+  const token =
+    getAdminToken();
+
+
   try{
 
-    if(getAdminToken()){
+    if(token){
 
       await fetch(
         `${API_BASE}/api/admin/logout`,
         {
           method:"POST",
+
           headers:{
-            "Accept":"application/json",
+            "Accept":
+              "application/json",
+
             "Authorization":
-              `Bearer ${getAdminToken()}`
-          }
+              `Bearer ${token}`
+          },
+
+          cache:
+            "no-store"
         }
       );
 
@@ -1727,18 +2030,38 @@ async function logoutAdmin(){
 
   }catch(error){
 
-    console.error(error);
+    console.warn(
+      "Logout request failed:",
+      error
+    );
 
   }finally{
 
     clearAdminToken();
 
-    document.getElementById("app")
-      .classList.add("hidden");
+    /*
+      Hakikisha dashboard haionekani tena.
+    */
 
-    showLogin("Umetoka kwenye Admin Mkuu.");
+    document
+      .getElementById("app")
+      .classList
+      .add("hidden");
+
+
+    showLogin(
+      "Umetoka kwenye Admin Mkuu."
+    );
+
+
+    document
+      .getElementById(
+        "loginPassword"
+      )
+      .value = "";
 
   }
+
 }
 
 
@@ -1748,7 +2071,7 @@ async function logoutAdmin(){
 
 document.addEventListener(
   "DOMContentLoaded",
-  async () => {
+  async function(){
 
     document
       .getElementById("loginForm")
@@ -1757,12 +2080,14 @@ document.addEventListener(
         loginAdmin
       );
 
+
     document
       .getElementById("schoolForm")
       .addEventListener(
         "submit",
         saveSchool
       );
+
 
     document
       .getElementById("fieldForm")
@@ -1771,18 +2096,52 @@ document.addEventListener(
         saveField
       );
 
+
+    /*
+      Anza ikiwa login screen tu.
+    */
+
+    showLogin();
+
+
+    /*
+      Angalia kama kuna session halali.
+    */
+
     const loggedIn =
       await checkAdminSession();
 
+
     if(loggedIn){
+
       await initDashboard();
+
     }
 
   }
 );
 
 
+/* =========================================================
+   INITIALIZE DASHBOARD
+========================================================= */
+
 async function initDashboard(){
+
+  /*
+    Double-check token kabla ya dashboard.
+  */
+
+  if(!getAdminToken()){
+
+    showLogin(
+      "Login ya Admin Mkuu inahitajika."
+    );
+
+    return;
+
+  }
+
 
   await loadSchools();
 
@@ -1795,8 +2154,22 @@ async function initDashboard(){
 
 async function loadSchools(){
 
+  if(!getAdminToken()){
+
+    showLogin(
+      "Tafadhali ingia kama Admin Mkuu kwanza."
+    );
+
+    return;
+
+  }
+
+
   const tbody =
-    document.getElementById("schoolsTableBody");
+    document.getElementById(
+      "schoolsTableBody"
+    );
+
 
   tbody.innerHTML = `
     <tr>
@@ -1805,6 +2178,7 @@ async function loadSchools(){
       </td>
     </tr>
   `;
+
 
   try{
 
@@ -1816,16 +2190,23 @@ async function loadSchools(){
         }
       );
 
+
     const data =
       await response.json();
 
-    if(!response.ok || data.success === false){
+
+    if(
+      !response.ok ||
+      data.success === false
+    ){
 
       throw new Error(
         data.message ||
         `HTTP ${response.status}`
       );
+
     }
+
 
     schools =
       Array.isArray(data)
@@ -1836,25 +2217,44 @@ async function loadSchools(){
           []
         );
 
+
     updateStats();
+
     populateRegionFilter();
+
     filterSchools();
+
 
   }catch(error){
 
-    if(error.message === "UNAUTHORIZED"){
+    if(
+      error.message ===
+      "UNAUTHORIZED" ||
+      error.message ===
+      "NO_ADMIN_TOKEN"
+    ){
+
       return;
+
     }
+
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="8"
-            style="color:#c62828;text-align:center;padding:30px;">
+        <td
+          colspan="8"
+          style="
+            color:#c62828;
+            text-align:center;
+            padding:30px;
+          "
+        >
           ❌ Imeshindikana kupakia shule —
           ${escapeHtml(error.message)}
         </td>
       </tr>
     `;
+
 
     showToast(
       error.message ||
@@ -1876,47 +2276,82 @@ function updateStats(){
   const total =
     schools.length;
 
+
   const active =
     schools.filter(
-      school => isSchoolActive(school)
+      school =>
+        isSchoolActive(school)
     ).length;
 
-  document.getElementById("totalSchools")
-    .textContent = total;
 
-  document.getElementById("activeSchools")
-    .textContent = active;
+  document
+    .getElementById(
+      "totalSchools"
+    )
+    .textContent =
+      total;
 
-  document.getElementById("schoolCountLabel")
+
+  document
+    .getElementById(
+      "activeSchools"
+    )
+    .textContent =
+      active;
+
+
+  document
+    .getElementById(
+      "schoolCountLabel"
+    )
     .textContent =
       `${total} shule`;
 
+
   let applicants = 0;
+
   let revenue = 0;
 
-  schools.forEach(school => {
 
-    applicants += Number(
-      school.applicant_count ||
-      school.applicants_count ||
-      school.total_applicants ||
-      0
-    );
+  schools.forEach(
+    school => {
 
-    revenue += Number(
-      school.total_revenue ||
-      school.revenue ||
-      0
-    );
+      applicants +=
+        Number(
+          school.applicant_count ||
+          school.applicants_count ||
+          school.total_applicants ||
+          0
+        );
 
-  });
 
-  document.getElementById("totalApplicants")
-    .textContent = applicants;
+      revenue +=
+        Number(
+          school.total_revenue ||
+          school.revenue ||
+          0
+        );
 
-  document.getElementById("totalRevenue")
+    }
+  );
+
+
+  document
+    .getElementById(
+      "totalApplicants"
+    )
     .textContent =
-      formatMoney(revenue);
+      applicants;
+
+
+  document
+    .getElementById(
+      "totalRevenue"
+    )
+    .textContent =
+      formatMoney(
+        revenue
+      );
 
 }
 
@@ -1932,16 +2367,22 @@ function isSchoolActive(school){
     school.active ??
     school.is_active;
 
+
   if(
     value === true ||
     value === 1 ||
     value === "1" ||
-    String(value).toLowerCase() === "active"
+    String(value).toLowerCase() ===
+      "active"
   ){
+
     return true;
+
   }
 
+
   return false;
+
 }
 
 
@@ -1951,6 +2392,7 @@ function schoolId(school){
     school.id ??
     school.school_id
   );
+
 }
 
 
@@ -1961,6 +2403,7 @@ function schoolName(school){
     school.school_name ??
     "—"
   );
+
 }
 
 
@@ -1971,6 +2414,7 @@ function schoolRegion(school){
     school.mkoa ??
     "—"
   );
+
 }
 
 
@@ -1981,6 +2425,7 @@ function schoolDistrict(school){
     school.wilaya ??
     "—"
   );
+
 }
 
 
@@ -1992,6 +2437,7 @@ function schoolType(school){
     school.category ??
     "—"
   );
+
 }
 
 
@@ -2002,6 +2448,7 @@ function schoolPrice(school){
     school.price ??
     0
   );
+
 }
 
 
@@ -2012,30 +2459,48 @@ function schoolPrice(school){
 function populateRegionFilter(){
 
   const select =
-    document.getElementById("regionFilter");
+    document.getElementById(
+      "regionFilter"
+    );
+
 
   const current =
     select.value;
 
+
   const regions =
-    [...new Set(
-      schools
-        .map(s => schoolRegion(s))
-        .filter(Boolean)
-        .filter(x => x !== "—")
-    )]
+    [
+      ...new Set(
+        schools
+          .map(
+            s =>
+              schoolRegion(s)
+          )
+          .filter(Boolean)
+          .filter(
+            x => x !== "—"
+          )
+      )
+    ]
     .sort();
 
-  select.innerHTML =
-    `<option value="">Mikoa yote</option>` +
-    regions.map(
-      region =>
-        `<option value="${escapeAttr(region)}">
-          ${escapeHtml(region)}
-        </option>`
-    ).join("");
 
-  select.value = current;
+  select.innerHTML =
+    `<option value="">
+      Mikoa yote
+    </option>` +
+    regions
+      .map(
+        region =>
+          `<option value="${escapeAttr(region)}">
+            ${escapeHtml(region)}
+          </option>`
+      )
+      .join("");
+
+
+  select.value =
+    current;
 
 }
 
@@ -2048,72 +2513,125 @@ function filterSchools(){
 
   const search =
     document
-      .getElementById("searchSchool")
+      .getElementById(
+        "searchSchool"
+      )
       .value
       .trim()
       .toLowerCase();
 
+
   const region =
     document
-      .getElementById("regionFilter")
+      .getElementById(
+        "regionFilter"
+      )
       .value;
+
 
   const status =
     document
-      .getElementById("statusFilter")
+      .getElementById(
+        "statusFilter"
+      )
       .value;
 
+
   const filtered =
-    schools.filter(school => {
+    schools.filter(
+      school => {
 
-      const text =
-        [
-          schoolName(school),
-          schoolRegion(school),
-          schoolDistrict(school),
-          schoolType(school)
-        ]
-        .join(" ")
-        .toLowerCase();
+        const text =
+          [
+            schoolName(school),
+            schoolRegion(school),
+            schoolDistrict(school),
+            schoolType(school)
+          ]
+          .join(" ")
+          .toLowerCase();
 
-      if(
-        search &&
-        !text.includes(search)
-      ){
-        return false;
+
+        if(
+          search &&
+          !text.includes(search)
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          region &&
+          schoolRegion(school) !==
+            region
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          status === "active" &&
+          !isSchoolActive(school)
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          status === "inactive" &&
+          isSchoolActive(school)
+        ){
+
+          return false;
+
+        }
+
+
+        return true;
+
       }
+    );
 
-      if(
-        region &&
-        schoolRegion(school) !== region
-      ){
-        return false;
-      }
 
-      if(status === "active" &&
-         !isSchoolActive(school)){
-        return false;
-      }
-
-      if(status === "inactive" &&
-         isSchoolActive(school)){
-        return false;
-      }
-
-      return true;
-
-    });
-
-  renderSchools(filtered);
+  renderSchools(
+    filtered
+  );
 
 }
 
 
+/* =========================================================
+   CLEAR FILTERS
+========================================================= */
+
 function clearFilters(){
 
-  document.getElementById("searchSchool").value = "";
-  document.getElementById("regionFilter").value = "";
-  document.getElementById("statusFilter").value = "";
+  document
+    .getElementById(
+      "searchSchool"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "regionFilter"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "statusFilter"
+    )
+    .value = "";
+
 
   filterSchools();
 
@@ -2127,120 +2645,172 @@ function clearFilters(){
 function renderSchools(list){
 
   const tbody =
-    document.getElementById("schoolsTableBody");
+    document.getElementById(
+      "schoolsTableBody"
+    );
+
 
   if(!list.length){
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="8"
-            style="text-align:center;padding:35px;color:#777;">
+        <td
+          colspan="8"
+          style="
+            text-align:center;
+            padding:35px;
+            color:#777;
+          "
+        >
           Hakuna shule iliyopatikana.
         </td>
       </tr>
     `;
 
     return;
+
   }
 
+
   tbody.innerHTML =
-    list.map(
-      (school,index) => {
+    list
+      .map(
+        (school,index) => {
 
-        const active =
-          isSchoolActive(school);
+          const active =
+            isSchoolActive(
+              school
+            );
 
-        const id =
-          schoolId(school);
 
-        return `
-          <tr>
+          const id =
+            schoolId(
+              school
+            );
 
-            <td>${index + 1}</td>
 
-            <td>
-              <strong>
-                ${escapeHtml(schoolName(school))}
-              </strong>
-            </td>
+          return `
+            <tr>
 
-            <td>
-              ${escapeHtml(schoolRegion(school))}
-            </td>
+              <td>
+                ${index + 1}
+              </td>
 
-            <td>
-              ${escapeHtml(schoolDistrict(school))}
-            </td>
+              <td>
+                <strong>
+                  ${escapeHtml(
+                    schoolName(
+                      school
+                    )
+                  )}
+                </strong>
+              </td>
 
-            <td>
-              ${escapeHtml(schoolType(school))}
-            </td>
+              <td>
+                ${escapeHtml(
+                  schoolRegion(
+                    school
+                  )
+                )}
+              </td>
 
-            <td>
-              ${formatMoney(schoolPrice(school))}
-            </td>
+              <td>
+                ${escapeHtml(
+                  schoolDistrict(
+                    school
+                  )
+                )}
+              </td>
 
-            <td>
-              <span class="status ${
-                active
-                  ? "status-active"
-                  : "status-inactive"
-              }">
-                ${active ? "ACTIVE" : "INACTIVE"}
-              </span>
-            </td>
+              <td>
+                ${escapeHtml(
+                  schoolType(
+                    school
+                  )
+                )}
+              </td>
 
-            <td>
+              <td>
+                ${formatMoney(
+                  schoolPrice(
+                    school
+                  )
+                )}
+              </td>
 
-              <div class="actions-cell">
+              <td>
 
-                <button
-                  class="small-btn btn-primary"
-                  onclick="editSchool(${Number(id)})"
-                >
-                  ✏️ Hariri
-                </button>
-
-                <button
-                  class="small-btn btn-warning"
-                  onclick="openBuilder(${Number(id)})"
-                >
-                  🧩 Form
-                </button>
-
-                <button
-                  class="small-btn ${
+                <span
+                  class="status ${
                     active
-                      ? "btn-danger"
-                      : "btn-success"
+                      ? "status-active"
+                      : "status-inactive"
                   }"
-                  onclick="toggleSchoolStatus(${Number(id)}, ${
-                    active ? "false" : "true"
-                  })"
                 >
                   ${
                     active
-                      ? "⛔ Zima"
-                      : "✅ Weka Live"
+                      ? "ACTIVE"
+                      : "INACTIVE"
                   }
-                </button>
+                </span>
 
-                <button
-                  class="small-btn btn-danger"
-                  onclick="deleteSchool(${Number(id)})"
+              </td>
+
+              <td>
+
+                <div
+                  class="actions-cell"
                 >
-                  🗑️
-                </button>
 
-              </div>
+                  <button
+                    class="small-btn btn-primary"
+                    onclick="editSchool(${Number(id)})"
+                  >
+                    ✏️ Hariri
+                  </button>
 
-            </td>
+                  <button
+                    class="small-btn btn-warning"
+                    onclick="openBuilder(${Number(id)})"
+                  >
+                    🧩 Form
+                  </button>
 
-          </tr>
-        `;
+                  <button
+                    class="small-btn ${
+                      active
+                        ? "btn-danger"
+                        : "btn-success"
+                    }"
+                    onclick="toggleSchoolStatus(
+                      ${Number(id)},
+                      ${active ? "false" : "true"}
+                    )"
+                  >
+                    ${
+                      active
+                        ? "⛔ Zima"
+                        : "✅ Weka Live"
+                    }
+                  </button>
 
-      }
-    ).join("");
+                  <button
+                    class="small-btn btn-danger"
+                    onclick="deleteSchool(${Number(id)})"
+                  >
+                    🗑️
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join("");
 
 }
 
@@ -2249,106 +2819,196 @@ function renderSchools(list){
    SCHOOL MODAL
 ========================================================= */
 
-function openSchoolModal(school = null){
+function openSchoolModal(
+  school = null
+){
 
   document
-    .getElementById("schoolModal")
-    .classList.add("show");
+    .getElementById(
+      "schoolModal"
+    )
+    .classList
+    .add("show");
+
 
   document
-    .getElementById("schoolModalTitle")
+    .getElementById(
+      "schoolModalTitle"
+    )
     .textContent =
       school
         ? "✏️ Hariri Shule"
         : "➕ Sajili Shule";
 
-  document.getElementById("schoolId").value =
-    school ? schoolId(school) : "";
 
-  document.getElementById("schoolName").value =
-    school ? schoolName(school) : "";
+  document
+    .getElementById(
+      "schoolId"
+    )
+    .value =
+      school
+        ? schoolId(school)
+        : "";
 
-  document.getElementById("schoolRegion").value =
-    school ? schoolRegion(school) : "";
 
-  document.getElementById("schoolDistrict").value =
-    school ? schoolDistrict(school) : "";
+  document
+    .getElementById(
+      "schoolName"
+    )
+    .value =
+      school
+        ? schoolName(school)
+        : "";
 
-  document.getElementById("schoolAddress").value =
-    school
-      ? (
-        school.address ||
-        school.location ||
-        ""
-      )
-      : "";
 
-  document.getElementById("schoolType").value =
-    school
-      ? schoolType(school)
-      : "";
+  document
+    .getElementById(
+      "schoolRegion"
+    )
+    .value =
+      school
+        ? schoolRegion(school)
+        : "";
 
-  document.getElementById("schoolFormPrice").value =
-    school
-      ? schoolPrice(school)
-      : 0;
 
-  document.getElementById("schoolPhone").value =
-    school
-      ? (
-        school.phone ||
-        school.contact_phone ||
-        ""
-      )
-      : "";
+  document
+    .getElementById(
+      "schoolDistrict"
+    )
+    .value =
+      school
+        ? schoolDistrict(school)
+        : "";
 
-  document.getElementById("schoolEmail").value =
-    school
-      ? (
-        school.email ||
-        school.contact_email ||
-        ""
-      )
-      : "";
 
-  document.getElementById("schoolWebsite").value =
-    school
-      ? (
-        school.website ||
-        ""
-      )
-      : "";
+  document
+    .getElementById(
+      "schoolAddress"
+    )
+    .value =
+      school
+        ? (
+          school.address ||
+          school.location ||
+          ""
+        )
+        : "";
 
-  document.getElementById("schoolApplicationYear").value =
-    school
-      ? (
-        school.application_year ||
-        school.year ||
-        2026
-      )
-      : 2026;
 
-  document.getElementById("schoolDescription").value =
-    school
-      ? (
-        school.description ||
-        ""
-      )
-      : "";
+  document
+    .getElementById(
+      "schoolType"
+    )
+    .value =
+      school
+        ? schoolType(school)
+        : "";
 
-  document.getElementById("schoolActive").checked =
-    school
-      ? isSchoolActive(school)
-      : true;
+
+  document
+    .getElementById(
+      "schoolFormPrice"
+    )
+    .value =
+      school
+        ? schoolPrice(school)
+        : 0;
+
+
+  document
+    .getElementById(
+      "schoolPhone"
+    )
+    .value =
+      school
+        ? (
+          school.phone ||
+          school.contact_phone ||
+          ""
+        )
+        : "";
+
+
+  document
+    .getElementById(
+      "schoolEmail"
+    )
+    .value =
+      school
+        ? (
+          school.email ||
+          school.contact_email ||
+          ""
+        )
+        : "";
+
+
+  document
+    .getElementById(
+      "schoolWebsite"
+    )
+    .value =
+      school
+        ? (
+          school.website ||
+          ""
+        )
+        : "";
+
+
+  document
+    .getElementById(
+      "schoolApplicationYear"
+    )
+    .value =
+      school
+        ? (
+          school.application_year ||
+          school.year ||
+          2026
+        )
+        : 2026;
+
+
+  document
+    .getElementById(
+      "schoolDescription"
+    )
+    .value =
+      school
+        ? (
+          school.description ||
+          ""
+        )
+        : "";
+
+
+  document
+    .getElementById(
+      "schoolActive"
+    )
+    .checked =
+      school
+        ? isSchoolActive(
+            school
+          )
+        : true;
 
 }
 
 
+/* =========================================================
+   CLOSE SCHOOL MODAL
+========================================================= */
+
 function closeSchoolModal(){
 
   document
-    .getElementById("schoolModal")
-    .classList.remove("show");
+    .getElementById(
+      "schoolModal"
+    )
+    .classList
+    .remove("show");
 
 }
 
@@ -2361,8 +3021,12 @@ function editSchool(id){
 
   const school =
     schools.find(
-      s => Number(schoolId(s)) === Number(id)
+      s =>
+        Number(
+          schoolId(s)
+        ) === Number(id)
     );
+
 
   if(!school){
 
@@ -2372,9 +3036,13 @@ function editSchool(id){
     );
 
     return;
+
   }
 
-  openSchoolModal(school);
+
+  openSchoolModal(
+    school
+  );
 
 }
 
@@ -2387,58 +3055,137 @@ async function saveSchool(event){
 
   event.preventDefault();
 
+
   const id =
-    document.getElementById("schoolId").value;
+    document
+      .getElementById(
+        "schoolId"
+      )
+      .value;
+
 
   const payload = {
 
     name:
-      document.getElementById("schoolName").value.trim(),
+      document
+        .getElementById(
+          "schoolName"
+        )
+        .value
+        .trim(),
+
 
     region:
-      document.getElementById("schoolRegion").value.trim(),
+      document
+        .getElementById(
+          "schoolRegion"
+        )
+        .value
+        .trim(),
+
 
     district:
-      document.getElementById("schoolDistrict").value.trim(),
+      document
+        .getElementById(
+          "schoolDistrict"
+        )
+        .value
+        .trim(),
+
 
     address:
-      document.getElementById("schoolAddress").value.trim(),
+      document
+        .getElementById(
+          "schoolAddress"
+        )
+        .value
+        .trim(),
+
 
     school_type:
-      document.getElementById("schoolType").value,
+      document
+        .getElementById(
+          "schoolType"
+        )
+        .value,
+
 
     form_price:
       Number(
-        document.getElementById("schoolFormPrice").value || 0
+        document
+          .getElementById(
+            "schoolFormPrice"
+          )
+          .value || 0
       ),
 
+
     phone:
-      document.getElementById("schoolPhone").value.trim(),
+      document
+        .getElementById(
+          "schoolPhone"
+        )
+        .value
+        .trim(),
+
 
     email:
-      document.getElementById("schoolEmail").value.trim(),
+      document
+        .getElementById(
+          "schoolEmail"
+        )
+        .value
+        .trim(),
+
 
     website:
-      document.getElementById("schoolWebsite").value.trim(),
+      document
+        .getElementById(
+          "schoolWebsite"
+        )
+        .value
+        .trim(),
+
 
     application_year:
       Number(
-        document.getElementById("schoolApplicationYear").value ||
+        document
+          .getElementById(
+            "schoolApplicationYear"
+          )
+          .value ||
         2026
       ),
 
+
     description:
-      document.getElementById("schoolDescription").value.trim(),
+      document
+        .getElementById(
+          "schoolDescription"
+        )
+        .value
+        .trim(),
+
 
     active:
-      document.getElementById("schoolActive").checked,
+      document
+        .getElementById(
+          "schoolActive"
+        )
+        .checked,
+
 
     status:
-      document.getElementById("schoolActive").checked
+      document
+        .getElementById(
+          "schoolActive"
+        )
+        .checked
         ? "active"
         : "inactive"
 
   };
+
 
   if(!payload.name){
 
@@ -2448,13 +3195,23 @@ async function saveSchool(event){
     );
 
     return;
+
   }
 
-  const button =
-    document.getElementById("saveSchoolButton");
 
-  button.disabled = true;
-  button.textContent = "⏳ Inahifadhi...";
+  const button =
+    document.getElementById(
+      "saveSchoolButton"
+    );
+
+
+  button.disabled =
+    true;
+
+
+  button.textContent =
+    "⏳ Inahifadhi...";
+
 
   try{
 
@@ -2464,23 +3221,38 @@ async function saveSchool(event){
           ? `/api/admin/schools/${encodeURIComponent(id)}`
           : "/api/admin/schools",
         {
-          method:id ? "PUT" : "POST",
-          body:JSON.stringify(payload)
+          method:
+            id
+              ? "PUT"
+              : "POST",
+
+          body:
+            JSON.stringify(
+              payload
+            )
         }
       );
+
 
     const data =
       await response.json();
 
-    if(!response.ok || data.success === false){
+
+    if(
+      !response.ok ||
+      data.success === false
+    ){
 
       throw new Error(
         data.message ||
         `HTTP ${response.status}`
       );
+
     }
 
+
     closeSchoolModal();
+
 
     showToast(
       id
@@ -2489,13 +3261,21 @@ async function saveSchool(event){
       "success"
     );
 
+
     await loadSchools();
+
 
   }catch(error){
 
-    if(error.message === "UNAUTHORIZED"){
+    if(
+      error.message ===
+      "UNAUTHORIZED"
+    ){
+
       return;
+
     }
+
 
     showToast(
       error.message ||
@@ -2503,10 +3283,14 @@ async function saveSchool(event){
       "error"
     );
 
+
   }finally{
 
-    button.disabled = false;
-    button.textContent = "💾 Hifadhi Shule";
+    button.disabled =
+      false;
+
+    button.textContent =
+      "💾 Hifadhi Shule";
 
   }
 
@@ -2517,15 +3301,21 @@ async function saveSchool(event){
    STATUS
 ========================================================= */
 
-async function toggleSchoolStatus(id, active){
+async function toggleSchoolStatus(
+  id,
+  active
+){
 
   if(!confirm(
     active
       ? "Unataka kuweka shule hii LIVE?"
       : "Unataka kuizima shule hii?"
   )){
+
     return;
+
   }
+
 
   try{
 
@@ -2534,26 +3324,36 @@ async function toggleSchoolStatus(id, active){
         `/api/admin/schools/${encodeURIComponent(id)}/status`,
         {
           method:"PUT",
-          body:JSON.stringify({
-            status:
+
+          body:
+            JSON.stringify({
+              status:
+                active
+                  ? "active"
+                  : "inactive",
+
               active
-                ? "active"
-                : "inactive",
-            active
-          })
+            })
         }
       );
+
 
     const data =
       await response.json();
 
-    if(!response.ok || data.success === false){
+
+    if(
+      !response.ok ||
+      data.success === false
+    ){
 
       throw new Error(
         data.message ||
         `HTTP ${response.status}`
       );
+
     }
+
 
     showToast(
       active
@@ -2562,13 +3362,21 @@ async function toggleSchoolStatus(id, active){
       "success"
     );
 
+
     await loadSchools();
+
 
   }catch(error){
 
-    if(error.message === "UNAUTHORIZED"){
+    if(
+      error.message ===
+      "UNAUTHORIZED"
+    ){
+
       return;
+
     }
+
 
     showToast(
       error.message ||
@@ -2589,20 +3397,28 @@ async function deleteSchool(id){
 
   const school =
     schools.find(
-      s => Number(schoolId(s)) === Number(id)
+      s =>
+        Number(
+          schoolId(s)
+        ) === Number(id)
     );
+
 
   const name =
     school
       ? schoolName(school)
       : "shule hii";
 
+
   if(!confirm(
     `Una uhakika unataka kufuta "${name}"?\n\n` +
     `Hatua hii inaweza kuondoa taarifa za shule.`
   )){
+
     return;
+
   }
+
 
   try{
 
@@ -2614,29 +3430,44 @@ async function deleteSchool(id){
         }
       );
 
+
     const data =
       await response.json();
 
-    if(!response.ok || data.success === false){
+
+    if(
+      !response.ok ||
+      data.success === false
+    ){
 
       throw new Error(
         data.message ||
         `HTTP ${response.status}`
       );
+
     }
+
 
     showToast(
       "Shule imefutwa.",
       "success"
     );
 
+
     await loadSchools();
+
 
   }catch(error){
 
-    if(error.message === "UNAUTHORIZED"){
+    if(
+      error.message ===
+      "UNAUTHORIZED"
+    ){
+
       return;
+
     }
+
 
     showToast(
       error.message ||
@@ -2657,8 +3488,12 @@ async function openBuilder(id){
 
   const school =
     schools.find(
-      s => Number(schoolId(s)) === Number(id)
+      s =>
+        Number(
+          schoolId(s)
+        ) === Number(id)
     );
+
 
   if(!school){
 
@@ -2668,18 +3503,31 @@ async function openBuilder(id){
     );
 
     return;
+
   }
+
 
   currentBuilderSchoolId =
     Number(id);
 
-  document.getElementById("builderSchoolName")
-    .textContent =
-      schoolName(school);
 
   document
-    .getElementById("builderModal")
-    .classList.add("show");
+    .getElementById(
+      "builderSchoolName"
+    )
+    .textContent =
+      schoolName(
+        school
+      );
+
+
+  document
+    .getElementById(
+      "builderModal"
+    )
+    .classList
+    .add("show");
+
 
   await loadBuilderFields();
 
@@ -2689,25 +3537,43 @@ async function openBuilder(id){
 function closeBuilder(){
 
   document
-    .getElementById("builderModal")
-    .classList.remove("show");
+    .getElementById(
+      "builderModal"
+    )
+    .classList
+    .remove("show");
 
-  currentBuilderSchoolId = null;
+
+  currentBuilderSchoolId =
+    null;
 
 }
 
 
+/* =========================================================
+   LOAD BUILDER FIELDS
+========================================================= */
+
 async function loadBuilderFields(){
 
   if(!currentBuilderSchoolId){
+
     return;
+
   }
 
+
   const container =
-    document.getElementById("fieldList");
+    document.getElementById(
+      "fieldList"
+    );
+
 
   container.innerHTML =
-    `<div class="loading">⏳ Inapakia fields...</div>`;
+    `<div class="loading">
+      ⏳ Inapakia fields...
+    </div>`;
+
 
   try{
 
@@ -2721,16 +3587,23 @@ async function loadBuilderFields(){
         }
       );
 
+
     const data =
       await response.json();
 
-    if(!response.ok || data.success === false){
+
+    if(
+      !response.ok ||
+      data.success === false
+    ){
 
       throw new Error(
         data.message ||
         `HTTP ${response.status}`
       );
+
     }
+
 
     currentFields =
       Array.isArray(data)
@@ -2742,17 +3615,32 @@ async function loadBuilderFields(){
           []
         );
 
+
     renderFields();
+
 
   }catch(error){
 
-    if(error.message === "UNAUTHORIZED"){
+    if(
+      error.message ===
+      "UNAUTHORIZED"
+    ){
+
       return;
+
     }
 
+
     container.innerHTML = `
-      <div style="padding:20px;color:#c62828;">
-        ❌ ${escapeHtml(error.message)}
+      <div
+        style="
+          padding:20px;
+          color:#c62828;
+        "
+      >
+        ❌ ${escapeHtml(
+          error.message
+        )}
       </div>
     `;
 
@@ -2761,126 +3649,147 @@ async function loadBuilderFields(){
 }
 
 
+/* =========================================================
+   RENDER FIELDS
+========================================================= */
+
 function renderFields(){
 
   const container =
-    document.getElementById("fieldList");
+    document.getElementById(
+      "fieldList"
+    );
+
 
   if(!currentFields.length){
 
     container.innerHTML = `
-      <div style="
-        text-align:center;
-        padding:30px;
-        color:#777;
-        border:1px dashed #ccc;
-        border-radius:10px;
-      ">
+      <div
+        style="
+          text-align:center;
+          padding:30px;
+          color:#777;
+          border:1px dashed #ccc;
+          border-radius:10px;
+        "
+      >
         Hakuna field maalum bado.<br>
-        Bonyeza <strong>➕ Ongeza Field</strong>
+        Bonyeza
+        <strong>
+          ➕ Ongeza Field
+        </strong>
         kuanza.
       </div>
     `;
 
     return;
+
   }
 
+
   container.innerHTML =
-    currentFields.map(
-      (field,index) => {
+    currentFields
+      .map(
+        (field,index) => {
 
-        const options =
-          normalizeFieldOptions(field.options);
+          const options =
+            normalizeFieldOptions(
+              field.options
+            );
 
-        return `
-          <div class="field-item">
 
-            <div class="field-item-head">
+          return `
+            <div class="field-item">
 
-              <div>
+              <div class="field-item-head">
 
-                <strong>
-                  ${escapeHtml(
-                    field.field_label ||
-                    field.label ||
-                    field.name ||
-                    `Field ${index+1}`
-                  )}
-                </strong>
+                <div>
 
-                <div class="field-meta">
+                  <strong>
+                    ${escapeHtml(
+                      field.field_label ||
+                      field.label ||
+                      field.name ||
+                      `Field ${index + 1}`
+                    )}
+                  </strong>
 
-                  Key:
-                  ${escapeHtml(
-                    field.field_key ||
-                    field.key ||
-                    ""
-                  )}
+                  <div class="field-meta">
 
-                  &nbsp; | &nbsp;
+                    Key:
+                    ${escapeHtml(
+                      field.field_key ||
+                      field.key ||
+                      ""
+                    )}
 
-                  Type:
-                  ${escapeHtml(
-                    field.field_type ||
-                    field.type ||
-                    "text"
-                  )}
+                    &nbsp; | &nbsp;
 
-                  &nbsp; | &nbsp;
+                    Type:
+                    ${escapeHtml(
+                      field.field_type ||
+                      field.type ||
+                      "text"
+                    )}
+
+                    &nbsp; | &nbsp;
+
+                    ${
+                      field.required
+                        ? "Required"
+                        : "Optional"
+                    }
+
+                  </div>
 
                   ${
-                    field.required
-                      ? "Required"
-                      : "Optional"
+                    options.length
+                      ? `
+                        <div class="field-meta">
+                          Options:
+                          ${escapeHtml(
+                            options.join(
+                              ", "
+                            )
+                          )}
+                        </div>
+                      `
+                      : ""
                   }
 
                 </div>
 
-                ${
-                  options.length
-                    ? `
-                      <div class="field-meta">
-                        Options:
-                        ${escapeHtml(
-                          options.join(", ")
-                        )}
-                      </div>
-                    `
-                    : ""
-                }
 
-              </div>
+                <div class="field-actions">
 
+                  <button
+                    class="small-btn btn-primary"
+                    onclick="editField(${Number(
+                      field.id
+                    )})"
+                  >
+                    ✏️
+                  </button>
 
-              <div class="field-actions">
+                  <button
+                    class="small-btn btn-danger"
+                    onclick="deleteField(${Number(
+                      field.id
+                    )})"
+                  >
+                    🗑️
+                  </button>
 
-                <button
-                  class="small-btn btn-primary"
-                  onclick="editField(${Number(
-                    field.id
-                  )})"
-                >
-                  ✏️
-                </button>
-
-                <button
-                  class="small-btn btn-danger"
-                  onclick="deleteField(${Number(
-                    field.id
-                  )})"
-                >
-                  🗑️
-                </button>
+                </div>
 
               </div>
 
             </div>
+          `;
 
-          </div>
-        `;
-
-      }
-    ).join("");
+        }
+      )
+      .join("");
 
 }
 
@@ -2889,89 +3798,151 @@ function renderFields(){
    FIELD MODAL
 ========================================================= */
 
-function openFieldModal(field = null){
+function openFieldModal(
+  field = null
+){
 
   editingFieldId =
     field
       ? Number(field.id)
       : null;
 
-  document.getElementById("fieldModalTitle")
+
+  document
+    .getElementById(
+      "fieldModalTitle"
+    )
     .textContent =
       field
         ? "✏️ Hariri Field"
         : "➕ Ongeza Field";
 
-  document.getElementById("fieldId").value =
-    field
-      ? field.id
-      : "";
 
-  document.getElementById("fieldLabel").value =
-    field
-      ? (
-        field.field_label ||
-        field.label ||
-        ""
-      )
-      : "";
+  document
+    .getElementById(
+      "fieldId"
+    )
+    .value =
+      field
+        ? field.id
+        : "";
 
-  document.getElementById("fieldKey").value =
-    field
-      ? (
-        field.field_key ||
-        field.key ||
-        ""
-      )
-      : "";
 
-  document.getElementById("fieldType").value =
-    field
-      ? (
-        field.field_type ||
-        field.type ||
-        "text"
-      )
-      : "text";
+  document
+    .getElementById(
+      "fieldLabel"
+    )
+    .value =
+      field
+        ? (
+          field.field_label ||
+          field.label ||
+          ""
+        )
+        : "";
 
-  document.getElementById("fieldOptions").value =
-    field
-      ? optionsToText(field.options)
-      : "";
 
-  document.getElementById("fieldRequired").checked =
-    field
-      ? Boolean(
-        field.required
-      )
-      : false;
+  document
+    .getElementById(
+      "fieldKey"
+    )
+    .value =
+      field
+        ? (
+          field.field_key ||
+          field.key ||
+          ""
+        )
+        : "";
 
-  document.getElementById("fieldVisible").checked =
-    field
-      ? field.visible !== false
-      : true;
 
-  document.getElementById("fieldPublic").checked =
-    field
-      ? field.public !== false
-      : true;
+  document
+    .getElementById(
+      "fieldType"
+    )
+    .value =
+      field
+        ? (
+          field.field_type ||
+          field.type ||
+          "text"
+        )
+        : "text";
+
+
+  document
+    .getElementById(
+      "fieldOptions"
+    )
+    .value =
+      field
+        ? optionsToText(
+            field.options
+          )
+        : "";
+
+
+  document
+    .getElementById(
+      "fieldRequired"
+    )
+    .checked =
+      field
+        ? Boolean(
+            field.required
+          )
+        : false;
+
+
+  document
+    .getElementById(
+      "fieldVisible"
+    )
+    .checked =
+      field
+        ? field.visible !== false
+        : true;
+
+
+  document
+    .getElementById(
+      "fieldPublic"
+    )
+    .checked =
+      field
+        ? field.public !== false
+        : true;
+
 
   toggleOptionsBox();
 
+
   document
-    .getElementById("fieldModal")
-    .classList.add("show");
+    .getElementById(
+      "fieldModal"
+    )
+    .classList
+    .add("show");
 
 }
 
 
+/* =========================================================
+   CLOSE FIELD MODAL
+========================================================= */
+
 function closeFieldModal(){
 
   document
-    .getElementById("fieldModal")
-    .classList.remove("show");
+    .getElementById(
+      "fieldModal"
+    )
+    .classList
+    .remove("show");
 
-  editingFieldId = null;
+
+  editingFieldId =
+    null;
 
 }
 
@@ -2984,8 +3955,11 @@ function editField(id){
 
   const field =
     currentFields.find(
-      f => Number(f.id) === Number(id)
+      f =>
+        Number(f.id) ===
+        Number(id)
     );
+
 
   if(!field){
 
@@ -2995,9 +3969,13 @@ function editField(id){
     );
 
     return;
+
   }
 
-  openFieldModal(field);
+
+  openFieldModal(
+    field
+  );
 
 }
 
@@ -3010,34 +3988,59 @@ function generateFieldKey(){
 
   const label =
     document
-      .getElementById("fieldLabel")
+      .getElementById(
+        "fieldLabel"
+      )
       .value;
 
+
   const keyInput =
-    document.getElementById("fieldKey");
+    document.getElementById(
+      "fieldKey"
+    );
+
 
   if(
     keyInput.value.trim() &&
     editingFieldId
   ){
+
     return;
+
   }
 
+
   keyInput.value =
-    slugify(label);
+    slugify(
+      label
+    );
 
 }
 
 
 function slugify(value){
 
-  return String(value || "")
+  return String(
+    value || ""
+  )
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9À-ÿ\s_-]/gi,"")
-    .replace(/\s+/g,"_")
-    .replace(/_+/g,"_")
-    .replace(/^_+|_+$/g,"");
+    .replace(
+      /[^a-z0-9À-ÿ\s_-]/gi,
+      ""
+    )
+    .replace(
+      /\s+/g,
+      "_"
+    )
+    .replace(
+      /_+/g,
+      "_"
+    )
+    .replace(
+      /^_+|_+$/g,
+      ""
+    );
 
 }
 
@@ -3049,58 +4052,87 @@ function slugify(value){
 function toggleOptionsBox(){
 
   const type =
-    document.getElementById("fieldType").value;
+    document
+      .getElementById(
+        "fieldType"
+      )
+      .value;
+
 
   const container =
-    document.getElementById("optionsContainer");
+    document.getElementById(
+      "optionsContainer"
+    );
+
 
   if(
     type === "dropdown" ||
     type === "radio"
   ){
 
-    container.style.display = "block";
+    container.style.display =
+      "block";
 
   }else{
 
-    container.style.display = "none";
+    container.style.display =
+      "none";
 
   }
 
 }
 
 
-function normalizeFieldOptions(options){
+function normalizeFieldOptions(
+  options
+){
 
-  if(!Array.isArray(options)){
+  if(
+    !Array.isArray(
+      options
+    )
+  ){
+
     return [];
+
   }
 
-  return options.map(
-    option => {
 
-      if(
-        option &&
-        typeof option === "object"
-      ){
+  return options
+    .map(
+      option => {
+
+        if(
+          option &&
+          typeof option ===
+            "object"
+        ){
+
+          return String(
+            option.label ??
+            option.value ??
+            ""
+          );
+
+        }
+
 
         return String(
-          option.label ??
-          option.value ??
-          ""
+          option ?? ""
         );
 
       }
-
-      return String(option ?? "");
-
-    }
-  ).filter(Boolean);
+    )
+    .filter(
+      Boolean
+    );
 
 }
 
 
-function optionsToText(options){
+function optionsToText(
+  options
+){
 
   return normalizeFieldOptions(
     options
@@ -3112,28 +4144,46 @@ function optionsToText(options){
 function buildOptions(){
 
   const type =
-    document.getElementById("fieldType").value;
+    document
+      .getElementById(
+        "fieldType"
+      )
+      .value;
+
 
   if(
     type !== "dropdown" &&
     type !== "radio"
   ){
+
     return [];
+
   }
+
 
   const text =
     document
-      .getElementById("fieldOptions")
+      .getElementById(
+        "fieldOptions"
+      )
       .value;
+
 
   return text
     .split(/\r?\n/)
-    .map(x => x.trim())
-    .filter(Boolean)
-    .map(value => ({
-      value,
-      label:value
-    }));
+    .map(
+      x =>
+        x.trim()
+    )
+    .filter(
+      Boolean
+    )
+    .map(
+      value => ({
+        value,
+        label:value
+      })
+    );
 
 }
 
@@ -3142,9 +4192,12 @@ function buildOptions(){
    SAVE FIELD
 ========================================================= */
 
-async function saveField(event){
+async function saveField(
+  event
+){
 
   event.preventDefault();
+
 
   if(!currentBuilderSchoolId){
 
@@ -3154,27 +4207,43 @@ async function saveField(event){
     );
 
     return;
+
   }
 
+
   const id =
-    document.getElementById("fieldId").value;
+    document
+      .getElementById(
+        "fieldId"
+      )
+      .value;
+
 
   const label =
     document
-      .getElementById("fieldLabel")
+      .getElementById(
+        "fieldLabel"
+      )
       .value
       .trim();
+
 
   const key =
     document
-      .getElementById("fieldKey")
+      .getElementById(
+        "fieldKey"
+      )
       .value
       .trim();
 
+
   const type =
     document
-      .getElementById("fieldType")
+      .getElementById(
+        "fieldType"
+      )
       .value;
+
 
   if(!label){
 
@@ -3184,7 +4253,9 @@ async function saveField(event){
     );
 
     return;
+
   }
+
 
   if(!key){
 
@@ -3194,34 +4265,47 @@ async function saveField(event){
     );
 
     return;
+
   }
+
 
   const payload = {
 
-    field_label:label,
+    field_label:
+      label,
 
-    field_key:key,
+    field_key:
+      key,
 
-    field_type:type,
+    field_type:
+      type,
 
-    options:buildOptions(),
+    options:
+      buildOptions(),
 
     required:
       document
-        .getElementById("fieldRequired")
+        .getElementById(
+          "fieldRequired"
+        )
         .checked,
 
     visible:
       document
-        .getElementById("fieldVisible")
+        .getElementById(
+          "fieldVisible"
+        )
         .checked,
 
     public:
       document
-        .getElementById("fieldPublic")
+        .getElementById(
+          "fieldPublic"
+        )
         .checked
 
   };
+
 
   try{
 
@@ -3229,32 +4313,50 @@ async function saveField(event){
       id
         ? `/api/admin/schools/${encodeURIComponent(
             currentBuilderSchoolId
-          )}/custom-fields/${encodeURIComponent(id)}`
+          )}/custom-fields/${encodeURIComponent(
+            id
+          )}`
         : `/api/admin/schools/${encodeURIComponent(
             currentBuilderSchoolId
           )}/custom-fields`;
+
 
     const response =
       await apiFetch(
         url,
         {
-          method:id ? "PUT" : "POST",
-          body:JSON.stringify(payload)
+          method:
+            id
+              ? "PUT"
+              : "POST",
+
+          body:
+            JSON.stringify(
+              payload
+            )
         }
       );
+
 
     const data =
       await response.json();
 
-    if(!response.ok || data.success === false){
+
+    if(
+      !response.ok ||
+      data.success === false
+    ){
 
       throw new Error(
         data.message ||
         `HTTP ${response.status}`
       );
+
     }
 
+
     closeFieldModal();
+
 
     showToast(
       id
@@ -3263,13 +4365,21 @@ async function saveField(event){
       "success"
     );
 
+
     await loadBuilderFields();
+
 
   }catch(error){
 
-    if(error.message === "UNAUTHORIZED"){
+    if(
+      error.message ===
+      "UNAUTHORIZED"
+    ){
+
       return;
+
     }
+
 
     showToast(
       error.message ||
@@ -3286,13 +4396,18 @@ async function saveField(event){
    DELETE FIELD
 ========================================================= */
 
-async function deleteField(id){
+async function deleteField(
+  id
+){
 
   if(!confirm(
     "Una uhakika unataka kufuta field hii?"
   )){
+
     return;
+
   }
+
 
   try{
 
@@ -3300,35 +4415,52 @@ async function deleteField(id){
       await apiFetch(
         `/api/admin/schools/${encodeURIComponent(
           currentBuilderSchoolId
-        )}/custom-fields/${encodeURIComponent(id)}`,
+        )}/custom-fields/${encodeURIComponent(
+          id
+        )}`,
         {
           method:"DELETE"
         }
       );
 
+
     const data =
       await response.json();
 
-    if(!response.ok || data.success === false){
+
+    if(
+      !response.ok ||
+      data.success === false
+    ){
 
       throw new Error(
         data.message ||
         `HTTP ${response.status}`
       );
+
     }
+
 
     showToast(
       "Field imefutwa.",
       "success"
     );
 
+
     await loadBuilderFields();
+
 
   }catch(error){
 
-    if(error.message === "UNAUTHORIZED"){
+    if(
+      error.message ===
+      "UNAUTHORIZED"
+    ){
+
       return;
+
     }
+
 
     showToast(
       error.message ||
@@ -3347,16 +4479,34 @@ async function deleteField(id){
 
 function showDashboard(){
 
+  if(!getAdminToken()){
+
+    showLogin(
+      "Login ya Admin Mkuu inahitajika."
+    );
+
+    return;
+
+  }
+
+
   loadSchools();
 
 }
 
 
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
 function toggleSidebar(){
 
   document
-    .getElementById("sidebar")
-    .classList.toggle("open");
+    .getElementById(
+      "sidebar"
+    )
+    .classList
+    .toggle("open");
 
 }
 
@@ -3365,25 +4515,37 @@ function toggleSidebar(){
    TOAST
 ========================================================= */
 
-function showToast(message,type=""){
+function showToast(
+  message,
+  type = ""
+){
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
+
 
   toast.textContent =
     message;
 
+
   toast.className =
     `show ${type}`;
+
 
   clearTimeout(
     window.toastTimer
   );
 
+
   window.toastTimer =
     setTimeout(
       () => {
-        toast.className = "";
+
+        toast.className =
+          "";
+
       },
       3500
     );
@@ -3392,41 +4554,77 @@ function showToast(message,type=""){
 
 
 /* =========================================================
-   FORMAT
+   FORMAT MONEY
 ========================================================= */
 
-function formatMoney(value){
+function formatMoney(
+  value
+){
 
   const amount =
-    Number(value || 0);
-
-  return "TSh " +
-    amount.toLocaleString("en-US");
-
-}
+    Number(
+      value || 0
+    );
 
 
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-function escapeAttr(value){
-
-  return escapeHtml(value);
+  return (
+    "TSh " +
+    amount.toLocaleString(
+      "en-US"
+    )
+  );
 
 }
 
 
 /* =========================================================
-   CLOSE MODALS WHEN CLICKING BACKGROUND
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttr(
+  value
+){
+
+  return escapeHtml(
+    value
+  );
+
+}
+
+
+/* =========================================================
+   CLOSE MODALS
 ========================================================= */
 
 document.addEventListener(
@@ -3434,10 +4632,14 @@ document.addEventListener(
   function(event){
 
     if(
-      event.target.classList.contains("modal")
+      event.target.classList.contains(
+        "modal"
+      )
     ){
 
-      event.target.classList.remove("show");
+      event.target.classList.remove(
+        "show"
+      );
 
     }
 
