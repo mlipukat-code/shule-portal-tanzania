@@ -6,11 +6,7 @@
 <title>Admin Mkuu - Shule Portal Tanzania</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
   font-family:Arial,Helvetica,sans-serif;
@@ -18,20 +14,11 @@ body{
   color:#1f2937;
 }
 
-button,input,select,textarea{
-  font:inherit;
-}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
 
-button{
-  cursor:pointer;
-}
-
-.hidden{
-  display:none!important;
-}
-
-/* ================= LOGIN ================= */
-
+/* LOGIN */
 #loginScreen{
   min-height:100vh;
   display:flex;
@@ -44,7 +31,7 @@ button{
 .login-card{
   width:100%;
   max-width:430px;
-  background:white;
+  background:#fff;
   border-radius:18px;
   padding:35px 30px;
   box-shadow:0 20px 60px rgba(0,0,0,.22);
@@ -62,27 +49,11 @@ button{
   font-size:35px;
 }
 
-.login-card h1{
-  text-align:center;
-  color:#0d47a1;
-  margin-bottom:6px;
-}
+.login-card h1{text-align:center;color:#0d47a1;margin-bottom:6px}
+.login-card .subtitle{text-align:center;color:#6b7280;margin-bottom:28px}
 
-.login-card .subtitle{
-  text-align:center;
-  color:#6b7280;
-  margin-bottom:28px;
-}
-
-.form-group{
-  margin-bottom:16px;
-}
-
-.form-group label{
-  display:block;
-  font-weight:bold;
-  margin-bottom:7px;
-}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-weight:bold;margin-bottom:7px}
 
 .form-group input,
 .form-group select,
@@ -107,20 +78,14 @@ button{
   border:0;
   border-radius:10px;
   padding:13px;
-  color:white;
+  color:#fff;
   background:#1565c0;
   font-weight:bold;
   margin-top:5px;
 }
 
-.login-btn:hover{
-  background:#0d47a1;
-}
-
-.login-btn:disabled{
-  opacity:.7;
-  cursor:not-allowed;
-}
+.login-btn:hover{background:#0d47a1}
+.login-btn:disabled{opacity:.7;cursor:not-allowed}
 
 .login-error{
   background:#ffebee;
@@ -138,11 +103,8 @@ button{
   margin-top:18px;
 }
 
-/* ================= APP ================= */
-
-#app{
-  min-height:100vh;
-}
+/* APP */
+#app{min-height:100vh}
 
 .sidebar{
   position:fixed;
@@ -151,7 +113,7 @@ button{
   bottom:0;
   width:250px;
   background:#0d47a1;
-  color:white;
+  color:#fff;
   z-index:100;
   overflow-y:auto;
 }
@@ -171,15 +133,13 @@ button{
   font-weight:normal;
 }
 
-.nav{
-  padding:15px 10px;
-}
+.nav{padding:15px 10px}
 
 .nav button{
   width:100%;
   border:0;
   background:transparent;
-  color:white;
+  color:#fff;
   text-align:left;
   padding:13px 14px;
   border-radius:8px;
@@ -202,7 +162,7 @@ button{
   width:100%;
   border:0;
   background:#b71c1c;
-  color:white;
+  color:#fff;
   padding:12px;
   border-radius:8px;
 }
@@ -214,7 +174,7 @@ button{
 
 .topbar{
   height:70px;
-  background:white;
+  background:#fff;
   border-bottom:1px solid #e5e7eb;
   display:flex;
   align-items:center;
@@ -225,9 +185,7 @@ button{
   z-index:50;
 }
 
-.topbar h2{
-  font-size:21px;
-}
+.topbar h2{font-size:21px}
 
 .admin-user{
   display:flex;
@@ -242,19 +200,16 @@ button{
   height:36px;
   border-radius:50%;
   background:#1565c0;
-  color:white;
+  color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:bold;
 }
 
-.content{
-  padding:25px;
-}
+.content{padding:25px}
 
-/* ================= STATS ================= */
-
+/* STATS */
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -263,7 +218,7 @@ button{
 }
 
 .stat-card{
-  background:white;
+  background:#fff;
   border-radius:12px;
   padding:20px;
   box-shadow:0 2px 8px rgba(0,0,0,.05);
@@ -282,10 +237,9 @@ button{
   color:#0d47a1;
 }
 
-/* ================= ACTIONS ================= */
-
+/* SECTIONS */
 .section{
-  background:white;
+  background:#fff;
   border-radius:12px;
   padding:20px;
   margin-bottom:22px;
@@ -300,9 +254,7 @@ button{
   margin-bottom:18px;
 }
 
-.section-header h3{
-  font-size:18px;
-}
+.section-header h3{font-size:18px}
 
 .actions{
   display:flex;
@@ -317,37 +269,14 @@ button{
   font-weight:bold;
 }
 
-.btn-primary{
-  background:#1565c0;
-  color:white;
-}
+.btn-primary{background:#1565c0;color:#fff}
+.btn-primary:hover{background:#0d47a1}
+.btn-success{background:#2e7d32;color:#fff}
+.btn-warning{background:#f9a825;color:#fff}
+.btn-danger{background:#c62828;color:#fff}
+.btn-secondary{background:#e5e7eb;color:#333}
 
-.btn-primary:hover{
-  background:#0d47a1;
-}
-
-.btn-success{
-  background:#2e7d32;
-  color:white;
-}
-
-.btn-warning{
-  background:#f9a825;
-  color:white;
-}
-
-.btn-danger{
-  background:#c62828;
-  color:white;
-}
-
-.btn-secondary{
-  background:#e5e7eb;
-  color:#333;
-}
-
-/* ================= SEARCH ================= */
-
+/* SEARCH */
 .filters{
   display:grid;
   grid-template-columns:2fr 1fr 1fr auto;
@@ -362,11 +291,8 @@ button{
   border-radius:8px;
 }
 
-/* ================= TABLE ================= */
-
-.table-wrap{
-  overflow-x:auto;
-}
+/* TABLE */
+.table-wrap{overflow-x:auto}
 
 table{
   width:100%;
@@ -381,10 +307,7 @@ th,td{
   font-size:14px;
 }
 
-th{
-  background:#f8fafc;
-  color:#555;
-}
+th{background:#f8fafc;color:#555}
 
 .status{
   display:inline-block;
@@ -394,20 +317,9 @@ th{
   font-weight:bold;
 }
 
-.status-active{
-  background:#e8f5e9;
-  color:#2e7d32;
-}
-
-.status-inactive{
-  background:#ffebee;
-  color:#c62828;
-}
-
-.status-pending{
-  background:#fff8e1;
-  color:#f57f17;
-}
+.status-active{background:#e8f5e9;color:#2e7d32}
+.status-inactive{background:#ffebee;color:#c62828}
+.status-pending{background:#fff8e1;color:#f57f17}
 
 .actions-cell{
   display:flex;
@@ -423,8 +335,7 @@ th{
   font-weight:bold;
 }
 
-/* ================= MODAL ================= */
-
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -436,12 +347,10 @@ th{
   z-index:300;
 }
 
-.modal.show{
-  display:flex;
-}
+.modal.show{display:flex}
 
 .modal-box{
-  background:white;
+  background:#fff;
   width:100%;
   max-width:700px;
   max-height:92vh;
@@ -450,9 +359,7 @@ th{
   padding:25px;
 }
 
-.modal-box.large{
-  max-width:900px;
-}
+.modal-box.large{max-width:900px}
 
 .modal-header{
   display:flex;
@@ -490,9 +397,7 @@ th{
   margin:10px 0;
 }
 
-.checkbox-row input{
-  width:auto;
-}
+.checkbox-row input{width:auto}
 
 .notice{
   padding:12px;
@@ -508,8 +413,7 @@ th{
   color:#777;
 }
 
-/* ================= FORM BUILDER ================= */
-
+/* BUILDER */
 .field-list{
   display:flex;
   flex-direction:column;
@@ -541,12 +445,9 @@ th{
   gap:5px;
 }
 
-.options-box{
-  min-height:100px;
-}
+.options-box{min-height:100px}
 
-/* ================= TOAST ================= */
-
+/* TOAST */
 #toast{
   position:fixed;
   right:20px;
@@ -554,114 +455,74 @@ th{
   max-width:380px;
   padding:14px 18px;
   border-radius:9px;
-  color:white;
+  color:#fff;
   background:#333;
   box-shadow:0 5px 20px rgba(0,0,0,.2);
   display:none;
   z-index:500;
 }
 
-#toast.show{
-  display:block;
-}
+#toast.show{display:block}
+#toast.success{background:#2e7d32}
+#toast.error{background:#c62828}
 
-#toast.success{
-  background:#2e7d32;
-}
-
-#toast.error{
-  background:#c62828;
-}
-
-/* ================= MOBILE ================= */
-
+/* MOBILE */
 .mobile-menu{
   display:none;
   border:0;
   background:#1565c0;
-  color:white;
+  color:#fff;
   border-radius:7px;
   padding:8px 11px;
 }
 
 @media(max-width:1000px){
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .filters{
-    grid-template-columns:1fr 1fr;
-  }
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .filters{grid-template-columns:1fr 1fr}
 }
 
 @media(max-width:700px){
+
   .sidebar{
     transform:translateX(-100%);
     transition:.25s;
   }
 
-  .sidebar.open{
-    transform:translateX(0);
-  }
+  .sidebar.open{transform:translateX(0)}
 
-  .main{
-    margin-left:0;
-  }
+  .main{margin-left:0}
 
-  .mobile-menu{
-    display:block;
-  }
+  .mobile-menu{display:block}
 
-  .topbar{
-    padding:0 15px;
-  }
+  .topbar{padding:0 15px}
 
-  .topbar h2{
-    font-size:17px;
-  }
+  .topbar h2{font-size:17px}
 
-  .admin-user span{
-    display:none;
-  }
+  .admin-user span{display:none}
 
-  .content{
-    padding:15px;
-  }
+  .content{padding:15px}
 
   .stats{
     grid-template-columns:1fr 1fr;
     gap:10px;
   }
 
-  .stat-card{
-    padding:15px;
-  }
+  .stat-card{padding:15px}
 
-  .stat-value{
-    font-size:23px;
-  }
+  .stat-value{font-size:23px}
 
-  .filters{
-    grid-template-columns:1fr;
-  }
+  .filters{grid-template-columns:1fr}
 
-  .grid-2{
-    grid-template-columns:1fr;
-  }
+  .grid-2{grid-template-columns:1fr}
 
-  .section{
-    padding:15px;
-  }
+  .section{padding:15px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     LOGIN SCREEN
-========================================================= -->
-
+<!-- LOGIN -->
 <div id="loginScreen">
 
   <div class="login-card">
@@ -680,7 +541,6 @@ th{
 
       <div class="form-group">
         <label for="loginEmail">Email</label>
-
         <input
           type="email"
           id="loginEmail"
@@ -692,7 +552,6 @@ th{
 
       <div class="form-group">
         <label for="loginPassword">Password</label>
-
         <input
           type="password"
           id="loginPassword"
@@ -722,10 +581,7 @@ th{
 </div>
 
 
-<!-- =========================================================
-     MAIN APPLICATION
-========================================================= -->
-
+<!-- APP -->
 <div id="app" class="hidden">
 
   <aside class="sidebar" id="sidebar">
@@ -749,15 +605,15 @@ th{
         🏫 Shule Zote
       </button>
 
-      <button onclick="window.location.href='/admin-school-admins.html'">
+      <button onclick="goToPage('/admin-school-admins.html')">
         👨‍💼 Admin wa Shule
       </button>
 
-      <button onclick="window.location.href='/admin-payments.html'">
+      <button onclick="goToPage('/admin-payments.html')">
         💳 Malipo
       </button>
 
-      <button onclick="window.location.href='/schools-public.html'">
+      <button onclick="goToPage('/schools-public.html')">
         🔎 Angalia Portal
       </button>
 
@@ -795,9 +651,7 @@ th{
           Admin Mkuu
         </span>
 
-        <div class="admin-avatar">
-          A
-        </div>
+        <div class="admin-avatar">A</div>
 
       </div>
 
@@ -806,54 +660,30 @@ th{
 
     <div class="content">
 
-      <!-- STATS -->
-
       <div class="stats">
 
         <div class="stat-card">
-          <div class="stat-title">
-            SHULE ZOTE
-          </div>
-
-          <div class="stat-value" id="totalSchools">
-            0
-          </div>
+          <div class="stat-title">SHULE ZOTE</div>
+          <div class="stat-value" id="totalSchools">0</div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-title">
-            SHULE ACTIVE
-          </div>
-
-          <div class="stat-value" id="activeSchools">
-            0
-          </div>
+          <div class="stat-title">SHULE ACTIVE</div>
+          <div class="stat-value" id="activeSchools">0</div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-title">
-            WAOMBAJI
-          </div>
-
-          <div class="stat-value" id="totalApplicants">
-            0
-          </div>
+          <div class="stat-title">WAOMBAJI</div>
+          <div class="stat-value" id="totalApplicants">0</div>
         </div>
 
         <div class="stat-card">
-          <div class="stat-title">
-            MAPATO
-          </div>
-
-          <div class="stat-value" id="totalRevenue">
-            TSh 0
-          </div>
+          <div class="stat-title">MAPATO</div>
+          <div class="stat-value" id="totalRevenue">TSh 0</div>
         </div>
 
       </div>
 
-
-      <!-- QUICK ACTIONS -->
 
       <div class="section">
 
@@ -879,14 +709,14 @@ th{
 
           <button
             class="btn btn-secondary"
-            onclick="window.location.href='/admin-school-admins.html'"
+            onclick="goToPage('/admin-school-admins.html')"
           >
             👨‍💼 Admin wa Shule
           </button>
 
           <button
             class="btn btn-secondary"
-            onclick="window.location.href='/admin-payments.html'"
+            onclick="goToPage('/admin-payments.html')"
           >
             💳 Malipo
           </button>
@@ -896,20 +726,12 @@ th{
       </div>
 
 
-      <!-- SCHOOLS -->
-
       <div class="section">
 
         <div class="section-header">
-
           <h3>🏫 Shule Zote</h3>
-
-          <span id="schoolCountLabel">
-            0 shule
-          </span>
-
+          <span id="schoolCountLabel">0 shule</span>
         </div>
-
 
         <div class="filters">
 
@@ -944,7 +766,6 @@ th{
           </button>
 
         </div>
-
 
         <div class="table-wrap">
 
@@ -986,19 +807,14 @@ th{
 </div>
 
 
-<!-- =========================================================
-     SCHOOL MODAL
-========================================================= -->
-
+<!-- SCHOOL MODAL -->
 <div class="modal" id="schoolModal">
 
   <div class="modal-box">
 
     <div class="modal-header">
 
-      <h3 id="schoolModalTitle">
-        ➕ Sajili Shule
-      </h3>
+      <h3 id="schoolModalTitle">➕ Sajili Shule</h3>
 
       <button
         class="close-btn"
@@ -1009,145 +825,81 @@ th{
 
     </div>
 
-
     <form id="schoolForm">
 
-      <input
-        type="hidden"
-        id="schoolId"
-      >
+      <input type="hidden" id="schoolId">
 
       <div class="grid-2">
 
         <div class="form-group">
           <label>Jina la Shule *</label>
-
-          <input
-            id="schoolName"
-            required
-          >
+          <input id="schoolName" required>
         </div>
 
         <div class="form-group">
           <label>Mkoa *</label>
-
-          <input
-            id="schoolRegion"
-            required
-          >
+          <input id="schoolRegion" required>
         </div>
 
         <div class="form-group">
           <label>Wilaya *</label>
-
-          <input
-            id="schoolDistrict"
-            required
-          >
+          <input id="schoolDistrict" required>
         </div>
 
         <div class="form-group">
           <label>Mahali / Address</label>
-
-          <input
-            id="schoolAddress"
-          >
+          <input id="schoolAddress">
         </div>
 
         <div class="form-group">
-
           <label>Aina ya Shule</label>
 
           <select id="schoolType">
-
-            <option value="">
-              Chagua aina
-            </option>
-
-            <option value="Primary">
-              Primary
-            </option>
-
-            <option value="Secondary">
-              Secondary
-            </option>
-
-            <option value="Primary & Secondary">
-              Primary & Secondary
-            </option>
-
-            <option value="Kindergarten">
-              Kindergarten
-            </option>
-
-            <option value="Other">
-              Other
-            </option>
-
+            <option value="">Chagua aina</option>
+            <option value="Primary">Primary</option>
+            <option value="Secondary">Secondary</option>
+            <option value="Primary & Secondary">Primary & Secondary</option>
+            <option value="Kindergarten">Kindergarten</option>
+            <option value="Other">Other</option>
           </select>
 
         </div>
 
         <div class="form-group">
-
           <label>Bei ya Fomu (TSh)</label>
-
           <input
             type="number"
             id="schoolFormPrice"
             min="0"
             value="0"
           >
-
         </div>
 
         <div class="form-group">
-
           <label>Simu</label>
-
-          <input
-            id="schoolPhone"
-            type="tel"
-          >
-
+          <input id="schoolPhone" type="tel">
         </div>
 
         <div class="form-group">
-
           <label>Email</label>
-
-          <input
-            id="schoolEmail"
-            type="email"
-          >
-
+          <input id="schoolEmail" type="email">
         </div>
 
         <div class="form-group">
-
           <label>Website</label>
-
-          <input
-            id="schoolWebsite"
-            type="url"
-          >
-
+          <input id="schoolWebsite" type="url">
         </div>
 
         <div class="form-group">
-
           <label>Mwaka wa Maombi</label>
-
           <input
             id="schoolApplicationYear"
             type="number"
             value="2026"
           >
-
         </div>
 
       </div>
-
 
       <div class="form-group">
 
@@ -1160,7 +912,6 @@ th{
         ></textarea>
 
       </div>
-
 
       <div class="checkbox-row">
 
@@ -1176,13 +927,11 @@ th{
 
       </div>
 
-
       <div class="notice">
         Baada ya kusajili shule unaweza kuifanyia
         <strong>Form Builder</strong> na kuweka fields maalum
         ambazo mzazi atajaza wakati wa maombi.
       </div>
-
 
       <div class="modal-footer">
 
@@ -1211,10 +960,7 @@ th{
 </div>
 
 
-<!-- =========================================================
-     FORM BUILDER MODAL
-========================================================= -->
-
+<!-- BUILDER MODAL -->
 <div class="modal" id="builderModal">
 
   <div class="modal-box large">
@@ -1222,14 +968,12 @@ th{
     <div class="modal-header">
 
       <div>
-
         <h3>🧩 Form Builder</h3>
 
         <div
           id="builderSchoolName"
           style="color:#777;margin-top:4px;"
         ></div>
-
       </div>
 
       <button
@@ -1241,17 +985,12 @@ th{
 
     </div>
 
-
     <div class="notice">
       Hapa unaweza kuweka taarifa maalum ambazo mzazi
       atajaza kwenye fomu ya shule hii.
     </div>
 
-
-    <div
-      class="actions"
-      style="margin-bottom:18px;"
-    >
+    <div class="actions" style="margin-bottom:18px;">
 
       <button
         class="btn btn-primary"
@@ -1269,7 +1008,6 @@ th{
 
     </div>
 
-
     <div id="fieldList" class="field-list">
 
       <div class="loading">
@@ -1283,19 +1021,14 @@ th{
 </div>
 
 
-<!-- =========================================================
-     FIELD MODAL
-========================================================= -->
-
+<!-- FIELD MODAL -->
 <div class="modal" id="fieldModal">
 
   <div class="modal-box">
 
     <div class="modal-header">
 
-      <h3 id="fieldModalTitle">
-        ➕ Ongeza Field
-      </h3>
+      <h3 id="fieldModalTitle">➕ Ongeza Field</h3>
 
       <button
         class="close-btn"
@@ -1306,14 +1039,9 @@ th{
 
     </div>
 
-
     <form id="fieldForm">
 
-      <input
-        type="hidden"
-        id="fieldId"
-      >
-
+      <input type="hidden" id="fieldId">
 
       <div class="form-group">
 
@@ -1328,7 +1056,6 @@ th{
 
       </div>
 
-
       <div class="form-group">
 
         <label>Field Key *</label>
@@ -1341,7 +1068,6 @@ th{
 
       </div>
 
-
       <div class="form-group">
 
         <label>Aina ya Field *</label>
@@ -1351,50 +1077,20 @@ th{
           onchange="toggleOptionsBox()"
         >
 
-          <option value="text">
-            Text
-          </option>
-
-          <option value="textarea">
-            Textarea
-          </option>
-
-          <option value="number">
-            Number
-          </option>
-
-          <option value="email">
-            Email
-          </option>
-
-          <option value="phone">
-            Phone
-          </option>
-
-          <option value="date">
-            Date
-          </option>
-
-          <option value="dropdown">
-            Dropdown
-          </option>
-
-          <option value="radio">
-            Radio
-          </option>
-
-          <option value="checkbox">
-            Checkbox
-          </option>
-
-          <option value="file">
-            File
-          </option>
+          <option value="text">Text</option>
+          <option value="textarea">Textarea</option>
+          <option value="number">Number</option>
+          <option value="email">Email</option>
+          <option value="phone">Phone</option>
+          <option value="date">Date</option>
+          <option value="dropdown">Dropdown</option>
+          <option value="radio">Radio</option>
+          <option value="checkbox">Checkbox</option>
+          <option value="file">File</option>
 
         </select>
 
       </div>
-
 
       <div
         class="form-group"
@@ -1402,9 +1098,7 @@ th{
         style="display:none;"
       >
 
-        <label>
-          Options
-        </label>
+        <label>Options</label>
 
         <textarea
           id="fieldOptions"
@@ -1420,50 +1114,20 @@ Mwingine"
 
       </div>
 
-
       <div class="checkbox-row">
-
-        <input
-          type="checkbox"
-          id="fieldRequired"
-        >
-
-        <label for="fieldRequired">
-          Required
-        </label>
-
+        <input type="checkbox" id="fieldRequired">
+        <label for="fieldRequired">Required</label>
       </div>
 
-
       <div class="checkbox-row">
-
-        <input
-          type="checkbox"
-          id="fieldVisible"
-          checked
-        >
-
-        <label for="fieldVisible">
-          Visible
-        </label>
-
+        <input type="checkbox" id="fieldVisible" checked>
+        <label for="fieldVisible">Visible</label>
       </div>
 
-
       <div class="checkbox-row">
-
-        <input
-          type="checkbox"
-          id="fieldPublic"
-          checked
-        >
-
-        <label for="fieldPublic">
-          Public
-        </label>
-
+        <input type="checkbox" id="fieldPublic" checked>
+        <label for="fieldPublic">Public</label>
       </div>
-
 
       <div class="modal-footer">
 
@@ -1495,12 +1159,17 @@ Mwingine"
 
 
 <script>
-/* =========================================================
-   CONFIG
-========================================================= */
 
 const API_BASE = window.location.origin;
 
+/*
+  MUHIMU:
+  Admin Mkuu token sasa inahifadhiwa localStorage.
+  Hii inaruhusu token kubaki ukienda:
+  admin-school-admins.html
+  admin-payments.html
+  na kurudi tena dashboard.
+*/
 const ADMIN_TOKEN_KEY = "spt_admin_token";
 
 let schools = [];
@@ -1509,72 +1178,96 @@ let currentFields = [];
 let editingFieldId = null;
 
 
-/* =========================================================
-   AUTHENTICATION STORAGE
-========================================================= */
-
-/*
-  IMPORTANT:
-
-  Toleo la zamani lilikuwa linahifadhi token kwenye localStorage.
-  Hilo lilifanya Admin Mkuu aweze kufunguliwa moja kwa moja.
-
-  Hapa tunaondoa token yoyote ya zamani kutoka localStorage.
-  Token mpya itawekwa sessionStorage.
-*/
-
-try{
-  localStorage.removeItem(ADMIN_TOKEN_KEY);
-}catch(error){
-  console.warn("localStorage haikupatikana.");
-}
-
+/* ================= TOKEN ================= */
 
 function getAdminToken(){
 
-  return sessionStorage.getItem(
-    ADMIN_TOKEN_KEY
-  ) || "";
+  return (
+    localStorage.getItem(ADMIN_TOKEN_KEY) ||
+    sessionStorage.getItem(ADMIN_TOKEN_KEY) ||
+    ""
+  );
 
 }
 
 
 function setAdminToken(token){
 
-  if(token){
+  if(!token) return;
 
+  localStorage.setItem(
+    ADMIN_TOKEN_KEY,
+    token
+  );
+
+  /*
+    Backup ya sessionStorage pia.
+  */
+  try{
     sessionStorage.setItem(
       ADMIN_TOKEN_KEY,
       token
     );
-
-  }
+  }catch(e){}
 
 }
 
 
 function clearAdminToken(){
 
-  sessionStorage.removeItem(
-    ADMIN_TOKEN_KEY
-  );
+  try{
+    localStorage.removeItem(
+      ADMIN_TOKEN_KEY
+    );
+  }catch(e){}
+
+  try{
+    sessionStorage.removeItem(
+      ADMIN_TOKEN_KEY
+    );
+  }catch(e){}
 
 }
 
 
-/* =========================================================
-   FORCE LOGIN SCREEN
-========================================================= */
+/* ================= NAVIGATION ================= */
 
-function showLogin(message = ""){
+function goToPage(url){
+
+  /*
+    Token tayari iko localStorage.
+    Kwa hiyo ukifungua page nyingine,
+    Admin Mkuu session itaendelea.
+  */
+
+  if(!getAdminToken()){
+
+    showLogin(
+      "Login ya Admin Mkuu inahitajika."
+    );
+
+    return;
+
+  }
+
+  window.location.href = url;
+
+}
+
+
+/* ================= LOGIN SCREEN ================= */
+
+function showLogin(message=""){
 
   document
     .getElementById("app")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
   document
     .getElementById("loginScreen")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
   const error =
     document.getElementById("loginError");
@@ -1582,13 +1275,11 @@ function showLogin(message = ""){
   if(message){
 
     error.textContent = message;
-
     error.classList.remove("hidden");
 
   }else{
 
     error.textContent = "";
-
     error.classList.add("hidden");
 
   }
@@ -1600,30 +1291,23 @@ function hideLogin(){
 
   document
     .getElementById("loginScreen")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
   document
     .getElementById("app")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
 }
 
 
-/* =========================================================
-   API FETCH
-========================================================= */
+/* ================= API ================= */
 
-async function apiFetch(
-  path,
-  options = {}
-){
+async function apiFetch(path,options={}){
 
   const token =
     getAdminToken();
-
-  /*
-    Hakuna token = hakuna Admin API.
-  */
 
   if(!token){
 
@@ -1637,16 +1321,10 @@ async function apiFetch(
 
   }
 
-
   const headers = {
-
-    "Accept":
-      "application/json",
-
+    "Accept":"application/json",
     ...(options.headers || {})
-
   };
-
 
   if(
     options.body &&
@@ -1658,10 +1336,8 @@ async function apiFetch(
 
   }
 
-
   headers["Authorization"] =
     `Bearer ${token}`;
-
 
   const response =
     await fetch(
@@ -1673,17 +1349,12 @@ async function apiFetch(
       }
     );
 
-
-  /*
-    Token invalid / expired.
-  */
-
   if(response.status === 401){
 
     clearAdminToken();
 
     showLogin(
-      "Session ya Admin Mkuu imeisha. Tafadhali ingia tena."
+      "Session ya Admin Mkuu haijathibitishwa. Tafadhali ingia tena."
     );
 
     throw new Error(
@@ -1692,20 +1363,16 @@ async function apiFetch(
 
   }
 
-
   return response;
 
 }
 
 
-/* =========================================================
-   LOGIN
-========================================================= */
+/* ================= LOGIN ================= */
 
 async function loginAdmin(event){
 
   event.preventDefault();
-
 
   const email =
     document
@@ -1714,45 +1381,29 @@ async function loginAdmin(event){
       .trim()
       .toLowerCase();
 
-
   const password =
     document
       .getElementById("loginPassword")
       .value;
-
 
   const button =
     document.getElementById(
       "loginButton"
     );
 
-
   const error =
     document.getElementById(
       "loginError"
     );
 
-
-  error.classList.add(
-    "hidden"
-  );
-
+  error.classList.add("hidden");
 
   button.disabled = true;
-
-  button.textContent =
-    "⏳ Inaingia...";
-
+  button.textContent = "⏳ Inaingia...";
 
   try{
 
-    /*
-      Ondoa session yoyote iliyobaki kabla
-      ya kujaribu login mpya.
-    */
-
     clearAdminToken();
-
 
     const response =
       await fetch(
@@ -1774,26 +1425,17 @@ async function loginAdmin(event){
               password
             }),
 
-          cache:
-            "no-store"
+          cache:"no-store"
         }
       );
 
-
     let data = {};
 
-
     try{
-
-      data =
-        await response.json();
-
-    }catch(error){
-
+      data = await response.json();
+    }catch(e){
       data = {};
-
     }
-
 
     if(
       !response.ok ||
@@ -1808,22 +1450,17 @@ async function loginAdmin(event){
 
     }
 
-
     /*
-      Hifadhi token mpya tu baada ya
-      backend kuthibitisha credentials.
+      HAPA NDIKO MUHIMU:
+      token inawekwa localStorage.
     */
-
     setAdminToken(
       data.token
     );
 
-
     /*
-      Verify token mpya kabla ya
-      kuonyesha dashboard.
+      Hakikisha token inafanya kazi.
     */
-
     const verifyResponse =
       await fetch(
         `${API_BASE}/api/admin/me`,
@@ -1838,15 +1475,18 @@ async function loginAdmin(event){
               `Bearer ${data.token}`
           },
 
-          cache:
-            "no-store"
+          cache:"no-store"
         }
       );
 
+    let verifyData = {};
 
-    const verifyData =
-      await verifyResponse.json();
-
+    try{
+      verifyData =
+        await verifyResponse.json();
+    }catch(e){
+      verifyData = {};
+    }
 
     if(
       !verifyResponse.ok ||
@@ -1861,7 +1501,6 @@ async function loginAdmin(event){
 
     }
 
-
     document
       .getElementById(
         "adminEmailDisplay"
@@ -1871,22 +1510,13 @@ async function loginAdmin(event){
         data.admin?.email ||
         email;
 
-
     hideLogin();
 
-
-    /*
-      Dashboard ifunguke baada ya
-      login na verification kufanikiwa.
-    */
-
     await initDashboard();
-
 
   }catch(error){
 
     clearAdminToken();
-
 
     document
       .getElementById(
@@ -1896,7 +1526,6 @@ async function loginAdmin(event){
         error.message ||
         "Imeshindikana kuingia.";
 
-
     document
       .getElementById(
         "loginError"
@@ -1904,11 +1533,9 @@ async function loginAdmin(event){
       .classList
       .remove("hidden");
 
-
   }finally{
 
-    button.disabled =
-      false;
+    button.disabled = false;
 
     button.textContent =
       "🔐 Ingia kama Admin Mkuu";
@@ -1918,19 +1545,12 @@ async function loginAdmin(event){
 }
 
 
-/* =========================================================
-   CHECK CURRENT SESSION
-========================================================= */
+/* ================= SESSION ================= */
 
 async function checkAdminSession(){
 
-  /*
-    Hakuna token = lazima login.
-  */
-
   const token =
     getAdminToken();
-
 
   if(!token){
 
@@ -1940,7 +1560,6 @@ async function checkAdminSession(){
 
   }
 
-
   try{
 
     const response =
@@ -1948,10 +1567,8 @@ async function checkAdminSession(){
         "/api/admin/me"
       );
 
-
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -1966,7 +1583,6 @@ async function checkAdminSession(){
 
     }
 
-
     document
       .getElementById(
         "adminEmailDisplay"
@@ -1975,11 +1591,9 @@ async function checkAdminSession(){
         data.admin?.email ||
         "Admin Mkuu";
 
-
     hideLogin();
 
     return true;
-
 
   }catch(error){
 
@@ -1994,15 +1608,12 @@ async function checkAdminSession(){
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
+/* ================= LOGOUT ================= */
 
 async function logoutAdmin(){
 
   const token =
     getAdminToken();
-
 
   try{
 
@@ -2021,8 +1632,7 @@ async function logoutAdmin(){
               `Bearer ${token}`
           },
 
-          cache:
-            "no-store"
+          cache:"no-store"
         }
       );
 
@@ -2031,7 +1641,7 @@ async function logoutAdmin(){
   }catch(error){
 
     console.warn(
-      "Logout request failed:",
+      "Logout failed:",
       error
     );
 
@@ -2039,20 +1649,14 @@ async function logoutAdmin(){
 
     clearAdminToken();
 
-    /*
-      Hakikisha dashboard haionekani tena.
-    */
-
     document
       .getElementById("app")
       .classList
       .add("hidden");
 
-
     showLogin(
       "Umetoka kwenye Admin Mkuu."
     );
-
 
     document
       .getElementById(
@@ -2065,9 +1669,7 @@ async function logoutAdmin(){
 }
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
+/* ================= INIT ================= */
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -2080,14 +1682,12 @@ document.addEventListener(
         loginAdmin
       );
 
-
     document
       .getElementById("schoolForm")
       .addEventListener(
         "submit",
         saveSchool
       );
-
 
     document
       .getElementById("fieldForm")
@@ -2096,21 +1696,8 @@ document.addEventListener(
         saveField
       );
 
-
-    /*
-      Anza ikiwa login screen tu.
-    */
-
-    showLogin();
-
-
-    /*
-      Angalia kama kuna session halali.
-    */
-
     const loggedIn =
       await checkAdminSession();
-
 
     if(loggedIn){
 
@@ -2122,15 +1709,9 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   INITIALIZE DASHBOARD
-========================================================= */
+/* ================= DASHBOARD ================= */
 
 async function initDashboard(){
-
-  /*
-    Double-check token kabla ya dashboard.
-  */
 
   if(!getAdminToken()){
 
@@ -2142,15 +1723,12 @@ async function initDashboard(){
 
   }
 
-
   await loadSchools();
 
 }
 
 
-/* =========================================================
-   LOAD SCHOOLS
-========================================================= */
+/* ================= LOAD SCHOOLS ================= */
 
 async function loadSchools(){
 
@@ -2164,12 +1742,10 @@ async function loadSchools(){
 
   }
 
-
   const tbody =
     document.getElementById(
       "schoolsTableBody"
     );
-
 
   tbody.innerHTML = `
     <tr>
@@ -2179,21 +1755,15 @@ async function loadSchools(){
     </tr>
   `;
 
-
   try{
 
     const response =
       await apiFetch(
-        "/api/admin/schools",
-        {
-          method:"GET"
-        }
+        "/api/admin/schools"
       );
-
 
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -2207,7 +1777,6 @@ async function loadSchools(){
 
     }
 
-
     schools =
       Array.isArray(data)
         ? data
@@ -2217,44 +1786,32 @@ async function loadSchools(){
           []
         );
 
-
     updateStats();
 
     populateRegionFilter();
 
     filterSchools();
 
-
   }catch(error){
 
     if(
-      error.message ===
-      "UNAUTHORIZED" ||
-      error.message ===
-      "NO_ADMIN_TOKEN"
+      error.message === "UNAUTHORIZED" ||
+      error.message === "NO_ADMIN_TOKEN"
     ){
-
       return;
-
     }
-
 
     tbody.innerHTML = `
       <tr>
         <td
           colspan="8"
-          style="
-            color:#c62828;
-            text-align:center;
-            padding:30px;
-          "
+          style="color:#c62828;text-align:center;padding:30px;"
         >
           ❌ Imeshindikana kupakia shule —
           ${escapeHtml(error.message)}
         </td>
       </tr>
     `;
-
 
     showToast(
       error.message ||
@@ -2267,98 +1824,69 @@ async function loadSchools(){
 }
 
 
-/* =========================================================
-   STATS
-========================================================= */
+/* ================= STATS ================= */
 
 function updateStats(){
 
   const total =
     schools.length;
 
-
   const active =
     schools.filter(
-      school =>
-        isSchoolActive(school)
+      s => isSchoolActive(s)
     ).length;
 
-
   document
-    .getElementById(
-      "totalSchools"
-    )
+    .getElementById("totalSchools")
     .textContent =
       total;
 
-
   document
-    .getElementById(
-      "activeSchools"
-    )
+    .getElementById("activeSchools")
     .textContent =
       active;
 
-
   document
-    .getElementById(
-      "schoolCountLabel"
-    )
+    .getElementById("schoolCountLabel")
     .textContent =
       `${total} shule`;
 
-
   let applicants = 0;
-
   let revenue = 0;
-
 
   schools.forEach(
     school => {
 
-      applicants +=
-        Number(
-          school.applicant_count ||
-          school.applicants_count ||
-          school.total_applicants ||
-          0
-        );
+      applicants += Number(
+        school.applicant_count ||
+        school.applicants_count ||
+        school.total_applicants ||
+        0
+      );
 
-
-      revenue +=
-        Number(
-          school.total_revenue ||
-          school.revenue ||
-          0
-        );
+      revenue += Number(
+        school.total_revenue ||
+        school.revenue ||
+        0
+      );
 
     }
   );
 
-
   document
-    .getElementById(
-      "totalApplicants"
-    )
+    .getElementById("totalApplicants")
     .textContent =
       applicants;
 
-
   document
-    .getElementById(
-      "totalRevenue"
-    )
+    .getElementById("totalRevenue")
     .textContent =
-      formatMoney(
-        revenue
-      );
+      formatMoney(revenue);
 
 }
 
 
-/* =========================================================
-   SCHOOL HELPERS
-========================================================= */
+/* ================= HELPERS ================= */
 
 function isSchoolActive(school){
 
@@ -2367,31 +1895,19 @@ function isSchoolActive(school){
     school.active ??
     school.is_active;
 
-
-  if(
+  return (
     value === true ||
     value === 1 ||
     value === "1" ||
-    String(value).toLowerCase() ===
-      "active"
-  ){
-
-    return true;
-
-  }
-
-
-  return false;
+    String(value).toLowerCase() === "active"
+  );
 
 }
 
 
 function schoolId(school){
 
-  return (
-    school.id ??
-    school.school_id
-  );
+  return school.id ?? school.school_id;
 
 }
 
@@ -2452,9 +1968,7 @@ function schoolPrice(school){
 }
 
 
-/* =========================================================
-   REGION FILTER
-========================================================= */
+/* ================= REGION ================= */
 
 function populateRegionFilter(){
 
@@ -2463,32 +1977,22 @@ function populateRegionFilter(){
       "regionFilter"
     );
 
-
   const current =
     select.value;
-
 
   const regions =
     [
       ...new Set(
         schools
-          .map(
-            s =>
-              schoolRegion(s)
-          )
+          .map(s => schoolRegion(s))
           .filter(Boolean)
-          .filter(
-            x => x !== "—"
-          )
+          .filter(x => x !== "—")
       )
     ]
     .sort();
 
-
   select.innerHTML =
-    `<option value="">
-      Mikoa yote
-    </option>` +
+    `<option value="">Mikoa yote</option>` +
     regions
       .map(
         region =>
@@ -2498,44 +2002,32 @@ function populateRegionFilter(){
       )
       .join("");
 
-
   select.value =
     current;
 
 }
 
 
-/* =========================================================
-   FILTER
-========================================================= */
+/* ================= FILTER ================= */
 
 function filterSchools(){
 
   const search =
     document
-      .getElementById(
-        "searchSchool"
-      )
+      .getElementById("searchSchool")
       .value
       .trim()
       .toLowerCase();
 
-
   const region =
     document
-      .getElementById(
-        "regionFilter"
-      )
+      .getElementById("regionFilter")
       .value;
-
 
   const status =
     document
-      .getElementById(
-        "statusFilter"
-      )
+      .getElementById("statusFilter")
       .value;
-
 
   const filtered =
     schools.filter(
@@ -2551,96 +2043,64 @@ function filterSchools(){
           .join(" ")
           .toLowerCase();
 
-
         if(
           search &&
           !text.includes(search)
         ){
-
           return false;
-
         }
-
 
         if(
           region &&
-          schoolRegion(school) !==
-            region
+          schoolRegion(school) !== region
         ){
-
           return false;
-
         }
-
 
         if(
           status === "active" &&
           !isSchoolActive(school)
         ){
-
           return false;
-
         }
-
 
         if(
           status === "inactive" &&
           isSchoolActive(school)
         ){
-
           return false;
-
         }
-
 
         return true;
 
       }
     );
 
-
-  renderSchools(
-    filtered
-  );
+  renderSchools(filtered);
 
 }
 
 
-/* =========================================================
-   CLEAR FILTERS
-========================================================= */
-
 function clearFilters(){
 
-  document
-    .getElementById(
-      "searchSchool"
-    )
-    .value = "";
+  document.getElementById(
+    "searchSchool"
+  ).value = "";
 
+  document.getElementById(
+    "regionFilter"
+  ).value = "";
 
-  document
-    .getElementById(
-      "regionFilter"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "statusFilter"
-    )
-    .value = "";
-
+  document.getElementById(
+    "statusFilter"
+  ).value = "";
 
   filterSchools();
 
 }
 
 
-/* =========================================================
-   RENDER SCHOOLS
-========================================================= */
+/* ================= RENDER ================= */
 
 function renderSchools(list){
 
@@ -2649,18 +2109,13 @@ function renderSchools(list){
       "schoolsTableBody"
     );
 
-
   if(!list.length){
 
     tbody.innerHTML = `
       <tr>
         <td
           colspan="8"
-          style="
-            text-align:center;
-            padding:35px;
-            color:#777;
-          "
+          style="text-align:center;padding:35px;color:#777;"
         >
           Hakuna shule iliyopatikana.
         </td>
@@ -2671,96 +2126,71 @@ function renderSchools(list){
 
   }
 
-
   tbody.innerHTML =
     list
       .map(
         (school,index) => {
 
           const active =
-            isSchoolActive(
-              school
-            );
-
+            isSchoolActive(school);
 
           const id =
-            schoolId(
-              school
-            );
-
+            schoolId(school);
 
           return `
             <tr>
 
-              <td>
-                ${index + 1}
-              </td>
+              <td>${index + 1}</td>
 
               <td>
                 <strong>
                   ${escapeHtml(
-                    schoolName(
-                      school
-                    )
+                    schoolName(school)
                   )}
                 </strong>
               </td>
 
               <td>
                 ${escapeHtml(
-                  schoolRegion(
-                    school
-                  )
+                  schoolRegion(school)
                 )}
               </td>
 
               <td>
                 ${escapeHtml(
-                  schoolDistrict(
-                    school
-                  )
+                  schoolDistrict(school)
                 )}
               </td>
 
               <td>
                 ${escapeHtml(
-                  schoolType(
-                    school
-                  )
+                  schoolType(school)
                 )}
               </td>
 
               <td>
                 ${formatMoney(
-                  schoolPrice(
-                    school
-                  )
+                  schoolPrice(school)
                 )}
               </td>
 
               <td>
-
-                <span
-                  class="status ${
-                    active
-                      ? "status-active"
-                      : "status-inactive"
-                  }"
-                >
+                <span class="status ${
+                  active
+                    ? "status-active"
+                    : "status-inactive"
+                }">
                   ${
                     active
                       ? "ACTIVE"
                       : "INACTIVE"
                   }
                 </span>
-
               </td>
 
               <td>
 
-                <div
-                  class="actions-cell"
-                >
+                <div class="actions-cell">
 
                   <button
                     class="small-btn btn-primary"
@@ -2815,218 +2245,111 @@ function renderSchools(list){
 }
 
 
-/* =========================================================
-   SCHOOL MODAL
-========================================================= */
+/* ================= SCHOOL MODAL ================= */
 
-function openSchoolModal(
-  school = null
-){
+function openSchoolModal(school=null){
 
   document
-    .getElementById(
-      "schoolModal"
-    )
+    .getElementById("schoolModal")
     .classList
     .add("show");
 
-
   document
-    .getElementById(
-      "schoolModalTitle"
-    )
+    .getElementById("schoolModalTitle")
     .textContent =
       school
         ? "✏️ Hariri Shule"
         : "➕ Sajili Shule";
 
+  document.getElementById("schoolId").value =
+    school ? schoolId(school) : "";
 
-  document
-    .getElementById(
-      "schoolId"
-    )
-    .value =
-      school
-        ? schoolId(school)
-        : "";
+  document.getElementById("schoolName").value =
+    school ? schoolName(school) : "";
 
+  document.getElementById("schoolRegion").value =
+    school ? schoolRegion(school) : "";
 
-  document
-    .getElementById(
-      "schoolName"
-    )
-    .value =
-      school
-        ? schoolName(school)
-        : "";
+  document.getElementById("schoolDistrict").value =
+    school ? schoolDistrict(school) : "";
 
+  document.getElementById("schoolAddress").value =
+    school
+      ? (
+        school.address ||
+        school.location ||
+        ""
+      )
+      : "";
 
-  document
-    .getElementById(
-      "schoolRegion"
-    )
-    .value =
-      school
-        ? schoolRegion(school)
-        : "";
+  document.getElementById("schoolType").value =
+    school ? schoolType(school) : "";
 
+  document.getElementById("schoolFormPrice").value =
+    school ? schoolPrice(school) : 0;
 
-  document
-    .getElementById(
-      "schoolDistrict"
-    )
-    .value =
-      school
-        ? schoolDistrict(school)
-        : "";
+  document.getElementById("schoolPhone").value =
+    school
+      ? (
+        school.phone ||
+        school.contact_phone ||
+        ""
+      )
+      : "";
 
+  document.getElementById("schoolEmail").value =
+    school
+      ? (
+        school.email ||
+        school.contact_email ||
+        ""
+      )
+      : "";
 
-  document
-    .getElementById(
-      "schoolAddress"
-    )
-    .value =
-      school
-        ? (
-          school.address ||
-          school.location ||
-          ""
-        )
-        : "";
+  document.getElementById("schoolWebsite").value =
+    school ? school.website || "" : "";
 
+  document.getElementById("schoolApplicationYear").value =
+    school
+      ? (
+        school.application_year ||
+        school.year ||
+        2026
+      )
+      : 2026;
 
-  document
-    .getElementById(
-      "schoolType"
-    )
-    .value =
-      school
-        ? schoolType(school)
-        : "";
+  document.getElementById("schoolDescription").value =
+    school
+      ? school.description || ""
+      : "";
 
-
-  document
-    .getElementById(
-      "schoolFormPrice"
-    )
-    .value =
-      school
-        ? schoolPrice(school)
-        : 0;
-
-
-  document
-    .getElementById(
-      "schoolPhone"
-    )
-    .value =
-      school
-        ? (
-          school.phone ||
-          school.contact_phone ||
-          ""
-        )
-        : "";
-
-
-  document
-    .getElementById(
-      "schoolEmail"
-    )
-    .value =
-      school
-        ? (
-          school.email ||
-          school.contact_email ||
-          ""
-        )
-        : "";
-
-
-  document
-    .getElementById(
-      "schoolWebsite"
-    )
-    .value =
-      school
-        ? (
-          school.website ||
-          ""
-        )
-        : "";
-
-
-  document
-    .getElementById(
-      "schoolApplicationYear"
-    )
-    .value =
-      school
-        ? (
-          school.application_year ||
-          school.year ||
-          2026
-        )
-        : 2026;
-
-
-  document
-    .getElementById(
-      "schoolDescription"
-    )
-    .value =
-      school
-        ? (
-          school.description ||
-          ""
-        )
-        : "";
-
-
-  document
-    .getElementById(
-      "schoolActive"
-    )
-    .checked =
-      school
-        ? isSchoolActive(
-            school
-          )
-        : true;
+  document.getElementById("schoolActive").checked =
+    school
+      ? isSchoolActive(school)
+      : true;
 
 }
 
 
-/* =========================================================
-   CLOSE SCHOOL MODAL
-========================================================= */
-
 function closeSchoolModal(){
 
   document
-    .getElementById(
-      "schoolModal"
-    )
+    .getElementById("schoolModal")
     .classList
     .remove("show");
 
 }
 
 
-/* =========================================================
-   EDIT SCHOOL
-========================================================= */
+/* ================= EDIT SCHOOL ================= */
 
 function editSchool(id){
 
   const school =
     schools.find(
       s =>
-        Number(
-          schoolId(s)
-        ) === Number(id)
+        Number(schoolId(s)) === Number(id)
     );
-
 
   if(!school){
 
@@ -3039,153 +2362,96 @@ function editSchool(id){
 
   }
 
-
-  openSchoolModal(
-    school
-  );
+  openSchoolModal(school);
 
 }
 
 
-/* =========================================================
-   SAVE SCHOOL
-========================================================= */
+/* ================= SAVE SCHOOL ================= */
 
 async function saveSchool(event){
 
   event.preventDefault();
 
-
   const id =
-    document
-      .getElementById(
-        "schoolId"
-      )
-      .value;
+    document.getElementById(
+      "schoolId"
+    ).value;
 
+  const active =
+    document.getElementById(
+      "schoolActive"
+    ).checked;
 
   const payload = {
 
     name:
-      document
-        .getElementById(
-          "schoolName"
-        )
-        .value
-        .trim(),
-
+      document.getElementById(
+        "schoolName"
+      ).value.trim(),
 
     region:
-      document
-        .getElementById(
-          "schoolRegion"
-        )
-        .value
-        .trim(),
-
+      document.getElementById(
+        "schoolRegion"
+      ).value.trim(),
 
     district:
-      document
-        .getElementById(
-          "schoolDistrict"
-        )
-        .value
-        .trim(),
-
+      document.getElementById(
+        "schoolDistrict"
+      ).value.trim(),
 
     address:
-      document
-        .getElementById(
-          "schoolAddress"
-        )
-        .value
-        .trim(),
-
+      document.getElementById(
+        "schoolAddress"
+      ).value.trim(),
 
     school_type:
-      document
-        .getElementById(
-          "schoolType"
-        )
-        .value,
-
+      document.getElementById(
+        "schoolType"
+      ).value,
 
     form_price:
       Number(
-        document
-          .getElementById(
-            "schoolFormPrice"
-          )
-          .value || 0
+        document.getElementById(
+          "schoolFormPrice"
+        ).value || 0
       ),
 
-
     phone:
-      document
-        .getElementById(
-          "schoolPhone"
-        )
-        .value
-        .trim(),
-
+      document.getElementById(
+        "schoolPhone"
+      ).value.trim(),
 
     email:
-      document
-        .getElementById(
-          "schoolEmail"
-        )
-        .value
-        .trim(),
-
+      document.getElementById(
+        "schoolEmail"
+      ).value.trim(),
 
     website:
-      document
-        .getElementById(
-          "schoolWebsite"
-        )
-        .value
-        .trim(),
-
+      document.getElementById(
+        "schoolWebsite"
+      ).value.trim(),
 
     application_year:
       Number(
-        document
-          .getElementById(
-            "schoolApplicationYear"
-          )
-          .value ||
-        2026
+        document.getElementById(
+          "schoolApplicationYear"
+        ).value || 2026
       ),
 
-
     description:
-      document
-        .getElementById(
-          "schoolDescription"
-        )
-        .value
-        .trim(),
+      document.getElementById(
+        "schoolDescription"
+      ).value.trim(),
 
-
-    active:
-      document
-        .getElementById(
-          "schoolActive"
-        )
-        .checked,
-
+    active,
 
     status:
-      document
-        .getElementById(
-          "schoolActive"
-        )
-        .checked
+      active
         ? "active"
         : "inactive"
 
   };
-
 
   if(!payload.name){
 
@@ -3198,20 +2464,14 @@ async function saveSchool(event){
 
   }
 
-
   const button =
     document.getElementById(
       "saveSchoolButton"
     );
 
-
-  button.disabled =
-    true;
-
-
+  button.disabled = true;
   button.textContent =
     "⏳ Inahifadhi...";
-
 
   try{
 
@@ -3227,16 +2487,12 @@ async function saveSchool(event){
               : "POST",
 
           body:
-            JSON.stringify(
-              payload
-            )
+            JSON.stringify(payload)
         }
       );
 
-
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -3250,9 +2506,7 @@ async function saveSchool(event){
 
     }
 
-
     closeSchoolModal();
-
 
     showToast(
       id
@@ -3261,21 +2515,13 @@ async function saveSchool(event){
       "success"
     );
 
-
     await loadSchools();
-
 
   }catch(error){
 
-    if(
-      error.message ===
-      "UNAUTHORIZED"
-    ){
-
+    if(error.message === "UNAUTHORIZED"){
       return;
-
     }
-
 
     showToast(
       error.message ||
@@ -3283,12 +2529,9 @@ async function saveSchool(event){
       "error"
     );
 
-
   }finally{
 
-    button.disabled =
-      false;
-
+    button.disabled = false;
     button.textContent =
       "💾 Hifadhi Shule";
 
@@ -3297,25 +2540,17 @@ async function saveSchool(event){
 }
 
 
-/* =========================================================
-   STATUS
-========================================================= */
+/* ================= STATUS ================= */
 
-async function toggleSchoolStatus(
-  id,
-  active
-){
+async function toggleSchoolStatus(id,active){
 
   if(!confirm(
     active
       ? "Unataka kuweka shule hii LIVE?"
       : "Unataka kuizima shule hii?"
   )){
-
     return;
-
   }
-
 
   try{
 
@@ -3337,10 +2572,8 @@ async function toggleSchoolStatus(
         }
       );
 
-
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -3354,7 +2587,6 @@ async function toggleSchoolStatus(
 
     }
 
-
     showToast(
       active
         ? "Shule imewekwa LIVE."
@@ -3362,21 +2594,13 @@ async function toggleSchoolStatus(
       "success"
     );
 
-
     await loadSchools();
-
 
   }catch(error){
 
-    if(
-      error.message ===
-      "UNAUTHORIZED"
-    ){
-
+    if(error.message === "UNAUTHORIZED"){
       return;
-
     }
-
 
     showToast(
       error.message ||
@@ -3389,36 +2613,27 @@ async function toggleSchoolStatus(
 }
 
 
-/* =========================================================
-   DELETE SCHOOL
-========================================================= */
+/* ================= DELETE ================= */
 
 async function deleteSchool(id){
 
   const school =
     schools.find(
       s =>
-        Number(
-          schoolId(s)
-        ) === Number(id)
+        Number(schoolId(s)) === Number(id)
     );
-
 
   const name =
     school
       ? schoolName(school)
       : "shule hii";
 
-
   if(!confirm(
     `Una uhakika unataka kufuta "${name}"?\n\n` +
     `Hatua hii inaweza kuondoa taarifa za shule.`
   )){
-
     return;
-
   }
-
 
   try{
 
@@ -3430,10 +2645,8 @@ async function deleteSchool(id){
         }
       );
 
-
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -3447,27 +2660,18 @@ async function deleteSchool(id){
 
     }
 
-
     showToast(
       "Shule imefutwa.",
       "success"
     );
 
-
     await loadSchools();
-
 
   }catch(error){
 
-    if(
-      error.message ===
-      "UNAUTHORIZED"
-    ){
-
+    if(error.message === "UNAUTHORIZED"){
       return;
-
     }
-
 
     showToast(
       error.message ||
@@ -3480,20 +2684,15 @@ async function deleteSchool(id){
 }
 
 
-/* =========================================================
-   FORM BUILDER
-========================================================= */
+/* ================= BUILDER ================= */
 
 async function openBuilder(id){
 
   const school =
     schools.find(
       s =>
-        Number(
-          schoolId(s)
-        ) === Number(id)
+        Number(schoolId(s)) === Number(id)
     );
-
 
   if(!school){
 
@@ -3506,20 +2705,15 @@ async function openBuilder(id){
 
   }
 
-
   currentBuilderSchoolId =
     Number(id);
-
 
   document
     .getElementById(
       "builderSchoolName"
     )
     .textContent =
-      schoolName(
-        school
-      );
-
+      schoolName(school);
 
   document
     .getElementById(
@@ -3527,7 +2721,6 @@ async function openBuilder(id){
     )
     .classList
     .add("show");
-
 
   await loadBuilderFields();
 
@@ -3543,37 +2736,28 @@ function closeBuilder(){
     .classList
     .remove("show");
 
-
-  currentBuilderSchoolId =
-    null;
+  currentBuilderSchoolId = null;
 
 }
 
 
-/* =========================================================
-   LOAD BUILDER FIELDS
-========================================================= */
+/* ================= LOAD FIELDS ================= */
 
 async function loadBuilderFields(){
 
   if(!currentBuilderSchoolId){
-
     return;
-
   }
-
 
   const container =
     document.getElementById(
       "fieldList"
     );
 
-
   container.innerHTML =
     `<div class="loading">
       ⏳ Inapakia fields...
     </div>`;
-
 
   try{
 
@@ -3581,16 +2765,11 @@ async function loadBuilderFields(){
       await apiFetch(
         `/api/admin/schools/${encodeURIComponent(
           currentBuilderSchoolId
-        )}/custom-fields`,
-        {
-          method:"GET"
-        }
+        )}/custom-fields`
       );
-
 
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -3604,7 +2783,6 @@ async function loadBuilderFields(){
 
     }
 
-
     currentFields =
       Array.isArray(data)
         ? data
@@ -3615,32 +2793,17 @@ async function loadBuilderFields(){
           []
         );
 
-
     renderFields();
-
 
   }catch(error){
 
-    if(
-      error.message ===
-      "UNAUTHORIZED"
-    ){
-
+    if(error.message === "UNAUTHORIZED"){
       return;
-
     }
 
-
     container.innerHTML = `
-      <div
-        style="
-          padding:20px;
-          color:#c62828;
-        "
-      >
-        ❌ ${escapeHtml(
-          error.message
-        )}
+      <div style="padding:20px;color:#c62828;">
+        ❌ ${escapeHtml(error.message)}
       </div>
     `;
 
@@ -3649,9 +2812,7 @@ async function loadBuilderFields(){
 }
 
 
-/* =========================================================
-   RENDER FIELDS
-========================================================= */
+/* ================= RENDER FIELDS ================= */
 
 function renderFields(){
 
@@ -3659,7 +2820,6 @@ function renderFields(){
     document.getElementById(
       "fieldList"
     );
-
 
   if(!currentFields.length){
 
@@ -3674,18 +2834,13 @@ function renderFields(){
         "
       >
         Hakuna field maalum bado.<br>
-        Bonyeza
-        <strong>
-          ➕ Ongeza Field
-        </strong>
-        kuanza.
+        Bonyeza <strong>➕ Ongeza Field</strong> kuanza.
       </div>
     `;
 
     return;
 
   }
-
 
   container.innerHTML =
     currentFields
@@ -3696,7 +2851,6 @@ function renderFields(){
             normalizeFieldOptions(
               field.options
             );
-
 
           return `
             <div class="field-item">
@@ -3710,7 +2864,7 @@ function renderFields(){
                       field.field_label ||
                       field.label ||
                       field.name ||
-                      `Field ${index + 1}`
+                      `Field ${index+1}`
                     )}
                   </strong>
 
@@ -3748,9 +2902,7 @@ function renderFields(){
                         <div class="field-meta">
                           Options:
                           ${escapeHtml(
-                            options.join(
-                              ", "
-                            )
+                            options.join(", ")
                           )}
                         </div>
                       `
@@ -3759,23 +2911,18 @@ function renderFields(){
 
                 </div>
 
-
                 <div class="field-actions">
 
                   <button
                     class="small-btn btn-primary"
-                    onclick="editField(${Number(
-                      field.id
-                    )})"
+                    onclick="editField(${Number(field.id)})"
                   >
                     ✏️
                   </button>
 
                   <button
                     class="small-btn btn-danger"
-                    onclick="deleteField(${Number(
-                      field.id
-                    )})"
+                    onclick="deleteField(${Number(field.id)})"
                   >
                     🗑️
                   </button>
@@ -3794,19 +2941,14 @@ function renderFields(){
 }
 
 
-/* =========================================================
-   FIELD MODAL
-========================================================= */
+/* ================= FIELD MODAL ================= */
 
-function openFieldModal(
-  field = null
-){
+function openFieldModal(field=null){
 
   editingFieldId =
     field
       ? Number(field.id)
       : null;
-
 
   document
     .getElementById(
@@ -3817,149 +2959,85 @@ function openFieldModal(
         ? "✏️ Hariri Field"
         : "➕ Ongeza Field";
 
+  document.getElementById("fieldId").value =
+    field ? field.id : "";
 
-  document
-    .getElementById(
-      "fieldId"
-    )
-    .value =
-      field
-        ? field.id
-        : "";
+  document.getElementById("fieldLabel").value =
+    field
+      ? (
+        field.field_label ||
+        field.label ||
+        ""
+      )
+      : "";
 
+  document.getElementById("fieldKey").value =
+    field
+      ? (
+        field.field_key ||
+        field.key ||
+        ""
+      )
+      : "";
 
-  document
-    .getElementById(
-      "fieldLabel"
-    )
-    .value =
-      field
-        ? (
-          field.field_label ||
-          field.label ||
-          ""
-        )
-        : "";
+  document.getElementById("fieldType").value =
+    field
+      ? (
+        field.field_type ||
+        field.type ||
+        "text"
+      )
+      : "text";
 
+  document.getElementById("fieldOptions").value =
+    field
+      ? optionsToText(field.options)
+      : "";
 
-  document
-    .getElementById(
-      "fieldKey"
-    )
-    .value =
-      field
-        ? (
-          field.field_key ||
-          field.key ||
-          ""
-        )
-        : "";
+  document.getElementById("fieldRequired").checked =
+    field
+      ? Boolean(field.required)
+      : false;
 
+  document.getElementById("fieldVisible").checked =
+    field
+      ? field.visible !== false
+      : true;
 
-  document
-    .getElementById(
-      "fieldType"
-    )
-    .value =
-      field
-        ? (
-          field.field_type ||
-          field.type ||
-          "text"
-        )
-        : "text";
-
-
-  document
-    .getElementById(
-      "fieldOptions"
-    )
-    .value =
-      field
-        ? optionsToText(
-            field.options
-          )
-        : "";
-
-
-  document
-    .getElementById(
-      "fieldRequired"
-    )
-    .checked =
-      field
-        ? Boolean(
-            field.required
-          )
-        : false;
-
-
-  document
-    .getElementById(
-      "fieldVisible"
-    )
-    .checked =
-      field
-        ? field.visible !== false
-        : true;
-
-
-  document
-    .getElementById(
-      "fieldPublic"
-    )
-    .checked =
-      field
-        ? field.public !== false
-        : true;
-
+  document.getElementById("fieldPublic").checked =
+    field
+      ? field.public !== false
+      : true;
 
   toggleOptionsBox();
 
-
   document
-    .getElementById(
-      "fieldModal"
-    )
+    .getElementById("fieldModal")
     .classList
     .add("show");
 
 }
 
 
-/* =========================================================
-   CLOSE FIELD MODAL
-========================================================= */
-
 function closeFieldModal(){
 
   document
-    .getElementById(
-      "fieldModal"
-    )
+    .getElementById("fieldModal")
     .classList
     .remove("show");
 
-
-  editingFieldId =
-    null;
+  editingFieldId = null;
 
 }
 
-
-/* =========================================================
-   EDIT FIELD
-========================================================= */
 
 function editField(id){
 
   const field =
     currentFields.find(
       f =>
-        Number(f.id) ===
-        Number(id)
+        Number(f.id) === Number(id)
     );
-
 
   if(!field){
 
@@ -3972,98 +3050,67 @@ function editField(id){
 
   }
 
-
-  openFieldModal(
-    field
-  );
+  openFieldModal(field);
 
 }
 
 
-/* =========================================================
-   FIELD KEY
-========================================================= */
+/* ================= FIELD KEY ================= */
 
 function generateFieldKey(){
 
   const label =
     document
-      .getElementById(
-        "fieldLabel"
-      )
+      .getElementById("fieldLabel")
       .value;
-
 
   const keyInput =
     document.getElementById(
       "fieldKey"
     );
 
-
   if(
     keyInput.value.trim() &&
     editingFieldId
   ){
-
     return;
-
   }
 
-
   keyInput.value =
-    slugify(
-      label
-    );
+    slugify(label);
 
 }
 
 
 function slugify(value){
 
-  return String(
-    value || ""
-  )
+  return String(value || "")
     .toLowerCase()
     .trim()
     .replace(
       /[^a-z0-9À-ÿ\s_-]/gi,
       ""
     )
-    .replace(
-      /\s+/g,
-      "_"
-    )
-    .replace(
-      /_+/g,
-      "_"
-    )
-    .replace(
-      /^_+|_+$/g,
-      ""
-    );
+    .replace(/\s+/g,"_")
+    .replace(/_+/g,"_")
+    .replace(/^_+|_+$/g,"");
 
 }
 
 
-/* =========================================================
-   OPTIONS
-========================================================= */
+/* ================= OPTIONS ================= */
 
 function toggleOptionsBox(){
 
   const type =
     document
-      .getElementById(
-        "fieldType"
-      )
+      .getElementById("fieldType")
       .value;
-
 
   const container =
     document.getElementById(
       "optionsContainer"
     );
-
 
   if(
     type === "dropdown" ||
@@ -4083,20 +3130,11 @@ function toggleOptionsBox(){
 }
 
 
-function normalizeFieldOptions(
-  options
-){
+function normalizeFieldOptions(options){
 
-  if(
-    !Array.isArray(
-      options
-    )
-  ){
-
+  if(!Array.isArray(options)){
     return [];
-
   }
-
 
   return options
     .map(
@@ -4104,8 +3142,7 @@ function normalizeFieldOptions(
 
         if(
           option &&
-          typeof option ===
-            "object"
+          typeof option === "object"
         ){
 
           return String(
@@ -4116,23 +3153,18 @@ function normalizeFieldOptions(
 
         }
 
-
         return String(
           option ?? ""
         );
 
       }
     )
-    .filter(
-      Boolean
-    );
+    .filter(Boolean);
 
 }
 
 
-function optionsToText(
-  options
-){
+function optionsToText(options){
 
   return normalizeFieldOptions(
     options
@@ -4145,11 +3177,8 @@ function buildOptions(){
 
   const type =
     document
-      .getElementById(
-        "fieldType"
-      )
+      .getElementById("fieldType")
       .value;
-
 
   if(
     type !== "dropdown" &&
@@ -4160,24 +3189,15 @@ function buildOptions(){
 
   }
 
-
   const text =
     document
-      .getElementById(
-        "fieldOptions"
-      )
+      .getElementById("fieldOptions")
       .value;
-
 
   return text
     .split(/\r?\n/)
-    .map(
-      x =>
-        x.trim()
-    )
-    .filter(
-      Boolean
-    )
+    .map(x => x.trim())
+    .filter(Boolean)
     .map(
       value => ({
         value,
@@ -4188,16 +3208,11 @@ function buildOptions(){
 }
 
 
-/* =========================================================
-   SAVE FIELD
-========================================================= */
+/* ================= SAVE FIELD ================= */
 
-async function saveField(
-  event
-){
+async function saveField(event){
 
   event.preventDefault();
-
 
   if(!currentBuilderSchoolId){
 
@@ -4210,40 +3225,27 @@ async function saveField(
 
   }
 
-
   const id =
-    document
-      .getElementById(
-        "fieldId"
-      )
-      .value;
-
+    document.getElementById(
+      "fieldId"
+    ).value;
 
   const label =
     document
-      .getElementById(
-        "fieldLabel"
-      )
+      .getElementById("fieldLabel")
       .value
       .trim();
-
 
   const key =
     document
-      .getElementById(
-        "fieldKey"
-      )
+      .getElementById("fieldKey")
       .value
       .trim();
 
-
   const type =
-    document
-      .getElementById(
-        "fieldType"
-      )
-      .value;
-
+    document.getElementById(
+      "fieldType"
+    ).value;
 
   if(!label){
 
@@ -4256,7 +3258,6 @@ async function saveField(
 
   }
 
-
   if(!key){
 
     showToast(
@@ -4268,20 +3269,15 @@ async function saveField(
 
   }
 
-
   const payload = {
 
-    field_label:
-      label,
+    field_label:label,
 
-    field_key:
-      key,
+    field_key:key,
 
-    field_type:
-      type,
+    field_type:type,
 
-    options:
-      buildOptions(),
+    options:buildOptions(),
 
     required:
       document
@@ -4306,20 +3302,16 @@ async function saveField(
 
   };
 
-
   try{
 
     const url =
       id
         ? `/api/admin/schools/${encodeURIComponent(
             currentBuilderSchoolId
-          )}/custom-fields/${encodeURIComponent(
-            id
-          )}`
+          )}/custom-fields/${encodeURIComponent(id)}`
         : `/api/admin/schools/${encodeURIComponent(
             currentBuilderSchoolId
           )}/custom-fields`;
-
 
     const response =
       await apiFetch(
@@ -4331,16 +3323,12 @@ async function saveField(
               : "POST",
 
           body:
-            JSON.stringify(
-              payload
-            )
+            JSON.stringify(payload)
         }
       );
 
-
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -4354,9 +3342,7 @@ async function saveField(
 
     }
 
-
     closeFieldModal();
-
 
     showToast(
       id
@@ -4365,21 +3351,13 @@ async function saveField(
       "success"
     );
 
-
     await loadBuilderFields();
-
 
   }catch(error){
 
-    if(
-      error.message ===
-      "UNAUTHORIZED"
-    ){
-
+    if(error.message === "UNAUTHORIZED"){
       return;
-
     }
-
 
     showToast(
       error.message ||
@@ -4392,22 +3370,15 @@ async function saveField(
 }
 
 
-/* =========================================================
-   DELETE FIELD
-========================================================= */
+/* ================= DELETE FIELD ================= */
 
-async function deleteField(
-  id
-){
+async function deleteField(id){
 
   if(!confirm(
     "Una uhakika unataka kufuta field hii?"
   )){
-
     return;
-
   }
-
 
   try{
 
@@ -4415,18 +3386,14 @@ async function deleteField(
       await apiFetch(
         `/api/admin/schools/${encodeURIComponent(
           currentBuilderSchoolId
-        )}/custom-fields/${encodeURIComponent(
-          id
-        )}`,
+        )}/custom-fields/${encodeURIComponent(id)}`,
         {
           method:"DELETE"
         }
       );
 
-
     const data =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -4440,27 +3407,18 @@ async function deleteField(
 
     }
 
-
     showToast(
       "Field imefutwa.",
       "success"
     );
 
-
     await loadBuilderFields();
-
 
   }catch(error){
 
-    if(
-      error.message ===
-      "UNAUTHORIZED"
-    ){
-
+    if(error.message === "UNAUTHORIZED"){
       return;
-
     }
-
 
     showToast(
       error.message ||
@@ -4473,9 +3431,7 @@ async function deleteField(
 }
 
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
+/* ================= DASHBOARD ================= */
 
 function showDashboard(){
 
@@ -4489,63 +3445,46 @@ function showDashboard(){
 
   }
 
-
   loadSchools();
 
 }
 
 
-/* =========================================================
-   MOBILE SIDEBAR
-========================================================= */
+/* ================= MOBILE ================= */
 
 function toggleSidebar(){
 
   document
-    .getElementById(
-      "sidebar"
-    )
+    .getElementById("sidebar")
     .classList
     .toggle("open");
 
 }
 
 
-/* =========================================================
-   TOAST
-========================================================= */
+/* ================= TOAST ================= */
 
-function showToast(
-  message,
-  type = ""
-){
+function showToast(message,type=""){
 
   const toast =
     document.getElementById(
       "toast"
     );
 
-
   toast.textContent =
     message;
 
-
   toast.className =
     `show ${type}`;
-
 
   clearTimeout(
     window.toastTimer
   );
 
-
   window.toastTimer =
     setTimeout(
       () => {
-
-        toast.className =
-          "";
-
+        toast.className = "";
       },
       3500
     );
@@ -4553,79 +3492,43 @@ function showToast(
 }
 
 
-/* =========================================================
-   FORMAT MONEY
-========================================================= */
+/* ================= MONEY ================= */
 
-function formatMoney(
-  value
-){
+function formatMoney(value){
 
   const amount =
-    Number(
-      value || 0
-    );
-
+    Number(value || 0);
 
   return (
     "TSh " +
-    amount.toLocaleString(
-      "en-US"
-    )
+    amount.toLocaleString("en-US")
   );
 
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+/* ================= ESCAPE ================= */
 
-function escapeHtml(
-  value
-){
+function escapeHtml(value){
 
-  return String(
-    value ?? ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-function escapeAttr(
-  value
-){
+function escapeAttr(value){
 
-  return escapeHtml(
-    value
-  );
+  return escapeHtml(value);
 
 }
 
 
-/* =========================================================
-   CLOSE MODALS
-========================================================= */
+/* ================= CLOSE MODALS ================= */
 
 document.addEventListener(
   "click",
