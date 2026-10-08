@@ -1,436 +1,430 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0879c9">
-  <title>Admin wa Shule - Shule Portal Tanzania</title>
-
-  <style>
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-      font-family:Arial,sans-serif;
-    }
-
-    body{
-      background:#f4f8fb;
-      color:#222;
-    }
-
-    header{
-      background:linear-gradient(135deg,#0879c9,#0056a6);
-      color:white;
-      padding:20px;
-      box-shadow:0 2px 8px rgba(0,0,0,.15);
-    }
-
-    header h1{
-      font-size:23px;
-      margin-bottom:6px;
-    }
-
-    header p{
-      font-size:14px;
-      opacity:.92;
-    }
-
-    .container{
-      width:95%;
-      max-width:1200px;
-      margin:25px auto;
-    }
-
-    .top-actions{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:15px;
-      margin-bottom:20px;
-      flex-wrap:wrap;
-    }
-
-    .page-title h2{
-      color:#0879c9;
-      margin-bottom:5px;
-    }
-
-    .page-title p{
-      color:#666;
-      font-size:14px;
-    }
-
-    button{
-      border:none;
-      border-radius:7px;
-      padding:11px 17px;
-      cursor:pointer;
-      font-size:14px;
-      font-weight:bold;
-    }
-
-    button:disabled{
-      opacity:.6;
-      cursor:not-allowed;
-    }
-
-    .btn-primary{
-      background:#0879c9;
-      color:white;
-    }
-
-    .btn-primary:hover{
-      background:#0565a8;
-    }
-
-    .btn-secondary{
-      background:#6c757d;
-      color:white;
-    }
-
-    .btn-success{
-      background:#198754;
-      color:white;
-    }
-
-    .btn-danger{
-      background:#dc3545;
-      color:white;
-    }
-
-    .btn-warning{
-      background:#ffc107;
-      color:#222;
-    }
-
-    .btn-small{
-      padding:7px 10px;
-      font-size:12px;
-      margin:2px;
-    }
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:15px;
-      margin-bottom:20px;
-    }
-
-    .stat-card{
-      background:white;
-      padding:20px;
-      border-radius:12px;
-      box-shadow:0 3px 12px rgba(0,0,0,.08);
-    }
-
-    .stat-card .number{
-      font-size:28px;
-      font-weight:bold;
-      color:#0879c9;
-      margin-bottom:5px;
-    }
-
-    .stat-card .label{
-      color:#666;
-      font-size:14px;
-    }
-
-    .card{
-      background:white;
-      padding:22px;
-      border-radius:12px;
-      margin-bottom:20px;
-      box-shadow:0 3px 12px rgba(0,0,0,.08);
-    }
-
-    .filters{
-      display:grid;
-      grid-template-columns:2fr 1fr 1fr auto;
-      gap:12px;
-      align-items:end;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .field label{
-      font-weight:bold;
-      font-size:13px;
-      margin-bottom:6px;
-    }
-
-    input,
-    select{
-      width:100%;
-      padding:11px;
-      border:1px solid #ccc;
-      border-radius:7px;
-      font-size:14px;
-      background:white;
-      outline:none;
-    }
-
-    input:focus,
-    select:focus{
-      border-color:#0879c9;
-      box-shadow:0 0 0 2px rgba(8,121,201,.12);
-    }
-
-    .table-container{
-      overflow-x:auto;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:950px;
-    }
-
-    th,
-    td{
-      padding:12px;
-      border-bottom:1px solid #ddd;
-      text-align:left;
-      font-size:13px;
-      vertical-align:middle;
-    }
-
-    th{
-      background:#0879c9;
-      color:white;
-      white-space:nowrap;
-    }
-
-    tr:hover{
-      background:#f5faff;
-    }
-
-    .badge{
-      display:inline-block;
-      padding:5px 9px;
-      border-radius:20px;
-      font-size:11px;
-      font-weight:bold;
-    }
-
-    .badge-active{
-      background:#dff5e5;
-      color:#176b2c;
-    }
-
-    .badge-inactive{
-      background:#fde1e1;
-      color:#a40000;
-    }
-
-    .loading{
-      text-align:center;
-      padding:30px;
-      color:#0879c9;
-    }
-
-    .empty{
-      text-align:center;
-      padding:30px;
-      color:#777;
-      display:none;
-    }
-
-    .message{
-      padding:12px;
-      border-radius:7px;
-      margin-bottom:15px;
-      display:none;
-      font-size:14px;
-    }
-
-    .message.success{
-      background:#dff5e5;
-      color:#176b2c;
-    }
-
-    .message.error{
-      background:#fde1e1;
-      color:#a40000;
-    }
-
-    .login-warning{
-      background:#fff3cd;
-      color:#856404;
-      padding:18px;
-      border-radius:8px;
-      margin-bottom:20px;
-      display:none;
-    }
-
-    .modal{
-      display:none;
-      position:fixed;
-      z-index:1000;
-      left:0;
-      top:0;
-      width:100%;
-      height:100%;
-      background:rgba(0,0,0,.55);
-      overflow-y:auto;
-      padding:20px;
-    }
-
-    .modal-content{
-      background:white;
-      width:100%;
-      max-width:650px;
-      margin:40px auto;
-      border-radius:12px;
-      overflow:hidden;
-      box-shadow:0 10px 35px rgba(0,0,0,.25);
-    }
-
-    .modal-header{
-      background:#0879c9;
-      color:white;
-      padding:18px 20px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-
-    .modal-header h3{
-      font-size:19px;
-    }
-
-    .close{
-      font-size:28px;
-      cursor:pointer;
-      line-height:1;
-    }
-
-    .modal-body{
-      padding:22px;
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:15px;
-    }
-
-    .full{
-      grid-column:1/-1;
-    }
-
-    .modal-footer{
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      margin-top:20px;
-      flex-wrap:wrap;
-    }
-
-    .password-note{
-      font-size:12px;
-      color:#777;
-      margin-top:5px;
-    }
-
-    .school-info{
-      font-size:12px;
-      color:#666;
-      margin-top:3px;
-    }
-
-    .security-note{
-      background:#eef7ff;
-      border-left:4px solid #0879c9;
-      padding:12px;
-      border-radius:6px;
-      margin-bottom:18px;
-      font-size:13px;
-      color:#345;
-    }
-
-    .loading-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(255,255,255,.65);
-      z-index:2000;
-      display:none;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .loading-box{
-      background:white;
-      padding:20px 25px;
-      border-radius:10px;
-      box-shadow:0 5px 25px rgba(0,0,0,.18);
-      color:#0879c9;
-      font-weight:bold;
-    }
-
-    .session-user{
-      display:inline-block;
-      margin-top:10px;
-      background:rgba(255,255,255,.14);
-      padding:7px 10px;
-      border-radius:6px;
-      font-size:12px;
-    }
-
-    @media(max-width:800px){
-
-      .stats{
-        grid-template-columns:1fr;
-      }
-
-      .filters{
-        grid-template-columns:1fr;
-      }
-
-      .form-grid{
-        grid-template-columns:1fr;
-      }
-
-      .full{
-        grid-column:auto;
-      }
-
-      .card{
-        padding:16px;
-      }
-
-      header h1{
-        font-size:20px;
-      }
-
-      .top-actions{
-        align-items:flex-start;
-      }
-
-      .top-actions button{
-        width:100%;
-      }
-
-      .modal{
-        padding:10px;
-      }
-
-      .modal-content{
-        margin:15px auto;
-      }
-
-      .modal-body{
-        padding:16px;
-      }
-
-      .modal-footer button{
-        width:100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0879c9">
+<title>Admin wa Shule - Shule Portal Tanzania</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f8fb;
+  color:#222;
+}
+
+header{
+  background:linear-gradient(135deg,#0879c9,#0056a6);
+  color:#fff;
+  padding:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+header h1{
+  font-size:23px;
+  margin-bottom:6px;
+}
+
+header p{
+  font-size:14px;
+  opacity:.92;
+}
+
+.session-user{
+  display:none;
+  margin-top:10px;
+  background:rgba(255,255,255,.15);
+  padding:8px 12px;
+  border-radius:7px;
+  font-size:13px;
+}
+
+.container{
+  width:95%;
+  max-width:1200px;
+  margin:25px auto;
+}
+
+.top-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.page-title h2{
+  color:#0879c9;
+  margin-bottom:5px;
+}
+
+.page-title p{
+  color:#666;
+  font-size:14px;
+}
+
+button{
+  border:none;
+  border-radius:7px;
+  padding:11px 17px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:bold;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.btn-primary{
+  background:#0879c9;
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:#0565a8;
+}
+
+.btn-secondary{
+  background:#6c757d;
+  color:#fff;
+}
+
+.btn-success{
+  background:#198754;
+  color:#fff;
+}
+
+.btn-danger{
+  background:#dc3545;
+  color:#fff;
+}
+
+.btn-warning{
+  background:#ffc107;
+  color:#222;
+}
+
+.btn-small{
+  padding:7px 10px;
+  font-size:12px;
+  margin:2px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.stat-card{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.stat-card .number{
+  font-size:28px;
+  font-weight:bold;
+  color:#0879c9;
+  margin-bottom:5px;
+}
+
+.stat-card .label{
+  color:#666;
+  font-size:14px;
+}
+
+.card{
+  background:#fff;
+  padding:22px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr auto;
+  gap:12px;
+  align-items:end;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+}
+
+.field label{
+  font-weight:bold;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+input,
+select{
+  width:100%;
+  padding:11px;
+  border:1px solid #ccc;
+  border-radius:7px;
+  font-size:14px;
+  background:#fff;
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:#0879c9;
+  box-shadow:0 0 0 2px rgba(8,121,201,.12);
+}
+
+.table-container{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:950px;
+}
+
+th,
+td{
+  padding:12px;
+  border-bottom:1px solid #ddd;
+  text-align:left;
+  font-size:13px;
+  vertical-align:middle;
+}
+
+th{
+  background:#0879c9;
+  color:#fff;
+  white-space:nowrap;
+}
+
+tr:hover{
+  background:#f5faff;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.badge-active{
+  background:#dff5e5;
+  color:#176b2c;
+}
+
+.badge-inactive{
+  background:#fde1e1;
+  color:#a40000;
+}
+
+.loading{
+  text-align:center;
+  padding:30px;
+  color:#0879c9;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#777;
+  display:none;
+}
+
+.message{
+  padding:12px;
+  border-radius:7px;
+  margin-bottom:15px;
+  display:none;
+  font-size:14px;
+}
+
+.message.success{
+  background:#dff5e5;
+  color:#176b2c;
+}
+
+.message.error{
+  background:#fde1e1;
+  color:#a40000;
+}
+
+.login-warning{
+  background:#fff3cd;
+  color:#856404;
+  padding:18px;
+  border-radius:8px;
+  margin-bottom:20px;
+  display:none;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  z-index:1000;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.55);
+  overflow-y:auto;
+  padding:20px;
+}
+
+.modal-content{
+  background:#fff;
+  width:100%;
+  max-width:650px;
+  margin:40px auto;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+.modal-header{
+  background:#0879c9;
+  color:#fff;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-header h3{
+  font-size:19px;
+}
+
+.close{
+  font-size:28px;
+  cursor:pointer;
+  line-height:1;
+}
+
+.modal-body{
+  padding:22px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+.password-note{
+  font-size:12px;
+  color:#777;
+  margin-top:5px;
+}
+
+.security-note{
+  background:#eef7ff;
+  border-left:4px solid #0879c9;
+  padding:12px;
+  border-radius:6px;
+  margin-bottom:18px;
+  font-size:13px;
+  color:#345;
+}
+
+.loading-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.65);
+  z-index:2000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.loading-box{
+  background:#fff;
+  padding:20px 25px;
+  border-radius:10px;
+  box-shadow:0 5px 25px rgba(0,0,0,.18);
+  color:#0879c9;
+  font-weight:bold;
+}
+
+@media(max-width:800px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  header h1{
+    font-size:20px;
+  }
+
+  .top-actions{
+    align-items:flex-start;
+  }
+
+  .top-actions button{
+    width:100%;
+  }
+
+  .modal{
+    padding:10px;
+  }
+
+  .modal-content{
+    margin:15px auto;
+  }
+
+  .modal-body{
+    padding:16px;
+  }
+
+  .modal-footer button{
+    width:100%;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -438,28 +432,19 @@
 <header>
   <h1>🏫 Shule Portal Tanzania</h1>
   <p>👤 ADMIN MKUU — Usimamizi wa Admin wa Shule</p>
-  <div id="sessionUser" class="session-user" style="display:none;"></div>
+  <div id="sessionUser" class="session-user"></div>
 </header>
 
 <div class="container">
 
   <div id="loginWarning" class="login-warning">
-
     <strong>🔐 Session ya Admin Mkuu haijapatikana.</strong>
-
     <br><br>
-
     Tafadhali ingia kwanza kwenye mfumo wa Admin Mkuu.
-
     <br><br>
-
-    <button
-      class="btn-primary"
-      onclick="goToAdminLogin()"
-    >
+    <button class="btn-primary" onclick="goToAdminLogin()">
       🔑 Nenda Admin Mkuu
     </button>
-
   </div>
 
   <div id="mainContent">
@@ -467,19 +452,13 @@
     <div class="top-actions">
 
       <div class="page-title">
-
         <h2>👤 Admin wa Shule</h2>
-
         <p>
           Ongeza, hariri na dhibiti akaunti za wasimamizi wa shule.
         </p>
-
       </div>
 
-      <button
-        class="btn-primary"
-        onclick="openAddModal()"
-      >
+      <button class="btn-primary" onclick="openAddModal()">
         ➕ Ongeza Admin
       </button>
 
@@ -490,48 +469,18 @@
     <div class="stats">
 
       <div class="stat-card">
-
-        <div
-          class="number"
-          id="totalAdmins"
-        >
-          0
-        </div>
-
-        <div class="label">
-          👥 Admin Wote
-        </div>
-
+        <div class="number" id="totalAdmins">0</div>
+        <div class="label">👥 Admin Wote</div>
       </div>
 
       <div class="stat-card">
-
-        <div
-          class="number"
-          id="activeAdmins"
-        >
-          0
-        </div>
-
-        <div class="label">
-          🟢 Admin Active
-        </div>
-
+        <div class="number" id="activeAdmins">0</div>
+        <div class="label">🟢 Admin Active</div>
       </div>
 
       <div class="stat-card">
-
-        <div
-          class="number"
-          id="inactiveAdmins"
-        >
-          0
-        </div>
-
-        <div class="label">
-          🔴 Admin Inactive
-        </div>
-
+        <div class="number" id="inactiveAdmins">0</div>
+        <div class="label">🔴 Admin Inactive</div>
       </div>
 
     </div>
@@ -545,65 +494,38 @@
       <div class="filters">
 
         <div class="field">
-
           <label>Tafuta</label>
-
           <input
             type="text"
             id="search"
             placeholder="Jina au email..."
             autocomplete="off"
           >
-
         </div>
 
         <div class="field">
-
           <label>Shule</label>
-
           <select id="schoolFilter">
-            <option value="">
-              Shule zote
-            </option>
+            <option value="">Shule zote</option>
           </select>
-
         </div>
 
         <div class="field">
-
           <label>Hali</label>
-
           <select id="statusFilter">
-
-            <option value="">
-              Hali zote
-            </option>
-
-            <option value="active">
-              Active
-            </option>
-
-            <option value="inactive">
-              Inactive
-            </option>
-
+            <option value="">Hali zote</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
           </select>
-
         </div>
 
         <div>
-
-          <button
-            class="btn-primary"
-            onclick="loadAdmins()"
-          >
+          <button class="btn-primary" onclick="loadAdmins()">
             🔍 Tafuta
           </button>
-
         </div>
 
       </div>
-
     </div>
 
     <div class="card">
@@ -612,29 +534,19 @@
         👥 Orodha ya Admin wa Shule
       </h3>
 
-      <div
-        id="loading"
-        class="loading"
-      >
+      <div id="loading" class="loading">
         Inapakia taarifa za admin...
       </div>
 
-      <div
-        id="empty"
-        class="empty"
-      >
+      <div id="empty" class="empty">
         Hakuna admin aliyepatikana.
       </div>
 
       <div class="table-container">
 
-        <table
-          id="adminsTable"
-          style="display:none;"
-        >
+        <table id="adminsTable" style="display:none;">
 
           <thead>
-
             <tr>
               <th>#</th>
               <th>ADMIN</th>
@@ -644,7 +556,6 @@
               <th>CREATED</th>
               <th>ACTIONS</th>
             </tr>
-
           </thead>
 
           <tbody id="adminsBody"></tbody>
@@ -656,16 +567,12 @@
     </div>
 
   </div>
-
 </div>
 
 
-<!-- ADMIN MODAL -->
+<!-- MODAL -->
 
-<div
-  id="adminModal"
-  class="modal"
->
+<div id="adminModal" class="modal">
 
   <div class="modal-content">
 
@@ -678,7 +585,6 @@
       <span
         class="close"
         onclick="closeModal()"
-        aria-label="Funga"
       >
         &times;
       </span>
@@ -688,23 +594,19 @@
     <div class="modal-body">
 
       <div class="security-note">
-        🔐 Akaunti hii itatumika na Admin wa Shule kuingia kwenye mfumo na kusimamia shule yake pekee.
+        🔐 Akaunti hii itatumika na Admin wa Shule kuingia
+        kwenye mfumo na kusimamia shule yake pekee.
       </div>
 
       <form id="adminForm">
 
-        <input
-          type="hidden"
-          id="adminId"
-        >
+        <input type="hidden" id="adminId">
 
         <div class="form-grid">
 
           <div class="field full">
 
-            <label>
-              Jina Kamili *
-            </label>
+            <label>Jina Kamili *</label>
 
             <input
               type="text"
@@ -718,28 +620,17 @@
 
           <div class="field full">
 
-            <label>
-              Shule *
-            </label>
+            <label>Shule *</label>
 
-            <select
-              id="school_id"
-              required
-            >
-
-              <option value="">
-                Chagua shule
-              </option>
-
+            <select id="school_id" required>
+              <option value="">Chagua shule</option>
             </select>
 
           </div>
 
           <div class="field full">
 
-            <label>
-              Email *
-            </label>
+            <label>Email *</label>
 
             <input
               type="email"
@@ -753,9 +644,7 @@
 
           <div class="field full">
 
-            <label>
-              Password
-            </label>
+            <label>Password</label>
 
             <input
               type="password"
@@ -764,10 +653,7 @@
               placeholder="Weka password"
             >
 
-            <div
-              class="password-note"
-              id="passwordNote"
-            >
+            <div class="password-note" id="passwordNote">
               Password iwe na angalau characters 6.
             </div>
 
@@ -775,9 +661,7 @@
 
           <div class="field">
 
-            <label>
-              Hali
-            </label>
+            <label>Hali</label>
 
             <select id="status">
 
@@ -824,10 +708,7 @@
 </div>
 
 
-<div
-  id="loadingOverlay"
-  class="loading-overlay"
->
+<div id="loadingOverlay" class="loading-overlay">
   <div class="loading-box">
     ⏳ Tafadhali subiri...
   </div>
@@ -836,67 +717,71 @@
 
 <script>
 
-const API_BASE = window.location.origin;
+/* =====================================================
+   CONFIGURATION
+===================================================== */
 
+const API_BASE = window.location.origin;
 const ADMIN_TOKEN_KEY = "spt_admin_token";
 
 let schools = [];
 let editingAdmin = false;
 
-const modal =
-  document.getElementById("adminModal");
 
-const adminForm =
-  document.getElementById("adminForm");
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-const adminsBody =
-  document.getElementById("adminsBody");
-
-const adminsTable =
-  document.getElementById("adminsTable");
-
-const loading =
-  document.getElementById("loading");
-
-const empty =
-  document.getElementById("empty");
-
-const message =
-  document.getElementById("message");
-
-const mainContent =
-  document.getElementById("mainContent");
-
-const loginWarning =
-  document.getElementById("loginWarning");
-
-const loadingOverlay =
-  document.getElementById("loadingOverlay");
-
-const sessionUser =
-  document.getElementById("sessionUser");
+const modal = document.getElementById("adminModal");
+const adminForm = document.getElementById("adminForm");
+const adminsBody = document.getElementById("adminsBody");
+const adminsTable = document.getElementById("adminsTable");
+const loading = document.getElementById("loading");
+const empty = document.getElementById("empty");
+const message = document.getElementById("message");
+const mainContent = document.getElementById("mainContent");
+const loginWarning = document.getElementById("loginWarning");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const sessionUser = document.getElementById("sessionUser");
 
 
-/* =========================
-   AUTH
-========================= */
+/* =====================================================
+   AUTH TOKEN
+===================================================== */
 
 function getAdminToken(){
 
   try{
 
-    return localStorage.getItem(
-      ADMIN_TOKEN_KEY
-    ) || "";
+    return (
+      localStorage.getItem(ADMIN_TOKEN_KEY) ||
+      sessionStorage.getItem(ADMIN_TOKEN_KEY) ||
+      ""
+    );
 
   }catch(error){
 
-    console.warn(
-      "localStorage haipatikani.",
-      error
-    );
-
     return "";
+
+  }
+
+}
+
+
+function setAdminToken(token){
+
+  if(!token){
+    return;
+  }
+
+  try{
+    localStorage.setItem(
+      ADMIN_TOKEN_KEY,
+      token
+    );
+  }catch(error){
+
+    console.warn(error);
 
   }
 
@@ -906,32 +791,12 @@ function getAdminToken(){
 function clearAdminToken(){
 
   try{
-
-    localStorage.removeItem(
-      ADMIN_TOKEN_KEY
-    );
-
-  }catch(error){
-
-    console.warn(
-      "localStorage haipatikani."
-    );
-
-  }
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
+  }catch(error){}
 
   try{
-
-    sessionStorage.removeItem(
-      ADMIN_TOKEN_KEY
-    );
-
-  }catch(error){
-
-    console.warn(
-      "sessionStorage haipatikani."
-    );
-
-  }
+    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+  }catch(error){}
 
 }
 
@@ -969,14 +834,11 @@ function hideLoginWarning(){
 }
 
 
-/* =========================
-   API
-========================= */
+/* =====================================================
+   API FETCH
+===================================================== */
 
-async function apiFetch(
-  path,
-  options = {}
-){
+async function apiFetch(path, options = {}){
 
   const token =
     getAdminToken();
@@ -992,12 +854,8 @@ async function apiFetch(
   }
 
   const headers = {
-
-    "Accept":
-      "application/json",
-
+    "Accept":"application/json",
     ...(options.headers || {})
-
   };
 
   if(
@@ -1013,8 +871,11 @@ async function apiFetch(
   headers["Authorization"] =
     `Bearer ${token}`;
 
-  const response =
-    await fetch(
+  let response;
+
+  try{
+
+    response = await fetch(
       `${API_BASE}${path}`,
       {
         ...options,
@@ -1022,6 +883,14 @@ async function apiFetch(
         cache:"no-store"
       }
     );
+
+  }catch(error){
+
+    throw new Error(
+      "Imeshindikana kuwasiliana na server."
+    );
+
+  }
 
   if(response.status === 401){
 
@@ -1040,9 +909,9 @@ async function apiFetch(
 }
 
 
-/* =========================
-   LOADING
-========================= */
+/* =====================================================
+   HELPERS
+===================================================== */
 
 function showLoading(){
 
@@ -1060,14 +929,7 @@ function hideLoading(){
 }
 
 
-/* =========================
-   MESSAGE
-========================= */
-
-function showMessage(
-  text,
-  type
-){
+function showMessage(text,type){
 
   message.textContent =
     text;
@@ -1078,25 +940,13 @@ function showMessage(
   message.style.display =
     "block";
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-  setTimeout(
-    ()=>{
-      message.style.display =
-        "none";
-    },
-    5000
-  );
+  setTimeout(()=>{
+    message.style.display =
+      "none";
+  },5000);
 
 }
 
-
-/* =========================
-   HTML ESCAPE
-========================= */
 
 function escapeHtml(value){
 
@@ -1104,9 +954,7 @@ function escapeHtml(value){
     value === null ||
     value === undefined
   ){
-
     return "";
-
   }
 
   return String(value)
@@ -1119,29 +967,17 @@ function escapeHtml(value){
 }
 
 
-/* =========================
-   DATE
-========================= */
-
 function formatDate(value){
 
   if(!value){
-
     return "-";
-
   }
 
   const date =
     new Date(value);
 
-  if(
-    Number.isNaN(
-      date.getTime()
-    )
-  ){
-
+  if(Number.isNaN(date.getTime())){
     return "-";
-
   }
 
   return date.toLocaleDateString(
@@ -1155,10 +991,6 @@ function formatDate(value){
 
 }
 
-
-/* =========================
-   STATUS
-========================= */
 
 function getAdminStatus(admin){
 
@@ -1187,11 +1019,1306 @@ function getAdminStatus(admin){
 }
 
 
-/* =========================
-   CHECK SESSION
-========================= */
+/* =====================================================
+   CHECK ADMIN SESSION
+===================================================== */
 
 async function checkAdminSession(){
 
   const token =
-    get
+    getAdminToken();
+
+  if(!token){
+
+    showLoginWarning();
+
+    return false;
+
+  }
+
+  try{
+
+    const response =
+      await apiFetch(
+        "/api/admin/me"
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Session si sahihi."
+      );
+
+    }
+
+    setAdminToken(token);
+
+    const admin =
+      data.admin || {};
+
+    sessionUser.textContent =
+      `👤 ${admin.full_name || admin.name || admin.email || "Admin Mkuu"}`;
+
+    sessionUser.style.display =
+      "inline-block";
+
+    hideLoginWarning();
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Session error:",
+      error
+    );
+
+    if(
+      error.message ===
+      "SESSION_EXPIRED"
+    ){
+
+      showLoginWarning();
+
+      return false;
+
+    }
+
+    clearAdminToken();
+
+    showLoginWarning();
+
+    return false;
+
+  }
+
+}
+
+
+/* =====================================================
+   LOAD SCHOOLS
+===================================================== */
+
+async function loadSchools(){
+
+  try{
+
+    const response =
+      await apiFetch(
+        "/api/admin/schools"
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kupata shule."
+      );
+
+    }
+
+    schools =
+      Array.isArray(data.schools)
+        ? data.schools
+        : [];
+
+    populateSchoolSelects();
+
+  }catch(error){
+
+    console.error(
+      "Load schools:",
+      error
+    );
+
+    if(
+      error.message !==
+      "SESSION_EXPIRED"
+    ){
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kupata shule.",
+        "error"
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   POPULATE SCHOOL SELECTS
+===================================================== */
+
+function populateSchoolSelects(){
+
+  const filter =
+    document.getElementById(
+      "schoolFilter"
+    );
+
+  const formSelect =
+    document.getElementById(
+      "school_id"
+    );
+
+  filter.innerHTML =
+    `<option value="">Shule zote</option>`;
+
+  formSelect.innerHTML =
+    `<option value="">Chagua shule</option>`;
+
+  schools.forEach(school=>{
+
+    const id =
+      school.id;
+
+    const name =
+      school.name ||
+      school.school_name ||
+      "Shule";
+
+    const option1 =
+      document.createElement(
+        "option"
+      );
+
+    option1.value =
+      id;
+
+    option1.textContent =
+      name;
+
+    filter.appendChild(
+      option1
+    );
+
+
+    const option2 =
+      document.createElement(
+        "option"
+      );
+
+    option2.value =
+      id;
+
+    option2.textContent =
+      name;
+
+    formSelect.appendChild(
+      option2
+    );
+
+  });
+
+}
+
+
+/* =====================================================
+   LOAD ADMINS
+===================================================== */
+
+async function loadAdmins(){
+
+  loading.style.display =
+    "block";
+
+  empty.style.display =
+    "none";
+
+  adminsTable.style.display =
+    "none";
+
+  adminsBody.innerHTML =
+    "";
+
+  try{
+
+    const search =
+      document.getElementById(
+        "search"
+      ).value.trim();
+
+    const schoolId =
+      document.getElementById(
+        "schoolFilter"
+      ).value;
+
+    const status =
+      document.getElementById(
+        "statusFilter"
+      ).value;
+
+    const params =
+      new URLSearchParams();
+
+    if(search){
+      params.set(
+        "search",
+        search
+      );
+    }
+
+    if(schoolId){
+      params.set(
+        "school_id",
+        schoolId
+      );
+    }
+
+    if(status){
+      params.set(
+        "status",
+        status
+      );
+    }
+
+    const query =
+      params.toString()
+        ? `?${params.toString()}`
+        : "";
+
+    const response =
+      await apiFetch(
+        `/api/admin/school-admins${query}`
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kupata admin."
+      );
+
+    }
+
+    let admins =
+      Array.isArray(data.admins)
+        ? data.admins
+        : [];
+
+    updateStats(
+      data,
+      admins
+    );
+
+    renderAdmins(
+      admins
+    );
+
+  }catch(error){
+
+    console.error(
+      "Load admins:",
+      error
+    );
+
+    if(
+      error.message !==
+      "SESSION_EXPIRED"
+    ){
+
+      loading.style.display =
+        "none";
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kupata admin.",
+        "error"
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(
+  data,
+  admins
+){
+
+  const total =
+    data.total_admins !== undefined
+      ? Number(data.total_admins)
+      : admins.length;
+
+  const active =
+    data.active_admins !== undefined
+      ? Number(data.active_admins)
+      : admins.filter(
+          a =>
+            getAdminStatus(a) ===
+            "active"
+        ).length;
+
+  const inactive =
+    data.inactive_admins !== undefined
+      ? Number(data.inactive_admins)
+      : admins.filter(
+          a =>
+            getAdminStatus(a) ===
+            "inactive"
+        ).length;
+
+  document.getElementById(
+    "totalAdmins"
+  ).textContent =
+    total;
+
+  document.getElementById(
+    "activeAdmins"
+  ).textContent =
+    active;
+
+  document.getElementById(
+    "inactiveAdmins"
+  ).textContent =
+    inactive;
+
+}
+
+
+/* =====================================================
+   RENDER ADMINS
+===================================================== */
+
+function renderAdmins(admins){
+
+  loading.style.display =
+    "none";
+
+  if(!admins.length){
+
+    empty.style.display =
+      "block";
+
+    adminsTable.style.display =
+      "none";
+
+    return;
+
+  }
+
+  empty.style.display =
+    "none";
+
+  adminsTable.style.display =
+    "table";
+
+  adminsBody.innerHTML =
+    "";
+
+  admins.forEach(
+    (admin,index)=>{
+
+      const status =
+        getAdminStatus(admin);
+
+      const schoolName =
+        admin.school_name ||
+        admin.school?.name ||
+        "Haijawekwa";
+
+      const schoolRegion =
+        admin.school_region ||
+        admin.region ||
+        "";
+
+      const schoolDistrict =
+        admin.school_district ||
+        admin.district ||
+        "";
+
+      const fullName =
+        admin.full_name ||
+        admin.name ||
+        "-";
+
+      const email =
+        admin.email ||
+        "-";
+
+      const created =
+        formatDate(
+          admin.created_at
+        );
+
+      const row =
+        document.createElement(
+          "tr"
+        );
+
+      row.innerHTML = `
+
+        <td>${index + 1}</td>
+
+        <td>
+          <strong>
+            ${escapeHtml(fullName)}
+          </strong>
+        </td>
+
+        <td>
+          <strong>
+            ${escapeHtml(schoolName)}
+          </strong>
+
+          <div style="
+            font-size:11px;
+            color:#777;
+            margin-top:3px;
+          ">
+            ${escapeHtml(
+              [schoolRegion,schoolDistrict]
+              .filter(Boolean)
+              .join(" • ")
+            )}
+          </div>
+        </td>
+
+        <td>
+          ${escapeHtml(email)}
+        </td>
+
+        <td>
+          <span class="
+            badge
+            ${
+              status === "active"
+                ? "badge-active"
+                : "badge-inactive"
+            }
+          ">
+            ${
+              status === "active"
+                ? "🟢 ACTIVE"
+                : "🔴 INACTIVE"
+            }
+          </span>
+        </td>
+
+        <td>
+          ${escapeHtml(created)}
+        </td>
+
+        <td>
+
+          <button
+            class="btn-warning btn-small"
+            onclick="editAdmin(${Number(admin.id)})"
+          >
+            ✏️ Edit
+          </button>
+
+          <button
+            class="btn-primary btn-small"
+            onclick="resetPassword(${Number(admin.id)})"
+          >
+            🔑 Password
+          </button>
+
+          ${
+            status === "active"
+              ? `
+                <button
+                  class="btn-secondary btn-small"
+                  onclick="changeStatus(${Number(admin.id)},'inactive')"
+                >
+                  🔴 Zima
+                </button>
+              `
+              : `
+                <button
+                  class="btn-success btn-small"
+                  onclick="changeStatus(${Number(admin.id)},'active')"
+                >
+                  🟢 Washa
+                </button>
+              `
+          }
+
+          <button
+            class="btn-danger btn-small"
+            onclick="deleteAdmin(${Number(admin.id)})"
+          >
+            🗑️ Futa
+          </button>
+
+        </td>
+
+      `;
+
+      adminsBody.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   OPEN ADD MODAL
+===================================================== */
+
+function openAddModal(){
+
+  editingAdmin =
+    false;
+
+  document.getElementById(
+    "modalTitle"
+  ).textContent =
+    "➕ Ongeza Admin wa Shule";
+
+  document.getElementById(
+    "adminId"
+  ).value =
+    "";
+
+  document.getElementById(
+    "full_name"
+  ).value =
+    "";
+
+  document.getElementById(
+    "school_id"
+  ).value =
+    "";
+
+  document.getElementById(
+    "email"
+  ).value =
+    "";
+
+  document.getElementById(
+    "password"
+  ).value =
+    "";
+
+  document.getElementById(
+    "status"
+  ).value =
+    "active";
+
+  document.getElementById(
+    "password"
+  ).required =
+    true;
+
+  document.getElementById(
+    "passwordNote"
+  ).textContent =
+    "Password iwe na angalau characters 6.";
+
+  modal.style.display =
+    "block";
+
+}
+
+
+/* =====================================================
+   EDIT ADMIN
+===================================================== */
+
+async function editAdmin(id){
+
+  if(!id){
+    return;
+  }
+
+  showLoading();
+
+  try{
+
+    const response =
+      await apiFetch(
+        `/api/admin/school-admins/${id}`
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kupata taarifa za admin."
+      );
+
+    }
+
+    const admin =
+      data.admin || data.data?.admin;
+
+    if(!admin){
+      throw new Error(
+        "Taarifa za admin hazikupatikana."
+      );
+    }
+
+    editingAdmin =
+      true;
+
+    document.getElementById(
+      "modalTitle"
+    ).textContent =
+      "✏️ Hariri Admin wa Shule";
+
+    document.getElementById(
+      "adminId"
+    ).value =
+      admin.id;
+
+    document.getElementById(
+      "full_name"
+    ).value =
+      admin.full_name ||
+      admin.name ||
+      "";
+
+    document.getElementById(
+      "school_id"
+    ).value =
+      admin.school_id ||
+      "";
+
+    document.getElementById(
+      "email"
+    ).value =
+      admin.email ||
+      "";
+
+    document.getElementById(
+      "password"
+    ).value =
+      "";
+
+    document.getElementById(
+      "status"
+    ).value =
+      getAdminStatus(admin);
+
+    document.getElementById(
+      "password"
+    ).required =
+      false;
+
+    document.getElementById(
+      "passwordNote"
+    ).textContent =
+      "Acha wazi kama hutaki kubadilisha password.";
+
+    modal.style.display =
+      "block";
+
+  }catch(error){
+
+    if(
+      error.message !==
+      "SESSION_EXPIRED"
+    ){
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kuhariri admin.",
+        "error"
+      );
+
+    }
+
+  }finally{
+
+    hideLoading();
+
+  }
+
+}
+
+
+/* =====================================================
+   SAVE ADMIN
+===================================================== */
+
+adminForm.addEventListener(
+  "submit",
+  saveAdmin
+);
+
+
+async function saveAdmin(event){
+
+  event.preventDefault();
+
+  const id =
+    document.getElementById(
+      "adminId"
+    ).value;
+
+  const full_name =
+    document.getElementById(
+      "full_name"
+    ).value.trim();
+
+  const school_id =
+    document.getElementById(
+      "school_id"
+    ).value;
+
+  const email =
+    document.getElementById(
+      "email"
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      "password"
+    ).value;
+
+  const status =
+    document.getElementById(
+      "status"
+    ).value;
+
+  if(!full_name){
+
+    showMessage(
+      "Weka jina kamili la admin.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  if(!school_id){
+
+    showMessage(
+      "Chagua shule.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  if(!email){
+
+    showMessage(
+      "Weka email.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  if(
+    !editingAdmin &&
+    password.length < 6
+  ){
+
+    showMessage(
+      "Password mpya lazima iwe na angalau characters 6.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  if(
+    editingAdmin &&
+    password &&
+    password.length < 6
+  ){
+
+    showMessage(
+      "Password lazima iwe na angalau characters 6.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const payload = {
+    full_name,
+    school_id:Number(school_id),
+    email,
+    status
+  };
+
+  if(password){
+    payload.password =
+      password;
+  }
+
+  showLoading();
+
+  const saveButton =
+    document.getElementById(
+      "saveButton"
+    );
+
+  saveButton.disabled =
+    true;
+
+  try{
+
+    let response;
+
+    if(editingAdmin){
+
+      response =
+        await apiFetch(
+          `/api/admin/school-admins/${id}`,
+          {
+            method:"PUT",
+            body:JSON.stringify(
+              payload
+            )
+          }
+        );
+
+    }else{
+
+      response =
+        await apiFetch(
+          "/api/admin/school-admins",
+          {
+            method:"POST",
+            body:JSON.stringify(
+              {
+                ...payload,
+                password
+              }
+            )
+          }
+        );
+
+    }
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kuhifadhi admin."
+      );
+
+    }
+
+    closeModal();
+
+    showMessage(
+      editingAdmin
+        ? "✅ Admin amehaririwa kikamilifu."
+        : "✅ Admin mpya ameongezwa kikamilifu.",
+      "success"
+    );
+
+    await loadAdmins();
+
+  }catch(error){
+
+    if(
+      error.message !==
+      "SESSION_EXPIRED"
+    ){
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kuhifadhi admin.",
+        "error"
+      );
+
+    }
+
+  }finally{
+
+    saveButton.disabled =
+      false;
+
+    hideLoading();
+
+  }
+
+}
+
+
+/* =====================================================
+   CHANGE STATUS
+===================================================== */
+
+async function changeStatus(
+  id,
+  status
+){
+
+  const action =
+    status === "active"
+      ? "kuwasha"
+      : "kuzima";
+
+  if(
+    !confirm(
+      `Una uhakika unataka ${action} admin huyu?`
+    )
+  ){
+
+    return;
+
+  }
+
+  showLoading();
+
+  try{
+
+    const response =
+      await apiFetch(
+        `/api/admin/school-admins/${id}/status`,
+        {
+          method:"PUT",
+          body:JSON.stringify({
+            status
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kubadilisha hali."
+      );
+
+    }
+
+    showMessage(
+      status === "active"
+        ? "✅ Admin amewashwa."
+        : "✅ Admin amezimwa.",
+      "success"
+    );
+
+    await loadAdmins();
+
+  }catch(error){
+
+    if(
+      error.message !==
+      "SESSION_EXPIRED"
+    ){
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kubadilisha hali.",
+        "error"
+      );
+
+    }
+
+  }finally{
+
+    hideLoading();
+
+  }
+
+}
+
+
+/* =====================================================
+   RESET PASSWORD
+===================================================== */
+
+async function resetPassword(id){
+
+  const password =
+    prompt(
+      "Ingiza password mpya ya admin:\n\nPassword iwe na angalau characters 6."
+    );
+
+  if(password === null){
+    return;
+  }
+
+  if(password.length < 6){
+
+    alert(
+      "Password lazima iwe na angalau characters 6."
+    );
+
+    return;
+
+  }
+
+  showLoading();
+
+  try{
+
+    const response =
+      await apiFetch(
+        `/api/admin/school-admins/${id}/reset-password`,
+        {
+          method:"PUT",
+          body:JSON.stringify({
+            password
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kubadilisha password."
+      );
+
+    }
+
+    showMessage(
+      "✅ Password imebadilishwa kikamilifu.",
+      "success"
+    );
+
+  }catch(error){
+
+    if(
+      error.message !==
+      "SESSION_EXPIRED"
+    ){
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kubadilisha password.",
+        "error"
+      );
+
+    }
+
+  }finally{
+
+    hideLoading();
+
+  }
+
+}
+
+
+/* =====================================================
+   DELETE ADMIN
+===================================================== */
+
+async function deleteAdmin(id){
+
+  if(
+    !confirm(
+      "⚠️ Una uhakika unataka kufuta admin huyu?\n\nKitendo hiki hakiwezi kurudishwa."
+    )
+  ){
+
+    return;
+
+  }
+
+  showLoading();
+
+  try{
+
+    const response =
+      await apiFetch(
+        `/api/admin/school-admins/${id}`,
+        {
+          method:"DELETE"
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
+
+      throw new Error(
+        data.message ||
+        "Imeshindikana kufuta admin."
+      );
+
+    }
+
+    showMessage(
+      "✅ Admin amefutwa.",
+      "success"
+    );
+
+    await loadAdmins();
+
+  }catch(error){
+
+    if(
+      error.message !==
+      "SESSION_EXPIRED"
+    ){
+
+      showMessage(
+        error.message ||
+        "Imeshindikana kufuta admin.",
+        "error"
+      );
+
+    }
+
+  }finally{
+
+    hideLoading();
+
+  }
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
+
+function closeModal(){
+
+  modal.style.display =
+    "none";
+
+  adminForm.reset();
+
+  document.getElementById(
+    "adminId"
+  ).value =
+    "";
+
+  editingAdmin =
+    false;
+
+}
+
+
+/* =====================================================
+   CLICK OUTSIDE MODAL
+===================================================== */
+
+window.addEventListener(
+  "click",
+  function(event){
+
+    if(event.target === modal){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   SEARCH WITH ENTER
+===================================================== */
+
+document.getElementById(
+  "search"
+).addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Enter"){
+
+      event.preventDefault();
+
+      loadAdmins();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+async function init(){
+
+  const loggedIn =
+    await checkAdminSession();
+
+  if(!loggedIn){
+
+    return;
+
+  }
+
+  await loadSchools();
+
+  await loadAdmins();
+
+}
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  init
+);
+
+</script>
+
+</body>
+</html>
