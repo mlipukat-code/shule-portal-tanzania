@@ -65,6 +65,10 @@ async function q(text, params = []) {
   return pool.query(text, params).then(r => r.rows);
 }
 
+/* =========================================================
+   HELPERS
+========================================================= */
+
 function hashPassword(password) {
   return crypto
     .createHash("sha256")
@@ -396,9 +400,9 @@ async function initDatabase() {
     )
   `);
 
-  /* ---------------------------------------------------------
+  /* =======================================================
      SAFE MIGRATIONS
-  --------------------------------------------------------- */
+  ======================================================= */
 
   const migrations = [
     `ALTER TABLE schools ADD COLUMN IF NOT EXISTS description TEXT`,
@@ -448,9 +452,9 @@ async function initDatabase() {
     }
   }
 
-  /* ---------------------------------------------------------
+  /* =======================================================
      DEMO SCHOOLS
-  --------------------------------------------------------- */
+  ======================================================= */
 
   const schoolCount = await q(`
     SELECT COUNT(*)::int AS count
@@ -514,9 +518,9 @@ async function initDatabase() {
     `);
   }
 
-  /* ---------------------------------------------------------
+  /* =======================================================
      DEMO SCHOOL ADMIN
-  --------------------------------------------------------- */
+  ======================================================= */
 
   const adminCount = await q(`
     SELECT COUNT(*)::int AS count
@@ -907,6 +911,14 @@ app.get(
       const schoolId =
         Number(req.params.id);
 
+      if (!schoolId) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "School ID si sahihi."
+        });
+      }
+
       const fields =
         await getSchoolCustomFields(
           schoolId
@@ -935,6 +947,14 @@ app.get(
     try {
       const schoolId =
         Number(req.params.id);
+
+      if (!schoolId) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "School ID si sahihi."
+        });
+      }
 
       const form =
         (
@@ -1254,11 +1274,16 @@ app.post(
           paymentResult.rows[0]
       });
     } catch (error) {
-      await client.query(
-        "ROLLBACK"
-      );
+      try {
+        await client.query(
+          "ROLLBACK"
+        );
+      } catch (_) {}
 
-      console.error(error);
+      console.error(
+        "Create application error:",
+        error
+      );
 
       res.status(500).json({
         success: false,
@@ -1472,9 +1497,11 @@ app.put(
         payment
       });
     } catch (error) {
-      await client.query(
-        "ROLLBACK"
-      );
+      try {
+        await client.query(
+          "ROLLBACK"
+        );
+      } catch (_) {}
 
       res.status(500).json({
         success: false,
@@ -1612,9 +1639,11 @@ app.post(
         received: true
       });
     } catch (error) {
-      await client.query(
-        "ROLLBACK"
-      );
+      try {
+        await client.query(
+          "ROLLBACK"
+        );
+      } catch (_) {}
 
       res.status(500).json({
         success: false,
@@ -1694,7 +1723,8 @@ app.post(
           id: admin.id,
           full_name:
             admin.full_name,
-          email: admin.email,
+          email:
+            admin.email,
           school_id:
             admin.school_id
         }
@@ -1819,6 +1849,24 @@ app.put(
       const b =
         req.body || {};
 
+      const formPrice =
+        Number(
+          b.form_price ??
+          b.formPrice ??
+          0
+        );
+
+      if (
+        !Number.isFinite(formPrice) ||
+        formPrice < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Bei ya fomu si sahihi."
+        });
+      }
+
       const school =
         (
           await q(`
@@ -1855,11 +1903,7 @@ app.put(
             String(
               b.level || ""
             ).trim(),
-            Number(
-              b.form_price ||
-              b.formPrice ||
-              0
-            ),
+            formPrice,
             String(
               b.phone || ""
             ).trim(),
@@ -1984,7 +2028,10 @@ async function schoolAdminDashboardStatsHandler(
     const schoolId =
       Number(req.auth.schoolId);
 
-    if (!schoolId) {
+    if (
+      !Number.isInteger(schoolId) ||
+      schoolId <= 0
+    ) {
       return res.status(400).json({
         success: false,
         message:
@@ -1992,137 +2039,9 @@ async function schoolAdminDashboardStatsHandler(
       });
     }
 
-    const stats =
-      (
-        await q(`
-          SELECT
-
-            /* -----------------------------------------
-               APPLICATIONS
-            ----------------------------------------- */
-
-            (
-              SELECT COUNT(*)
-              FROM applications
-              WHERE school_id=$1
-            ) AS total_applications,
-
-            (
-              SELECT COUNT(*)
-              FROM applications
-              WHERE school_id=$1
-                AND LOWER(
-                  COALESCE(status,'')
-                ) IN (
-                  'submitted',
-                  'pending',
-                  'under_review'
-                )
-            ) AS pending_applications,
-
-            (
-              SELECT COUNT(*)
-              FROM applications
-              WHERE school_id=$1
-                AND LOWER(
-                  COALESCE(status,'')
-                )='approved'
-            ) AS approved_applications,
-
-            (
-              SELECT COUNT(*)
-              FROM applications
-              WHERE school_id=$1
-                AND LOWER(
-                  COALESCE(status,'')
-                )='rejected'
-            ) AS rejected_applications,
-
-            /* -----------------------------------------
-               PAYMENT STATUS
-            ----------------------------------------- */
-
-            (
-              SELECT COUNT(*)
-              FROM applications
-              WHERE school_id=$1
-                AND LOWER(
-                  COALESCE(payment_status,'')
-                )='paid'
-            ) AS paid_applications,
-
-            (
-              SELECT COUNT(*)
-              FROM applications
-              WHERE school_id=$1
-                AND LOWER(
-                  COALESCE(payment_status,'')
-                ) <> 'paid'
-            ) AS unpaid_applications,
-
-            /* -----------------------------------------
-               PAYMENTS
-            ----------------------------------------- */
-
-            (
-              SELECT COUNT(*)
-              FROM payments p
-              INNER JOIN applications a
-                ON a.id=p.application_id
-              WHERE a.school_id=$1
-                AND LOWER(
-                  COALESCE(p.status,'')
-                )='paid'
-            ) AS paid_payments,
-
-            (
-              SELECT COALESCE(
-                SUM(p.amount),
-                0
-              )
-              FROM payments p
-              INNER JOIN applications a
-                ON a.id=p.application_id
-              WHERE a.school_id=$1
-                AND LOWER(
-                  COALESCE(p.status,'')
-                )='paid'
-            ) AS total_revenue,
-
-            /* -----------------------------------------
-               TODAY
-            ----------------------------------------- */
-
-            (
-              SELECT COUNT(*)
-              FROM applications
-              WHERE school_id=$1
-                AND created_at::date=
-                    CURRENT_DATE
-            ) AS applications_today,
-
-            (
-              SELECT COUNT(*)
-              FROM payments p
-              INNER JOIN applications a
-                ON a.id=p.application_id
-              WHERE a.school_id=$1
-                AND LOWER(
-                  COALESCE(p.status,'')
-                )='paid'
-                AND p.paid_at IS NOT NULL
-                AND p.paid_at::date=
-                    CURRENT_DATE
-            ) AS payments_today
-
-        `, [
-          schoolId
-        ])
-      )[0];
-
-    /* -----------------------------------------------------
-       SCHOOL INFORMATION
-    ----------------------------------------------------- */
+    /* =====================================================
+       CHECK SCHOOL
+    ===================================================== */
 
     const school =
       (
@@ -2145,6 +2064,7 @@ async function schoolAdminDashboardStatsHandler(
             updated_at
           FROM schools
           WHERE id=$1
+          LIMIT 1
         `, [
           schoolId
         ])
@@ -2158,73 +2078,167 @@ async function schoolAdminDashboardStatsHandler(
       });
     }
 
+    /* =====================================================
+       APPLICATION STATS
+    ===================================================== */
+
+    const applicationStats =
+      (
+        await q(`
+          SELECT
+            COUNT(*) AS total_applications,
+
+            COUNT(*) FILTER (
+              WHERE LOWER(
+                COALESCE(status,'')
+              ) IN (
+                'submitted',
+                'pending',
+                'under_review'
+              )
+            ) AS pending_applications,
+
+            COUNT(*) FILTER (
+              WHERE LOWER(
+                COALESCE(status,'')
+              )='approved'
+            ) AS approved_applications,
+
+            COUNT(*) FILTER (
+              WHERE LOWER(
+                COALESCE(status,'')
+              )='rejected'
+            ) AS rejected_applications,
+
+            COUNT(*) FILTER (
+              WHERE LOWER(
+                COALESCE(payment_status,'')
+              )='paid'
+            ) AS paid_applications,
+
+            COUNT(*) FILTER (
+              WHERE LOWER(
+                COALESCE(payment_status,'')
+              )<>'paid'
+            ) AS unpaid_applications,
+
+            COUNT(*) FILTER (
+              WHERE created_at::date=CURRENT_DATE
+            ) AS applications_today
+
+          FROM applications
+          WHERE school_id=$1
+        `, [
+          schoolId
+        ])
+      )[0] || {};
+
+    /* =====================================================
+       PAYMENT STATS
+    ===================================================== */
+
+    const paymentStats =
+      (
+        await q(`
+          SELECT
+            COUNT(*) FILTER (
+              WHERE LOWER(
+                COALESCE(p.status,'')
+              )='paid'
+            ) AS paid_payments,
+
+            COALESCE(
+              SUM(
+                CASE
+                  WHEN LOWER(
+                    COALESCE(p.status,'')
+                  )='paid'
+                  THEN COALESCE(p.amount,0)
+                  ELSE 0
+                END
+              ),
+              0
+            ) AS total_revenue,
+
+            COUNT(*) FILTER (
+              WHERE LOWER(
+                COALESCE(p.status,'')
+              )='paid'
+              AND p.paid_at IS NOT NULL
+              AND p.paid_at::date=CURRENT_DATE
+            ) AS payments_today
+
+          FROM payments p
+          INNER JOIN applications a
+            ON a.id=p.application_id
+          WHERE a.school_id=$1
+        `, [
+          schoolId
+        ])
+      )[0] || {};
+
+    /* =====================================================
+       RESPONSE
+    ===================================================== */
+
     res.json({
       success: true,
 
       stats: {
         total_applications:
           Number(
-            stats.total_applications ||
-            0
+            applicationStats.total_applications || 0
           ),
 
         pending_applications:
           Number(
-            stats.pending_applications ||
-            0
+            applicationStats.pending_applications || 0
           ),
 
         approved_applications:
           Number(
-            stats.approved_applications ||
-            0
+            applicationStats.approved_applications || 0
           ),
 
         rejected_applications:
           Number(
-            stats.rejected_applications ||
-            0
+            applicationStats.rejected_applications || 0
           ),
 
         paid_applications:
           Number(
-            stats.paid_applications ||
-            0
+            applicationStats.paid_applications || 0
           ),
 
         unpaid_applications:
           Number(
-            stats.unpaid_applications ||
-            0
+            applicationStats.unpaid_applications || 0
           ),
 
         paid_payments:
           Number(
-            stats.paid_payments ||
-            0
+            paymentStats.paid_payments || 0
           ),
 
         total_revenue:
           Number(
-            stats.total_revenue ||
-            0
+            paymentStats.total_revenue || 0
           ),
 
         applications_today:
           Number(
-            stats.applications_today ||
-            0
+            applicationStats.applications_today || 0
           ),
 
         payments_today:
           Number(
-            stats.payments_today ||
-            0
+            paymentStats.payments_today || 0
           )
       },
 
       school
     });
+
   } catch (error) {
     console.error(
       "School Admin Dashboard Stats Error:",
@@ -2233,24 +2247,22 @@ async function schoolAdminDashboardStatsHandler(
 
     res.status(500).json({
       success: false,
-      message: error.message
+      message:
+        "Imeshindikana kupata takwimu za dashboard.",
+      error: error.message
     });
   }
-});
+}
 
-/*
-  Endpoint kuu inayotumiwa na dashboard
-*/
+/* =========================================================
+   SCHOOL ADMIN DASHBOARD STATS ENDPOINTS
+========================================================= */
 
 app.get(
   "/api/school-admin/dashboard/stats",
   schoolAdmin,
   schoolAdminDashboardStatsHandler
 );
-
-/*
-  Endpoint ya compatibility
-*/
 
 app.get(
   "/api/school-admin/dashboard-stats",
@@ -2877,6 +2889,24 @@ app.post(
         });
       }
 
+      const formPrice =
+        Number(
+          b.form_price ??
+          b.formPrice ??
+          0
+        );
+
+      if (
+        !Number.isFinite(formPrice) ||
+        formPrice < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Bei ya fomu si sahihi."
+        });
+      }
+
       const school =
         (
           await q(`
@@ -2912,11 +2942,7 @@ app.post(
             String(
               b.level || ""
             ).trim(),
-            Number(
-              b.form_price ||
-              b.formPrice ||
-              0
-            ),
+            formPrice,
             String(
               b.phone || ""
             ).trim(),
@@ -2965,8 +2991,34 @@ app.put(
       const id =
         Number(req.params.id);
 
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "School ID si sahihi."
+        });
+      }
+
       const b =
         req.body || {};
+
+      const formPrice =
+        Number(
+          b.form_price ??
+          b.formPrice ??
+          0
+        );
+
+      if (
+        !Number.isFinite(formPrice) ||
+        formPrice < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Bei ya fomu si sahihi."
+        });
+      }
 
       const school =
         (
@@ -3002,11 +3054,7 @@ app.put(
             String(
               b.level || ""
             ).trim(),
-            Number(
-              b.form_price ||
-              b.formPrice ||
-              0
-            ),
+            formPrice,
             String(
               b.phone || ""
             ).trim(),
@@ -3442,17 +3490,7 @@ app.get(
 
 /* =========================================================
    MAIN ADMIN - SCHOOL ADMINS
-   COMPLETE CRUD
 ========================================================= */
-
-/*
-  GET LIST
-  Supports:
-
-  ?search=
-  ?school_id=
-  ?status=active|inactive
-*/
 
 app.get(
   "/api/admin/school-admins",
@@ -4058,12 +4096,6 @@ app.put(
         });
       }
 
-      /*
-        Ikiwa admin amehamishwa shule
-        au amefanywa inactive,
-        tunafuta session zake.
-      */
-
       for (
         const [
           token,
@@ -4286,11 +4318,6 @@ app.put(
             "Admin wa shule hajapatikana."
         });
       }
-
-      /*
-        Force re-login after
-        password reset.
-      */
 
       for (
         const [
