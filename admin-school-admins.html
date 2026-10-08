@@ -186,7 +186,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:900px;
+      min-width:950px;
     }
 
     th,
@@ -371,6 +371,15 @@
       font-weight:bold;
     }
 
+    .session-user{
+      display:inline-block;
+      margin-top:10px;
+      background:rgba(255,255,255,.14);
+      padding:7px 10px;
+      border-radius:6px;
+      font-size:12px;
+    }
+
     @media(max-width:800px){
 
       .stats{
@@ -429,6 +438,7 @@
 <header>
   <h1>🏫 Shule Portal Tanzania</h1>
   <p>👤 ADMIN MKUU — Usimamizi wa Admin wa Shule</p>
+  <div id="sessionUser" class="session-user" style="display:none;"></div>
 </header>
 
 <div class="container">
@@ -457,11 +467,13 @@
     <div class="top-actions">
 
       <div class="page-title">
+
         <h2>👤 Admin wa Shule</h2>
 
         <p>
           Ongeza, hariri na dhibiti akaunti za wasimamizi wa shule.
         </p>
+
       </div>
 
       <button
@@ -478,6 +490,7 @@
     <div class="stats">
 
       <div class="stat-card">
+
         <div
           class="number"
           id="totalAdmins"
@@ -488,9 +501,11 @@
         <div class="label">
           👥 Admin Wote
         </div>
+
       </div>
 
       <div class="stat-card">
+
         <div
           class="number"
           id="activeAdmins"
@@ -501,9 +516,11 @@
         <div class="label">
           🟢 Admin Active
         </div>
+
       </div>
 
       <div class="stat-card">
+
         <div
           class="number"
           id="inactiveAdmins"
@@ -514,6 +531,7 @@
         <div class="label">
           🔴 Admin Inactive
         </div>
+
       </div>
 
     </div>
@@ -534,6 +552,7 @@
             type="text"
             id="search"
             placeholder="Jina au email..."
+            autocomplete="off"
           >
 
         </div>
@@ -543,11 +562,9 @@
           <label>Shule</label>
 
           <select id="schoolFilter">
-
             <option value="">
               Shule zote
             </option>
-
           </select>
 
         </div>
@@ -661,6 +678,7 @@
       <span
         class="close"
         onclick="closeModal()"
+        aria-label="Funga"
       >
         &times;
       </span>
@@ -693,6 +711,7 @@
               id="full_name"
               required
               placeholder="Mfano: Imanuel John"
+              autocomplete="name"
             >
 
           </div>
@@ -727,6 +746,7 @@
               id="email"
               required
               placeholder="admin@shule.co.tz"
+              autocomplete="email"
             >
 
           </div>
@@ -818,12 +838,6 @@
 
 const API_BASE = window.location.origin;
 
-/*
-  MUHIMU:
-  Tunatumia localStorage ili token ya Admin Mkuu
-  ipatikane hata ukienda kwenye admin-school-admins.html.
-*/
-
 const ADMIN_TOKEN_KEY = "spt_admin_token";
 
 let schools = [];
@@ -859,6 +873,9 @@ const loginWarning =
 const loadingOverlay =
   document.getElementById("loadingOverlay");
 
+const sessionUser =
+  document.getElementById("sessionUser");
+
 
 /* =========================
    AUTH
@@ -868,13 +885,16 @@ function getAdminToken(){
 
   try{
 
-    return (
-      localStorage.getItem(
-        ADMIN_TOKEN_KEY
-      ) || ""
-    );
+    return localStorage.getItem(
+      ADMIN_TOKEN_KEY
+    ) || "";
 
   }catch(error){
+
+    console.warn(
+      "localStorage haipatikani.",
+      error
+    );
 
     return "";
 
@@ -891,10 +911,15 @@ function clearAdminToken(){
       ADMIN_TOKEN_KEY
     );
 
-    /*
-      Pia tunaondoa sessionStorage ya zamani
-      kama bado ipo kwenye browser.
-    */
+  }catch(error){
+
+    console.warn(
+      "localStorage haipatikani."
+    );
+
+  }
+
+  try{
 
     sessionStorage.removeItem(
       ADMIN_TOKEN_KEY
@@ -903,7 +928,7 @@ function clearAdminToken(){
   }catch(error){
 
     console.warn(
-      "Storage haikupatikana."
+      "sessionStorage haipatikani."
     );
 
   }
@@ -927,6 +952,9 @@ function showLoginWarning(){
   mainContent.style.display =
     "none";
 
+  sessionUser.style.display =
+    "none";
+
 }
 
 
@@ -942,7 +970,7 @@ function hideLoginWarning(){
 
 
 /* =========================
-   API FETCH
+   API
 ========================= */
 
 async function apiFetch(
@@ -1013,7 +1041,7 @@ async function apiFetch(
 
 
 /* =========================
-   LOADING OVERLAY
+   LOADING
 ========================= */
 
 function showLoading(){
@@ -1045,7 +1073,7 @@ function showMessage(
     text;
 
   message.className =
-    "message " + type;
+    `message ${type}`;
 
   message.style.display =
     "block";
@@ -1067,7 +1095,7 @@ function showMessage(
 
 
 /* =========================
-   ESCAPE HTML
+   HTML ESCAPE
 ========================= */
 
 function escapeHtml(value){
@@ -1082,31 +1110,11 @@ function escapeHtml(value){
   }
 
   return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -1127,7 +1135,7 @@ function formatDate(value){
     new Date(value);
 
   if(
-    isNaN(
+    Number.isNaN(
       date.getTime()
     )
   ){
@@ -1149,7 +1157,7 @@ function formatDate(value){
 
 
 /* =========================
-   STATUS NORMALIZER
+   STATUS
 ========================= */
 
 function getAdminStatus(admin){
@@ -1186,1325 +1194,4 @@ function getAdminStatus(admin){
 async function checkAdminSession(){
 
   const token =
-    getAdminToken();
-
-  if(!token){
-
-    showLoginWarning();
-
-    return false;
-
-  }
-
-  try{
-
-    const response =
-      await apiFetch(
-        "/api/admin/me"
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.success
-    ){
-
-      throw new Error(
-        "Session si sahihi."
-      );
-
-    }
-
-    hideLoginWarning();
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      "Session check:",
-      error
-    );
-
-    clearAdminToken();
-
-    showLoginWarning();
-
-    return false;
-
-  }
-
-}
-
-
-/* =========================
-   LOAD SCHOOLS
-========================= */
-
-async function loadSchools(){
-
-  try{
-
-    const response =
-      await apiFetch(
-        "/api/admin/schools"
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.success
-    ){
-
-      throw new Error(
-        data.message ||
-        "Imeshindikana kupata shule."
-      );
-
-    }
-
-    schools =
-      Array.isArray(
-        data.schools
-      )
-        ? data.schools
-        : [];
-
-    const schoolSelect =
-      document.getElementById(
-        "school_id"
-      );
-
-    const schoolFilter =
-      document.getElementById(
-        "schoolFilter"
-      );
-
-    schoolSelect.innerHTML =
-      `
-        <option value="">
-          Chagua shule
-        </option>
-      `;
-
-    schoolFilter.innerHTML =
-      `
-        <option value="">
-          Shule zote
-        </option>
-      `;
-
-    schools.forEach(
-      school=>{
-
-        const option1 =
-          document.createElement(
-            "option"
-          );
-
-        option1.value =
-          school.id;
-
-        option1.textContent =
-          `${school.name || "Shule"}${
-            school.region
-              ? " — " + school.region
-              : ""
-          }`;
-
-        schoolSelect.appendChild(
-          option1
-        );
-
-
-        const option2 =
-          document.createElement(
-            "option"
-          );
-
-        option2.value =
-          school.id;
-
-        option2.textContent =
-          school.name ||
-          "Shule";
-
-        schoolFilter.appendChild(
-          option2
-        );
-
-      }
-    );
-
-  }catch(error){
-
-    console.error(
-      "Load schools:",
-      error
-    );
-
-    if(
-      error.message ===
-        "NO_ADMIN_SESSION" ||
-      error.message ===
-        "SESSION_EXPIRED"
-    ){
-
-      return;
-
-    }
-
-    showMessage(
-      error.message ||
-      "Imeshindikana kupata shule.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================
-   LOAD ADMINS
-========================= */
-
-async function loadAdmins(){
-
-  loading.style.display =
-    "block";
-
-  adminsTable.style.display =
-    "none";
-
-  empty.style.display =
-    "none";
-
-  try{
-
-    const search =
-      document
-        .getElementById("search")
-        .value
-        .trim();
-
-    const schoolId =
-      document
-        .getElementById("schoolFilter")
-        .value;
-
-    const status =
-      document
-        .getElementById("statusFilter")
-        .value;
-
-    const params =
-      new URLSearchParams();
-
-    if(search){
-
-      params.append(
-        "search",
-        search
-      );
-
-    }
-
-    if(schoolId){
-
-      params.append(
-        "school_id",
-        schoolId
-      );
-
-    }
-
-    if(status){
-
-      params.append(
-        "status",
-        status
-      );
-
-    }
-
-    const url =
-      "/api/admin/school-admins" +
-      (
-        params.toString()
-          ? "?" +
-            params.toString()
-          : ""
-      );
-
-    const response =
-      await apiFetch(url);
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.success
-    ){
-
-      throw new Error(
-        data.message ||
-        "Imeshindikana kupata admin."
-      );
-
-    }
-
-    const admins =
-      Array.isArray(data.admins)
-        ? data.admins
-        : [];
-
-    document.getElementById(
-      "totalAdmins"
-    ).textContent =
-      data.total_admins ??
-      admins.length;
-
-    const activeCount =
-      admins.filter(
-        admin =>
-          getAdminStatus(admin) ===
-          "active"
-      ).length;
-
-    const inactiveCount =
-      admins.filter(
-        admin =>
-          getAdminStatus(admin) ===
-          "inactive"
-      ).length;
-
-    document.getElementById(
-      "activeAdmins"
-    ).textContent =
-      data.active_admins ??
-      activeCount;
-
-    document.getElementById(
-      "inactiveAdmins"
-    ).textContent =
-      data.inactive_admins ??
-      inactiveCount;
-
-    adminsBody.innerHTML =
-      "";
-
-    if(admins.length === 0){
-
-      loading.style.display =
-        "none";
-
-      empty.style.display =
-        "block";
-
-      return;
-
-    }
-
-    admins.forEach(
-      (admin,index)=>{
-
-        const row =
-          document.createElement(
-            "tr"
-          );
-
-        const status =
-          getAdminStatus(admin);
-
-        const statusBadge =
-          status === "active"
-
-            ? `
-              <span class="badge badge-active">
-                🟢 ACTIVE
-              </span>
-            `
-
-            : `
-              <span class="badge badge-inactive">
-                🔴 INACTIVE
-              </span>
-            `;
-
-        row.innerHTML = `
-
-          <td>
-            ${index + 1}
-          </td>
-
-          <td>
-
-            <strong>
-              ${escapeHtml(
-                admin.full_name ||
-                "-"
-              )}
-            </strong>
-
-            <div class="school-info">
-              ID:
-              ${escapeHtml(
-                admin.id
-              )}
-            </div>
-
-          </td>
-
-          <td>
-
-            <strong>
-              ${escapeHtml(
-                admin.school_name ||
-                "-"
-              )}
-            </strong>
-
-            <div class="school-info">
-
-              ${escapeHtml(
-                admin.school_region ||
-                ""
-              )}
-
-              ${
-                admin.school_region
-                  ? " • "
-                  : ""
-              }
-
-              ${escapeHtml(
-                admin.school_district ||
-                ""
-              )}
-
-            </div>
-
-          </td>
-
-          <td>
-            ${escapeHtml(
-              admin.email ||
-              "-"
-            )}
-          </td>
-
-          <td>
-            ${statusBadge}
-          </td>
-
-          <td>
-            ${formatDate(
-              admin.created_at
-            )}
-          </td>
-
-          <td>
-
-            <button
-              class="btn-warning btn-small"
-              onclick="editAdmin(${Number(admin.id)})"
-            >
-              ✏️ Hariri
-            </button>
-
-            ${
-              status === "active"
-
-              ? `
-                <button
-                  class="btn-danger btn-small"
-                  onclick="changeStatus(${Number(admin.id)},'inactive')"
-                >
-                  🔴 Zima
-                </button>
-              `
-
-              : `
-                <button
-                  class="btn-success btn-small"
-                  onclick="changeStatus(${Number(admin.id)},'active')"
-                >
-                  🟢 Washa
-                </button>
-              `
-            }
-
-            <button
-              class="btn-primary btn-small"
-              onclick="resetPassword(${Number(admin.id)})"
-            >
-              🔑 Password
-            </button>
-
-            <button
-              class="btn-danger btn-small"
-              onclick="deleteAdmin(${Number(admin.id)})"
-            >
-              🗑️ Futa
-            </button>
-
-          </td>
-
-        `;
-
-        adminsBody.appendChild(
-          row
-        );
-
-      }
-    );
-
-    loading.style.display =
-      "none";
-
-    adminsTable.style.display =
-      "table";
-
-  }catch(error){
-
-    console.error(
-      "Load admins:",
-      error
-    );
-
-    loading.style.display =
-      "none";
-
-    if(
-      error.message ===
-        "NO_ADMIN_SESSION" ||
-      error.message ===
-        "SESSION_EXPIRED"
-    ){
-
-      return;
-
-    }
-
-    empty.style.display =
-      "block";
-
-    showMessage(
-      error.message ||
-      "Imeshindikana kupata admin.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================
-   ADD MODAL
-========================= */
-
-function openAddModal(){
-
-  editingAdmin =
-    false;
-
-  document.getElementById(
-    "modalTitle"
-  ).textContent =
-    "➕ Ongeza Admin wa Shule";
-
-  adminForm.reset();
-
-  document.getElementById(
-    "adminId"
-  ).value =
-    "";
-
-  document.getElementById(
-    "status"
-  ).value =
-    "active";
-
-  document.getElementById(
-    "password"
-  ).required =
-    true;
-
-  document.getElementById(
-    "passwordNote"
-  ).textContent =
-    "Password iwe na angalau characters 6.";
-
-  modal.style.display =
-    "block";
-
-}
-
-
-/* =========================
-   CLOSE MODAL
-========================= */
-
-function closeModal(){
-
-  modal.style.display =
-    "none";
-
-}
-
-
-/* =========================
-   EDIT ADMIN
-========================= */
-
-async function editAdmin(id){
-
-  try{
-
-    showLoading();
-
-    const response =
-      await apiFetch(
-        `/api/admin/school-admins/${id}`
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.success
-    ){
-
-      throw new Error(
-        data.message ||
-        "Imeshindikana kupata taarifa za admin."
-      );
-
-    }
-
-    const admin =
-      data.admin;
-
-    editingAdmin =
-      true;
-
-    document.getElementById(
-      "modalTitle"
-    ).textContent =
-      "✏️ Hariri Admin wa Shule";
-
-    document.getElementById(
-      "adminId"
-    ).value =
-      admin.id;
-
-    document.getElementById(
-      "full_name"
-    ).value =
-      admin.full_name ||
-      "";
-
-    document.getElementById(
-      "school_id"
-    ).value =
-      admin.school_id ||
-      "";
-
-    document.getElementById(
-      "email"
-    ).value =
-      admin.email ||
-      "";
-
-    document.getElementById(
-      "status"
-    ).value =
-      getAdminStatus(admin);
-
-    document.getElementById(
-      "password"
-    ).value =
-      "";
-
-    document.getElementById(
-      "password"
-    ).required =
-      false;
-
-    document.getElementById(
-      "passwordNote"
-    ).textContent =
-      "Acha wazi kama hutaki kubadilisha password.";
-
-    modal.style.display =
-      "block";
-
-  }catch(error){
-
-    console.error(
-      "Edit admin:",
-      error
-    );
-
-    if(
-      error.message ===
-        "NO_ADMIN_SESSION" ||
-      error.message ===
-        "SESSION_EXPIRED"
-    ){
-
-      return;
-
-    }
-
-    showMessage(
-      error.message ||
-      "Imeshindikana kufungua admin.",
-      "error"
-    );
-
-  }finally{
-
-    hideLoading();
-
-  }
-
-}
-
-
-/* =========================
-   SAVE ADMIN
-========================= */
-
-adminForm.addEventListener(
-  "submit",
-  async function(event){
-
-    event.preventDefault();
-
-    const id =
-      document.getElementById(
-        "adminId"
-      ).value;
-
-    const full_name =
-      document.getElementById(
-        "full_name"
-      ).value
-      .trim();
-
-    const school_id =
-      document.getElementById(
-        "school_id"
-      ).value;
-
-    const email =
-      document.getElementById(
-        "email"
-      ).value
-      .trim()
-      .toLowerCase();
-
-    const password =
-      document.getElementById(
-        "password"
-      ).value;
-
-    const status =
-      document.getElementById(
-        "status"
-      ).value;
-
-    if(!full_name){
-
-      showMessage(
-        "Jina kamili linahitajika.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    if(!school_id){
-
-      showMessage(
-        "Tafadhali chagua shule.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    if(!email){
-
-      showMessage(
-        "Email inahitajika.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    if(
-      !editingAdmin &&
-      password.length < 6
-    ){
-
-      showMessage(
-        "Password lazima iwe na angalau characters 6.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    if(
-      editingAdmin &&
-      password &&
-      password.length < 6
-    ){
-
-      showMessage(
-        "Password mpya lazima iwe na angalau characters 6.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    const adminData = {
-
-      full_name,
-
-      school_id:
-        Number(school_id),
-
-      email,
-
-      status
-
-    };
-
-    if(password){
-
-      adminData.password =
-        password;
-
-    }
-
-    const saveButton =
-      document.getElementById(
-        "saveButton"
-      );
-
-    saveButton.disabled =
-      true;
-
-    saveButton.textContent =
-      "⏳ Inahifadhi...";
-
-    try{
-
-      let response;
-
-      if(editingAdmin){
-
-        response =
-          await apiFetch(
-            `/api/admin/school-admins/${id}`,
-            {
-              method:"PUT",
-              body:
-                JSON.stringify(
-                  adminData
-                )
-            }
-          );
-
-      }else{
-
-        response =
-          await apiFetch(
-            "/api/admin/school-admins",
-            {
-              method:"POST",
-              body:
-                JSON.stringify(
-                  adminData
-                )
-            }
-          );
-
-      }
-
-      const data =
-        await response.json();
-
-      if(
-        !response.ok ||
-        !data.success
-      ){
-
-        throw new Error(
-          data.message ||
-          "Imeshindikana kuhifadhi admin."
-        );
-
-      }
-
-      closeModal();
-
-      showMessage(
-        editingAdmin
-          ? "Admin amehaririwa kwa mafanikio."
-          : "Admin ameongezwa kwa mafanikio.",
-        "success"
-      );
-
-      await loadAdmins();
-
-    }catch(error){
-
-      console.error(
-        "Save admin:",
-        error
-      );
-
-      if(
-        error.message ===
-          "NO_ADMIN_SESSION" ||
-        error.message ===
-          "SESSION_EXPIRED"
-      ){
-
-        return;
-
-      }
-
-      showMessage(
-        error.message ||
-        "Imeshindikana kuhifadhi admin.",
-        "error"
-      );
-
-    }finally{
-
-      saveButton.disabled =
-        false;
-
-      saveButton.textContent =
-        "💾 Hifadhi";
-
-    }
-
-  }
-);
-
-
-/* =========================
-   CHANGE STATUS
-========================= */
-
-async function changeStatus(
-  id,
-  newStatus
-){
-
-  const action =
-    newStatus === "active"
-      ? "kumuwasha"
-      : "kumzima";
-
-  if(
-    !confirm(
-      `Una uhakika unataka ${action} admin huyu?`
-    )
-  ){
-
-    return;
-
-  }
-
-  try{
-
-    showLoading();
-
-    const response =
-      await apiFetch(
-        `/api/admin/school-admins/${id}/status`,
-        {
-          method:"PUT",
-          body:
-            JSON.stringify({
-              status:
-                newStatus
-            })
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.success
-    ){
-
-      throw new Error(
-        data.message ||
-        "Imeshindikana kubadilisha status."
-      );
-
-    }
-
-    showMessage(
-      newStatus === "active"
-        ? "Admin amewashwa kwa mafanikio."
-        : "Admin amezimwa kwa mafanikio.",
-      "success"
-    );
-
-    await loadAdmins();
-
-  }catch(error){
-
-    console.error(
-      "Status:",
-      error
-    );
-
-    if(
-      error.message ===
-        "NO_ADMIN_SESSION" ||
-      error.message ===
-        "SESSION_EXPIRED"
-    ){
-
-      return;
-
-    }
-
-    showMessage(
-      error.message ||
-      "Imeshindikana kubadilisha status.",
-      "error"
-    );
-
-  }finally{
-
-    hideLoading();
-
-  }
-
-}
-
-
-/* =========================
-   RESET PASSWORD
-========================= */
-
-async function resetPassword(id){
-
-  const newPassword =
-    prompt(
-      "Ingiza password mpya (angalau characters 6):"
-    );
-
-  if(newPassword === null){
-
-    return;
-
-  }
-
-  if(newPassword.length < 6){
-
-    alert(
-      "Password lazima iwe na angalau characters 6."
-    );
-
-    return;
-
-  }
-
-  if(
-    !confirm(
-      "Una uhakika unataka kubadilisha password ya admin huyu?"
-    )
-  ){
-
-    return;
-
-  }
-
-  try{
-
-    showLoading();
-
-    const response =
-      await apiFetch(
-        `/api/admin/school-admins/${id}/reset-password`,
-        {
-          method:"PUT",
-          body:
-            JSON.stringify({
-              password:
-                newPassword
-            })
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.success
-    ){
-
-      throw new Error(
-        data.message ||
-        "Imeshindikana kubadilisha password."
-      );
-
-    }
-
-    showMessage(
-      "Password imebadilishwa kwa mafanikio.",
-      "success"
-    );
-
-  }catch(error){
-
-    console.error(
-      "Reset password:",
-      error
-    );
-
-    if(
-      error.message ===
-        "NO_ADMIN_SESSION" ||
-      error.message ===
-        "SESSION_EXPIRED"
-    ){
-
-      return;
-
-    }
-
-    showMessage(
-      error.message ||
-      "Imeshindikana kubadilisha password.",
-      "error"
-    );
-
-  }finally{
-
-    hideLoading();
-
-  }
-
-}
-
-
-/* =========================
-   DELETE ADMIN
-========================= */
-
-async function deleteAdmin(id){
-
-  if(
-    !confirm(
-      "⚠️ Una uhakika unataka KUFUTA admin huyu?\n\nAkaunti yake haitatumika tena kuingia kwenye mfumo."
-    )
-  ){
-
-    return;
-
-  }
-
-  try{
-
-    showLoading();
-
-    const response =
-      await apiFetch(
-        `/api/admin/school-admins/${id}`,
-        {
-          method:"DELETE"
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.success
-    ){
-
-      throw new Error(
-        data.message ||
-        "Imeshindikana kufuta admin."
-      );
-
-    }
-
-    showMessage(
-      "Admin amefutwa kwa mafanikio.",
-      "success"
-    );
-
-    await loadAdmins();
-
-  }catch(error){
-
-    console.error(
-      "Delete admin:",
-      error
-    );
-
-    if(
-      error.message ===
-        "NO_ADMIN_SESSION" ||
-      error.message ===
-        "SESSION_EXPIRED"
-    ){
-
-      return;
-
-    }
-
-    showMessage(
-      error.message ||
-      "Imeshindikana kufuta admin.",
-      "error"
-    );
-
-  }finally{
-
-    hideLoading();
-
-  }
-
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-document
-  .getElementById("search")
-  .addEventListener(
-    "keydown",
-    function(event){
-
-      if(
-        event.key === "Enter"
-      ){
-
-        loadAdmins();
-
-      }
-
-    }
-  );
-
-
-document
-  .getElementById("schoolFilter")
-  .addEventListener(
-    "change",
-    loadAdmins
-  );
-
-
-document
-  .getElementById("statusFilter")
-  .addEventListener(
-    "change",
-    loadAdmins
-  );
-
-
-/* =========================
-   CLOSE MODAL OUTSIDE
-========================= */
-
-window.addEventListener(
-  "click",
-  function(event){
-
-    if(
-      event.target === modal
-    ){
-
-      closeModal();
-
-    }
-
-  }
-);
-
-
-/* =========================
-   ESC KEY
-========================= */
-
-document.addEventListener(
-  "keydown",
-  function(event){
-
-    if(
-      event.key === "Escape"
-    ){
-
-      closeModal();
-
-    }
-
-  }
-);
-
-
-/* =========================
-   INITIALIZE
-========================= */
-
-async function initializePage(){
-
-  const loggedIn =
-    await checkAdminSession();
-
-  if(!loggedIn){
-
-    return;
-
-  }
-
-  await loadSchools();
-
-  await loadAdmins();
-
-}
-
-
-initializePage();
-
-</script>
-
-</body>
-</html>
+    get
